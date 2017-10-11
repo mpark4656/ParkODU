@@ -1,0 +1,4 @@
+#ignore file for git
+.gradle/
+.idea/
+*.iml
