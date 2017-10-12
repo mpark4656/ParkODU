@@ -19,7 +19,7 @@ import java.util.UUID;
 public class GoldApplication implements ApplicationContextAware, ApplicationListener<ContextRefreshedEvent> {
 
     private ApplicationContext applicationContext;
-    private boolean dataInitialized = false;
+    private boolean dataInitialized = true;
 
     @Autowired
     private GarageRepository garageRepository;
@@ -34,11 +34,20 @@ public class GoldApplication implements ApplicationContextAware, ApplicationList
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+
+        garageRepository.loadAll();
+        parkingSpaceRepository.loadAll();
+
         if (!dataInitialized) {
             System.out.println("*** Initializing Dummy Data ***");
 
             Garage garage1 = new Garage();
             garage1.setGarageKey("8774fdbb-a70e-4e0b-94b1-cad60f08af55");
+            garage1.setName("Garage A");
+            garage1.setAddressOne("123 Parking Ave");
+            garage1.setCity("Parkville");
+            garage1.setState("VA");
+            garage1.setZipCode("12345");
             garageRepository.save(garage1);
             System.out.println("Garage 1: " + garage1);
 

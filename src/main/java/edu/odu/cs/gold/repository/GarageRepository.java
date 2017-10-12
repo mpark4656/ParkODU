@@ -49,8 +49,9 @@ public class GarageRepository {
         map.delete(key);
     }
 
-    public long getCollectionSize() {
+    public void loadAll() {
         IMap map = hazelcastInstance.getMap(collectionName);
-        return map.getLocalMapStats().getOwnedEntryCount();
+        map.loadAll(false);
     }
+
 }
