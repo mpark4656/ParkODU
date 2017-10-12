@@ -1,9 +1,6 @@
 package edu.odu.cs.gold.configuration;
 
-import com.hazelcast.config.Config;
-import com.hazelcast.config.MapConfig;
-import com.hazelcast.config.MapIndexConfig;
-import com.hazelcast.config.MapStoreConfig;
+import com.hazelcast.config.*;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import edu.odu.cs.gold.model.Garage;
@@ -19,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.env.Environment;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -29,6 +27,9 @@ public class GoldConfiguration implements ApplicationContextAware {
 
     public static final String COLLECTION_GARAGE = "Garage";
     public static final String COLLECTION_PARKING_SPACE = "ParkingSpace";
+
+    @Autowired
+    public Environment environment;
 
     @Autowired
     public MongoTemplate mongoTemplate;
@@ -49,6 +50,25 @@ public class GoldConfiguration implements ApplicationContextAware {
         for (MapConfig mapConfig : applicationContext.getBeansOfType(MapConfig.class).values()) {
             hazelcastConfig.addMapConfig(mapConfig);
         }
+
+        // Management Center Configs
+        if (environment.getProperty("hazelcast.mancenter.enable", Boolean.class, false)) {
+
+            String managementUrl = environment.getProperty("hazelcast.mancenter.url", "http://localhost:8080/mancenter");
+
+            ManagementCenterConfig managementCenterConfig = new ManagementCenterConfig();
+            managementCenterConfig.setUrl(managementUrl);
+            managementCenterConfig.setEnabled(true);
+
+            System.err.println(managementCenterConfig);
+
+            hazelcastConfig.setManagementCenterConfig(managementCenterConfig);
+        }
+
+        // Group Configs
+        hazelcastConfig.getGroupConfig().setName(environment.getProperty("hazelcast.group.name", "dev"));
+        hazelcastConfig.getGroupConfig().setPassword(environment.getProperty("hazelcast.group.password", ""));
+
 
         return hazelcastConfig;
     }
