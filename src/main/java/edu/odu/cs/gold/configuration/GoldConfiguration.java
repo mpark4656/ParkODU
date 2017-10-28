@@ -3,30 +3,34 @@ package edu.odu.cs.gold.configuration;
 import com.hazelcast.config.*;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import edu.odu.cs.gold.model.Floor;
+import edu.odu.cs.gold.model.FloorStatistic;
 import edu.odu.cs.gold.model.Garage;
 import edu.odu.cs.gold.model.ParkingSpace;
 import edu.odu.cs.gold.mongo.MongoMapStore;
+import edu.odu.cs.gold.repository.FloorRepository;
+import edu.odu.cs.gold.repository.FloorStatisticRepository;
 import edu.odu.cs.gold.repository.GarageRepository;
 import edu.odu.cs.gold.repository.ParkingSpaceRepository;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
-@EnableWebMvc
-@ComponentScan("edu.odu.cs")
+@PropertySources(value = {
+        @PropertySource(value = "file:${propertiesDirectory}/parkodu.properties")
+})
 public class GoldConfiguration implements ApplicationContextAware {
 
     public static final String COLLECTION_GARAGE = "Garage";
+    public static final String COLLECTION_FLOOR = "Floor";
     public static final String COLLECTION_PARKING_SPACE = "ParkingSpace";
+
+    public static final String COLLECTION_FLOOR_STATISTIC = "FloorStatistic";
 
     @Autowired
     public Environment environment;
@@ -53,22 +57,16 @@ public class GoldConfiguration implements ApplicationContextAware {
 
         // Management Center Configs
         if (environment.getProperty("hazelcast.mancenter.enable", Boolean.class, false)) {
-
-            String managementUrl = environment.getProperty("hazelcast.mancenter.url", "http://localhost:8080/mancenter");
-
+            String mancenterUrl = environment.getProperty("hazelcast.mancenter.url", "http://localhost:8080/mancenter");
             ManagementCenterConfig managementCenterConfig = new ManagementCenterConfig();
-            managementCenterConfig.setUrl(managementUrl);
+            managementCenterConfig.setUrl(mancenterUrl);
             managementCenterConfig.setEnabled(true);
-
-            System.err.println(managementCenterConfig);
-
             hazelcastConfig.setManagementCenterConfig(managementCenterConfig);
         }
 
         // Group Configs
         hazelcastConfig.getGroupConfig().setName(environment.getProperty("hazelcast.group.name", "dev"));
         hazelcastConfig.getGroupConfig().setPassword(environment.getProperty("hazelcast.group.password", ""));
-
 
         return hazelcastConfig;
     }
@@ -86,8 +84,18 @@ public class GoldConfiguration implements ApplicationContextAware {
     }
 
     @Bean
+    public FloorRepository floorRepository() {
+        return new FloorRepository(hazelcastInstance(), COLLECTION_FLOOR);
+    }
+
+    @Bean
     public ParkingSpaceRepository parkingSpaceRepository() {
         return new ParkingSpaceRepository(hazelcastInstance(), COLLECTION_PARKING_SPACE);
+    }
+
+    @Bean
+    public FloorStatisticRepository floorStatisticRepository() {
+        return new FloorStatisticRepository(hazelcastInstance(), COLLECTION_FLOOR_STATISTIC);
     }
 
     @Bean
@@ -96,8 +104,18 @@ public class GoldConfiguration implements ApplicationContextAware {
     }
 
     @Bean
+    public MongoMapStore floorMapStore() {
+        return new MongoMapStore(mongoTemplate, COLLECTION_FLOOR, Floor.class);
+    }
+
+    @Bean
     public MongoMapStore parkingSpaceMapStore() {
         return new MongoMapStore(mongoTemplate, COLLECTION_PARKING_SPACE, ParkingSpace.class);
+    }
+
+    @Bean
+    public MongoMapStore floorStatisticMapStore() {
+        return new MongoMapStore(mongoTemplate, COLLECTION_FLOOR_STATISTIC, FloorStatistic.class);
     }
 
     @Bean
@@ -110,6 +128,25 @@ public class GoldConfiguration implements ApplicationContextAware {
         mapStoreConfig.setEnabled(true);
         mapStoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.EAGER);
         mapConfig.setMapStoreConfig(mapStoreConfig);
+
+        return mapConfig;
+    }
+
+
+    @Bean
+    public MapConfig floorRepositoryMapConfig() {
+        MapConfig mapConfig = new MapConfig(COLLECTION_FLOOR);
+
+        // MapStore
+        MapStoreConfig mapStoreConfig = new MapStoreConfig();
+        mapStoreConfig.setImplementation(floorMapStore());
+        mapStoreConfig.setEnabled(true);
+        mapStoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.EAGER);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+
+        // Indexed Attributes
+        mapConfig.addMapIndexConfig(new MapIndexConfig("garageKey", false));
+        mapConfig.addMapIndexConfig(new MapIndexConfig("number", false));
 
         return mapConfig;
     }
@@ -128,7 +165,24 @@ public class GoldConfiguration implements ApplicationContextAware {
         // Indexed Attributes
         mapConfig.addMapIndexConfig(new MapIndexConfig("garageKey", false));
         mapConfig.addMapIndexConfig(new MapIndexConfig("available", false));
-        mapConfig.addMapIndexConfig(new MapIndexConfig("floor", false));
+        mapConfig.addMapIndexConfig(new MapIndexConfig("number", false));
+
+        return mapConfig;
+    }
+
+    @Bean
+    public MapConfig floorStatisticRepositoryMapConfig() {
+        MapConfig mapConfig = new MapConfig(COLLECTION_FLOOR_STATISTIC);
+
+        // MapStore
+        MapStoreConfig mapStoreConfig = new MapStoreConfig();
+        mapStoreConfig.setImplementation(floorStatisticMapStore());
+        mapStoreConfig.setEnabled(true);
+        mapStoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.EAGER);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+
+        // Indexed Attributes
+        mapConfig.addMapIndexConfig(new MapIndexConfig("floorKey", false));
 
         return mapConfig;
     }

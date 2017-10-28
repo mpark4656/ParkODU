@@ -6,7 +6,7 @@ public class ParkingSpace implements Serializable {
 
     private String parkingSpaceKey;
     private String garageKey;
-    private int parkingSpaceNumber;
+    private Integer number;
     private boolean available;
     private String floor;
 
@@ -26,12 +26,12 @@ public class ParkingSpace implements Serializable {
         this.garageKey = garageKey;
     }
 
-    public int getParkingSpaceNumber() {
-        return parkingSpaceNumber;
+    public Integer getNumber() {
+        return number;
     }
 
-    public void setParkingSpaceNumber(int parkingSpaceNumber) {
-        this.parkingSpaceNumber = parkingSpaceNumber;
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 
     public boolean isAvailable() {
@@ -55,7 +55,7 @@ public class ParkingSpace implements Serializable {
         return "ParkingSpace{" +
                 "parkingSpaceKey='" + parkingSpaceKey + '\'' +
                 ", garageKey='" + garageKey + '\'' +
-                ", parkingSpaceNumber=" + parkingSpaceNumber +
+                ", number=" + number +
                 ", available=" + available +
                 ", floor='" + floor + '\'' +
                 '}';

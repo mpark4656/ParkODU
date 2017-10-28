@@ -18,6 +18,17 @@ apply plugin: 'org.springframework.boot'
 jar {
     baseName = 'cs410gold'
     version =  '1.0.0'
+
+    exclude "META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA"
+
+    from {
+        (configurations.runtime).collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    manifest {
+        attributes("Main-Class": "edu.odu.cs.gold.GoldApplication" )
+    }
 }
 
 sourceCompatibility = 1.8
@@ -29,17 +40,18 @@ repositories {
 
 dependencies {
 
-    compile("org.springframework.boot:spring-boot-starter-web:1.5.7.RELEASE")
-    compile("org.springframework.boot:spring-boot-starter-data-mongodb")
-    //compile("org.springframework.boot:spring-boot-starter-data-mongodb")
-    //compile("org.mongodb:mongo-java-driver:3.0.4")
+    compile("org.springframework.boot:spring-boot-devtools")
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile("org.springframework.boot:spring-boot-starter-security")
+    compile("org.thymeleaf.extras:thymeleaf-extras-conditionalcomments")
+
     /*
-    compile("org.springframework.boot:spring-boot-starter-web:1.5.7.RELEASE") {
-        exclude module: "spring-boot-starter-tomcat"
-    }
-    compile("org.springframework.boot:spring-boot-starter-jetty")
-    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile("org.springframework.boot:spring-boot-starter-web:1.5.7.RELEASE")
     */
+
+    compile("org.springframework.boot:spring-boot-starter-data-mongodb")
     compile("com.hazelcast:hazelcast:3.8.3")
     compile("com.fasterxml.jackson.core:jackson-databind")
 

@@ -3,9 +3,11 @@ package edu.odu.cs.gold.repository;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.query.Predicate;
+import edu.odu.cs.gold.model.Floor;
 import edu.odu.cs.gold.model.Garage;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -17,6 +19,15 @@ public class GarageRepository {
     public GarageRepository(HazelcastInstance hazelcastInstance, String collectionName) {
         this.hazelcastInstance = hazelcastInstance;
         this.collectionName = collectionName;
+    }
+
+    public String getId(Garage entity) {
+        return entity.getGarageKey();
+    }
+
+    public Collection<Garage> findAll() {
+        IMap map = hazelcastInstance.getMap(collectionName);
+        return map.values();
     }
 
     public Garage findByKey(String key) {
@@ -39,9 +50,9 @@ public class GarageRepository {
         return map.values(predicate).size();
     }
 
-    public void save(Garage garage) {
+    public void save(Garage entity) {
         IMap map = hazelcastInstance.getMap(collectionName);
-        map.set(garage.getGarageKey(), garage);
+        map.set(getId(entity), entity);
     }
 
     public void delete(String key) {

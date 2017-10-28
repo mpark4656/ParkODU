@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <!--
+    <link rel="icon" th:href="@{img/favicon.ico}"/>
+    -->
+
+    <title>ParkODU</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+
+    <!-- Custom styles -->
+    <!-- Notice how the link tag has two href attributes? The first one in normal HTML will be used by the browser when the template is read from the file system. The second with the ‘th’ namespace is used by Thymeleaf when the template is rendered via Spring Boot. In this case a SPeL expression is being used to resolve the path of the static asset under Spring Boot, and this will be used as the path when the template is rendered by Spring Boot for the browser via a request through Tomcat. -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/parking.css}"/>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <a class="navbar-brand" href="#" style="color: #FFD700;">ParkODU</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/garage}">Garages</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/team}">Team</a>
+                </li>
+                <!--
+                <li class="nav-item">
+                    <a class="nav-link" href="./deliverables.html">Deliverables</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./references.html">References</a>
+                </li>
+                -->
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container marketing" style="margin-top: 50px;">
+        <div class="row">
+            <h1>Home</h1>
+            <hr/>
+        </div>
+
+        <!-- FOOTER -->
+        <footer>
+            <p class="float-right"><a href="#">Back to top</a></p>
+            <p>&copy; 2017 ParkODU</p>
+        </footer>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets.js/jquery-3.2.1.min.assets.js"><\/script>')</script>
+    -->
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+</body>
+</html>

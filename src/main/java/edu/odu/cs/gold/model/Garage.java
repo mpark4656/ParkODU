@@ -1,16 +1,23 @@
 package edu.odu.cs.gold.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Garage implements Serializable {
 
     private String garageKey;
     private String name;
+    private String description;
+    private String heightDescription;
     private String addressOne;
     private String addressTwo;
     private String city;
     private String state;
     private String zipCode;
+    private Integer availableSpaces;
+    private Integer totalSpaces;
+    private Double capacity;
+    private Date lastUpdated;
 
     public String getGarageKey() {
         return garageKey;
@@ -26,6 +33,22 @@ public class Garage implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getHeightDescription() {
+        return heightDescription;
+    }
+
+    public void setHeightDescription(String heightDescription) {
+        this.heightDescription = heightDescription;
     }
 
     public String getAddressOne() {
@@ -68,16 +91,65 @@ public class Garage implements Serializable {
         this.zipCode = zipCode;
     }
 
+    public Integer getAvailableSpaces() {
+        return availableSpaces;
+    }
+
+    public void setAvailableSpaces(Integer availableSpaces) {
+        this.availableSpaces = availableSpaces;
+    }
+
+    public Integer getTotalSpaces() {
+        return totalSpaces;
+    }
+
+    public void setTotalSpaces(Integer totalSpaces) {
+        this.totalSpaces = totalSpaces;
+    }
+
+    public Double getCapacity() {
+        return capacity;
+    }
+
+    public void calculateCapacity() {
+        if (totalSpaces > 0) {
+            double total = (double)totalSpaces;
+            double unavailableTotal = (double)(totalSpaces - availableSpaces);
+            capacity = Math.round((unavailableTotal / total) * 10000.00) / 100.00;
+        }
+        else {
+            capacity = 0.0;
+        }
+    }
+
+    public void setCapacity(Double capacity) {
+        this.capacity = capacity;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
     @Override
     public String toString() {
         return "Garage{" +
                 "garageKey='" + garageKey + '\'' +
                 ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", heightDescription='" + heightDescription + '\'' +
                 ", addressOne='" + addressOne + '\'' +
                 ", addressTwo='" + addressTwo + '\'' +
                 ", city='" + city + '\'' +
                 ", state='" + state + '\'' +
                 ", zipCode='" + zipCode + '\'' +
+                ", availableSpaces=" + availableSpaces +
+                ", totalSpaces=" + totalSpaces +
+                ", capacity=" + capacity +
+                ", lastUpdated=" + lastUpdated +
                 '}';
     }
 }
