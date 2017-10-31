@@ -2,9 +2,6 @@ package edu.odu.cs.gold;
 
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
-import edu.odu.cs.gold.model.Floor;
-import edu.odu.cs.gold.model.FloorStatistic;
-import edu.odu.cs.gold.model.Garage;
 import edu.odu.cs.gold.model.ParkingSpace;
 import edu.odu.cs.gold.repository.FloorRepository;
 import edu.odu.cs.gold.repository.FloorStatisticRepository;
@@ -22,10 +19,9 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 @SpringBootApplication
-public class GoldApplication implements ApplicationContextAware, ApplicationListener<ContextRefreshedEvent> {
+public class ParkODUApplication implements ApplicationContextAware, ApplicationListener<ContextRefreshedEvent> {
 
     private ApplicationContext applicationContext;
     private boolean dataInitialized = true;
@@ -82,7 +78,7 @@ public class GoldApplication implements ApplicationContextAware, ApplicationList
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(GoldApplication.class, args);
+        SpringApplication.run(ParkODUApplication.class, args);
     }
 
 }
