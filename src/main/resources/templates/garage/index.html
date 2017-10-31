@@ -81,7 +81,9 @@
             <div class="row">
                 <table class="table table-bordered">
                     <tr>
+                        <!--
                         <th>GarageKey</th>
+                        -->
                         <th>Name</th>
                         <!--
                         <th>Address</th>
@@ -93,7 +95,9 @@
                         <th>Capacity</th>
                     </tr>
                     <tr th:each="garage : ${garages}">
+                        <!--
                         <td th:text="${garage.garageKey}">Garage Key</td>
+                        -->
                         <td><a th:href="@{/garage/details} + '/' + ${garage.garageKey}" title="Garage Details" th:text="${garage.name}">Details</a></td>
                         <!--
                         <td th:text="${garage.addressOne}">Address One</td>

@@ -16,7 +16,7 @@ apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 
 jar {
-    baseName = 'cs410gold'
+    baseName = 'parkodu'
     version =  '1.0.0'
 
     exclude "META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA"

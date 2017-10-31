@@ -89,7 +89,7 @@
                         <dd th:text="${garage.availableSpaces}"></dd>
                         <dt>Total Spaces</dt>
                         <dd th:text="${garage.totalSpaces}"></dd>
-                        <dt>Capacity</dt>
+                        <dt>Current Capacity</dt>
                         <dd th:text="${garage.capacity} + '%'"></dd>
                         <dt>Description</dt>
                         <dd th:text="${garage.description}"></dd>
@@ -101,17 +101,23 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
+                    <!--
                     <p>Note: The FloorKey column is for testing purposes only.</p>
+                    -->
                     <table class="table table-bordered table-striped table-centered">
                         <tr>
+                            <!--
                             <th class="col-md-3">FloorKey</th>
+                            -->
                             <th class="col-md-3">Floor</th>
                             <th class="col-md-3">Description</th>
                             <th class="col-md-3">Available Spaces</th>
                             <th class="col-md-3">Capacity</th>
                         </tr>
                         <tr th:each="floor : ${floors}">
+                            <!--
                             <td th:text="${floor.floorKey}"></td>
+                            -->
                             <td><a th:href="@{'/garage/details/' + ${floor.garageKey} + '/floor/' + ${floor.floorKey}}" th:text="'Level ' + ${floor.number}"></a></td>
                             <td th:text="${floor.description}"></td>
                             <td th:text="${floor.availableSpaces}"></td>

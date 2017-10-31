@@ -98,28 +98,17 @@
                     </dl>
                 </div>
                 <div class="col-md-7">
-
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-md-6">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <h4>Average Capacity per Hour</h4>
-                        </div>
-                        <div class="panel-body">
-                            <canvas id="floorStatisticChart" width="525" height="300"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <h4>Space Availablity Floor Plan</h4>
                         </div>
                         <div class="panel-body">
-                            <canvas id="floorPlan" width="525" height="300"
+                            <canvas id="floorPlan" width="800" height="425"
                                     style="border:1px solid #d3d3d3; padding: 5px;">
                                 Your browser does not support the HTML5 canvas tag.
                             </canvas>
@@ -128,7 +117,20 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h4>Average Capacity per Hour</h4>
+                        </div>
+                        <div class="panel-body">
+                            <canvas id="floorStatisticChart" width="525" height="150"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <!--
             <p>TODO - Remove tables below after testing.</p>
             <div class="row">
                 <div class="col-md-6">
@@ -149,18 +151,12 @@
                     <table class="table table-bordered table-striped table-centered">
                         <tr>
                             <th>ParkingSpaceKey</th>
-                            <!--
-                            <th>GarageKey</th>
-                            -->
                             <th>Floor</th>
                             <th>Number</th>
                             <th>Available</th>
                         </tr>
                         <tr th:each="parkingSpace : ${parkingSpaces}">
                             <td th:text="${parkingSpace.parkingSpaceKey}"></td>
-                            <!--
-                            <td th:text="${parkingSpace.garageKey}"></td>
-                            -->
                             <td th:text="${parkingSpace.floor}"></td>
                             <td th:text="${parkingSpace.number}"></td>
                             <td th:text="${parkingSpace.available}"></td>
@@ -168,6 +164,7 @@
                     </table>
                 </div>
             </div>
+            -->
 
             <!--
             <img th:src="@{/img/garage_a_floor_plan.png}" width="500" height="250"/>
@@ -203,9 +200,27 @@
 
        var spaceNumber = 1;
 
+       // Border
+       ctx.rect(0,0,800,425);
+       ctx.rect(0,0,50,50);
+
+       // Stairs - Top Right
+       ctx.font = "10px Arial";
+       ctx.rect(750,0,50,50);
+       var wordXOffset = 750;
+       var wordYOffset = 0;
+       ctx.fillText("Stairs",wordXOffset + 12,wordYOffset + 28);
+
+       // Stairs - Bottom Left
+       ctx.font = "10px Arial";
+       ctx.rect(0,375,50,50);
+       wordXOffset = 0;
+       wordYOffset = 375;
+       ctx.fillText("Stairs",wordXOffset + 12,wordYOffset + 28);
+
     // Top Row
     // Vertical Spaces
-    for (i = 0; i < 17; i++) {
+    for (i = 0; i < 28; i++) {
 
         var xOffset = 50;
         var yOffset = 0;
@@ -246,9 +261,9 @@
 
     // Right Column
     // Horizontal Spaces
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 13; i++) {
 
-        var xOffset = 475;
+        var xOffset = 750;
         var yOffset = 50;
 
         var spaceWidth = 50;
@@ -287,51 +302,10 @@
 
     // Bottom Row 1
     // Vertical Spaces
-    for (i = 7; i > 0; i--) {
+    for (i = 27; i > 0; i--) {
 
-        var xOffset = 25;
-        var yOffset = 250;
-
-        var spaceWidth = 25;
-        var spaceHeight = 50;
-
-        // Background
-        if (availableSpaces.includes(spaceNumber + "")) {
-        	ctx.fillStyle = "#00FF00";           // Green
-        }
-        else {
-        	ctx.fillStyle = "#FF0000";           // Red
-        }
-
-        ctx.rect((i*25)+xOffset,yOffset,spaceWidth,spaceHeight);       // 1
-        ctx.fillRect((i*25)+xOffset,yOffset,spaceWidth,spaceHeight);   // 1
-
-		// Space Number
-		if (availableSpaces.includes(spaceNumber + "")) {
-			ctx.fillStyle = "#000000"; // Black
-		}
-        else {
-        	ctx.fillStyle = "#FFFFFF"; // White
-        }
-
-        ctx.font = "10px Arial";
-
-   		if (spaceNumber < 10) {
-        	ctx.fillText(spaceNumber,10+(i*25)+xOffset,yOffset+30); // 1
-        }
-        else if (spaceNumber => 10 && spaceNumber < 100) {
-        	ctx.fillText(spaceNumber,7+(i*25)+xOffset,yOffset+30); // 1
-        }
-
-        spaceNumber++;
-	}
-
-    // Bottom Row 2
-    // Vertical Spaces
-    for (i = 7; i > 0; i--) {
-
-        var xOffset = 275;
-        var yOffset = 250;
+        var xOffset = 50;
+        var yOffset = 375;
 
         var spaceWidth = 25;
         var spaceHeight = 50;
@@ -367,53 +341,14 @@
         spaceNumber++;
 	}
 
-    // Left Column
-    // Horizontal Spaces
-    for (i = 8; i > 0; i--) {
 
-        var xOffset = 0;
-        var yOffset = 25;
-
-        var spaceWidth = 50;
-        var spaceHeight = 25;
-
-        // Background
-        if (availableSpaces.includes(spaceNumber + "")) {
-        	ctx.fillStyle = "#00FF00";           // Green
-        }
-        else {
-        	ctx.fillStyle = "#FF0000";           // Red
-        }
-
-        ctx.rect(xOffset,(i*25)+yOffset,spaceWidth,spaceHeight);       // 1
-        ctx.fillRect(xOffset,(i*25)+yOffset,spaceWidth,spaceHeight);   // 1
-
-		// Space Number
-		if (availableSpaces.includes(spaceNumber + "")) {
-			ctx.fillStyle = "#000000"; // Black
-		}
-        else {
-        	ctx.fillStyle = "#FFFFFF"; // White
-        }
-
-        ctx.font = "10px Arial";
-
-   		if (spaceNumber < 10) {
-        	ctx.fillText(spaceNumber,20+xOffset,(i*25)+yOffset+15); // 1
-        }
-        else if (spaceNumber => 10 && spaceNumber < 100) {
-        	ctx.fillText(spaceNumber,17+xOffset,(i*25)+yOffset+15); // 1
-        }
-
-        spaceNumber++;
-	}
 
     // Middle Row 1
     // Vertical Spaces
-    for (i = 0; i < 13; i++) {
+    for (i = 0; i < 24; i++) {
 
-        var xOffset = 100;
-        var yOffset = 100;
+        var xOffset = 88;
+        var yOffset = 90;
 
         var spaceWidth = 25;
         var spaceHeight = 50;
@@ -451,10 +386,10 @@
 
     // Middle Row 2
     // Vertical Spaces
-    for (i = 0; i < 13; i++) {
+    for (i = 0; i < 23; i++) {
 
         var xOffset = 100;
-        var yOffset = 150;
+        var yOffset = 140;
 
         var spaceWidth = 25;
         var spaceHeight = 50;
@@ -483,8 +418,100 @@
    		if (spaceNumber < 10) {
         	ctx.fillText(spaceNumber,10+(i*25)+xOffset,yOffset+30); // 1
         }
-        else if (spaceNumber => 10 && spaceNumber < 100) {
+        else if (spaceNumber >= 10 && spaceNumber < 100) {
         	ctx.fillText(spaceNumber,7+(i*25)+xOffset,yOffset+30); // 1
+        }
+        else if (spaceNumber >= 100 && spaceNumber < 1000) {
+        	ctx.fillText(spaceNumber,3+(i*25)+xOffset,yOffset+30); // 1
+        }
+
+        spaceNumber++;
+	}
+
+    // Middle Row 3
+    // Vertical Spaces
+    for (i = 0; i < 23; i++) {
+
+        var xOffset = 100;
+        var yOffset = 235;
+
+        var spaceWidth = 25;
+        var spaceHeight = 50;
+
+        // Background
+        if (availableSpaces.includes(spaceNumber + "")) {
+        	ctx.fillStyle = "#00FF00";           // Green
+        }
+        else {
+        	ctx.fillStyle = "#FF0000";           // Red
+        }
+
+        ctx.rect((i*25)+xOffset,yOffset,spaceWidth,spaceHeight);       // 1
+        ctx.fillRect((i*25)+xOffset,yOffset,spaceWidth,spaceHeight);   // 1
+
+		// Space Number
+		if (availableSpaces.includes(spaceNumber + "")) {
+			ctx.fillStyle = "#000000"; // Black
+		}
+        else {
+        	ctx.fillStyle = "#FFFFFF"; // White
+        }
+
+        ctx.font = "10px Arial";
+
+   		if (spaceNumber < 10) {
+        	ctx.fillText(spaceNumber,10+(i*25)+xOffset,yOffset+30); // 1
+        }
+        else if (spaceNumber >= 10 && spaceNumber < 100) {
+        	ctx.fillText(spaceNumber,7+(i*25)+xOffset,yOffset+30); // 1
+        }
+        else if (spaceNumber >= 100 && spaceNumber < 1000) {
+        	ctx.fillText(spaceNumber,3+(i*25)+xOffset,yOffset+30); // 1
+        }
+
+        spaceNumber++;
+	}
+
+
+        // Middle Row 4
+    // Vertical Spaces
+    for (i = 0; i < 24; i++) {
+
+        var xOffset = 88;
+        var yOffset = 285;
+
+        var spaceWidth = 25;
+        var spaceHeight = 50;
+
+        // Background
+        if (availableSpaces.includes(spaceNumber + "")) {
+        	ctx.fillStyle = "#00FF00";           // Green
+        }
+        else {
+        	ctx.fillStyle = "#FF0000";           // Red
+        }
+
+        ctx.rect((i*25)+xOffset,yOffset,spaceWidth,spaceHeight);       // 1
+        ctx.fillRect((i*25)+xOffset,yOffset,spaceWidth,spaceHeight);   // 1
+
+		// Space Number
+		if (availableSpaces.includes(spaceNumber + "")) {
+			ctx.fillStyle = "#000000"; // Black
+		}
+        else {
+        	ctx.fillStyle = "#FFFFFF"; // White
+        }
+
+        ctx.font = "10px Arial";
+
+   		if (spaceNumber < 10) {
+        	ctx.fillText(spaceNumber,10+(i*25)+xOffset,yOffset+30); // 1
+        }
+        else if (spaceNumber >= 10 && spaceNumber < 100) {
+        	ctx.fillText(spaceNumber,7+(i*25)+xOffset,yOffset+30); // 1
+        }
+        else if (spaceNumber >= 100 && spaceNumber < 1000) {
+        	ctx.fillText(spaceNumber,3+(i*25)+xOffset,yOffset+30); // 1
         }
 
         spaceNumber++;
