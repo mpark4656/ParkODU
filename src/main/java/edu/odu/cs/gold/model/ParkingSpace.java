@@ -1,6 +1,8 @@
 package edu.odu.cs.gold.model;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.UUID;
 
 public class ParkingSpace implements Serializable {
 
@@ -9,6 +11,12 @@ public class ParkingSpace implements Serializable {
     private Integer number;
     private boolean available;
     private String floor;
+    private String permitType;
+    private Date lastUpdated;
+
+    public ParkingSpace() {
+        parkingSpaceKey = UUID.randomUUID().toString();
+    }
 
     public String getParkingSpaceKey() {
         return parkingSpaceKey;
@@ -50,6 +58,22 @@ public class ParkingSpace implements Serializable {
         this.floor = floor;
     }
 
+    public String getPermitType() {
+        return permitType;
+    }
+
+    public void setPermitType(String permitType) {
+        this.permitType = permitType;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
     @Override
     public String toString() {
         return "ParkingSpace{" +
@@ -58,6 +82,8 @@ public class ParkingSpace implements Serializable {
                 ", number=" + number +
                 ", available=" + available +
                 ", floor='" + floor + '\'' +
+                ", permitType='" + permitType + '\'' +
+                ", lastUpdated='" + lastUpdated + '\'' +
                 '}';
     }
 }

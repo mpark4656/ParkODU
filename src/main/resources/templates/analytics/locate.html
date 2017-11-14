@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid navbar-container">
+        <div class="col-md-3">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- Main Logo -->
+                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="navbar" class="navbar-collapse collapse navbar-center">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/garage}">Garages</a></li>
+                    <li><a th:href="@{/analytics/locate}">Search</a></li>
+                    <!-- Settings Link -->
+                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
+                </ul>
+                <!--
+                <form class="navbar-form navbar-right">
+                    <input type="text" class="form-control" placeholder="Search..."/>
+                </form>
+                -->
+            </div>
+        </div>
+        <div class="col-md-3">
+            <!-- Social Media Links -->
+            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid main-container">
+
+    <!-- Welcome User -->
+    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
+
+            <h1 class="text-center" style="text-transform: uppercase;">Search</h1>
+            <hr/>
+
+            <form class="form-horizontal" th:action="@{/analytics/locate}" method="POST">
+
+                <input type="hidden" name="latitude" id="latitude" />
+                <input type="hidden" name="longitude" id="longitude" />
+
+                <div class="form-group">
+                    <label for="startingAddress" class="control-label col-md-4">Starting Location</label>
+                    <div class="col-md-8">
+                        <input type="text" name="startingAddress" id="startingAddress" placeholder="Enter your starting address" onFocus="getLocationByGPS()" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-4">Permit Types</label>
+                    <div class="col-md-8">
+                        <input name="permitTypes" id="permitType1" type="checkbox" value="Commuter" />
+                        <label for="permitType1">Commuter</label>
+                        <br/>
+                        <input name="permitTypes" id="permitType2" type="checkbox" value="Faculty" />
+                        <label for="permitType2">Faculty</label>
+                        <br/>
+                        <input name="permitTypes" id="permitType3" type="checkbox" value="Metered" />
+                        <label for="permitType3">Metered</label>
+                        <br/>
+                        <input name="permitTypes" id="permitType4" type="checkbox" value="Quad Resident" />
+                        <label for="permitType4">Quad Resident</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="destinationBuildingId" class="control-label col-md-4">Destination Building</label>
+                    <div class="col-md-8">
+                        <select name="destinationBuildingId" id="destinationBuildingId" class="form-control">
+                            <option th:each="building : ${buildings}" th:value="${building.buildingKey}" th:text="${building.name}"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-8 col-md-offset-4">
+                        <input type="submit" value="Search" class="btn btn-primary" />
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <br/>
+
+    <!-- Footer -->
+    <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
+</div>
+
+<script>
+var startingAddress;
+
+function initAutocomplete() {
+    startingAddress = new google.maps.places.Autocomplete((document.getElementById('startingAddress')), {types: ['geocode']});
+    startingAddress.addListener('place_changed', getLocationByAddress);
+}
+
+function getLocationByAddress() {
+    var place = startingAddress.getPlace();
+    document.getElementById('latitude').value = startingAddress.getPlace().geometry.location.lat();
+    document.getElementById('longitude').value = startingAddress.getPlace().geometry.location.lng();
+}
+
+function getLocationByGPS() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var geolocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+            var circle = new google.maps.Circle({
+                center: geolocation,
+                radius: position.coords.accuracy
+            });
+            startingAddress.setBounds(circle.getBounds());
+
+            document.getElementById('latitude').value = position.coords.latitude;
+            document.getElementById('longitude').value = position.coords.longitude;
+        });
+    }
+}
+</script>
+
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<!-- Google Maps API Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: google-maps-scripts" /> /*/-->
+
+</body>
+</html>

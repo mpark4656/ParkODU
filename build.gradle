@@ -17,7 +17,7 @@ apply plugin: 'org.springframework.boot'
 
 jar {
     baseName = 'parkodu'
-    version =  '1.0.0'
+    version = '1.0.0-SNAPSHOT'
 
     exclude "META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA"
 
@@ -40,20 +40,24 @@ repositories {
 
 dependencies {
 
+    // Spring Framework
     compile("org.springframework.boot:spring-boot-devtools")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.springframework.boot:spring-boot-starter-security")
-    compile("org.thymeleaf.extras:thymeleaf-extras-conditionalcomments")
-
-    /*
-    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-    compile("org.springframework.boot:spring-boot-starter-web:1.5.7.RELEASE")
-    */
-
     compile("org.springframework.boot:spring-boot-starter-data-mongodb")
+    compile("org.springframework.security:spring-security-taglibs")
+
+    // Hazelcast
     compile("com.hazelcast:hazelcast:3.8.3")
+
+    // JSON
     compile("com.fasterxml.jackson.core:jackson-databind")
 
+    // Thymeleaf
+    compile("org.thymeleaf.extras:thymeleaf-extras-conditionalcomments")
+    compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity4")
+
+    // Testing
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }

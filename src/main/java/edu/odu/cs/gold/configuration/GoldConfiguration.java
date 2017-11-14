@@ -3,15 +3,9 @@ package edu.odu.cs.gold.configuration;
 import com.hazelcast.config.*;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import edu.odu.cs.gold.model.Floor;
-import edu.odu.cs.gold.model.FloorStatistic;
-import edu.odu.cs.gold.model.Garage;
-import edu.odu.cs.gold.model.ParkingSpace;
+import edu.odu.cs.gold.model.*;
 import edu.odu.cs.gold.mongo.MongoMapStore;
-import edu.odu.cs.gold.repository.FloorRepository;
-import edu.odu.cs.gold.repository.FloorStatisticRepository;
-import edu.odu.cs.gold.repository.GarageRepository;
-import edu.odu.cs.gold.repository.ParkingSpaceRepository;
+import edu.odu.cs.gold.repository.*;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -29,6 +23,9 @@ public class GoldConfiguration implements ApplicationContextAware {
     public static final String COLLECTION_GARAGE = "Garage";
     public static final String COLLECTION_FLOOR = "Floor";
     public static final String COLLECTION_PARKING_SPACE = "ParkingSpace";
+    public static final String COLLECTION_BUILDING = "Building";
+
+    public static final String COLLECTION_TRAVEL_DISTANCE_DURATION = "TravelDistanceDuration";
 
     public static final String COLLECTION_FLOOR_STATISTIC = "FloorStatistic";
 
@@ -94,6 +91,16 @@ public class GoldConfiguration implements ApplicationContextAware {
     }
 
     @Bean
+    public BuildingRepository buildingRepository() {
+        return new BuildingRepository(hazelcastInstance(), COLLECTION_BUILDING);
+    }
+
+    @Bean
+    public TravelDistanceDurationRepository travelDistanceDurationRepository() {
+        return new TravelDistanceDurationRepository(hazelcastInstance(), COLLECTION_TRAVEL_DISTANCE_DURATION);
+    }
+
+    @Bean
     public FloorStatisticRepository floorStatisticRepository() {
         return new FloorStatisticRepository(hazelcastInstance(), COLLECTION_FLOOR_STATISTIC);
     }
@@ -111,6 +118,16 @@ public class GoldConfiguration implements ApplicationContextAware {
     @Bean
     public MongoMapStore parkingSpaceMapStore() {
         return new MongoMapStore(mongoTemplate, COLLECTION_PARKING_SPACE, ParkingSpace.class);
+    }
+
+    @Bean
+    public MongoMapStore buildingMapStore() {
+        return new MongoMapStore(mongoTemplate, COLLECTION_BUILDING, Building.class);
+    }
+
+    @Bean
+    public MongoMapStore travelDistanceDurationMapStore() {
+        return new MongoMapStore(mongoTemplate, COLLECTION_TRAVEL_DISTANCE_DURATION, TravelDistanceDuration.class);
     }
 
     @Bean
@@ -166,6 +183,42 @@ public class GoldConfiguration implements ApplicationContextAware {
         mapConfig.addMapIndexConfig(new MapIndexConfig("garageKey", false));
         mapConfig.addMapIndexConfig(new MapIndexConfig("available", false));
         mapConfig.addMapIndexConfig(new MapIndexConfig("number", false));
+
+        return mapConfig;
+    }
+
+    @Bean
+    public MapConfig buildingRepositoryMapConfig() {
+        MapConfig mapConfig = new MapConfig(COLLECTION_BUILDING);
+
+        // MapStore
+        MapStoreConfig mapStoreConfig = new MapStoreConfig();
+        mapStoreConfig.setImplementation(buildingMapStore());
+        mapStoreConfig.setEnabled(true);
+        mapStoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.EAGER);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+
+        // Indexed Attributes
+        mapConfig.addMapIndexConfig(new MapIndexConfig("buildingKey", false));
+
+        return mapConfig;
+    }
+
+    @Bean
+    public MapConfig travelDistanceDurationRepositoryMapConfig() {
+        MapConfig mapConfig = new MapConfig(COLLECTION_TRAVEL_DISTANCE_DURATION);
+
+        // MapStore
+        MapStoreConfig mapStoreConfig = new MapStoreConfig();
+        mapStoreConfig.setImplementation(travelDistanceDurationMapStore());
+        mapStoreConfig.setEnabled(true);
+        mapStoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.EAGER);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+
+        // Indexed Attributes
+        mapConfig.addMapIndexConfig(new MapIndexConfig("garageKey", false));
+        mapConfig.addMapIndexConfig(new MapIndexConfig("buildingKey", false));
+        mapConfig.addMapIndexConfig(new MapIndexConfig("travelMode", false));
 
         return mapConfig;
     }

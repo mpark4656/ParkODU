@@ -1,436 +1,84 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content=""/>
-    <meta name="author" content=""/>
-
-    <!--
-    <link rel="icon" href="../../favicon.ico"/>
-    -->
-
-    <title>ParkODU</title>
-
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
-
-    <!-- ParkODU Custom Stylesheet -->
-    <link rel="stylesheet" type="text/css" th:href="@{/css/parking.css}"/>
-
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
 </head>
-
 <body>
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#" style="color: yellow;">ParkODU</a>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid navbar-container">
+        <div class="col-md-3">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- Main Logo -->
+                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
+            </div>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Profile</a></li>
-                <li><a href="#">Help</a></li>
-            </ul>
-            <form class="navbar-form navbar-right">
-                <input type="text" class="form-control" placeholder="Search..."/>
-            </form>
+        <div class="col-md-6">
+            <div id="navbar" class="navbar-collapse collapse navbar-center">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/garage}">Garages</a></li>
+                    <li><a th:href="@{/analytics/locate}">Search</a></li>
+                    <!-- Settings Link -->
+                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
+                </ul>
+                <!--
+                <form class="navbar-form navbar-right">
+                    <input type="text" class="form-control" placeholder="Search..."/>
+                </form>
+                -->
+            </div>
+        </div>
+        <div class="col-md-3">
+            <!-- Social Media Links -->
+            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
         </div>
     </div>
 </nav>
 
 <div class="container-fluid main-container">
-    <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-            <ul class="nav nav-sidebar">
-                <li class="active"><a th:href="@{/garage}">Garages <span class="sr-only">(current)</span></a></li>
-                <!--
-                <li><a href="#">Analytics</a></li>
-                <li><a href="#">Export</a></li>
-                -->
-            </ul>
-            <!--
-            <ul class="nav nav-sidebar">
-                <li><a href="">Nav item</a></li>
-                <li><a href="">Nav item again</a></li>
-                <li><a href="">One more nav</a></li>
-                <li><a href="">Another nav item</a></li>
-                <li><a href="">More navigation</a></li>
-            </ul>
-            <ul class="nav nav-sidebar">
-                <li><a href="">Nav item again</a></li>
-                <li><a href="">One more nav</a></li>
-                <li><a href="">Another nav item</a></li>
-            </ul>
-            -->
-        </div>
-        <div class="col-sm-9 col-md-10 main">
-            <h1>Garages</h1>
-            <hr/>
 
-            <div class="row">
-                <table class="table table-bordered">
+    <!-- Welcome User -->
+    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+            <h1 class="text-center" style="text-transform: uppercase;">Garages</h1>
+            <hr/>
+            <table class="table table-bordered table-centered">
+                <thead>
                     <tr>
-                        <!--
-                        <th>GarageKey</th>
-                        -->
-                        <th>Name</th>
-                        <!--
-                        <th>Address</th>
-                        <th>City</th>
-                        <th>State</th>
-                        <th>Zip</th>
-                        -->
-                        <th>Available Spaces</th>
-                        <th>Capacity</th>
+                        <th width="40%">Garage</th>
+                        <th width="30%">Available Spaces</th>
+                        <th width="30%">Occupancy Rate</th>
                     </tr>
+                </thead>
+                <tbody>
                     <tr th:each="garage : ${garages}">
-                        <!--
-                        <td th:text="${garage.garageKey}">Garage Key</td>
-                        -->
-                        <td><a th:href="@{/garage/details} + '/' + ${garage.garageKey}" title="Garage Details" th:text="${garage.name}">Details</a></td>
-                        <!--
-                        <td th:text="${garage.addressOne}">Address One</td>
-                        <td th:text="${garage.city}">City</td>
-                        <td th:text="${garage.state}">State</td>
-                        <td th:text="${garage.zipCode}">Zip</td>
-                        -->
+                        <td style="text-align: left;"><a th:href="@{/garage/details} + '/' + ${garage.garageKey}" title="Garage Details" th:text="${garage.name}">Details</a></td>
                         <td th:text="${garage.availableSpaces}">Available Spaces</td>
                         <td th:text="${garage.capacity} + '%'"></td>
                     </tr>
-                </table>
-            </div>
+                </tbody>
+            </table>
         </div>
     </div>
+
+    <br/>
+
+    <!-- Footer -->
+    <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
 
-<footer class="footer">
-    <p>&copy; 2017 ParkODU</p>
-</footer>
-
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script th:src="@{/js/popper.min.js}"></script>
-<script th:src="@{/js/bootstrap.min.js}"></script>
-
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    window.onload = function() {
-    var canvas = document.getElementById("myCanvas");
-    var ctx = canvas.getContext("2d");
-    var img = document.getElementById("scream");
-
-       //ctx.drawImage(img, 0, 0);
-
-       ctx.lineWidth="1";
-
-       var available = /*[[${availableParkingSpaces}]]*/;
-       var availableSpaces = available.split(',');
-
-       var spaceNumber = 1;
-
-    // Top Row
-    // Vertical Spaces
-    for (i = 0; i < 17; i++) {
-
-        var xOffset = 50;
-        var yOffset = 0;
-
-        var spaceWidth = 25;
-        var spaceHeight = 50;
-
-        // Background
-        if (availableSpaces.includes(spaceNumber + "")) {
-        	ctx.fillStyle = "#00FF00";           // Green
-        }
-        else {
-        	ctx.fillStyle = "#FF0000";           // Red
-        }
-
-        ctx.rect((i*25)+xOffset,yOffset,spaceWidth,spaceHeight);       // 1
-        ctx.fillRect((i*25)+xOffset,yOffset,spaceWidth,spaceHeight);   // 1
-
-		// Space Number
-		if (availableSpaces.includes(spaceNumber + "")) {
-			ctx.fillStyle = "#000000"; // Black
-		}
-        else {
-        	ctx.fillStyle = "#FFFFFF"; // White
-        }
-
-        ctx.font = "10px Arial";
-
-   		if (spaceNumber < 10) {
-        	ctx.fillText(spaceNumber,10+(i*25)+xOffset,yOffset+30); // 1
-        }
-        else if (spaceNumber => 10 && spaceNumber < 100) {
-        	ctx.fillText(spaceNumber,7+(i*25)+xOffset,yOffset+30); // 1
-        }
-
-        spaceNumber++;
-	}
-
-    // Right Column
-    // Horizontal Spaces
-    for (i = 0; i < 8; i++) {
-
-        var xOffset = 475;
-        var yOffset = 50;
-
-        var spaceWidth = 50;
-        var spaceHeight = 25;
-
-        // Background
-        if (availableSpaces.includes(spaceNumber + "")) {
-        	ctx.fillStyle = "#00FF00";           // Green
-        }
-        else {
-        	ctx.fillStyle = "#FF0000";           // Red
-        }
-
-        ctx.rect(xOffset,(i*25)+yOffset,spaceWidth,spaceHeight);       // 1
-        ctx.fillRect(xOffset,(i*25)+yOffset,spaceWidth,spaceHeight);   // 1
-
-		// Space Number
-		if (availableSpaces.includes(spaceNumber + "")) {
-			ctx.fillStyle = "#000000"; // Black
-		}
-        else {
-        	ctx.fillStyle = "#FFFFFF"; // White
-        }
-
-        ctx.font = "10px Arial";
-
-   		if (spaceNumber < 10) {
-        	ctx.fillText(spaceNumber,20+xOffset,(i*25)+yOffset+15); // 1
-        }
-        else if (spaceNumber => 10 && spaceNumber < 100) {
-        	ctx.fillText(spaceNumber,17+xOffset,(i*25)+yOffset+15); // 1
-        }
-
-        spaceNumber++;
-	}
-
-    // Bottom Row 1
-    // Vertical Spaces
-    for (i = 7; i > 0; i--) {
-
-        var xOffset = 25;
-        var yOffset = 250;
-
-        var spaceWidth = 25;
-        var spaceHeight = 50;
-
-        // Background
-        if (availableSpaces.includes(spaceNumber + "")) {
-        	ctx.fillStyle = "#00FF00";           // Green
-        }
-        else {
-        	ctx.fillStyle = "#FF0000";           // Red
-        }
-
-        ctx.rect((i*25)+xOffset,yOffset,spaceWidth,spaceHeight);       // 1
-        ctx.fillRect((i*25)+xOffset,yOffset,spaceWidth,spaceHeight);   // 1
-
-		// Space Number
-		if (availableSpaces.includes(spaceNumber + "")) {
-			ctx.fillStyle = "#000000"; // Black
-		}
-        else {
-        	ctx.fillStyle = "#FFFFFF"; // White
-        }
-
-        ctx.font = "10px Arial";
-
-   		if (spaceNumber < 10) {
-        	ctx.fillText(spaceNumber,10+(i*25)+xOffset,yOffset+30); // 1
-        }
-        else if (spaceNumber => 10 && spaceNumber < 100) {
-        	ctx.fillText(spaceNumber,7+(i*25)+xOffset,yOffset+30); // 1
-        }
-
-        spaceNumber++;
-	}
-
-    // Bottom Row 2
-    // Vertical Spaces
-    for (i = 7; i > 0; i--) {
-
-        var xOffset = 275;
-        var yOffset = 250;
-
-        var spaceWidth = 25;
-        var spaceHeight = 50;
-
-        // Background
-        if (availableSpaces.includes(spaceNumber + "")) {
-        	ctx.fillStyle = "#00FF00";           // Green
-        }
-        else {
-        	ctx.fillStyle = "#FF0000";           // Red
-        }
-
-        ctx.rect((i*25)+xOffset,yOffset,spaceWidth,spaceHeight);       // 1
-        ctx.fillRect((i*25)+xOffset,yOffset,spaceWidth,spaceHeight);   // 1
-
-		// Space Number
-		if (availableSpaces.includes(spaceNumber + "")) {
-			ctx.fillStyle = "#000000"; // Black
-		}
-        else {
-        	ctx.fillStyle = "#FFFFFF"; // White
-        }
-
-        ctx.font = "10px Arial";
-
-   		if (spaceNumber < 10) {
-        	ctx.fillText(spaceNumber,10+(i*25)+xOffset,yOffset+30); // 1
-        }
-        else if (spaceNumber => 10 && spaceNumber < 100) {
-        	ctx.fillText(spaceNumber,7+(i*25)+xOffset,yOffset+30); // 1
-        }
-
-        spaceNumber++;
-	}
-
-    // Left Column
-    // Horizontal Spaces
-    for (i = 8; i > 0; i--) {
-
-        var xOffset = 0;
-        var yOffset = 25;
-
-        var spaceWidth = 50;
-        var spaceHeight = 25;
-
-        // Background
-        if (availableSpaces.includes(spaceNumber + "")) {
-        	ctx.fillStyle = "#00FF00";           // Green
-        }
-        else {
-        	ctx.fillStyle = "#FF0000";           // Red
-        }
-
-        ctx.rect(xOffset,(i*25)+yOffset,spaceWidth,spaceHeight);       // 1
-        ctx.fillRect(xOffset,(i*25)+yOffset,spaceWidth,spaceHeight);   // 1
-
-		// Space Number
-		if (availableSpaces.includes(spaceNumber + "")) {
-			ctx.fillStyle = "#000000"; // Black
-		}
-        else {
-        	ctx.fillStyle = "#FFFFFF"; // White
-        }
-
-        ctx.font = "10px Arial";
-
-   		if (spaceNumber < 10) {
-        	ctx.fillText(spaceNumber,20+xOffset,(i*25)+yOffset+15); // 1
-        }
-        else if (spaceNumber => 10 && spaceNumber < 100) {
-        	ctx.fillText(spaceNumber,17+xOffset,(i*25)+yOffset+15); // 1
-        }
-
-        spaceNumber++;
-	}
-
-    // Middle Row 1
-    // Vertical Spaces
-    for (i = 0; i < 13; i++) {
-
-        var xOffset = 100;
-        var yOffset = 100;
-
-        var spaceWidth = 25;
-        var spaceHeight = 50;
-
-        // Background
-        if (availableSpaces.includes(spaceNumber + "")) {
-        	ctx.fillStyle = "#00FF00";           // Green
-        }
-        else {
-        	ctx.fillStyle = "#FF0000";           // Red
-        }
-
-        ctx.rect((i*25)+xOffset,yOffset,spaceWidth,spaceHeight);       // 1
-        ctx.fillRect((i*25)+xOffset,yOffset,spaceWidth,spaceHeight);   // 1
-
-		// Space Number
-		if (availableSpaces.includes(spaceNumber + "")) {
-			ctx.fillStyle = "#000000"; // Black
-		}
-        else {
-        	ctx.fillStyle = "#FFFFFF"; // White
-        }
-
-        ctx.font = "10px Arial";
-
-   		if (spaceNumber < 10) {
-        	ctx.fillText(spaceNumber,10+(i*25)+xOffset,yOffset+30); // 1
-        }
-        else if (spaceNumber => 10 && spaceNumber < 100) {
-        	ctx.fillText(spaceNumber,7+(i*25)+xOffset,yOffset+30); // 1
-        }
-
-        spaceNumber++;
-	}
-
-    // Middle Row 2
-    // Vertical Spaces
-    for (i = 0; i < 13; i++) {
-
-        var xOffset = 100;
-        var yOffset = 150;
-
-        var spaceWidth = 25;
-        var spaceHeight = 50;
-
-        // Background
-        if (availableSpaces.includes(spaceNumber + "")) {
-        	ctx.fillStyle = "#00FF00";           // Green
-        }
-        else {
-        	ctx.fillStyle = "#FF0000";           // Red
-        }
-
-        ctx.rect((i*25)+xOffset,yOffset,spaceWidth,spaceHeight);       // 1
-        ctx.fillRect((i*25)+xOffset,yOffset,spaceWidth,spaceHeight);   // 1
-
-		// Space Number
-		if (availableSpaces.includes(spaceNumber + "")) {
-			ctx.fillStyle = "#000000"; // Black
-		}
-        else {
-        	ctx.fillStyle = "#FFFFFF"; // White
-        }
-
-        ctx.font = "10px Arial";
-
-   		if (spaceNumber < 10) {
-        	ctx.fillText(spaceNumber,10+(i*25)+xOffset,yOffset+30); // 1
-        }
-        else if (spaceNumber => 10 && spaceNumber < 100) {
-        	ctx.fillText(spaceNumber,7+(i*25)+xOffset,yOffset+30); // 1
-        }
-
-        spaceNumber++;
-	}
-
-    ctx.stroke();
-};
-/*]]>*/
-</script>
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 
 </body>
 </html>

@@ -2,6 +2,7 @@ package edu.odu.cs.gold.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 public class Garage implements Serializable {
 
@@ -17,7 +18,20 @@ public class Garage implements Serializable {
     private Integer availableSpaces;
     private Integer totalSpaces;
     private Double capacity;
+    private Double latitude;
+    private Double longitude;
     private Date lastUpdated;
+
+    public Garage() {
+        this.garageKey = UUID.randomUUID().toString();
+    }
+
+    public Garage(String name, Double latitude, Double longitude) {
+        this.garageKey = UUID.randomUUID().toString();
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 
     public String getGarageKey() {
         return garageKey;
@@ -126,12 +140,32 @@ public class Garage implements Serializable {
         this.capacity = capacity;
     }
 
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
     public Date getLastUpdated() {
         return lastUpdated;
     }
 
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    public Location getLocation() {
+        return new Location(garageKey, name, latitude, longitude);
     }
 
     @Override
@@ -149,6 +183,8 @@ public class Garage implements Serializable {
                 ", availableSpaces=" + availableSpaces +
                 ", totalSpaces=" + totalSpaces +
                 ", capacity=" + capacity +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
                 ", lastUpdated=" + lastUpdated +
                 '}';
     }

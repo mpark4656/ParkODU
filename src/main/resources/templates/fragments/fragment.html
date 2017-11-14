@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" 
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<!-- Head -->
+<head th:fragment="head">
+	<meta charset="utf-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<meta name="description" content=""/>
+	<meta name="author" content=""/>
+
+	<link rel="icon" href="../../favicon.ico"/>
+
+	<title>ParkODU</title>
+
+	<!-- Bootstrap core CSS -->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+	<!-- Delightful Indulgence Custom Stylesheet -->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/parkodu.css}"/>
+
+</head>
+<body>
+	<!-- Main Logo -->
+	<div th:fragment="main-logo">
+		<a class="navbar-brand" th:href="@{/}">ParkODU</a>
+	</div>
+	<!--
+	<a class="navbar-brand" th:href="@{/}"><img src="./img/delightful_indulgence_logo.png" alt="Delightful Indulgence Logo"/></a>
+	-->
+
+	<!-- Settings Link -->
+	<div th:fragment="settings-link">
+		<li sec:authorize="hasRole('ADMIN')"><a th:href="@{/settings}">Settings</a></li>
+		<!--
+		<li><a th:href="@{/settings}">Settings</a></li>
+		-->
+	</div>
+
+	<!-- Settings Link (Active) -->
+	<div th:fragment="settings-link-active">
+		<li sec:authorize="hasRole('ADMIN')" class="active"><a th:href="@{/settings}">Settings</a></li>
+		<!--
+		<li class="active"><a th:href="@{/settings}">Settings</a></li>
+		-->
+	</div>
+
+	<!-- Social Media Links -->
+	<div th:fragment="social-media-links">
+		<div class="social-media-links-container">
+			<a target="_blank" href="#" class="fa fa-facebook facebook-icon"></a>
+			<a target="_blank" href="#" class="fa fa-instagram instagram-icon"></a>
+		</div>
+	</div>
+
+	<!-- Welcome User -->
+	<div th:fragment="welcome-user">
+		<div sec:authorize="isAuthenticated()" class="text-right">
+			<form th:action="@{/logout}" method="POST">
+				<p class="submenu-text" style="display: inline;">Welcome <span sec:authentication="name"></span></p>
+				<span class="submenu-text">|</span>
+				<input type="submit" class="logout-button small submenu-text" style="display: inline; margin-left: 5px;" value="Logout"/>
+			</form>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<div th:fragment="footer">
+		<footer class="footer">
+			<p>&copy; 2017 ParkODU</p>
+		</footer>
+	</div>
+
+	<!-- Scripts -->
+	<div th:fragment="scripts">
+		<script th:src="@{/js/jquery-3.2.1.min.js}"></script>
+		<script th:src="@{/js/popper.min.js}"></script>
+		<script th:src="@{/js/bootstrap.min.js}"></script>
+	</div>
+
+	<!-- Google Maps API Scripts -->
+	<div th:fragment="google-maps-scripts">
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCK-F1dqhEye7aaQdd9dd69-oMMokv2pVA&amp;libraries=places&amp;callback=initAutocomplete" async="async" defer="defer"></script>
+	</div>
+
+	<!-- Chart.js Scripts -->
+	<div th:fragment="chart-js-scripts">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>
+	</div>
+
+</body>
+</html>

@@ -3,50 +3,43 @@ package edu.odu.cs.gold.repository;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.query.Predicate;
-import edu.odu.cs.gold.model.Floor;
-import edu.odu.cs.gold.model.Garage;
+import edu.odu.cs.gold.model.Building;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
-public class GarageRepository {
+public class BuildingRepository {
 
     private HazelcastInstance hazelcastInstance;
     private String collectionName;
 
-    public GarageRepository(HazelcastInstance hazelcastInstance, String collectionName) {
+    public BuildingRepository(HazelcastInstance hazelcastInstance, String collectionName) {
         this.hazelcastInstance = hazelcastInstance;
         this.collectionName = collectionName;
     }
 
-    public String getId(Garage entity) {
-        return entity.getGarageKey();
+    public String getId(Building entity) {
+        return entity.getBuildingKey();
     }
 
-    public Collection<Garage> findAll() {
+    public Collection<Building> findAll() {
         IMap map = hazelcastInstance.getMap(collectionName);
         return map.values();
     }
 
-    public Map findAllMap() {
+    public Building findByKey(String key) {
         IMap map = hazelcastInstance.getMap(collectionName);
-        Map<String, Object> entityMap = new HashMap<>();
-        for (Object value : map.values()) {
-            entityMap.put(getId((Garage)value), value);
-        }
-        return entityMap;
+        return (Building)map.get(key);
     }
 
-    public Garage findByKey(String key) {
-        IMap map = hazelcastInstance.getMap(collectionName);
-        return (Garage)map.get(key);
-    }
-
-    public List<Garage> findByKeys(Set<String> keys) {
+    public List<Building> findByKeys(Set<String> keys) {
         IMap map = hazelcastInstance.getMap(collectionName);
         return new ArrayList<>(map.getAll(keys).values());
     }
 
-    public List<Garage> findByPredicate(Predicate predicate) {
+    public List<Building> findByPredicate(Predicate predicate) {
         IMap map = hazelcastInstance.getMap(collectionName);
         return new ArrayList<>(map.values(predicate));
     }
@@ -56,14 +49,14 @@ public class GarageRepository {
         return map.values(predicate).size();
     }
 
-    public void save(Garage entity) {
+    public void save(Building entity) {
         IMap map = hazelcastInstance.getMap(collectionName);
         map.set(getId(entity), entity);
     }
 
-    public void save(Collection<Garage> entities) {
+    public void save(Collection<Building> entities) {
         IMap map = hazelcastInstance.getMap(collectionName);
-        for (Garage entity : entities) {
+        for (Building entity : entities) {
             map.set(getId(entity), entity);
         }
     }
@@ -71,6 +64,15 @@ public class GarageRepository {
     public void delete(String key) {
         IMap map = hazelcastInstance.getMap(collectionName);
         map.delete(key);
+    }
+
+    public int deleteByPredicate(Predicate predicate) {
+        IMap map = hazelcastInstance.getMap(collectionName);
+        List<Building> entities = this.findByPredicate(predicate);
+        for (Building entity : entities) {
+            map.delete(getId(entity));
+        }
+        return entities.size();
     }
 
     public void loadAll() {
