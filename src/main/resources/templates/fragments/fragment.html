@@ -47,6 +47,30 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 		-->
 	</div>
 
+	<!-- Login (Active)-->
+	<div th:fragment="user-login">
+		<li sec:authorize="isAnonymous()"><a th:href="@{/login}">Login</a></li>
+		<!--
+		<li><a th:href="@{/login}">Login</a></li>
+		-->
+	</div>
+
+	<!-- Create User (User) -->
+	<div th:fragment="new-user-user">
+		<li sec:authorize="isAnonymous()"><a th:href="@{/newuser}">Create</a></li>
+		<!--
+		<li ><a th:href="@{/newuser}">New User</a></li>
+		-->
+	</div>
+
+	<!--Create User (Admin) -->
+	<div th:fragment="new-user">
+		<li sec:authorize="hasRole('ADMIN')" class="active"><a th:href="@{/newuser}">Create</a></li>
+		<!--
+		<li class="active"><a th:href="@{/newuser}">New User</a></li>
+		-->
+	</div>
+
 	<!-- Social Media Links -->
 	<div th:fragment="social-media-links">
 		<div class="social-media-links-container">

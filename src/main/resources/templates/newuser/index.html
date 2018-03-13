@@ -38,27 +38,7 @@
             </div>
         </div>
 
-        <div class="col-md-1">
-            <div id="navbar" class="navbar-collapse collapse navbar-center">
-                <ul class="nav navbar-nav">
-                    <!-- Login -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: user-login" /> /*/-->
-                </ul>
-            </div>
-        </div>
-
-        <div class="col-md-1">
-            <div id="navbar" class="navbar-collapse collapse navbar-center">
-                <ul class="nav navbar-nav">
-                    <!-- Create User -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: new-user" /> /*/-->
-                    <!-- Create User -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: new-user-user" /> /*/-->
-                </ul>
-            </div>
-        </div>
-
-        <div class="col-md-1">
+        <div class="col-md-3">
             <!-- Social Media Links -->
             <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
         </div>
@@ -80,7 +60,39 @@
 
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
-            <h1 class="text-center" style="text-transform: uppercase;">Welcome to ParkODU!</h1>
+            <h1 class="text-center" style="text-transform: uppercase;">Create User</h1>
+            <hr/>
+            <form th:action="@{/newuser}" method="post">
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+                        <label for="username" class="control-label col-md-4">Username</label>
+                        <div class="col-md-8">
+                            <input type="text" name="username" id="username" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="control-label col-md-4">Password</label>
+                        <div class="col-md-8">
+                            <input type="password" name="password" id="password" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="control-label col-md-4">Re-enter Password</label>
+                        <div class="col-md-8">
+                            <input type="password" name="repassword" id="repassword" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-8 col-md-offset-4">
+                            <input type="submit" value="Submit" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 

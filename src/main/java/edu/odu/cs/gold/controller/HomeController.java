@@ -35,4 +35,9 @@ public class HomeController {
         return "redirect:/";
     }
 
+    @RequestMapping ("/newuser")
+    public String newuser() {
+        return "newuser/index";
+    }
+
 }
