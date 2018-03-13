@@ -58,12 +58,6 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         buildingRepository.loadAll();
         travelDistanceDurationRepository.loadAll();
 
-        System.out.println("# of Garages: " + garageRepository.findAll().size());
-        System.out.println("# of Floors: " + floorRepository.findAll().size());
-        System.out.println("# of FloorStatistics: " + floorStatisticRepository.findAll().size());
-        System.out.println("# of Buildings: " + buildingRepository.findAll().size());
-        System.out.println("# of TravelDistanceDurations: " + travelDistanceDurationRepository.findAll().size());
-
         if (false) {
                     /*
             Predicate predicate = Predicates.and(
