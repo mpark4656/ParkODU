@@ -37,7 +37,7 @@ public class HomeController {
 
     @RequestMapping ("/newuser")
     public String newuser() {
-        return "newuser/index";
+        return "home/newuser";
     }
 
 }
