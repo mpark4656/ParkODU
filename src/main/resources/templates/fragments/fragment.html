@@ -57,9 +57,9 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 	<!-- Create User (User) -->
 	<div th:fragment="new-user-user">
-		<li sec:authorize="isAnonymous()"><a th:href="@{/newuser}">Create</a></li>
+		<li sec:authorize="isAnonymous()" class="active"><a th:href="@{/newuser}">Create</a></li>
 		<!--
-		<li ><a th:href="@{/newuser}">New User</a></li>
+		<li class="active"><a th:href="@{/newuser}">New User</a></li>
 		-->
 	</div>
 
@@ -79,6 +79,26 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 		</div>
 	</div>
 
+	<!-- User Role (Admin) -->
+	<div th:fragment="user-role-admin">
+		<li sec:authorize="hasRole('ADMIN')" class="active"><a th:text="Admin" class="submenu-text" style="..."></a></li>
+		<!--
+		<li class="active"><p th:text="Admin"></p></li>
+		-->
+	</div>
+
+	<!-- User Role (User) -->
+	<div th:fragment="user-role-user">
+		<li sec:authorize="isAnonymous()" class="active"><p th:text="User" class="submenu-text" style="..."></p></li>
+		<!--
+		<li class="active"><p th:text="User"></p></li>
+		-->
+	</div>
+
+
+	<!--
+<li class="active">< th:id="user_role-user">User</a></li>
+-->
 	<!-- Welcome User -->
 	<div th:fragment="welcome-user">
 		<div sec:authorize="isAuthenticated()" class="text-right">
@@ -113,6 +133,8 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 	<div th:fragment="chart-js-scripts">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>
 	</div>
+
+
 
 </body>
 </html>
