@@ -50,7 +50,7 @@
 
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <h1 class="text-center" style="text-transform: uppercase;">Parking Space</h1>
+            <h1 class="text-center" style="text-transform: uppercase;">Floor</h1>
             <h4 class="text-center" style="text-transform: uppercase;">Settings</h4>
             <hr/>
         </div>
@@ -58,9 +58,11 @@
 
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <th:block th:each="garage : ${garages}">
-                <a th:href="@{/settings/floor/garage} + '/' + ${garage.garageKey}" th:text="${garage.garageName}"></a>
-            </th:block>
+            <ul>
+                <li th:each="garage : ${garages}">
+                <a th:href="@{/settings/floor/garage} + '/' + ${garage.garageKey}" th:text="${garage.name}"></a>
+                </li>
+            </ul>
         </div>
     </div>
 
