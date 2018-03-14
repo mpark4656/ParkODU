@@ -55,7 +55,15 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         floorRepository.loadAll();
         parkingSpaceRepository.loadAll();
         floorStatisticRepository.loadAll();
+        buildingRepository.loadAll();
+        travelDistanceDurationRepository.loadAll();
 
+        System.out.println("# of Garages loaded from Mongo: " + garageRepository.findAll().size());
+        System.out.println("# of Floors loaded from Mongo: " + floorRepository.findAll().size());
+        System.out.println("# of ParkingSpaces loaded from Mongo: " + parkingSpaceRepository.findAll().size());
+        System.out.println("# of FloorStatistics loaded from Mongo: " + floorStatisticRepository.findAll().size());
+        System.out.println("# of Buildings loaded from Mongo: " + buildingRepository.findAll().size());
+        System.out.println("# of TravelDistanceDurations loaded from Mongo: " + travelDistanceDurationRepository.findAll().size());
 
         if (false) {
                     /*
