@@ -55,6 +55,8 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         floorRepository.loadAll();
         parkingSpaceRepository.loadAll();
         floorStatisticRepository.loadAll();
+        buildingRepository.loadAll();
+        travelDistanceDurationRepository.loadAll();
 
 
         if (false) {
