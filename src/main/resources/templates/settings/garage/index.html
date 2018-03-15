@@ -50,14 +50,18 @@
 
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <h1 class="text-center" style="text-transform: uppercase;" th:text="${garage.name}"></h1>
+            <h1 class="text-center" style="text-transform: uppercase;">garages</h1>
             <hr/>
         </div>
     </div>
 
+    <div>
+        <button  type="submit" name="save" onclick="save()">Save Changes</button> <!-- Submit changes in text area-->
+    </div>
+
     <div class="row">
         <div class="col-xs-6 col-sm-6 col-md-5 col-md-offset-1">
-            <table class="table table-bordered table-centered">
+            <table id="garageTable" class="table table-bordered table-centered">
                 <thead>
                 <tr>
                     <th>Name</th>
@@ -75,17 +79,31 @@
                 </thead>
                 <tbody>
                 <tr th:each="garage : ${garages}">
-                    <td th:text="${garage.name}"></td>
-                    <td th:text="garage.description"></td>
-                    <td th:text="garage.addressOne"></td>
-                    <td th:text="garage.addressTwo"></td>
-                    <td th:text="garage.city"></td>
-                    <td th:text="garage.state"></td>
-                    <td th:text="garage.zipCode"></td>
-                    <td th:text="garage.availableSpaces"></td>
-                    <td th:text="garage.totalSpaces"></td>
-                    <td th:text="garage.capacity"></td>
-                    <td th:text="garage.lastUpdated"></td>
+                    <td>
+                        <textarea th:id="'name' + ${garage.garageKey}" th:text="${garage.name}"></textarea> <!-- Editable -->
+                    </td>
+                    <td>
+                        <textarea th:id="'description' + ${garage.garageKey}" th:text="${garage.description}" rows="4" cols="50"></textarea> <!-- Editable -->
+                    </td>
+                    <td>
+                        <textarea th:id="'addressOne' + ${garage.garageKey}" th:text="${garage.addressOne}"></textarea> <!-- Editable -->
+                    </td>
+                    <td>
+                        <textarea th:id="'addressTwo' + ${garage.garageKey}" th:text="${garage.addressTwo}"></textarea>  <!-- Editable -->
+                    </td>
+                    <td>
+                        <textarea th:id="'city' + ${garage.garageKey}" th:text="${garage.city}"></textarea> <!-- Editable -->
+                    </td>
+                    <td>
+                        <textarea th:id="'state' + ${garage.garageKey}" th:text="${garage.state}"></textarea> <!-- Editable -->
+                    </td>
+                    <td>
+                        <textarea th:id="'zipCode' + ${garage.garageKey}" th:text="${garage.zipCode}"></textarea> <!-- Editable -->
+                    </td>
+                    <td th:text="${garage.availableSpaces}"></td>
+                    <td th:text="${garage.totalSpaces}"></td>
+                    <td th:text="${garage.capacity}"></td>
+                    <td th:text="${garage.lastUpdated}"></td>
                 </tr>
                 </tbody>
             </table>
@@ -101,8 +119,37 @@
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 
-<script>
+<script th:inline = "javascript">
+function save() {
 
+        var garages = [[${garages}]];
+        alert(garages.length);
+        var i, garageKey, name, description, addressOne, addressTwo, city, state, zipCode;
+        for(i = 0; i < garages.length; i++) {
+            garageKey = garages[i].garageKey;
+            name = document.getElementById("name" + garages[i].garageKey ).value;
+            description = document.getElementById("description" + garages[i].garageKey ).value;
+            addressOne = document.getElementById("addressOne" + garages[i].garageKey ).value;
+            addressTwo = document.getElementById("addressTwo" + garages[i].garageKey ).value;
+            city = document.getElementById("city" + garages[i].garageKey ).value;
+            state = document.getElementById("state" + garages[i].garageKey ).value;
+            zipCode = document.getElementById("zipCode" + garages[i].garageKey ).value;
+            alert(name);
+            var garage = {
+                "garageKey" : garageKey,
+                "name" : name,
+                "description" : description,
+                "addressOne" : addressOne,
+                "addressTwo" : addressTwo,
+                "city" : city,
+                "state" : state,
+                "zipCode" : zipCode }
+
+
+            $.post("/rest/garage/update", { garage : garage })
+                .done(function(data))
+        }
+    }
 </script>
 
 </body>
