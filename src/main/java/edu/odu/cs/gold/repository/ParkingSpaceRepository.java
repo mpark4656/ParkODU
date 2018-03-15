@@ -26,7 +26,7 @@ public class ParkingSpaceRepository {
         return entity.getParkingSpaceKey();
     }
 
-    public Collection<Garage> findAll() {
+    public Collection<ParkingSpace> findAll() {
         IMap map = hazelcastInstance.getMap(collectionName);
         return map.values();
     }

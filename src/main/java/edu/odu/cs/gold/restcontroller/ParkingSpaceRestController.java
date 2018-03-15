@@ -10,7 +10,9 @@ import edu.odu.cs.gold.service.GarageService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -95,5 +97,24 @@ public class ParkingSpaceRestController {
         garageService.refresh(parkingSpace.getGarageKey());
 
         return parkingSpaceKey + "'s availability was set to " + available;
+    }
+
+    /**
+     * Simulator will use this to get a list of all parking spaces. The client needs to provide the unique subscription key
+     * that matches.
+     *
+     * @param subscriptionKey String
+     * @return
+     */
+    @GetMapping("/parking_spaces/{subscriptionKey}")
+    public List<ParkingSpace> getCollection(@PathVariable String subscriptionKey) {
+
+        if(subscriptionKey.equals("2093af49-30d2-4ba3-873b-29970e012656")) {
+            ArrayList<ParkingSpace> parkingSpaceList = new ArrayList<> (parkingSpaceRepository.findAll());
+            return parkingSpaceList;
+        }
+        else {
+            return null;
+        }
     }
 }

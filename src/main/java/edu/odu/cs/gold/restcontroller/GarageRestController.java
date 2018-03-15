@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -164,5 +165,24 @@ public class GarageRestController {
             }
         }
         return ResponseEntity.badRequest().build();
+    }
+
+    /**
+     * Simulator will use this to get a list of all garages. The client needs to provide the unique subscription key
+     * that matches.
+     *
+     * @param subscriptionKey
+     * @return
+     */
+    @GetMapping("/garages/{subscriptionKey}")
+    public List<Garage> getCollection(@PathVariable String subscriptionKey) {
+
+        if(subscriptionKey.equals("2093af49-30d2-4ba3-873b-29970e012656")) {
+            ArrayList<Garage> garageList = new ArrayList<> (garageRepository.findAll());
+            return garageList;
+        }
+        else {
+            return null;
+        }
     }
 }
