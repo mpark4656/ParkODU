@@ -69,7 +69,9 @@
                 <tr th:each="floor : ${floors}">
                     <td th:text="${floor.number}"></td>
                     <td th:text="${floor.totalSpaces}"></td>
-                    <td th:text="${floor.description}"></td>
+                    <td>
+                        <textarea th:text="${floor.description}"></textarea> <!-- editable -->
+                    </td>
                 </tr>
                 </tbody>
             </table>
