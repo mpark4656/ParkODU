@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid navbar-container">
+        <div class="col-md-3">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- Main Logo -->
+                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="navbar" class="navbar-collapse collapse navbar-center">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/garage}">Garages</a></li>
+                    <li><a th:href="@{/analytics/locate}">Search</a></li>
+                    <!-- Settings Link -->
+                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
+                </ul>
+                <!--
+                <form class="navbar-form navbar-right">
+                    <input type="text" class="form-control" placeholder="Search..."/>
+                </form>
+                -->
+            </div>
+        </div>
+        <div class="col-md-3">
+            <!-- Social Media Links -->
+            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid main-container">
+
+    <!-- Welcome User -->
+    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+            <h1 class="text-center" style="text-transform: uppercase;">Create Garage</h1>
+            <hr/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+            <form class="form-horizontal" id="create-garage-form" role="form" th:action="@{/settings/garage/create}" method="post" th:object="${garage}">
+                <input type="hidden" id="id" th:value="${garage.garageKey}" th:field="${garage.garageKey}"/>
+                <div class="form-group">
+                    <label for="name" class="col-md-4 control-label">Name</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="name" required="required" th:field="${garage.name}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description" class="col-md-4 control-label">Description</label>
+                    <div class="col-md-8">
+                        <!--
+                        <input type="text" class="form-control" id="description" th:field="${garage.description}"/>
+                        -->
+                        <textarea rows="4" cols="50" class="form-control" id="description" th:field="${garage.description}"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="heightDescription" class="col-md-4 control-label">Height Description</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="heightDescription" th:field="${garage.heightDescription}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="addressOne" class="col-md-4 control-label">Address One</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="addressOne" th:field="${garage.addressOne}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="addressTwo" class="col-md-4 control-label">Address Two</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="addressTwo" th:field="${garage.addressTwo}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="city" class="col-md-4 control-label">City</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="city" th:field="${garage.city}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="state" class="col-md-4 control-label">State</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="state" th:field="${garage.state}" pattern="^[A-Z]{2}$" title="Two uppercase letters abbreviating the State name"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="zipCode" class="col-md-4 control-label">Zip Code</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="zipCode" th:field="${garage.zipCode}" pattern="^\d{5}$" title="Five digits"/>
+                    </div>
+                </div>
+                <div class="col-md-8 col-md-offset-4">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-primary">Reset</button>
+                    <a th:href="@{/settings/garage/index}" class="btn btn-primary" title="Back">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <br/>
+
+    <!-- Footer -->
+    <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
+</div>
+
+<!-- Delete Garage Modal -->
+<div class="modal fade" id="delete-garage-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" role="form" th:action="@{/settings/garage/delete}" method="post">
+                <div class="modal-header modal-header-danger">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delete Garage</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center">Are you sure you want to delete the Garage '<span id="delete-garage-name-text"></span>'?</p>
+                    <p class="text-center"><b>Warning:</b> This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="delete-garage-id" name="garageKey" required="required"/>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- End Delete Garage Modal -->
+
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<script th:inline="javascript">
+$('.delete-garage-button').on('click', function()
+{
+    $('#delete-garage-name-text').text($(this).data("name"));
+    $('#delete-garage-id').val($(this).data("id"));
+});
+</script>
+
+</body>
+</html>
