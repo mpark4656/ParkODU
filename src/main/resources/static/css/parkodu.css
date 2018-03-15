@@ -521,3 +521,5 @@ footer p {
 #fine-uploader-manual-trigger .qq-uploader .qq-total-progress-bar-container {
     width: 60%;
 }
+
+textarea { resize: vertical; }

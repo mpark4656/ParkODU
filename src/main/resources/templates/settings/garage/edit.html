@@ -50,33 +50,69 @@
 
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <h1 class="text-center" style="text-transform: uppercase;">Garage Settings</h1>
+            <h1 class="text-center" style="text-transform: uppercase;">Edit Garage</h1>
             <hr/>
         </div>
     </div>
 
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
-            <p class="text-right">
-                <a th:href="@{/settings/garage/create}" class="btn btn-success btn-sm" title="Create Garage">Create</a>
-            </p>
-            <table id="garageTable" class="table table-bordered">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="garage : ${garages}">
-                    <td th:text="${garage.name}"></td>
-                    <td>
-                        <a th:href="@{/settings/garage/edit} + '/' + ${garage.garageKey}" class="btn btn-primary btn-sm">Edit</a>
-                        <button class="btn btn-danger btn-sm delete-garage-button" title="Delete Garage" th:attr="data-id=${garage.garageKey},data-name=${garage.name}" data-toggle="modal" data-target="#delete-garage-modal">Delete</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <form class="form-horizontal" id="edit-garage-form" role="form" th:action="@{/settings/garage/edit}" method="post" th:object="${garage}">
+                <input type="hidden" id="id" th:value="${garage.garageKey}" th:field="${garage.garageKey}"/>
+                <div class="form-group">
+                    <label for="name" class="col-md-4 control-label">Name</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="name" required="required" th:field="${garage.name}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description" class="col-md-4 control-label">Description</label>
+                    <div class="col-md-8">
+                        <textarea rows="4" cols="50" class="form-control" id="description" th:field="${garage.description}"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="heightDescription" class="col-md-4 control-label">Height Description</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="heightDescription" th:field="${garage.heightDescription}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="addressOne" class="col-md-4 control-label">Address One</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="addressOne" th:field="${garage.addressOne}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="addressTwo" class="col-md-4 control-label">Address Two</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="addressTwo" th:field="${garage.addressTwo}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="city" class="col-md-4 control-label">City</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="city" th:field="${garage.city}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="state" class="col-md-4 control-label">State</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="state" th:field="${garage.state}" pattern="^[A-Z]{2}$" title="Two uppercase letters abbreviating the State name"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="zipCode" class="col-md-4 control-label">Zip Code</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="zipCode" th:field="${garage.zipCode}" pattern="^\d{5}$" title="Five digits"/>
+                    </div>
+                </div>
+                <div class="col-md-8 col-md-offset-4">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-primary">Reset</button>
+                    <a th:href="@{/settings/garage/index}" class="btn btn-primary" title="Back">Back</a>
+                </div>
+            </form>
         </div>
     </div>
 

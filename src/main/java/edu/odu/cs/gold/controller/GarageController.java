@@ -49,7 +49,7 @@ public class GarageController {
     public String index(Model model) {
         List<Garage> garages = new ArrayList<>(garageRepository.findAll());
         garages.sort(Comparator.comparing(Garage::getName));
-        model.addAttribute("garage", garages);
+        model.addAttribute("garages", garages);
         return "garage/index";
     }
 
