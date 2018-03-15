@@ -86,25 +86,7 @@
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 
 <script>
-$(document).ready(function(){
-    $(".availabilityCheckbox").change(function(){
 
-        var parkingSpaceKey = $(this).val();
-
-        if ($(this).prop('checked')) {
-            $.post("/settings/parking_space/set_availability", { parkingSpaceKey: parkingSpaceKey, available: "true" })
-                .done(function(data) {
-                    //alert(data);
-                });
-        }
-        else {
-            $.post("/settings/parking_space/set_availability", { parkingSpaceKey: parkingSpaceKey, available: "false" })
-                .done(function(data) {
-                    //alert(data);
-                });
-        }
-    });
-});
 </script>
 
 </body>

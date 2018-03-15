@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * This controller provides methods for returning html pages that allow
- * admins to configure garages.
+ * admins to configure garage.
  *
  * For actual manipulation of Garage models such as update, add, and delete,
  * see GarageRestController.java

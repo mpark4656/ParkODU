@@ -47,8 +47,8 @@ public class FloorSettingsController {
      * This method returns "settings/floor/index" with a collection of all garage objects
      * added to the model.
      *
-     * Usage in settings/floor/index.html to access the collection of all garages
-     * ${garages}
+     * Usage in settings/floor/index.html to access the collection of all garage
+     * ${garage}
 
      * @param model Model
      * @return String "settings/floor/index"
@@ -58,7 +58,7 @@ public class FloorSettingsController {
 
         List<Garage> garages = new ArrayList<>(garageRepository.findAll());
         garages.sort(Comparator.comparing(Garage::getName));
-        model.addAttribute("garages", garages);
+        model.addAttribute("garage", garages);
 
         return "settings/floor/index";
     }
