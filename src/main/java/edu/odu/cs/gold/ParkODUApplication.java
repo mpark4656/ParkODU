@@ -42,6 +42,12 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
     private FloorStatisticRepository floorStatisticRepository;
 
     @Autowired
+    private PermitTypeRepository permitTypeRepository;
+
+    @Autowired
+    private SpaceTypeRepository spaceTypeRepository;
+
+    @Autowired
     private GoogleMapService googleMapService;
 
     @Override
@@ -57,6 +63,8 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         floorStatisticRepository.loadAll();
         buildingRepository.loadAll();
         travelDistanceDurationRepository.loadAll();
+        permitTypeRepository.loadAll();
+        spaceTypeRepository.loadAll();
 
         System.out.println("# of Garages loaded from Mongo: " + garageRepository.findAll().size());
         System.out.println("# of Floors loaded from Mongo: " + floorRepository.findAll().size());
@@ -64,6 +72,9 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         System.out.println("# of FloorStatistics loaded from Mongo: " + floorStatisticRepository.findAll().size());
         System.out.println("# of Buildings loaded from Mongo: " + buildingRepository.findAll().size());
         System.out.println("# of TravelDistanceDurations loaded from Mongo: " + travelDistanceDurationRepository.findAll().size());
+        System.out.println("# of Permit Types loaded from Mongo: " + permitTypeRepository.findAll().size());
+        System.out.println("# of Space Types loaded from Mongo: " + spaceTypeRepository.findAll().size());
+
 
         if (false) {
                     /*
