@@ -44,6 +44,9 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
     @Autowired
     private GoogleMapService googleMapService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
@@ -57,6 +60,7 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         floorStatisticRepository.loadAll();
         buildingRepository.loadAll();
         travelDistanceDurationRepository.loadAll();
+        userRepository.loadAll();
 
         if (false) {
                     /*

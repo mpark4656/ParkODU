@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 @Controller
-@RequestMapping("/settings/parking_space")
+@RequestMapping("/parking_space")
 public class ParkingSpaceController {
 
     private GarageRepository garageRepository;
@@ -37,55 +37,11 @@ public class ParkingSpaceController {
         this.garageService = garageService;
     }
 
-    @GetMapping({"","/","/index"})
-    public String index(Model model) {
+    // Modified 3/13/2018 @9:15PM
+    // Moved set_availability PostMapping for parking_space to ParkingSpaceRestController.java
 
-        List<Garage> garages = new ArrayList<>(garageRepository.findAll());
-        garages.sort(Comparator.comparing(Garage::getName));
-
-        List<Floor> floors = new ArrayList<>(floorRepository.findAll());
-        floors.sort(Comparator.comparing(Floor::getNumber));
-
-        model.addAttribute("garages", garages);
-        model.addAttribute("floors", floors);
-
-        return "settings/parking_space/index";
-    }
-
-    @GetMapping("floor/{floorKey}")
-    public String floor(@PathVariable("floorKey") String floorKey,
-                        Model model) {
-
-        Floor floor = floorRepository.findByKey(floorKey);
-        Garage garage = garageRepository.findByKey(floor.getGarageKey());
-
-        Predicate predicate = Predicates.and(
-                Predicates.equal("garageKey", floor.getGarageKey()),
-                Predicates.equal("floor", floor.getNumber())
-        );
-
-        List<ParkingSpace> parkingSpaces = new ArrayList<>(parkingSpaceRepository.findByPredicate(predicate));
-        parkingSpaces.sort(Comparator.comparing(ParkingSpace::getNumber));
-
-        model.addAttribute("garage", garage);
-        model.addAttribute("floor", floor);
-        model.addAttribute("parkingSpaces", parkingSpaces);
-
-        return "settings/parking_space/floor";
-    }
-
-    @PostMapping("/set_availability")
-    @ResponseBody
-    public String setAvailability(@RequestParam("parkingSpaceKey") String parkingSpaceKey,
-                                  @RequestParam("available") Boolean available) {
-
-        ParkingSpace parkingSpace = parkingSpaceRepository.findByKey(parkingSpaceKey);
-        parkingSpace.setAvailable(available);
-        parkingSpace.setLastUpdated(new Date());
-        parkingSpaceRepository.save(parkingSpace);
-
-        garageService.refresh(parkingSpace.getGarageKey());
-
-        return parkingSpaceKey + "'s availability was set to " + available;
-    }
+    // ParkingSpace does not yet have parking_space/detail.html or parking_space/index.html like Garage and Floor
+    // This class will remain as a placeholder for parking_space in case we will decide to add parking_space/detail.html
+    // to show individual space information such as sensor status.
 }
+

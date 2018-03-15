@@ -34,10 +34,4 @@ public class HomeController {
     public String logout() {
         return "redirect:/";
     }
-
-    @RequestMapping ("/newuser")
-    public String newuser() {
-        return "home/newuser";
-    }
-
 }

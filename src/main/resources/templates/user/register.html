@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+
+    <!-- Bootstrap core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous" />
+
+    <link th:href="@{css/style.css}" rel="stylesheet" />
+</head>
+
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid navbar-container">
+        <div class="col-md-3">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- Main Logo -->
+                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="navbar" class="navbar-collapse collapse navbar-center">
+                <ul class="nav navbar-nav"></ul>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <!-- Social Media Links -->
+            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
+        </div>
+    </div>
+</nav>
+
+<!--
+<div class="text-center submenu">
+    <th:block th:each="itemCategory : ${itemCategories}">
+        <a th:href="@{/gallery/category} + '/' + ${itemCategory.name}" class="submenu-text" th:text="${itemCategory.name}"></a>
+        <span th:if="${itemCategory.key != lastItemCategoryKey}" class="submenu-text">|</span>
+    </th:block>
+</div>
+-->
+
+<div class="container-fluid main-container">
+    <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
+        <h1 class="text-center" style="text-transform: uppercase;">New User Registration</h1>
+
+        <form autocomplete="off" action="#" th:action="@{/user/register}" th:object="${user}" method="post" class="m-t" role="form" data-toggle="validator">
+
+            <div th:if="${confirmationMessage}" class="alert alert-success" role="alert" th:text="${confirmationMessage}"></div>
+
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+
+            <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="validation-message alert alert-danger" role="alert"></div>
+
+            <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="validation-message alert alert-danger" role="alert"></div>
+
+            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="validation-message alert alert-danger" role="alert"></div>
+
+            <div class="form-group input-group has-feedback col-md-4 col-md-offset-4">
+                <label th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="validation-message"></label>
+                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                <input type="text" th:field="*{firstName}" placeholder="First Name" class="form-control" required="false" />
+                <span class="glyphicon form-control-feedback " aria-hidden="true"></span>
+            </div>
+
+            <div class="form-group input-group has-feedback col-md-4 col-md-offset-4">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                <input type="text" th:field="*{lastName}" placeholder="Last Name" class="form-control" required="false" />
+                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            </div>
+
+            <div class="form-group input-group has-feedback col-md-4 col-md-offset-4">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+                <input type="email" th:field="*{email}" placeholder="Email Address" class="form-control" data-error="This email address is invalid" required="false" />
+                <span class="glyphicon form-control-feedback " aria-hidden="true"></span>
+            </div>
+
+
+            <div class="form-group col-md-4 col-md-offset-4">
+                <!-- Import Schedule -->
+                <!--/*/ <th:block th:include="fragments/fragment :: import-schedule" /> /*/-->
+            </div>
+
+            <button type="submit" class="btn btn-primary block full-width m-b col-md-offset-4">Register</button>
+        </form>
+    </div>
+    <!-- Footer -->
+    <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
+</div>
+
+<!-- jQuery-->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<!-- Bootstrap -->
+<script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+<!-- Bootstrap Validator plugin -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+</body>
+</html>
