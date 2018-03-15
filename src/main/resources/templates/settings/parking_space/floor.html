@@ -163,13 +163,13 @@ $(document).ready(function(){
         var parkingSpaceKey = $(this).val();
 
         if ($(this).prop('checked')) {
-            $.post("/rest/parking_space/set_availability", { parkingSpaceKey: parkingSpaceKey, available: "true" })
+            $.post("/settings/parking_space/set_availability", { parkingSpaceKey: parkingSpaceKey, available: "true" })
                 .done(function(data) {
                     //alert(data);
                 });
         }
         else {
-            $.post("/rest/parking_space/set_availability", { parkingSpaceKey: parkingSpaceKey, available: "false" })
+            $.post("/settings/parking_space/set_availability", { parkingSpaceKey: parkingSpaceKey, available: "false" })
                 .done(function(data) {
                     //alert(data);
                 });

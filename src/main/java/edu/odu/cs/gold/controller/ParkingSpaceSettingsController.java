@@ -7,11 +7,11 @@ import edu.odu.cs.gold.repository.*;
 import edu.odu.cs.gold.service.GarageService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -48,7 +48,7 @@ public class ParkingSpaceSettingsController {
         List<Floor> floors = new ArrayList<>(floorRepository.findAll());
         floors.sort(Comparator.comparing(Floor::getNumber));
 
-        model.addAttribute("garage", garages);
+        model.addAttribute("garages", garages);
         model.addAttribute("floors", floors);
 
         return "settings/parking_space/index";
@@ -80,5 +80,26 @@ public class ParkingSpaceSettingsController {
         model.addAttribute("spaceTypes", spaceTypes);
 
         return "settings/parking_space/floor";
+    }
+
+    /**
+     * PostRequest for setting availability of a single space
+     * @param parkingSpaceKey String
+     * @param available Boolean
+     * @return
+     */
+    @PostMapping("/set_availability")
+    @ResponseBody
+    public String setAvailability(@RequestParam("parkingSpaceKey") String parkingSpaceKey,
+                                  @RequestParam("available") Boolean available) {
+
+        ParkingSpace parkingSpace = parkingSpaceRepository.findByKey(parkingSpaceKey);
+        parkingSpace.setAvailable(available);
+        parkingSpace.setLastUpdated(new Date());
+        parkingSpaceRepository.save(parkingSpace);
+
+        garageService.refresh(parkingSpace.getGarageKey());
+
+        return parkingSpaceKey + "'s availability was set to " + available;
     }
 }

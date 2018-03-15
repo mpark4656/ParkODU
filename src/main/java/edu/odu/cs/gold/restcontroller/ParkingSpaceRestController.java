@@ -75,10 +75,6 @@ public class ParkingSpaceRestController {
 
     /**
      * Modified by Michael Park
-     * This method updates the available attribute of a parking space.
-     * This PostMapping was originally in ParkingSpaceController.java.
-     * Since RestController contains methods for manipulating model, this method was moved
-     * to ParkingSpaceRestController.java.
      *
      * Simulator will eventually call this method for marking a space as occupied or unoccupied
      *
