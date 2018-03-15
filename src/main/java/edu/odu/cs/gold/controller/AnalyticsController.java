@@ -3,19 +3,13 @@ package edu.odu.cs.gold.controller;
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
 import edu.odu.cs.gold.model.*;
-import edu.odu.cs.gold.repository.BuildingRepository;
-import edu.odu.cs.gold.repository.GarageRepository;
-import edu.odu.cs.gold.repository.ParkingSpaceRepository;
-import edu.odu.cs.gold.repository.TravelDistanceDurationRepository;
+import edu.odu.cs.gold.repository.*;
 import edu.odu.cs.gold.service.GoogleMapService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/analytics")
@@ -26,17 +20,23 @@ public class AnalyticsController {
     private ParkingSpaceRepository parkingSpaceRepository;
     private TravelDistanceDurationRepository travelDistanceDurationRepository;
     private GoogleMapService googleMapService;
+    private PermitTypeRepository permitTypeRepository;
+    private SpaceTypeRepository spaceTypeRepository;
 
     public AnalyticsController(GarageRepository garageRepository,
                                BuildingRepository buildingRepository,
                                ParkingSpaceRepository parkingSpaceRepository,
                                TravelDistanceDurationRepository travelDistanceDurationRepository,
-                               GoogleMapService googleMapService) {
+                               GoogleMapService googleMapService,
+                               PermitTypeRepository permitTypeRepository,
+                               SpaceTypeRepository spaceTypeRepository) {
         this.garageRepository = garageRepository;
         this.buildingRepository = buildingRepository;
         this.parkingSpaceRepository = parkingSpaceRepository;
         this.travelDistanceDurationRepository = travelDistanceDurationRepository;
         this.googleMapService = googleMapService;
+        this.permitTypeRepository = permitTypeRepository;
+        this.spaceTypeRepository = spaceTypeRepository;
     }
 
     @GetMapping({"","/","/index"})
@@ -51,13 +51,12 @@ public class AnalyticsController {
     public String locate(Model model) {
         List<Building> buildings = new ArrayList<>(buildingRepository.findAll());
         buildings.sort(Comparator.comparing(Building::getName));
-        List<String> permitTypes = new ArrayList<>();
-        permitTypes.add("Commuter");
-        permitTypes.add("Faculty");
-        permitTypes.add("Metered");
-        permitTypes.add("Quad Resident");
-        model.addAttribute("buildings", buildings);
 
+        List<PermitType> permitTypes = new ArrayList<>(permitTypeRepository.findAll());
+        List<SpaceType> spaceTypes = new ArrayList<>(spaceTypeRepository.findAll());
+
+        model.addAttribute("buildings", buildings);
+        model.addAttribute("spaceTypes", spaceTypes);
         model.addAttribute("permitTypes", permitTypes);
         return "analytics/locate";
     }
@@ -66,17 +65,19 @@ public class AnalyticsController {
     public String locate(@RequestParam(name = "startingAddress", required = false) String startingAddress,
                          @RequestParam(name = "latitude", required = false) Double startingLatitude,
                          @RequestParam(name = "longitude", required = false) Double startingLongitude,
-                         @RequestParam(name = "permitTypes", required = false) List<String> permitTypes,
+                         @RequestParam(name = "permitTypeKeys", required = false) List<String> permitTypeKeys,
+                         @RequestParam(name = "spaceTypeKeys", required = false) List<String> spaceTypeKeys,
                          @RequestParam(name = "destinationBuildingId", required = false) String destinationBuildingId,
                          Model model) {
+
         Location startingLocation = new Location(startingAddress, startingLatitude, startingLongitude);
         Building destinationBuilding = buildingRepository.findByKey(destinationBuildingId);
 
         Predicate permitPredicate = null;
-        if (permitTypes != null) {
+        if (permitTypeKeys != null) {
             List<Predicate> predicates = new ArrayList<>();
-            for (String permitType : permitTypes) {
-                predicates.add(Predicates.equal("permitType", permitType));
+            for (String permitTypeKey : permitTypeKeys) {
+                predicates.add(Predicates.equal("permitTypeKey", permitTypeKey));
             }
             permitPredicate = Predicates.or(predicates.toArray(new Predicate[0]));
         }
@@ -132,6 +133,15 @@ public class AnalyticsController {
 
         // Default sort by closest Garage to Destination Building
         recommendations.sort(Comparator.comparing(Recommendation::getGarageToDestinationBuildingDistanceValue));
+
+        List<PermitType> permitTypes = new ArrayList<> ();
+
+        // Get the Permit Type objects from the keys
+        if (permitTypeKeys != null) {
+            Set<String> permitTypeKeySet = new HashSet<String> (permitTypeKeys);
+            permitTypes = new ArrayList<> (permitTypeRepository.findByKeys(permitTypeKeySet));
+        }
+
 
         model.addAttribute("startingAddress", startingAddress);
         model.addAttribute("permitTypes", permitTypes);

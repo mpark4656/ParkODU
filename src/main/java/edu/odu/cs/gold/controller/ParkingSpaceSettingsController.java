@@ -2,12 +2,8 @@ package edu.odu.cs.gold.controller;
 
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
-import edu.odu.cs.gold.model.Floor;
-import edu.odu.cs.gold.model.Garage;
-import edu.odu.cs.gold.model.ParkingSpace;
-import edu.odu.cs.gold.repository.FloorRepository;
-import edu.odu.cs.gold.repository.GarageRepository;
-import edu.odu.cs.gold.repository.ParkingSpaceRepository;
+import edu.odu.cs.gold.model.*;
+import edu.odu.cs.gold.repository.*;
 import edu.odu.cs.gold.service.GarageService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,15 +21,21 @@ public class ParkingSpaceSettingsController {
     private GarageRepository garageRepository;
     private FloorRepository floorRepository;
     private ParkingSpaceRepository parkingSpaceRepository;
+    private PermitTypeRepository permitTypeRepository;
+    private SpaceTypeRepository spaceTypeRepository;
     private GarageService garageService;
 
     public ParkingSpaceSettingsController(GarageRepository garageRepository,
                                           FloorRepository floorRepository,
                                           ParkingSpaceRepository parkingSpaceRepository,
+                                          PermitTypeRepository permitTypeRepository,
+                                          SpaceTypeRepository spaceTypeRepository,
                                           GarageService garageService) {
         this.garageRepository = garageRepository;
         this.floorRepository = floorRepository;
         this.parkingSpaceRepository = parkingSpaceRepository;
+        this.permitTypeRepository = permitTypeRepository;
+        this.spaceTypeRepository = spaceTypeRepository;
         this.garageService = garageService;
     }
 
@@ -67,9 +69,15 @@ public class ParkingSpaceSettingsController {
         List<ParkingSpace> parkingSpaces = new ArrayList<>(parkingSpaceRepository.findByPredicate(predicate));
         parkingSpaces.sort(Comparator.comparing(ParkingSpace::getNumber));
 
+        // Get the Permit Types and Space types currently in the repository
+        List<PermitType> permitTypes = new  ArrayList<> (permitTypeRepository.findAll());
+        List<SpaceType> spaceTypes = new ArrayList<> (spaceTypeRepository.findAll());
+
         model.addAttribute("garage", garage);
         model.addAttribute("floor", floor);
         model.addAttribute("parkingSpaces", parkingSpaces);
+        model.addAttribute("permitTypes", permitTypes);
+        model.addAttribute("spaceTypes", spaceTypes);
 
         return "settings/parking_space/floor";
     }
