@@ -40,16 +40,53 @@ public class AccountsController {
         return "accounts/index";
     }
 
+    @GetMapping("/create")
+    public String create(Model model) {
+        User user = new User();
+        user.generateId();
+        model.addAttribute("user", user);
+        return "accounts/create";
+    }
+
+    @PostMapping("/create")
+    public String create(User user) {
+        User existingUser = null;
+        try {
+            existingUser = userRepository.findByKey(user.getId());
+            if (existingUser == null) {
+                userRepository.save(user);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:/accounts/index";
+    }
+
     @GetMapping("/edit/{userKey}")
-    public String updateGet(@PathVariable String userKey, Model model) {
+    public String updateGet(@PathVariable("userKey") String userKey, Model model) {
         User user = userRepository.findByKey(userKey);
-        return "accounts/update";
+        model.addAttribute("user", user);
+        return "accounts/edit";
     }
 
     @PostMapping("/edit/{userKey}")
-    public String updatePost(@PathVariable String userKey, Model model) {
-
-        return "accounts/update";
+    public String updatePost(User user) {
+        User existingUser = null;
+        try {
+            existingUser = userRepository.findByKey(user.getId());
+            existingUser.setFirstName(user.getFirstName());
+            existingUser.setLastName(user.getLastName());
+            existingUser.setEmail(user.getEmail());
+            existingUser.setPassword(user.getPassword());
+            existingUser.setRole(user.getRole());
+            existingUser.setEnabled(user.getEnabled());
+            userRepository.save(existingUser);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:/accounts/index";
     }
 
     @PostMapping("/delete")

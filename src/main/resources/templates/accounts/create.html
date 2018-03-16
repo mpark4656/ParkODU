@@ -50,56 +50,70 @@
 
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <h1 class="text-center" style="text-transform: uppercase;">Edit User</h1>
+            <h1 class="text-center" style="text-transform: uppercase;">Create Garage</h1>
             <hr/>
         </div>
     </div>
 
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
-            <form class="form-horizontal" id="edit-user-form" role="form" th:action="@{/accounts/edit}" method="post" th:object="${user}">
-                <input type="hidden" id="id" th:value="${user.id}" th:field="${user.id}"/>
+            <form class="form-horizontal" id="create-garage-form" role="form" th:action="@{/settings/garage/create}" method="post" th:object="${garage}">
+                <input type="hidden" id="id" th:value="${garage.garageKey}" th:field="${garage.garageKey}"/>
                 <div class="form-group">
-                    <label for="userFirstName" class="col-md-4 control-label">First Name</label>
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" id="userFirstName" required="required" th:field="${user.firstName}"/>
+                    <label for="name" class="col-md-4 control-label">Name</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="name" required="required" th:field="${garage.name}"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="userlastName" class="col-md-4 control-label">Last Name</label>
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" id="userLastName" th:field="${user.lastName}"></input>
+                    <label for="description" class="col-md-4 control-label">Description</label>
+                    <div class="col-md-8">
+                        <!--
+                        <input type="text" class="form-control" id="description" th:field="${garage.description}"/>
+                        -->
+                        <textarea rows="4" cols="50" class="form-control" id="description" th:field="${garage.description}"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="userEmail" class="col-md-4 control-label">Email</label>
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" id="userEmail" th:field="${user.email}"/>
+                    <label for="heightDescription" class="col-md-4 control-label">Height Description</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="heightDescription" th:field="${garage.heightDescription}"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="userRole" class="col-md-4 control-label">Role</label>
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" id="userRole" th:field="${user.role}"/>
+                    <label for="addressOne" class="col-md-4 control-label">Address One</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="addressOne" th:field="${garage.addressOne}"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="userEnabled" class="col-md-4 control-label">Enabled</label>
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" id="userEnabled" th:field="${user.enabled}"/>
+                    <label for="addressTwo" class="col-md-4 control-label">Address Two</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="addressTwo" th:field="${garage.addressTwo}"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="userPassword" class="col-md-4 control-label">Password</label>
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" id="userPassword" th:field="${user.password}"/>
+                    <label for="city" class="col-md-4 control-label">City</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="city" th:field="${garage.city}"/>
                     </div>
                 </div>
-
+                <div class="form-group">
+                    <label for="state" class="col-md-4 control-label">State</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="state" th:field="${garage.state}" pattern="^[A-Z]{2}$" title="Two uppercase letters abbreviating the State name"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="zipCode" class="col-md-4 control-label">Zip Code</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="zipCode" th:field="${garage.zipCode}" pattern="^\d{5}$" title="Five digits"/>
+                    </div>
+                </div>
                 <div class="col-md-8 col-md-offset-4">
                     <button type="submit" class="btn btn-primary">Submit</button>
                     <button type="reset" class="btn btn-primary">Reset</button>
-                    <a th:href="@{/accounts/index}" class="btn btn-primary" title="Back">Back</a>
+                    <a th:href="@{/settings/garage/index}" class="btn btn-primary" title="Back">Back</a>
                 </div>
             </form>
         </div>
@@ -112,20 +126,20 @@
 </div>
 
 <!-- Delete Garage Modal -->
-<div class="modal fade" id="delete-user-modal" role="dialog">
+<div class="modal fade" id="delete-garage-modal" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" role="form" th:action="@{/accounts/delete}" method="post">
+            <form class="form-horizontal" role="form" th:action="@{/settings/garage/delete}" method="post">
                 <div class="modal-header modal-header-danger">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Delete User</h4>
+                    <h4 class="modal-title">Delete Garage</h4>
                 </div>
                 <div class="modal-body">
-                    <p class="text-center">Are you sure you want to delete the User?</p>
+                    <p class="text-center">Are you sure you want to delete the Garage '<span id="delete-garage-name-text"></span>'?</p>
                     <p class="text-center"><b>Warning:</b> This action cannot be undone.</p>
                 </div>
                 <div class="modal-footer">
-                    <input type="hidden" id="delete-user-id" name="garageKey" required="required"/>
+                    <input type="hidden" id="delete-garage-id" name="garageKey" required="required"/>
                     <button type="submit" class="btn btn-danger">Delete</button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                 </div>
@@ -139,9 +153,10 @@
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 
 <script th:inline="javascript">
-$('.delete-user-button').on('click', function()
+$('.delete-garage-button').on('click', function()
 {
-    $('#delete-user-id').val($(this).data("id"));
+    $('#delete-garage-name-text').text($(this).data("name"));
+    $('#delete-garage-id').val($(this).data("id"));
 });
 </script>
 

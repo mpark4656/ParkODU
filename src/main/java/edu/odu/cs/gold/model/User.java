@@ -12,6 +12,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Transient;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @Entity
 @Table(name = "user")
@@ -43,6 +44,10 @@ public class User implements Serializable{
     @NotEmpty(message = "Please provide your last name")
     private String lastName;
 
+    @Column(name = "role")
+    @NotEmpty(message = "Please provide your last name")
+    private String role;
+
     @Column(name = "enabled")
     private boolean enabled;
 
@@ -51,6 +56,10 @@ public class User implements Serializable{
 
     public String getConfirmationToken() {
         return confirmationToken;
+    }
+
+    public String generateId() {
+        return UUID.randomUUID().toString();
     }
 
     public void setConfirmationToken(String confirmationToken) {
@@ -109,6 +118,14 @@ public class User implements Serializable{
         return enabled;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public void setEnabled(boolean value) {
         this.enabled = value;
     }
@@ -122,6 +139,7 @@ public class User implements Serializable{
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
                 ", enabled=" + enabled +
                 '}';
     }

@@ -59,9 +59,31 @@ public class AccountsRestController {
     }
 
     @PostMapping("/update")
-    public ResponseEntity<?> update(@RequestBody User user) {
+    public ResponseEntity<?> edit(@RequestBody User user) {
+        User existingUser = userRepository.findByKey(user.getId());
+        if (existingUser != null) {
+            // Upsert - if null, don't update the field
+            if (user.getFirstName() != null) {
+                existingUser.setFirstName(user.getFirstName());
+            }
+            if (user.getLastName() != null) {
+                existingUser.setLastName(user.getLastName());
+            }
+            if (user.getEmail() != null) {
+                existingUser.setEmail(user.getEmail());
+            }
+            if (user.getPassword() != null) {
+                existingUser.setPassword(user.getPassword());
+            }
+            if (user.getRole() != null) {
+                existingUser.setRole(user.getRole());
+            }
+            existingUser.setEnabled(user.getEnabled());
 
-
+            userRepository.save(existingUser);
+            System.out.println("Updated User: " + existingUser);
+            return ResponseEntity.ok().build();
+        }
         return ResponseEntity.badRequest().build();
     }
 
