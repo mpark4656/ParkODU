@@ -46,7 +46,7 @@ public class ParkingSpaceSettingsController {
         List<Floor> floors = new ArrayList<>(floorRepository.findAll());
         floors.sort(Comparator.comparing(Floor::getNumber));
 
-        model.addAttribute("garage", garages);
+        model.addAttribute("garages", garages);
         model.addAttribute("floors", floors);
 
         return "settings/parking_space/index";
