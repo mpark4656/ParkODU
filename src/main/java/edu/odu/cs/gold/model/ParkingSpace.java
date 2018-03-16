@@ -12,6 +12,9 @@ public class ParkingSpace implements Serializable {
     private boolean available;
     private String floor;
     private String permitType;
+    private String permitTypeKey;
+    private String spaceType;
+    private String spaceTypeKey;
     private Date lastUpdated;
 
     public ParkingSpace() {
@@ -58,13 +61,25 @@ public class ParkingSpace implements Serializable {
         this.floor = floor;
     }
 
-    public String getPermitType() {
-        return permitType;
+    public String getPermitType() { return permitType; }
+
+    public void setPermitType(String permitType) { this.permitType = permitType; }
+
+    public String getPermitTypeKey() {
+        return permitTypeKey;
     }
 
-    public void setPermitType(String permitType) {
-        this.permitType = permitType;
+    public void setPermitTypeKey(String permitTypeKey) {
+        this.permitTypeKey = permitTypeKey;
     }
+
+    public String getSpaceType() { return spaceType; }
+
+    public void setSpaceType(String spaceType) { this.spaceType = spaceType; }
+
+    public String getSpaceTypeKey() { return spaceTypeKey; }
+
+    public void setSpaceTypeKey(String spaceTypeKey) { this.spaceTypeKey = spaceTypeKey; }
 
     public Date getLastUpdated() {
         return lastUpdated;
@@ -83,6 +98,9 @@ public class ParkingSpace implements Serializable {
                 ", available=" + available +
                 ", floor='" + floor + '\'' +
                 ", permitType='" + permitType + '\'' +
+                ", permitTypeKey='" + permitTypeKey + '\'' +
+                ", spaceType='" + spaceType + '\'' +
+                ", spaceTypeKey='" + spaceTypeKey + '\'' +
                 ", lastUpdated='" + lastUpdated + '\'' +
                 '}';
     }

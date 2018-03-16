@@ -171,4 +171,23 @@ public class FloorRestController {
         floorRepository.deleteByPredicate(predicate);
         return ResponseEntity.ok().build();
     }
+
+    /**
+     * Simulator will use this to get a list of all floors. The client needs to provide the unique subscription key
+     * that matches.
+     *
+     * @param subscriptionKey String
+     * @return
+     */
+    @GetMapping("/floors/{subscriptionKey}")
+    public List<Floor> getCollection(@PathVariable String subscriptionKey) {
+
+        if(subscriptionKey.equals("2093af49-30d2-4ba3-873b-29970e012656")) {
+            ArrayList<Floor> floorList = new ArrayList<> (floorRepository.findAll());
+            return floorList;
+        }
+        else {
+            return null;
+        }
+    }
 }
