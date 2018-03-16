@@ -4,7 +4,6 @@
 <head>
     <!-- Head -->
     <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
-
     <style>
 .switch {
   position: relative;
@@ -124,21 +123,28 @@ input:checked + .slider:before {
                         <th>Permit Type</th>
                         <th>Space Type</th>
                         <th>Available</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="parkingSpace : ${parkingSpaces}">
                         <td th:text="${parkingSpace.number}"></td>
                         <td>
-                            <select>
-                                <option th:each="permitType : ${permitTypes}" th:if="${parkingSpace.permitTypeKey} == ${permitType.permitTypeKey}" th:text="${permitType.name}" selected="true"></option>
-                                <option th:each="permitType : ${permitTypes}" th:unless="${parkingSpace.permitTypeKey} == ${permitType.permitTypeKey}" th:text="${permitType.name}"></option>
+                            <select id="permit_type_dropdown" class="form-control">
+                                <option th:each="permitType : ${permitTypes}"
+                                        th:text="${permitType.name}"
+                                        th:value="${permitType.permitTypeKey}"
+                                        th:selected="(${parkingSpace.permitTypeKey eq permitType.permitTypeKey})">
+                                </option>
                             </select>
                         </td>
                         <td>
-                            <select>
-                                <option th:each="spaceType : ${spaceTypes}" th:if="${parkingSpace.spaceTypeKey} == ${spaceType.spaceTypeKey}" th:text="${spaceType.name}" selected="true"></option>
-                                <option th:each="spaceType : ${spaceTypes}" th:unless="${parkingSpace.spaceTypeKey} == ${spaceType.spaceTypeKey}" th:text="${spaceType.name}"></option>
+                            <select id="space_type_dropdown" class="form-control">
+                                <option th:each="spaceType : ${spaceTypes}"
+                                        th:text="${spaceType.name}"
+                                        th:value="${spaceType.spaceTypeKey}"
+                                        th:selected="(${parkingSpace.spaceTypeKey eq spaceType.spaceTypeKey})">
+                                </option>
                             </select>
                         </td>
                         <td>
@@ -150,6 +156,13 @@ input:checked + .slider:before {
                                 <input type="checkbox" class="availabilityCheckbox" th:value="${parkingSpace.parkingSpaceKey}"/>
                                 <span class="slider round"></span>
                             </label>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger btn-sm delete-parkingSpace-button"
+                                    title="Delete Parking Space"
+                                    th:attr="data-id=${parkingSpace.parkingSpaceKey},data-name=${parkingSpace.number}"
+                                    data-toggle="modal"
+                                    data-target="">Delete</button>
                         </td>
                     </tr>
                 </tbody>
