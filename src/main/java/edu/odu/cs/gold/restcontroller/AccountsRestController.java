@@ -58,7 +58,7 @@ public class AccountsRestController {
         return ResponseEntity.badRequest().build();
     }
 
-    @PostMapping("/edit")
+    @PostMapping("/update")
     public ResponseEntity<?> update(@RequestBody User user) {
 
 
