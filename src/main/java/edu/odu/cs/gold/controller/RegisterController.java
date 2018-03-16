@@ -14,10 +14,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.ModelAndViewDefiningException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -45,37 +44,35 @@ public class RegisterController {
     }
 
     // Return registration form template
-    @RequestMapping(value="/user/register", method = RequestMethod.GET)
-    public ModelAndView showRegistrationPage(ModelAndView model, User user){
-        model.addObject("user", user);
-        model.setViewName("user/register");
-        return model;
+    @GetMapping("/user/register")
+    public String showRegistrationPage(Model model, User user){
+        model.addAttribute("user", user);
+        return "user/register";
     }
 
     // Process form input data
-    @RequestMapping(value = "/user/register", method = RequestMethod.POST)
+    @PostMapping("/user/register")
     public ModelAndView processRegistrationForm(ModelAndView model, @Valid User user, BindingResult bindingResult, HttpServletRequest request) {
 
         // Lookup user in database by e-mail
-        User userExists = userService.findByEmail(user.getEmail());
 
-        System.out.println(userExists);
+        boolean userExists = userService.userExists(user.getEmail());
 
-        if (userExists != null) {
+        System.out.println("User exists: " + userExists);
+
+        if (userExists) {
             model.addObject("alreadyRegisteredMessage", "Oops!  There is already a user registered with the email provided.");
             model.setViewName("user/register");
             bindingResult.reject("email");
-        }
-
-        if (bindingResult.hasErrors()) {
             model.setViewName("user/register");
-        } else { // new user so we create user and send confirmation e-mail
-
+        }
+        else {
             // Disable user until they click on confirmation link in email
             user.setEnabled(false);
 
             // Generate random 36-character string token for confirmation link
             user.setConfirmationToken(UUID.randomUUID().toString());
+            user.setId(UUID.randomUUID().toString());
 
             userService.saveUser(user);
 
@@ -93,7 +90,6 @@ public class RegisterController {
             model.addObject("confirmationMessage", "A confirmation e-mail has been sent to " + user.getEmail());
             model.setViewName("user/register");
         }
-
         return model;
     }
 

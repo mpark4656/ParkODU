@@ -42,11 +42,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService());
     }
 
-    @Bean
-    public UserService userService() {
-        return new UserService();
-    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         //http.authorizeRequests().antMatchers("/**").permitAll();

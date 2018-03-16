@@ -4,6 +4,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.query.Predicate;
 
+import com.hazelcast.query.Predicates;
 import edu.odu.cs.gold.model.User;
 
 import java.util.ArrayList;
@@ -35,11 +36,6 @@ public class UserRepository {
         return (User)map.get(key);
     }
 
-    public User findByEmail(String email) {
-        IMap map = hazelcastInstance.getMap(collectionName);
-        return (User)map.get(email);
-    }
-
     public User findByConfirmationToken(String token) {
         IMap map = hazelcastInstance.getMap(collectionName);
         return (User)map.get(token);
@@ -57,6 +53,7 @@ public class UserRepository {
 
     public int countByPredicate(Predicate predicate) {
         IMap map = hazelcastInstance.getMap(collectionName);
+        System.out.println(map.getName());
         return map.values(predicate).size();
     }
 
