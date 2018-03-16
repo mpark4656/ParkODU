@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid navbar-container">
+        <div class="col-md-3">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- Main Logo -->
+                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="navbar" class="navbar-collapse collapse navbar-center">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/garage}">Garages</a></li>
+                    <li><a th:href="@{/analytics/locate}">Search</a></li>
+                    <!-- Settings Link -->
+                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
+                </ul>
+                <!--
+                <form class="navbar-form navbar-right">
+                    <input type="text" class="form-control" placeholder="Search..."/>
+                </form>
+                -->
+            </div>
+        </div>
+        <div class="col-md-3">
+            <!-- Social Media Links -->
+            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid main-container">
+
+    <!-- Welcome User -->
+    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+            <h1 class="text-center" style="text-transform: uppercase;">Account Management</h1>
+            <hr/>
+            <table class="table table-bordered table-centered">
+                <thead>
+                <tr>
+                    <th width="20%">Edit Account</th>
+                    <th width="20%">First Name</th>
+                    <th width="20%">Last Name</th>
+                    <th width="20%">Email</th>
+                    <th width="10%">Role</th>
+                    <th width="10%">Enabled</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="users : ${user}">
+                    <td th:href="@{/accounts/edit} + '/' + ${users.id}" class="btn btn-primary" width="50%">Edit</td>
+                    <td class="btn btn-primary" name="userKeyDelete" width="50%" value="${users.id}">Delete</td>
+                    <td th:text="${users.firstName}"></td>
+                    <td th:text="${users.lastName}"></td>
+                    <td th:text="${users.email}"></td>
+                    <td th:text="Placeholder"></td>
+                    <td th:text="${users.enabled}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <br/>
+
+    <!-- Footer -->
+    <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
+</div>
+
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+</body>
+</html>
