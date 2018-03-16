@@ -18,7 +18,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 @PropertySources(value = {
         @PropertySource(value = "file:${propertiesDirectory}/parkodu.properties")
 })
-public class GoldConfiguration implements ApplicationContextAware {
+public class ParkODUConfiguration implements ApplicationContextAware {
 
     public static final String COLLECTION_GARAGE = "Garage";
     public static final String COLLECTION_FLOOR = "Floor";

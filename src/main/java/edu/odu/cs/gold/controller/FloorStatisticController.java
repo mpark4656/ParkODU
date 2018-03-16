@@ -44,7 +44,7 @@ public class FloorStatisticController {
     @GetMapping({"","/","/index"})
     public String index(Model model) {
         List<Garage> garages = new ArrayList<>(garageRepository.findAll());
-        model.addAttribute("garages", garages);
+        model.addAttribute("garage", garages);
         return "garage/index";
     }
 
