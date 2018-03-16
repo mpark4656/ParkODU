@@ -3,62 +3,53 @@ package edu.odu.cs.gold.repository;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.query.Predicate;
-import edu.odu.cs.gold.model.FloorStatistic;
-import edu.odu.cs.gold.model.Garage;
-import edu.odu.cs.gold.model.ParkingSpace;
-
+import edu.odu.cs.gold.model.PermitType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-public class ParkingSpaceRepository {
-
+public class PermitTypeRepository {
     private HazelcastInstance hazelcastInstance;
     private String collectionName;
 
-    public ParkingSpaceRepository(HazelcastInstance hazelcastInstance, String collectionName) {
+    public PermitTypeRepository(HazelcastInstance hazelcastInstance, String collectionName) {
         this.hazelcastInstance = hazelcastInstance;
         this.collectionName = collectionName;
     }
 
-    public String getId(ParkingSpace entity) {
-        return entity.getParkingSpaceKey();
+    public String getId(PermitType entity) {
+        return entity.getPermitTypeKey();
     }
 
-    public Collection<ParkingSpace> findAll() {
+    public Collection<PermitType> findAll() {
         IMap map = hazelcastInstance.getMap(collectionName);
         return map.values();
     }
 
-    public ParkingSpace findByKey(String key) {
+    public PermitType findById(String key) {
         IMap map = hazelcastInstance.getMap(collectionName);
-        return (ParkingSpace)map.get(key);
+        return (PermitType)map.get(key);
     }
 
-    public List<ParkingSpace> findByKeys(Set<String> keys) {
+    public List<PermitType> findByKeys(Set<String> keys) {
         IMap map = hazelcastInstance.getMap(collectionName);
         return new ArrayList<>(map.getAll(keys).values());
     }
 
-    public List<ParkingSpace> findByPredicate(Predicate predicate) {
+    public List<PermitType> findByPredicate(Predicate predicate) {
         IMap map = hazelcastInstance.getMap(collectionName);
         return new ArrayList<>(map.values(predicate));
     }
 
-    public int countByPredicate(Predicate predicate) {
-        IMap map = hazelcastInstance.getMap(collectionName);
-        return map.values(predicate).size();
-    }
-
-    public void save(ParkingSpace entity) {
+    public void save(PermitType entity) {
         IMap map = hazelcastInstance.getMap(collectionName);
         map.set(getId(entity), entity);
     }
 
-    public void save(Collection<ParkingSpace> entities) {
+    public void save(Collection<PermitType> entities) {
         IMap map = hazelcastInstance.getMap(collectionName);
-        for (ParkingSpace entity : entities) {
+        for (PermitType entity : entities) {
             map.set(getId(entity), entity);
         }
     }
@@ -68,10 +59,15 @@ public class ParkingSpaceRepository {
         map.delete(key);
     }
 
+    public int countByPredicate(Predicate predicate) {
+        IMap map = hazelcastInstance.getMap(collectionName);
+        return map.values(predicate).size();
+    }
+
     public int deleteByPredicate(Predicate predicate) {
         IMap map = hazelcastInstance.getMap(collectionName);
-        List<ParkingSpace> entities = this.findByPredicate(predicate);
-        for (ParkingSpace entity : entities) {
+        List<PermitType> entities = this.findByPredicate(predicate);
+        for (PermitType entity : entities) {
             map.delete(getId(entity));
         }
         return entities.size();

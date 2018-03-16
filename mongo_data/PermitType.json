@@ -1,0 +1,6 @@
+{"_id":"34958c50-253d-4806-871f-85b3db59f8ec","permitTypeKey":"34958c50-253d-4806-871f-85b3db59f8ec","name":"Commuter","description":"General student parking permit available to commuters only."}
+{"_id":"ae6a61ba-d2a1-4d37-9ad5-bbd9377d7d5d","permitTypeKey":"ae6a61ba-d2a1-4d37-9ad5-bbd9377d7d5d","name":"Perimeter","description":"Great value for commuters who don't mind a longer walk to save money."}
+{"_id":"96b192a1-3c4b-4851-8b00-45f37e94ba11","permitTypeKey":"96b192a1-3c4b-4851-8b00-45f37e94ba11","name":"Evening","description":"Affordable option for commuters who only need to park on campus after 3:45PM."}
+{"_id":"22fcbd91-285f-4c56-99c4-527b184e0e47","permitTypeKey":"22fcbd91-285f-4c56-99c4-527b184e0e47","name":"Motorcycle","description":"Includes scooters & mopeds with state license plates."}
+{"_id":"d868d863-4519-4914-b110-2f8d30005da9","permitTypeKey":"d868d863-4519-4914-b110-2f8d30005da9","name":"Metered","description":"Metered Parking provides short-term parking in high-demand locations at $0.50/15 minutes."}
+{"_id":"93cf89a4-c967-499f-9d94-001e6a451ef3","permitTypeKey":"93cf89a4-c967-499f-9d94-001e6a451ef3","name":"Faculty","description":"ODU Faculty / Staff"}

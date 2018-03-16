@@ -28,6 +28,8 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     public static final String COLLECTION_TRAVEL_DISTANCE_DURATION = "TravelDistanceDuration";
 
     public static final String COLLECTION_FLOOR_STATISTIC = "FloorStatistic";
+    public static final String COLLECTION_PERMIT_TYPE = "PermitType";
+    public static final String COLLECTION_SPACE_TYPE = "SpaceType";
 
     public static final String COLLECTION_USER = "User";
 
@@ -108,6 +110,16 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     }
 
     @Bean
+    public PermitTypeRepository permitTypeRepository() {
+        return new PermitTypeRepository(hazelcastInstance(), COLLECTION_PERMIT_TYPE);
+    }
+
+    @Bean
+    public SpaceTypeRepository spaceTypeRepository() {
+        return new SpaceTypeRepository(hazelcastInstance(), COLLECTION_SPACE_TYPE);
+    }
+
+    @Bean
     public UserRepository userRepository() {
         return new UserRepository(hazelcastInstance(), COLLECTION_USER);
     }
@@ -145,6 +157,16 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     @Bean
     public MongoMapStore userMapStore() {
         return new MongoMapStore(mongoTemplate, COLLECTION_USER, User.class);
+    }
+
+    @Bean
+    public MongoMapStore permitTypeMapStore() {
+        return new MongoMapStore(mongoTemplate, COLLECTION_PERMIT_TYPE, PermitType.class);
+    }
+
+    @Bean
+    public MongoMapStore spaceTypeMapStore() {
+        return new MongoMapStore(mongoTemplate, COLLECTION_SPACE_TYPE, SpaceType.class);
     }
 
     @Bean
@@ -268,6 +290,42 @@ public class ParkODUConfiguration implements ApplicationContextAware {
         mapConfig.addMapIndexConfig(new MapIndexConfig("userName", false));
         mapConfig.addMapIndexConfig(new MapIndexConfig("confirmationToken", false));
         mapConfig.addMapIndexConfig(new MapIndexConfig("id",false));
+
+        return mapConfig;
+    }
+
+    @Bean
+    public MapConfig permitTypeRepositoryMapConfig() {
+        MapConfig mapConfig = new MapConfig(COLLECTION_PERMIT_TYPE);
+
+        // MapStore
+        MapStoreConfig mapStoreConfig = new MapStoreConfig();
+        mapStoreConfig.setImplementation(permitTypeMapStore());
+        mapStoreConfig.setEnabled(true);
+        mapStoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.EAGER);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+
+        // Indexed Attributes
+        mapConfig.addMapIndexConfig(new MapIndexConfig("permitTypeKey", false));
+        mapConfig.addMapIndexConfig(new MapIndexConfig("name", false));
+
+        return mapConfig;
+    }
+
+    @Bean
+    public MapConfig spaceTypeRepositoryMapConfig() {
+        MapConfig mapConfig = new MapConfig(COLLECTION_SPACE_TYPE);
+
+        // MapStore
+        MapStoreConfig mapStoreConfig = new MapStoreConfig();
+        mapStoreConfig.setImplementation(spaceTypeMapStore());
+        mapStoreConfig.setEnabled(true);
+        mapStoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.EAGER);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+
+        // Indexed Attributes
+        mapConfig.addMapIndexConfig(new MapIndexConfig("spaceTypeKey", false));
+        mapConfig.addMapIndexConfig(new MapIndexConfig("name", false));
 
         return mapConfig;
     }

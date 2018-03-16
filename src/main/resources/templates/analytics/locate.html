@@ -69,6 +69,13 @@
                 <div class="form-group">
                     <label class="control-label col-md-4">Permit Types</label>
                     <div class="col-md-8">
+                        <div th:each="permitType : ${permitTypes}">
+                            <input name="permitTypeKeys" type="checkbox" th:id="${permitType.permitTypeKey}" th:value="${permitType.permitTypeKey}" />
+                            <label th:for="${permitType.permitTypeKey}" th:text="${permitType.name}"></label>
+                        </div>
+
+
+                        <!--
                         <input name="permitTypes" id="permitType1" type="checkbox" value="Commuter" />
                         <label for="permitType1">Commuter</label>
                         <br/>
@@ -80,6 +87,17 @@
                         <br/>
                         <input name="permitTypes" id="permitType4" type="checkbox" value="Quad Resident" />
                         <label for="permitType4">Quad Resident</label>
+                        -->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-4">Space Types</label>
+                    <div class="col-md-8">
+                        <div th:each="spaceType : ${spaceTypes}">
+                            <input name="spaceTypeKeys" type="checkbox" th:id="${spaceType.spaceTypeKey}" th:value="${spaceType.spaceTypeKey}" />
+                            <label th:for="${spaceType.spaceTypeKey}" th:text="${spaceType.name}"></label>
+                        </div>
                     </div>
                 </div>
 

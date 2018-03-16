@@ -58,7 +58,7 @@
                 <dt>Permit Types</dt>
                 <dd>
                     <th:block th:each="permitType : ${permitTypes}">
-                        <span th:text="${permitType}"></span>
+                        <span th:text="${permitType.name}"></span>
                         <br/>
                     </th:block>
                 </dd>
