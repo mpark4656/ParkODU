@@ -215,17 +215,17 @@ $(document).ready(function(){
     });
 });
 
-/*$(document).ready(function(){
+$(document).ready(function(){
     $("#space_type_dropdown").change(function(){
 
     var parkingSpaceKey = $('#parking_space_row').val();
     var spaceTypeKey = $(this).val();
 
-    $.post("/settings/parking_space/set_space_type", { parkingSpaceKey: parkingSpace ... })
+    $.post("/settings/parking_space/set_space_type", { parkingSpaceKey: parkingSpace, spaceTypeKey: spaceTypeKey })
         .done(function(data) {
         });
     });
-});*/
+});
 
 
 </script>

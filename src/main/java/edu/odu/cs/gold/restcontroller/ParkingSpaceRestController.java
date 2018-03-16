@@ -51,7 +51,7 @@ public class ParkingSpaceRestController {
     public ResponseEntity<?> update(@RequestBody ParkingSpace parkingSpace) {
         ParkingSpace existingParkingSpace = parkingSpaceRepository.findByKey(parkingSpace.getParkingSpaceKey());
         if (existingParkingSpace != null) {
-            // Upsert - if null, don't update the field
+            // Update - if null, don't update the field
             if (parkingSpace.getNumber() != null) {
                 existingParkingSpace.setNumber(parkingSpace.getNumber());
             }
