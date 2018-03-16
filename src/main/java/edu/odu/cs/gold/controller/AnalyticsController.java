@@ -68,6 +68,7 @@ public class AnalyticsController {
                          @RequestParam(name = "permitTypeKeys", required = false) List<String> permitTypeKeys,
                          @RequestParam(name = "spaceTypeKeys", required = false) List<String> spaceTypeKeys,
                          @RequestParam(name = "destinationBuildingId", required = false) String destinationBuildingId,
+                         @RequestParam(name = "minSpaces", required = false) Integer minSpaces,
                          Model model) {
 
         Location startingLocation = new Location(startingAddress, startingLatitude, startingLongitude);
@@ -85,6 +86,7 @@ public class AnalyticsController {
         List<Recommendation> recommendations = new ArrayList<>();
 
         List<Garage> garages = new ArrayList<>(garageRepository.findAll());
+
         for (Garage garage : garages) {
             int availabilityCount = 0;
             int totalCount = 0;
@@ -108,28 +110,31 @@ public class AnalyticsController {
             else {
                 availabilityCount = garage.getAvailableSpaces();
             }
-            Recommendation recommendation = new Recommendation();
-            recommendation.setStartingAddress(startingAddress);
-            recommendation.setGarage(garage);
-            recommendation.setDestinationBuilding(destinationBuilding);
+            if (minSpaces <= availabilityCount) {
+                Recommendation recommendation = new Recommendation();
+                recommendation.setStartingAddress(startingAddress);
+                recommendation.setGarage(garage);
+                recommendation.setDestinationBuilding(destinationBuilding);
 
-            recommendation.setAvailabilityCount(availabilityCount);
-            recommendation.setTotalCount(totalCount);
+                recommendation.setAvailabilityCount(availabilityCount);
+                recommendation.setTotalCount(totalCount);
 
-            DistanceDuration startingAddressToGarage = googleMapService.getDistanceDuration(startingLocation, garage.getLocation(), GoogleMapService.TravelMode.DRIVING);
-            recommendation.setStartingAddressToGarage(startingAddressToGarage);
+                DistanceDuration startingAddressToGarage = googleMapService.getDistanceDuration(startingLocation, garage.getLocation(), GoogleMapService.TravelMode.DRIVING);
+                recommendation.setStartingAddressToGarage(startingAddressToGarage);
 
-            DistanceDuration garageToDestinationBuilding = googleMapService.getDistanceDuration(garage.getLocation(), destinationBuilding.getLocation(), GoogleMapService.TravelMode.WALKING);
-            recommendation.setGarageToDestinationBuilding(garageToDestinationBuilding);
+                DistanceDuration garageToDestinationBuilding = googleMapService.getDistanceDuration(garage.getLocation(), destinationBuilding.getLocation(), GoogleMapService.TravelMode.WALKING);
+                recommendation.setGarageToDestinationBuilding(garageToDestinationBuilding);
 
-            // Set Total Distance
-            recommendation.setTotalDistanceValue(recommendation.getStartingAddressToGarageDistanceValue() + recommendation.getGarageToDestinationBuildingDistanceValue());
+                // Set Total Distance
+                recommendation.setTotalDistanceValue(recommendation.getStartingAddressToGarageDistanceValue() + recommendation.getGarageToDestinationBuildingDistanceValue());
 
-            // Set Total Duration
-            recommendation.setTotalDurationValue(recommendation.getStartingAddressToGarageDurationValue() + recommendation.getGarageToDestinationBuildingDurationValue());
+                // Set Total Duration
+                recommendation.setTotalDurationValue(recommendation.getStartingAddressToGarageDurationValue() + recommendation.getGarageToDestinationBuildingDurationValue());
 
-            recommendations.add(recommendation);
+                recommendations.add(recommendation);
+            }
         }
+
 
         // Default sort by closest Garage to Destination Building
         recommendations.sort(Comparator.comparing(Recommendation::getGarageToDestinationBuildingDistanceValue));

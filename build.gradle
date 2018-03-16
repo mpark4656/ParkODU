@@ -40,6 +40,10 @@ repositories {
 
 dependencies {
 
+    //JavaX
+    //compile("org.hibernate.javax.persistence:hibernate-jpa-2.0-api")
+    compile group: 'javax.persistence', name: 'persistence-api', version: '1.0'
+
     // Spring Framework
     compile("org.springframework.boot:spring-boot-devtools")
     compile("org.springframework.boot:spring-boot-starter-web")
@@ -47,6 +51,13 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-data-mongodb")
     compile("org.springframework.security:spring-security-taglibs")
+
+    compile group: 'org.springframework.data', name: 'spring-data-jpa'
+    compile("org.springframework.boot:spring-boot-starter-mail")
+
+    // Zxcvbn
+    compile group: 'com.nulab-inc', name: 'zxcvbn', version: '1.0.0'
+
 
     // Hazelcast
     compile("com.hazelcast:hazelcast:3.8.3")
