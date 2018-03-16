@@ -37,4 +37,12 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void deleteUser(int id) {
+        Predicate predicate = Predicates.equal("id", id);
+        userRepository.deleteByPredicate(predicate);
+    }
+
+    public void refresh(String userId) {
+
+    }
 }

@@ -82,7 +82,7 @@ public class RegisterController {
             registrationEmail.setTo(user.getEmail());
             registrationEmail.setSubject("Registration Confirmation");
             registrationEmail.setText("To confirm your e-mail address, please click the link below:\n"
-                    + appUrl + "/confirm?token=" + user.getConfirmationToken());
+                    + appUrl + ":8083/confirm?token=" + user.getConfirmationToken());
             registrationEmail.setFrom("noreply@ParkODU.cs.odu.edu");
 
             emailService.sendEmail(registrationEmail);

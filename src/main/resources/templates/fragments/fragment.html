@@ -96,15 +96,16 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 	</div>
 
 	<!-- Import Schedule -->
-	<div th:fragment="import-schedule">
+	<!--<div th:fragment="import-schedule">
 		<li sec:authorize="isAnonymous()" >
 			<input th:type="file" class="form-control-file" id="importSchedule" />
 		</li>
-		<!--
+	-->	<!--
         <li><input th:type="file" /></li>
         -->
+	<!--
 	</div>
-
+-->
 	<!-- Welcome User -->
 	<div th:fragment="welcome-user">
 		<div sec:authorize="isAuthenticated()" class="text-right">

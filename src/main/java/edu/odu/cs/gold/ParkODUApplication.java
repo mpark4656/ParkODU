@@ -5,6 +5,7 @@ import com.hazelcast.query.Predicates;
 import edu.odu.cs.gold.model.*;
 import edu.odu.cs.gold.repository.*;
 import edu.odu.cs.gold.service.GoogleMapService;
+import edu.odu.cs.gold.service.UserService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -47,6 +48,9 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
@@ -65,7 +69,7 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
             for ( User Entries : userRepository.findAll()) {
                 System.out.println(Entries.toString());
             }
-        //System.out.println("# of Users loaded from Mongo: " + userRepository.findAll();
+            //System.out.println("# of Users loaded from Mongo: " + userRepository.findAll();
 
         if (false) {
                     /*
