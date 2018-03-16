@@ -130,7 +130,7 @@ input:checked + .slider:before {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="parkingSpace : ${parkingSpaces}">
+                    <tr th:each="parkingSpace : ${parkingSpaces}" id="parking_space_row" th:data-value="${parkingSpace.parkingSpaceKey}">
                         <td th:text="${parkingSpace.number}"></td>
                         <td>
                             <select id="permit_type_dropdown" class="form-control">
@@ -202,6 +202,32 @@ $(document).ready(function(){
         }
     });
 });
+
+$(document).ready(function(){
+    $("#permit_type_dropdown").change(function(){
+
+    var parkingSpaceKey = $('#parking_space_row').val();
+    var permitTypeKey = $(this).val();
+
+    $.post("/settings/parking_space/set_permit_type", { parkingSpaceKey: parkingSpaceKey, permitTypeKey: permitTypeKey })
+        .done(function(data) {
+        });
+    });
+});
+
+/*$(document).ready(function(){
+    $("#space_type_dropdown").change(function(){
+
+    var parkingSpaceKey = $('#parking_space_row').val();
+    var spaceTypeKey = $(this).val();
+
+    $.post("/settings/parking_space/set_space_type", { parkingSpaceKey: parkingSpace ... })
+        .done(function(data) {
+        });
+    });
+});*/
+
+
 </script>
 
 </body>
