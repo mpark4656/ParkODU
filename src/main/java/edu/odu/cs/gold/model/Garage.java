@@ -22,15 +22,17 @@ public class Garage implements Serializable {
     private Double longitude;
     private Date lastUpdated;
 
-    public Garage() {
-        this.garageKey = UUID.randomUUID().toString();
-    }
+    public Garage() {}
 
     public Garage(String name, Double latitude, Double longitude) {
         this.garageKey = UUID.randomUUID().toString();
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public void generateGarageKey() {
+        this.garageKey = UUID.randomUUID().toString();
     }
 
     public String getGarageKey() {

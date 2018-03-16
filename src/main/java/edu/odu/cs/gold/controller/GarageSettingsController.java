@@ -8,8 +8,8 @@ import edu.odu.cs.gold.repository.ParkingSpaceRepository;
 import edu.odu.cs.gold.service.GarageService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -62,5 +62,68 @@ public class GarageSettingsController {
         model.addAttribute("garages", garages);
 
         return "settings/garage/index";
+    }
+
+    @GetMapping("/create")
+    public String create(Model model) {
+        Garage garage = new Garage();
+        garage.generateGarageKey();
+        model.addAttribute("garage", garage);
+        return "settings/garage/create";
+    }
+
+    @PostMapping("/create")
+    public String create(Garage garage) {
+        Garage existingGarage = null;
+        try {
+            existingGarage = garageRepository.findByKey(garage.getGarageKey());
+            if (existingGarage == null) {
+                garageRepository.save(garage);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:/settings/garage/index";
+    }
+
+    @GetMapping("/edit/{garageKey}")
+    public String edit(@PathVariable("garageKey") String garageKey,
+                       Model model) {
+        Garage garage = garageRepository.findByKey(garageKey);
+        model.addAttribute("garage", garage);
+        return "settings/garage/edit";
+    }
+
+    @PostMapping("/edit")
+    public String edit(Garage garage) {
+        Garage existingGarage = null;
+        try {
+            existingGarage = garageRepository.findByKey(garage.getGarageKey());
+            existingGarage.setName(garage.getName());
+            existingGarage.setDescription(garage.getDescription());
+            existingGarage.setHeightDescription(garage.getHeightDescription());
+            existingGarage.setAddressOne(garage.getAddressOne());
+            existingGarage.setAddressTwo(garage.getAddressTwo());
+            existingGarage.setCity(garage.getCity());
+            existingGarage.setState(garage.getState());
+            existingGarage.setZipCode(garage.getZipCode());
+            garageRepository.save(existingGarage);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:/settings/garage/index";
+    }
+
+    @PostMapping("/delete")
+    public String delete(@RequestParam("garageKey") String garageKey) {
+        try {
+            garageRepository.delete(garageKey);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:/settings/garage/index";
     }
 }
