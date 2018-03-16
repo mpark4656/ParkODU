@@ -52,6 +52,9 @@
         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
             <h1 class="text-center" style="text-transform: uppercase;">Account Management</h1>
             <hr/>
+            <p class="text-right">
+                <a th:href="@{/accounts/create}" class="btn btn-success btn-sm" title="Create User">Create</a>
+            </p>
             <table class="table table-bordered table-centered">
                 <thead>
                 <tr>
@@ -72,12 +75,11 @@
                     <td th:text="${users.firstName}"></td>
                     <td th:text="${users.lastName}"></td>
                     <td th:text="${users.email}"></td>
-                    <td th:text="Placeholder"></td>
+                    <td th:text="${users.role}"></td>
                     <td th:text="${users.enabled}"></td>
                 </tr>
                 </tbody>
             </table>
-
         </div>
     </div>
 

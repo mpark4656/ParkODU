@@ -49,6 +49,7 @@ public class AccountsRestController {
     public ResponseEntity<?> add(@RequestBody User user) {
         if (user.getId() != null)  {
             user.setId(UUID.randomUUID().toString());
+            user.setConfirmationToken(UUID.randomUUID().toString());
             user.setEnabled(true);
             userRepository.save(user);
             userService.refresh(user.getId());

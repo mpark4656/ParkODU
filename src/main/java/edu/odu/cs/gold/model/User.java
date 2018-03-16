@@ -58,8 +58,8 @@ public class User implements Serializable{
         return confirmationToken;
     }
 
-    public String generateId() {
-        return UUID.randomUUID().toString();
+    public void generateId() {
+        this.id = UUID.randomUUID().toString();
     }
 
     public void setConfirmationToken(String confirmationToken) {
