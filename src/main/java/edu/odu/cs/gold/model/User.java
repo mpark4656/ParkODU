@@ -117,7 +117,7 @@ public class User implements Serializable{
     public String toString() {
         return "User{" +
                 "confirmationToken='" + confirmationToken + '\'' +
-                "id='" + id + '\'' +
+                ", id='" + id + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +

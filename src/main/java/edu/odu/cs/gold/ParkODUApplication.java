@@ -62,6 +62,11 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         travelDistanceDurationRepository.loadAll();
         userRepository.loadAll();
 
+            for ( User Entries : userRepository.findAll()) {
+                System.out.println(Entries.toString());
+            }
+        //System.out.println("# of Users loaded from Mongo: " + userRepository.findAll();
+
         if (false) {
                     /*
             Predicate predicate = Predicates.and(
