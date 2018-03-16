@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
 
+import edu.odu.cs.gold.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.SimpleMailMessage;
@@ -35,6 +36,7 @@ public class RegisterController {
     private PasswordEncoder bCryptPasswordEncoder;
     private UserService userService;
     private EmailService emailService;
+    private UserRepository userRepository;
 
     @Autowired
     public RegisterController(PasswordEncoder bCryptPasswordEncoder, UserService userService, EmailService emailService) {
@@ -52,97 +54,71 @@ public class RegisterController {
 
     // Process form input data
     @PostMapping("/user/register")
-    public ModelAndView processRegistrationForm(ModelAndView model, @Valid User user, BindingResult bindingResult, HttpServletRequest request) {
-
+    public String processRegistrationForm(Model model, @Valid User user, BindingResult bindingResult, HttpServletRequest request) {
         // Lookup user in database by e-mail
-
         boolean userExists = userService.userExists(user.getEmail());
-
         System.out.println("User exists: " + userExists);
-
         if (userExists) {
-            model.addObject("alreadyRegisteredMessage", "Oops!  There is already a user registered with the email provided.");
-            model.setViewName("user/register");
+            model.addAttribute("alreadyRegisteredMessage", "Oops!  There is already a user registered with the email provided.");
             bindingResult.reject("email");
-            model.setViewName("user/register");
         }
         else {
             // Disable user until they click on confirmation link in email
             user.setEnabled(false);
-
             // Generate random 36-character string token for confirmation link
             user.setConfirmationToken(UUID.randomUUID().toString());
             user.setId(UUID.randomUUID().toString());
+            user.setRole("user");
 
             userService.saveUser(user);
-
             String appUrl = request.getScheme() + "://" + request.getServerName();
-
             SimpleMailMessage registrationEmail = new SimpleMailMessage();
             registrationEmail.setTo(user.getEmail());
             registrationEmail.setSubject("Registration Confirmation");
             registrationEmail.setText("To confirm your e-mail address, please click the link below:\n"
-                    + appUrl + ":8083/confirm?token=" + user.getConfirmationToken());
+                    + appUrl + ":8083/user/confirm?token=" + user.getConfirmationToken());
             registrationEmail.setFrom("noreply@ParkODU.cs.odu.edu");
-
             emailService.sendEmail(registrationEmail);
-
-            model.addObject("confirmationMessage", "A confirmation e-mail has been sent to " + user.getEmail());
-            model.setViewName("user/register");
+            model.addAttribute("confirmationMessage", "A confirmation e-mail has been sent to " + user.getEmail());
         }
-        return model;
+        return "user/register";
     }
 
     // Process confirmation link
-    @RequestMapping(value="/user/confirm", method = RequestMethod.GET)
-    public ModelAndView showConfirmationPage(ModelAndView model, @RequestParam("token") String token) {
+    @GetMapping("/user/confirm")
+    public String showConfirmationPage(Model model, @RequestParam("token") String token) {
 
-        User user = userService.findByConfirmationToken(token);
-
+        User user = userRepository.findByKey(token);
         if (user == null) { // No token found in DB
-            model.addObject("invalidToken", "Oops!  This is an invalid confirmation link.");
+            model.addAttribute("invalidToken", "Oops!  This is an invalid confirmation link.");
         } else { // Token found
-            model.addObject("confirmationToken", user.getConfirmationToken());
+           model.addAttribute("confirmationToken", token);
         }
-
-        model.setViewName("confirm");
-        return model;
+        return "user/confirm";
     }
 
     // Process confirmation link
-    @RequestMapping(value="/user/confirm", method = RequestMethod.POST)
-    public ModelAndView processConfirmationForm(ModelAndView model, BindingResult bindingResult, @RequestParam Map requestParams, RedirectAttributes redir) {
-
-        model.setViewName("user/confirm");
-
+    @PostMapping("/user/confirm")
+    public String processConfirmationForm(Model model, BindingResult bindingResult, @RequestParam Map requestParams, RedirectAttributes redir) {
         Zxcvbn passwordCheck = new Zxcvbn();
-
         Strength strength = passwordCheck.measure((String)requestParams.get("password"));
-
         if (strength.getScore() < 3) {
             bindingResult.reject("password");
-
             redir.addFlashAttribute("errorMessage", "Your password is too weak.  Choose a stronger one.");
-
-            model.setViewName("redirect:confirm?token=" + requestParams.get("token"));
+            model.addAttribute("redirect:confirm?token=" + requestParams.get("token"));
             System.out.println(requestParams.get("token"));
-            return model;
+            return "user/confirm";
         }
-
         // Find the user associated with the reset token
-        User user = userService.findByConfirmationToken((String)requestParams.get("token"));
-
-        // Set new password
+        User user = userRepository.findByKey((String)requestParams.get("token"));
+        // Set new Password
         user.setPassword(bCryptPasswordEncoder.encode((String)requestParams.get("password")));
-
         // Set user to enabled
         user.setEnabled(true);
-
         // Save user
         userService.saveUser(user);
-
-        model.addObject("successMessage", "Your password has been set!");
-        return model;
+        model.addAttribute("successMessage", "Your password has been set!");
+        return "user/confirm";
     }
 
 }

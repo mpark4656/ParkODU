@@ -67,7 +67,7 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         userRepository.loadAll();
 
             for ( User Entries : userRepository.findAll()) {
-                System.out.println(Entries.toString());
+                System.out.println(Entries.getConfirmationToken().toString());
             }
             //System.out.println("# of Users loaded from Mongo: " + userRepository.findAll();
 

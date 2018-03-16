@@ -99,7 +99,7 @@
                 <div class="col-md-8 col-md-offset-4">
                     <button type="submit" class="btn btn-primary">Submit</button>
                     <button type="reset" class="btn btn-primary">Reset</button>
-                    <a th:href="@{/accounts/index}" class="btn btn-primary" title="Back">Back</a>
+                    <a th:href="@{/settings/accounts/index}" class="btn btn-primary" title="Back">Back</a>
                 </div>
             </form>
         </div>
@@ -115,7 +115,7 @@
 <div class="modal fade" id="delete-user-modal" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" role="form" th:action="@{/accounts/delete}" method="post">
+            <form class="form-horizontal" role="form" th:action="@{/settings/accounts/delete}" method="post">
                 <div class="modal-header modal-header-danger">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Delete User</h4>

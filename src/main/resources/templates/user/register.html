@@ -61,7 +61,7 @@
 
         <form autocomplete="off" th:action="@{/user/register}" th:object="${user}" method="post" class="m-t" role="form" data-toggle="validator">
 
-            <div th:if="${confirmationMessage}" class="alert alert-success" role="alert" th:text="${confirmationMessage}"></div>
+            <div th:if="${confirmationMessage}" class="alert alert-success col-md-4" role="alert" th:text="${confirmationMessage}"></div>
 
             <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
 

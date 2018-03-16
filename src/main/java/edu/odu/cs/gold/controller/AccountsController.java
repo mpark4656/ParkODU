@@ -18,7 +18,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Controller
-@RequestMapping("/accounts")
+@RequestMapping("/settings/accounts")
 public class AccountsController {
 
     private UserRepository userRepository;
@@ -60,7 +60,7 @@ public class AccountsController {
         catch (Exception e) {
             e.printStackTrace();
         }
-        return "redirect:/accounts/index";
+        return "redirect:/settings/accounts/index";
     }
 
     @GetMapping("/edit/{userKey}")
@@ -86,7 +86,7 @@ public class AccountsController {
         catch (Exception e) {
             e.printStackTrace();
         }
-        return "redirect:/accounts/index";
+        return "redirect:/settings/accounts/index";
     }
 
     @PostMapping("/delete")
@@ -98,6 +98,6 @@ public class AccountsController {
         catch (Exception e) {
             e.printStackTrace();
         }
-        return "redirect:/accounts/index";
+        return "redirect:/settings/accounts/index";
     }
 }

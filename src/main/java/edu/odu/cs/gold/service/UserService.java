@@ -20,8 +20,17 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User findByConfirmationToken(String confirmationToken) {
-        return userRepository.findByConfirmationToken(confirmationToken);
+    public boolean confirmationTokenExits(String confirmationToken) {
+        //Predicate predicate = Predicates.equal("confirmationToken", confirmationToken);
+        //User user = userRepository.countByPredicate(confirmationToken);
+        //int numTokens = userRepository.countByPredicate(predicate);
+        //boolean isEnabled = userRepository.findByConfirmationToken(confirmationToken).getEnabled();
+        //if (numTokens != 0 &&  isEnabled == false) {
+        //    return true;
+        //}
+        //else {
+            return false;
+        //}
     }
 
     public boolean userExists(String email) {
