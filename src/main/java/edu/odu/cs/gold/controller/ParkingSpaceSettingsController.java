@@ -102,15 +102,53 @@ public class ParkingSpaceSettingsController {
         try {
             existingParkingSpace = parkingSpaceRepository.findByKey(parkingSpace.getParkingSpaceKey());
             if (existingParkingSpace == null) {
+                parkingSpace.setLastUpdated(new Date());
+                System.out.println(parkingSpace.toString());
                 parkingSpaceRepository.save(parkingSpace);
+                garageService.refresh(parkingSpace.getGarageKey());   
             }
         }
         catch(Exception e) {
             e.printStackTrace();
         }
 
+
         return "settings/parking_space/index";
     }
+
+    @PostMapping("/set_space_number")
+    @ResponseBody
+    public String setSpaceNumber(@RequestParam("parkingSpaceKey") String parkingSpaceKey,
+                                 @RequestParam("spaceNumber") Integer spaceNumber) {
+
+
+        ParkingSpace parkingSpace = parkingSpaceRepository.findByKey(parkingSpaceKey);
+
+        Predicate predicate = Predicates.and(
+                Predicates.equal("garageKey", parkingSpace.getGarageKey()),
+                Predicates.equal("floor", parkingSpace.getFloor())
+        );
+
+        // Get all the parking spaces
+        List<ParkingSpace> parkingSpaces = new ArrayList<> (parkingSpaceRepository.findByPredicate(predicate));
+
+        // Check to see if the given space number already exists
+        for(ParkingSpace eachParkingSpace : parkingSpaces) {
+            if(eachParkingSpace.getNumber().equals(spaceNumber)) {
+                return "The space number " + spaceNumber + " already exists.";
+            }
+        }
+
+        // This is a unique space number, so set the given parking space to the number and save it
+        parkingSpace.setNumber(spaceNumber);
+        parkingSpace.setLastUpdated(new Date());
+        parkingSpaceRepository.save(parkingSpace);
+
+        garageService.refresh(parkingSpace.getGarageKey());
+
+        return parkingSpaceKey + "'s space number was set to " + spaceNumber;
+    }
+
 
     /**
      *

@@ -131,7 +131,9 @@ input:checked + .slider:before {
                 </thead>
                 <tbody>
                     <tr th:each="parkingSpace : ${parkingSpaces}">
-                        <td th:text="${parkingSpace.number}"></td>
+                        <td>
+                            <input class="spaceNumberBox" type="number" min="1" th:value="${parkingSpace.number}" th:attr="data-key=${parkingSpace.parkingSpaceKey}"/>
+                        </td>
                         <td>
                             <select class="form-control permitTypeDropdown" th:attr="data-key=${parkingSpace.parkingSpaceKey}">
                                 <option th:each="permitType : ${permitTypes}"
@@ -252,6 +254,17 @@ $(document).ready(function(){
     });
 });
 
+$(document).ready(function(){
+    $('.spaceNumberBox').change(function(){
+
+    var parkingSpaceKey = $(this).data("key");
+    var spaceNumber = $(this).val();
+
+    $.post("/settings/parking_space/set_space_number", { parkingSpaceKey: parkingSpaceKey, spaceNumber: spaceNumber })
+        .done(function(data) {
+        });
+    });
+});
 </script>
 
 <script th:inline="javascript">
