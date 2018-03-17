@@ -166,7 +166,7 @@ input:checked + .slider:before {
                                     title="Delete Parking Space"
                                     th:attr="data-id=${parkingSpace.parkingSpaceKey},data-name=${parkingSpace.number}"
                                     data-toggle="modal"
-                                    data-target="">Delete</button>
+                                    data-target="#delete-parkingSpace-modal">Delete</button>
                         </td>
                     </tr>
                 </tbody>
@@ -257,7 +257,6 @@ $(document).ready(function(){
 <script th:inline="javascript">
 $('.delete-parkingSpace-button').on('click', function()
 {
-    alert("hi");
     $('#delete-parkingSpace-name-text').text($(this).data("name"));
     $('#delete-parkingSpace-id').val($(this).data("id"));
 });

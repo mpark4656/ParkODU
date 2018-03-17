@@ -156,6 +156,11 @@ public class ParkingSpaceSettingsController {
         return parkingSpaceKey + "'s availability was set to " + available;
     }
 
+    /**
+     *
+     * @param parkingSpaceKey
+     * @return
+     */
     @PostMapping("/delete")
     public String delete(@RequestParam("parkingSpaceKey") String parkingSpaceKey) {
         try {
@@ -164,6 +169,6 @@ public class ParkingSpaceSettingsController {
         catch (Exception e) {
             e.printStackTrace();
         }
-        return "redirect:/settings/parking_space/floor";
+        return "redirect:/settings/parking_space/index";
     }
 }
