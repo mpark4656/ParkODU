@@ -36,6 +36,11 @@ public class UserRepository {
         return (User)map.get(key);
     }
 
+    public User findByConfirmationToken(String confirmationToken) {
+        IMap map = hazelcastInstance.getMap(collectionName);
+        return (User)map.get(confirmationToken);
+    }
+
     public List<User> findByKeys(Set<String> keys) {
         IMap map = hazelcastInstance.getMap(collectionName);
         return new ArrayList<>(map.getAll(keys).values());

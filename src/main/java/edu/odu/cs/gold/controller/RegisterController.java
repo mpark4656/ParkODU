@@ -33,9 +33,13 @@ import com.nulabinc.zxcvbn.Zxcvbn;
 @Controller
 public class RegisterController {
 
+    @Autowired
     private PasswordEncoder bCryptPasswordEncoder;
+    @Autowired
     private UserService userService;
+    @Autowired
     private EmailService emailService;
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -85,40 +89,44 @@ public class RegisterController {
     }
 
     // Process confirmation link
-    @GetMapping("/user/confirm")
-    public String showConfirmationPage(Model model, @RequestParam("token") String token) {
+    @RequestMapping(value="/user/confirm", method = RequestMethod.GET)
+    public ModelAndView showConfirmationPage(ModelAndView model, @RequestParam("token") String token) {
+        User user = userRepository.findByConfirmationToken(token);
+        System.out.println(user);
 
-        User user = userRepository.findByKey(token);
         if (user == null) { // No token found in DB
-            model.addAttribute("invalidToken", "Oops!  This is an invalid confirmation link.");
-        } else { // Token found
-           model.addAttribute("confirmationToken", token);
+            model.addObject("invalidToken", "Oops!  This is an invalid confirmation link.");
         }
-        return "user/confirm";
+        else
+        { // Token found
+            model.addObject("confirmationToken", token);
+        }
+        model.setViewName("user/confirm");
+        return model;
     }
 
     // Process confirmation link
-    @PostMapping("/user/confirm")
-    public String processConfirmationForm(Model model, BindingResult bindingResult, @RequestParam Map requestParams, RedirectAttributes redir) {
+    @RequestMapping(value="/confirm", method = RequestMethod.POST)
+    public ModelAndView processConfirmationForm(ModelAndView model, BindingResult bindingResult, @RequestParam Map requestParams, RedirectAttributes redir) {
+        model.setViewName("user/confirm");
         Zxcvbn passwordCheck = new Zxcvbn();
         Strength strength = passwordCheck.measure((String)requestParams.get("password"));
         if (strength.getScore() < 3) {
             bindingResult.reject("password");
             redir.addFlashAttribute("errorMessage", "Your password is too weak.  Choose a stronger one.");
-            model.addAttribute("redirect:confirm?token=" + requestParams.get("token"));
+            model.addObject("redirect:confirm?token=" + requestParams.get("token"));
             System.out.println(requestParams.get("token"));
-            return "user/confirm";
+            return model;
         }
         // Find the user associated with the reset token
-        User user = userRepository.findByKey((String)requestParams.get("token"));
+        User user = userRepository.findByConfirmationToken((String)requestParams.get("token"));
         // Set new Password
         user.setPassword(bCryptPasswordEncoder.encode((String)requestParams.get("password")));
         // Set user to enabled
         user.setEnabled(true);
         // Save user
         userService.saveUser(user);
-        model.addAttribute("successMessage", "Your password has been set!");
-        return "user/confirm";
+        model.addObject("successMessage", "Your password has been set!");
+        return model;
     }
-
 }

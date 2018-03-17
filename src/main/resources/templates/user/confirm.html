@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="" />
-    <meta name="author" content="Amir Boroumand" />
     <link rel="icon" href="favicon.ico" />
-
-    <title>User Registration with Spring Boot</title>
-
     <!-- Bootstrap core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           rel="stylesheet"
@@ -21,15 +19,51 @@
     <link th:href="@{css/fv.css}" rel="stylesheet" />
 </head>
 
-<body class="gray-bg">
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid navbar-container">
+        <div class="col-md-3">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- Main Logo -->
+                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="navbar" class="navbar-collapse collapse navbar-center">
+                <ul class="nav navbar-nav">
+                    <!--<li><a th:href="@{/garage}">Garages</a></li>
+                    <li><a th:href="@{/analytics/locate}">Search</a></li>-->
+                    <!-- Settings Link -->
+                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
+                </ul>
+                <!--
+                <form class="navbar-form navbar-right">
+                    <input type="text" class="form-control" placeholder="Search..."/>
+                </form>
+                -->
+            </div>
+        </div>
+        <div class="col-md-3">
+            <!-- Social Media Links -->
+            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
+        </div>
+    </div>
+</nav>
 
 <div class="middle-box text-center loginscreen animated fadeInDown">
     <div>
 
-        <hr />
+        <br/>
         <h4>Set Your Password</h4>
 
-        <div th:if="${successMessage}" class="alert alert-success"
+        <div th:if="${successMessage}" class="alert alert-success text-center"
              role="alert" th:text="${successMessage}"></div>
 
         <div th:if="${errorMessage}" class="alert alert-danger"
@@ -39,7 +73,7 @@
              role="alert" th:text="${invalidToken}"></div>
 
         <form th:if="!${invalidToken}" class="m-t" id="passwordForm" role="form" action="#"
-              th:object="${setPassword}" th:action="@{/confirm}" method="post">
+              th:object="${setPassword}" th:action="@{/user/confirm}" method="post">
 
             <input type="hidden" name="token" th:value="${confirmationToken}" />
 
@@ -66,6 +100,94 @@
         </form>
     </div>
 </div>
+<!-- jQuery-->
+<script
+        src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<!-- Bootstrap -->
+<script
+        src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+<!-- Bootstrap Validator plugin -->
+<script
+        src="//cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
+
+<script th:src="@{js/fv.min.js}"></script>
+<script>
+		$(document).ready(function() {
+		    $('#passwordForm').formValidation({
+		        framework: 'bootstrap',
+		        icon: {
+		            valid: 'glyphicon glyphicon-ok',
+		            invalid: 'glyphicon glyphicon-remove',
+		            validating: 'glyphicon glyphicon-refresh'
+		        },
+		        fields: {
+
+		            password: {
+		                validators: {
+		                    notEmpty: {
+		                        message: 'The password is required'
+		                    },
+		                    callback: {
+		                        callback: function(value, validator, $field) {
+		                            var password = $field.val();
+		                            if (password == '') {
+		                                return true;
+		                            }
+
+		                            var result  = zxcvbn(password),
+		                                score   = result.score,
+		                                message = result.feedback.warning || 'The password is weak';
+
+		                            // Update the progress bar width and add alert class
+		                            var $bar = $('#strengthBar');
+		                            switch (score) {
+		                                case 0:
+		                                    $bar.attr('class', 'progress-bar progress-bar-danger')
+		                                        .css('width', '1%');
+		                                    break;
+		                                case 1:
+		                                    $bar.attr('class', 'progress-bar progress-bar-danger')
+		                                        .css('width', '25%');
+		                                    break;
+		                                case 2:
+		                                    $bar.attr('class', 'progress-bar progress-bar-danger')
+		                                        .css('width', '50%');
+		                                    break;
+		                                case 3:
+		                                    $bar.attr('class', 'progress-bar progress-bar-warning')
+		                                        .css('width', '75%');
+		                                    break;
+		                                case 4:
+		                                    $bar.attr('class', 'progress-bar progress-bar-success')
+		                                        .css('width', '100%');
+		                                    break;
+		                            }
+
+		                            // We will treat the password as an invalid one if the score is less than 3
+		                            if (score &lt; 3) {
+		                                return {
+		                                    valid: false,
+		                                    message: message
+		                                }
+		                            }
+
+		                            return true;
+		                        }
+		                    }
+		                }
+		            }
+		        }
+		    });
+		});
+
+});
+</script>
 
 </body>
 </html>
