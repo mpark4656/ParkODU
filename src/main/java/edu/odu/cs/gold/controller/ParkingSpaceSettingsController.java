@@ -108,7 +108,6 @@ public class ParkingSpaceSettingsController {
         return parkingSpaceKey + "'s space type was set to " + spaceType.getName();
     }
 
-
     /**
      *
      * @param parkingSpaceKey
