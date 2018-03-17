@@ -84,8 +84,9 @@ public class ParkingSpaceSettingsController {
     @GetMapping("/create/{garageKey}")
     public String create(@PathVariable("garageKey") String garageKey, Model model) {
         ParkingSpace parkingSpace = new ParkingSpace();
-        
+        System.out.println(garageKey);
         parkingSpace.setGarageKey(garageKey);
+        System.out.println(parkingSpace.toString());
         List<PermitType> permitTypes = new ArrayList<> (permitTypeRepository.findAll());
         List<SpaceType> spaceTypes = new ArrayList<> (spaceTypeRepository.findAll());
         model.addAttribute("parkingSpace", parkingSpace);
