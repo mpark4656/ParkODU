@@ -101,8 +101,9 @@ public class ParkingSpaceSettingsController {
         // 2. Update parkingSpace.permitTypeKey (Permit Type Key)
         parkingSpace.setSpaceType(spaceType.getName());
         parkingSpace.setSpaceTypeKey(spaceType.getSpaceTypeKey());
-
+        parkingSpace.setLastUpdated(new Date());
         parkingSpaceRepository.save(parkingSpace);
+
         garageService.refresh(parkingSpace.getGarageKey());
 
         return parkingSpaceKey + "'s space type was set to " + spaceType.getName();
@@ -119,6 +120,10 @@ public class ParkingSpaceSettingsController {
     public String setPermitType(@RequestParam("parkingSpaceKey") String parkingSpaceKey,
                                 @RequestParam("permitTypeKey") String permitTypeKey) {
 
+        System.out.println("Parking Space Key is " + parkingSpaceKey);
+        System.out.println("Permit Type Key is " + permitTypeKey);
+
+
         ParkingSpace parkingSpace = parkingSpaceRepository.findByKey(parkingSpaceKey);
         PermitType permitType = permitTypeRepository.findByKey(permitTypeKey);
 
@@ -127,8 +132,9 @@ public class ParkingSpaceSettingsController {
         // 2. Update parkingSpace.permitTypeKey (Permit Type Key)
         parkingSpace.setPermitType(permitType.getName());
         parkingSpace.setPermitTypeKey(permitType.getPermitTypeKey());
-
+        parkingSpace.setLastUpdated(new Date());
         parkingSpaceRepository.save(parkingSpace);
+
         garageService.refresh(parkingSpace.getGarageKey());
 
         return parkingSpaceKey + "'s permit type was set to " + permitType.getName();

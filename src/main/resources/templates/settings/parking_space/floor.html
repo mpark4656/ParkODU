@@ -137,7 +137,8 @@ input:checked + .slider:before {
                                 <option th:each="permitType : ${permitTypes}"
                                         th:text="${permitType.name}"
                                         th:value="${permitType.permitTypeKey}"
-                                        th:selected="(${parkingSpace.permitTypeKey eq permitType.permitTypeKey})">
+                                        th:selected="(${parkingSpace.permitTypeKey eq permitType.permitTypeKey})"
+                                        th:id="${parkingSpace.parkingSpaceKey}">
                                 </option>
                             </select>
                         </td>
