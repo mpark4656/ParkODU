@@ -83,6 +83,59 @@ public class ParkingSpaceSettingsController {
     }
 
     /**
+     *
+     * @param parkingSpaceKey
+     * @param spaceTypeKey
+     * @return
+     */
+    @PostMapping("/set_space_type")
+    @ResponseBody
+    public String setSpaceType(@RequestParam("parkingSpaceKey") String parkingSpaceKey,
+                               @RequestParam("spaceTypeKey") String spaceTypeKey) {
+
+        ParkingSpace parkingSpace = parkingSpaceRepository.findByKey(parkingSpaceKey);
+        SpaceType spaceType = spaceTypeRepository.findByKey(spaceTypeKey);
+
+        // Remember that updating the space type requires 2 actions
+        // 1. Update parkingSpace.permitType (Permit Type Display name)
+        // 2. Update parkingSpace.permitTypeKey (Permit Type Key)
+        parkingSpace.setSpaceType(spaceType.getName());
+        parkingSpace.setSpaceTypeKey(spaceType.getSpaceTypeKey());
+
+        parkingSpaceRepository.save(parkingSpace);
+        garageService.refresh(parkingSpace.getGarageKey());
+
+        return parkingSpaceKey + "'s space type was set to " + spaceType.getName();
+    }
+
+
+    /**
+     *
+     * @param parkingSpaceKey
+     * @param permitTypeKey
+     * @return
+     */
+    @PostMapping("/set_permit_type")
+    @ResponseBody
+    public String setPermitType(@RequestParam("parkingSpaceKey") String parkingSpaceKey,
+                                @RequestParam("permitTypeKey") String permitTypeKey) {
+
+        ParkingSpace parkingSpace = parkingSpaceRepository.findByKey(parkingSpaceKey);
+        PermitType permitType = permitTypeRepository.findByKey(permitTypeKey);
+
+        // Remember that updating the permit type requires 2 actions
+        // 1. Update parkingSpace.permitType (Permit Type Display name)
+        // 2. Update parkingSpace.permitTypeKey (Permit Type Key)
+        parkingSpace.setPermitType(permitType.getName());
+        parkingSpace.setPermitTypeKey(permitType.getPermitTypeKey());
+
+        parkingSpaceRepository.save(parkingSpace);
+        garageService.refresh(parkingSpace.getGarageKey());
+
+        return parkingSpaceKey + "'s permit type was set to " + permitType.getName();
+    }
+
+    /**
      * PostRequest for setting availability of a single space
      * @param parkingSpaceKey String
      * @param available Boolean

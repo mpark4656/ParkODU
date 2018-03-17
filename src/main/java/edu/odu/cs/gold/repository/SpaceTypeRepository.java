@@ -27,7 +27,7 @@ public class SpaceTypeRepository {
         return map.values();
     }
 
-    public SpaceType findById(String key) {
+    public SpaceType findByKey(String key) {
         IMap map = hazelcastInstance.getMap(collectionName);
         return (SpaceType)map.get(key);
     }
