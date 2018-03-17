@@ -156,6 +156,11 @@ public class ParkingSpaceSettingsController {
         return parkingSpaceKey + "'s availability was set to " + available;
     }
 
+    /**
+     *
+     * @param parkingSpaceKey
+     * @return
+     */
     @PostMapping("/delete")
     public String delete(@RequestParam("parkingSpaceKey") String parkingSpaceKey) {
         try {
