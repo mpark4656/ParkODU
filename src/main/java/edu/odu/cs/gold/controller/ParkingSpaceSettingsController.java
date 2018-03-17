@@ -81,6 +81,30 @@ public class ParkingSpaceSettingsController {
         return "settings/parking_space/floor";
     }
 
+    @GetMapping("/create")
+    public String create(Model model) {
+        ParkingSpace parkingSpace = new ParkingSpace();
+        model.addAttribute("parkingSpace", parkingSpace);
+        return "settings/parking_space/create";
+    }
+
+    @PostMapping("/create")
+    public String create(ParkingSpace parkingSpace) {
+        ParkingSpace existingParkingSpace = null;
+
+        try {
+            existingParkingSpace = parkingSpaceRepository.findByKey(parkingSpace.getGarageKey());
+            if (existingParkingSpace == null) {
+                parkingSpaceRepository.save(parkingSpace);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return "settings/parking_space/index";
+    }
+
     /**
      *
      * @param parkingSpaceKey
