@@ -164,6 +164,6 @@ public class ParkingSpaceSettingsController {
         catch (Exception e) {
             e.printStackTrace();
         }
-        return "redirect:/settings/parking_space/floor";
+        return "redirect:/settings/parking_space/index";
     }
 }
