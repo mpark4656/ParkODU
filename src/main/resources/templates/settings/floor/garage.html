@@ -56,20 +56,24 @@
     </div>
 
     <div class="row">
-        <div class="col-xs-6 col-sm-6 col-md-5 col-md-offset-1">
-            <table class="table table-bordered table-centered">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+            <p class="text-right">
+                <a th:href="@{/settings/floor/create}" class="btn btn-success btn-sm" title="Create Floor">Create</a>
+            </p>
+            <table id="garageFloorsTable" class="table table-bordered">
                 <thead>
                 <tr>
-                    <th>Number</th>
-                    <th>Total Spaces</th>
-                    <th>Description</th>
+                    <th>Name</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="floor : ${floors}">
                     <td th:text="${floor.number}"></td>
-                    <td th:text="${floor.totalSpaces}"></td>
-                    <td th:text="${floor.description}"></td>
+                    <td>
+                        <a th:href="@{/settings/floor/edit} + '/' + ${floor.floorKey}" class="btn btn-primary btn-sm">Edit</a>
+                        <button class="btn btn-danger btn-sm delete-garage-button" title="Delete Floor" th:attr="data-id=${floor.floorKey},data-name=${floor.number}" data-toggle="modal" data-target="#delete-floor-modal">Delete</button>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -82,11 +86,39 @@
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
 
+<!-- Delete Garage Modal -->
+<div class="modal fade" id="delete-floor-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" role="form" th:action="@{/settings/floor/delete}" method="post">
+                <div class="modal-header modal-header-danger">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delete Floor</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center">Are you sure you want to delete the Floor '<span id="delete-floor-name-text"></span>'?</p>
+                    <p class="text-center"><b>Warning:</b> This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="delete-floor-id" name="floorKey" required="required"/>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- End Delete Garage Modal -->
+
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 
-<script>
-
+<script th:inline="javascript">
+$('.delete-floor-button').on('click', function()
+{
+    $('#delete-floor-name-text').text($(this).data("name"));
+    $('#delete-floor-id').val($(this).data("id"));
+});
 </script>
 
 </body>

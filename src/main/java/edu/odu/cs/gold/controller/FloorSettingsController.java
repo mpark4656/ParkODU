@@ -58,7 +58,7 @@ public class FloorSettingsController {
 
         List<Garage> garages = new ArrayList<>(garageRepository.findAll());
         garages.sort(Comparator.comparing(Garage::getName));
-        model.addAttribute("garage", garages);
+        model.addAttribute("garages", garages);
 
         return "settings/floor/index";
     }
