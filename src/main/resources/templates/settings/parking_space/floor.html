@@ -117,7 +117,8 @@ input:checked + .slider:before {
     <div class="row">
         <div class="col-xs-6 col-sm-6 col-md-5 col-md-offset-1">
             <p class="text-left">
-                <a href="@{/settings/parking_space/create}" class="btn btn-success btn-sm" title="Create Parking Space">Create</a>
+                <a th:href="@{/settings/parking_space/create}" class="btn btn-success btn-sm" title="Create Parking Space">Create</a>
+                <a th:href="@{/settings/parking_space/floor} + '/' + ${floor.floorKey}" class="btn btn-success btn-sm" title="Reload this page">Refresh</a>
             </p>
             <table class="table table-bordered table-centered">
                 <thead>
@@ -126,6 +127,7 @@ input:checked + .slider:before {
                         <th>Permit Type</th>
                         <th>Space Type</th>
                         <th>Available</th>
+                        <th>Last Updated</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -162,6 +164,9 @@ input:checked + .slider:before {
                                 <input type="checkbox" class="availabilityCheckbox" th:value="${parkingSpace.parkingSpaceKey}"/>
                                 <span class="slider round"></span>
                             </label>
+                        </td>
+                        <td th:text="${parkingSpace.lastUpdated}">
+
                         </td>
                         <td>
                             <button class="btn btn-danger btn-sm delete-parkingSpace-button"

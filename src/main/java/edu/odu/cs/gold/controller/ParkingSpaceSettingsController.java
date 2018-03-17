@@ -81,13 +81,20 @@ public class ParkingSpaceSettingsController {
         return "settings/parking_space/floor";
     }
 
-    @GetMapping("/create/{garageKey}")
-    public String create(@PathVariable("garageKey") String garageKey, Model model) {
+    @GetMapping("/create/{garageKey}/{floorKey}")
+    public String create(@PathVariable("garageKey") String garageKey,
+                         @PathVariable("floorKey") String floorKey,
+                         Model model) {
+
         ParkingSpace parkingSpace = new ParkingSpace();
-        
+        Floor floor = floorRepository.findByKey(floorKey);
+
         parkingSpace.setGarageKey(garageKey);
+        parkingSpace.setFloor(floor.getNumber());
+
         List<PermitType> permitTypes = new ArrayList<> (permitTypeRepository.findAll());
         List<SpaceType> spaceTypes = new ArrayList<> (spaceTypeRepository.findAll());
+
         model.addAttribute("parkingSpace", parkingSpace);
         model.addAttribute("permitTypes", permitTypes);
         model.addAttribute("spaceTypes", spaceTypes);
@@ -99,11 +106,21 @@ public class ParkingSpaceSettingsController {
     public String create(ParkingSpace parkingSpace) {
         ParkingSpace existingParkingSpace = null;
 
+        if(parkingSpace.getGarageKey() == null || parkingSpace.getGarageKey().isEmpty()) {
+            // Unable to create a new parking space. Required attributes are missing
+            return "settings/parking_space/index";
+        }
+
         try {
             existingParkingSpace = parkingSpaceRepository.findByKey(parkingSpace.getParkingSpaceKey());
             if (existingParkingSpace == null) {
+                PermitType permitType = permitTypeRepository.findByKey(parkingSpace.getPermitTypeKey());
+                SpaceType spaceType = spaceTypeRepository.findByKey(parkingSpace.getSpaceTypeKey());
+
                 parkingSpace.setLastUpdated(new Date());
-                System.out.println(parkingSpace.toString());
+                parkingSpace.setPermitType(permitType.getName());
+                parkingSpace.setSpaceType(spaceType.getName());
+
                 parkingSpaceRepository.save(parkingSpace);
                 garageService.refresh(parkingSpace.getGarageKey());   
             }
@@ -112,18 +129,24 @@ public class ParkingSpaceSettingsController {
             e.printStackTrace();
         }
 
-
-        return "settings/parking_space/index";
+        return "settings/parking_space/floor/";
     }
 
+    /**
+     * Method to update the space number of a parking space.
+     * @param parkingSpaceKey String unique key of the parking space
+     * @param spaceNumber String new space number
+     * @return
+     */
     @PostMapping("/set_space_number")
     @ResponseBody
     public String setSpaceNumber(@RequestParam("parkingSpaceKey") String parkingSpaceKey,
                                  @RequestParam("spaceNumber") Integer spaceNumber) {
 
-
         ParkingSpace parkingSpace = parkingSpaceRepository.findByKey(parkingSpaceKey);
 
+        // Need to find out whether there is a parking space on the same floor with the same space number.
+        // Business rule dictates that the space number has to be unique on the same floor of the same garage.
         Predicate predicate = Predicates.and(
                 Predicates.equal("garageKey", parkingSpace.getGarageKey()),
                 Predicates.equal("floor", parkingSpace.getFloor())
@@ -151,9 +174,9 @@ public class ParkingSpaceSettingsController {
 
 
     /**
-     *
-     * @param parkingSpaceKey
-     * @param spaceTypeKey
+     * Method for setting the space type of the specified parking space
+     * @param parkingSpaceKey String unique key of the parking space
+     * @param spaceTypeKey String unique key of the space type
      * @return
      */
     @PostMapping("/set_space_type")
@@ -178,9 +201,9 @@ public class ParkingSpaceSettingsController {
     }
 
     /**
-     * Set
-     * @param parkingSpaceKey
-     * @param permitTypeKey
+     * Method for setting the permit type of the specified parking space
+     * @param parkingSpaceKey String unique key of the parking space
+     * @param permitTypeKey String unique key of the permit type
      * @return
      */
     @PostMapping("/set_permit_type")
@@ -196,16 +219,21 @@ public class ParkingSpaceSettingsController {
         // 2. Update parkingSpace.permitTypeKey (Permit Type Key)
         parkingSpace.setPermitType(permitType.getName());
         parkingSpace.setPermitTypeKey(permitType.getPermitTypeKey());
+
+        // Set the last updated date
         parkingSpace.setLastUpdated(new Date());
+
+        // Save to repository
         parkingSpaceRepository.save(parkingSpace);
 
+        // Refresh the garage
         garageService.refresh(parkingSpace.getGarageKey());
 
         return parkingSpaceKey + "'s permit type was set to " + permitType.getName();
     }
 
     /**
-     * PostRequest for setting availability of a single space
+     * Method for setting availability of a single space
      * @param parkingSpaceKey String
      * @param available Boolean
      * @return
@@ -226,18 +254,38 @@ public class ParkingSpaceSettingsController {
     }
 
     /**
+     * This method deletes a parking space and redirects to the parking spaces list in
+     * settings/parking_space/floor/{floorKey}
      *
-     * @param parkingSpaceKey
+     * @param parkingSpaceKey String
      * @return
      */
     @PostMapping("/delete")
     public String delete(@RequestParam("parkingSpaceKey") String parkingSpaceKey) {
+
+        ParkingSpace parkingSpace = parkingSpaceRepository.findByKey(parkingSpaceKey);
+
+        // Set up the predicate to find all floors that have the specified garage key and the floor number
+        Predicate predicate = Predicates.and(
+                Predicates.equal("garageKey", parkingSpace.getGarageKey()),
+                Predicates.equal("number", parkingSpace.getFloor())
+        );
+
+        // findByPredicate() method always returns a list, but we know that there is only one floor that
+        // meets the predicate's criteria (There should be only one)
+        List<Floor> floors = new ArrayList<>(floorRepository.findByPredicate(predicate));
+
+        // Get the floor key from the floor
+        String floorKey = floors.get(0).getFloorKey();
+
         try {
             parkingSpaceRepository.delete(parkingSpaceKey);
         }
         catch (Exception e) {
             e.printStackTrace();
         }
-        return "redirect:/settings/parking_space/index";
+
+        // Return back to the /settings/parking_space/floor page
+        return "redirect:/settings/parking_space/floor/" + floorKey;
     }
 }
