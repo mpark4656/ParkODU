@@ -27,7 +27,7 @@ public class PermitTypeRepository {
         return map.values();
     }
 
-    public PermitType findById(String key) {
+    public PermitType findByKey(String key) {
         IMap map = hazelcastInstance.getMap(collectionName);
         return (PermitType)map.get(key);
     }

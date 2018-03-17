@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid navbar-container">
+        <div class="col-md-3">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- Main Logo -->
+                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="navbar" class="navbar-collapse collapse navbar-center">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/garage}">Garages</a></li>
+                    <li><a th:href="@{/analytics/locate}">Search</a></li>
+                    <!-- Settings Link -->
+                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
+                </ul>
+                <!--
+                <form class="navbar-form navbar-right">
+                    <input type="text" class="form-control" placeholder="Search..."/>
+                </form>
+                -->
+            </div>
+        </div>
+        <div class="col-md-3">
+            <!-- Social Media Links -->
+            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid main-container">
+
+    <!-- Welcome User -->
+    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+            <h1 class="text-center" style="text-transform: uppercase;">Create Parking Space</h1>
+            <hr/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+            <form class="form-horizontal" id="create-garage-form" role="form" th:action="@{/settings/parking_space/create}" method="post" th:object="${parkingSpace}">
+                <input type="hidden" id="space-id" th:value="${parkingSpace.parkingSpaceKey}" th:field="${parkingSpace.parkingSpaceKey}"/>
+                <input type="hidden" id="garage-id" th:value="${parkingSpace.garageKey}" th:field="${parkingSpace.garageKey}"/>
+                <input type="hidden" id="floor-number" th:value="${parkingSpace.floor}" th:field="${parkingSpace.floor}"/>
+                <div class="form-group">
+                    <label for="number" class="col-md-4 control-label">Number</label>
+                    <div class="col-md-8">
+                        <input type="number" class="form-control" id="number" required="required" th:field="${parkingSpace.number}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="permitType" class="col-md-4 control-label" required="required">Permit Type</label>
+                    <div class="col-md-8">
+                        <select class="form-control permitTypeDropdown" id="permitType" th:field="*{permitTypeKey}">
+                            <option th:each="permitType : ${permitTypes}"
+                                    th:text="${permitType.name}"
+                                    th:value="${permitType.permitTypeKey}"
+                                    th:selected="(${parkingSpace.permitTypeKey eq permitType.permitTypeKey})"
+                            >
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="spaceType" class="col-md-4 control-label"  required="required">Space Type</label>
+                    <div class="col-md-8">
+                        <select class="form-control spaceTypeDropdown" id="spaceType" th:field="*{spaceTypeKey}">
+                            <option th:each="spaceType : ${spaceTypes}"
+                                    th:text="${spaceType.name}"
+                                    th:value="${spaceType.spaceTypeKey}"
+                                    th:selected="(${parkingSpace.spaceTypeKey eq spaceType.spaceTypeKey})">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-8 col-md-offset-4">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-primary">Reset</button>
+                    <a th:href="@{/settings/parking_space/index}" class="btn btn-primary" title="Back">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <br/>
+
+    <!-- Footer -->
+    <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
+</div>
+
+
+
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<script>
+
+</script>
+
+</body>
+</html>
