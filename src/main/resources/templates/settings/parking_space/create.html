@@ -66,9 +66,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="permitType" class="col-md-4 control-label" id="permitType" required="required">Permit Type</label>
+                    <label for="permitType" class="col-md-4 control-label" required="required">Permit Type</label>
                     <div class="col-md-8">
-                        <select class="form-control permitTypeDropdown" th:field="${parkingSpace.permitType}">
+                        <select class="form-control permitTypeDropdown" id="permitType" th:field="*{permitTypeKey}">
                             <option th:each="permitType : ${permitTypes}"
                                     th:text="${permitType.name}"
                                     th:value="${permitType.permitTypeKey}"
@@ -79,9 +79,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="spaceType" class="col-md-4 control-label" id="spaceType" required="required">Space Type</label>
+                    <label for="spaceType" class="col-md-4 control-label"  required="required">Space Type</label>
                     <div class="col-md-8">
-                        <select class="form-control spaceTypeDropdown" th:field="${parkingSpace.spaceType}">
+                        <select class="form-control spaceTypeDropdown" id="spaceType" th:field="*{spaceTypeKey}">
                             <option th:each="spaceType : ${spaceTypes}"
                                     th:text="${spaceType.name}"
                                     th:value="${spaceType.spaceTypeKey}"
