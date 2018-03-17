@@ -8,7 +8,6 @@ import edu.odu.cs.gold.service.GarageService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -101,16 +100,16 @@ public class ParkingSpaceSettingsController {
         // 2. Update parkingSpace.permitTypeKey (Permit Type Key)
         parkingSpace.setSpaceType(spaceType.getName());
         parkingSpace.setSpaceTypeKey(spaceType.getSpaceTypeKey());
-
+        parkingSpace.setLastUpdated(new Date());
         parkingSpaceRepository.save(parkingSpace);
+
         garageService.refresh(parkingSpace.getGarageKey());
 
         return parkingSpaceKey + "'s space type was set to " + spaceType.getName();
     }
 
-
     /**
-     *
+     * Set
      * @param parkingSpaceKey
      * @param permitTypeKey
      * @return
@@ -128,8 +127,9 @@ public class ParkingSpaceSettingsController {
         // 2. Update parkingSpace.permitTypeKey (Permit Type Key)
         parkingSpace.setPermitType(permitType.getName());
         parkingSpace.setPermitTypeKey(permitType.getPermitTypeKey());
-
+        parkingSpace.setLastUpdated(new Date());
         parkingSpaceRepository.save(parkingSpace);
+
         garageService.refresh(parkingSpace.getGarageKey());
 
         return parkingSpaceKey + "'s permit type was set to " + permitType.getName();
@@ -154,5 +154,16 @@ public class ParkingSpaceSettingsController {
         garageService.refresh(parkingSpace.getGarageKey());
 
         return parkingSpaceKey + "'s availability was set to " + available;
+    }
+
+    @PostMapping("/delete")
+    public String delete(@RequestParam("parkingSpaceKey") String parkingSpaceKey) {
+        try {
+            parkingSpaceRepository.delete(parkingSpaceKey);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:/settings/parking_space/floor";
     }
 }
