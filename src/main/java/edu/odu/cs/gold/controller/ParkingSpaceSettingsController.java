@@ -8,7 +8,6 @@ import edu.odu.cs.gold.service.GarageService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -110,7 +109,7 @@ public class ParkingSpaceSettingsController {
     }
 
     /**
-     *
+     * Set
      * @param parkingSpaceKey
      * @param permitTypeKey
      * @return
@@ -155,5 +154,16 @@ public class ParkingSpaceSettingsController {
         garageService.refresh(parkingSpace.getGarageKey());
 
         return parkingSpaceKey + "'s availability was set to " + available;
+    }
+
+    @PostMapping("/delete")
+    public String delete(@RequestParam("parkingSpaceKey") String parkingSpaceKey) {
+        try {
+            parkingSpaceRepository.delete(parkingSpaceKey);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:/settings/parking_space/floor";
     }
 }
