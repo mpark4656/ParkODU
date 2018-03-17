@@ -93,7 +93,9 @@
                 </thead>
                 <tbody>
                     <tr th:each="recommendation : ${recommendations}">
-                        <td style="text-align: left;"><a th:href="@{/garage/details} + '/' + ${recommendation.garage.garageKey}" th:text="${recommendation.garage.name}"></a></td>
+                        <td style="text-align: left;"><a th:href="@{/garage/details} + '/' + ${recommendation.garage.garageKey}" th:text="${recommendation.garage.name}"></a>
+                            <p class="text-left"><a th:href="@{/navigate}" class="btn btn-primary">Navigate</a></p>
+                        </td>
                         <td th:text="${recommendation.availabilityCount}"></td>
                         <td th:text="${recommendation.startingAddressToGarageDistanceText}"></td>
                         <td th:text="${recommendation.startingAddressToGarageDurationText}"></td>

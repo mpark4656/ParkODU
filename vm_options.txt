@@ -1,0 +1,1 @@
+-DpropertiesDirectory=./src/main/resources

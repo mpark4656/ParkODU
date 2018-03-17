@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid navbar-container">
+        <div class="col-md-3">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- Main Logo -->
+                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="navbar" class="navbar-collapse collapse navbar-center">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/garage}">Garages</a></li>
+                    <li><a th:href="@{/analytics/locate}">Search</a></li>
+                    <!-- Settings Link -->
+                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
+                </ul>
+                <!--
+                <form class="navbar-form navbar-right">
+                    <input type="text" class="form-control" placeholder="Search..."/>
+                </form>
+                -->
+            </div>
+        </div>
+        <div class="col-md-3">
+            <!-- Social Media Links -->
+            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid main-container">
+
+    <!-- Welcome User -->
+    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+            <h1 class="text-center" style="text-transform: uppercase;">Edit User</h1>
+            <hr/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+            <form class="form-horizontal" id="edit-user-form" role="form" th:action="@{/accounts/edit}" method="post" th:object="${user}">
+                <input type="hidden" id="id" th:value="${user.id}" th:field="${user.id}"/>
+                <div class="form-group">
+                    <label for="userFirstName" class="col-md-4 control-label">First Name</label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="userFirstName" required="required" th:field="${user.firstName}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="userlastName" class="col-md-4 control-label">Last Name</label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="userLastName" th:field="${user.lastName}"></input>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="userEmail" class="col-md-4 control-label">Email</label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="userEmail" th:field="${user.email}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="userRole" class="col-md-4 control-label">Role</label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="userRole" th:field="${user.role}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="userEnabled" class="col-md-4 control-label">Enabled</label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="userEnabled" th:field="${user.enabled}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="userPassword" class="col-md-4 control-label">Password</label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="userPassword" th:field="${user.password}"/>
+                    </div>
+                </div>
+
+                <div class="col-md-8 col-md-offset-4">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-primary">Reset</button>
+                    <a th:href="@{/settings/accounts/index}" class="btn btn-primary" title="Back">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <br/>
+
+    <!-- Footer -->
+    <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
+</div>
+
+<!-- Delete Garage Modal -->
+<div class="modal fade" id="delete-user-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" role="form" th:action="@{/settings/accounts/delete}" method="post">
+                <div class="modal-header modal-header-danger">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delete User</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center">Are you sure you want to delete the User?</p>
+                    <p class="text-center"><b>Warning:</b> This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="delete-user-id" name="garageKey" required="required"/>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- End Delete Garage Modal -->
+
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<script th:inline="javascript">
+$('.delete-user-button').on('click', function()
+{
+    $('#delete-user-id').val($(this).data("id"));
+});
+</script>
+
+</body>
+</html>

@@ -44,3 +44,4 @@ public class ParkingSpaceController {
     // This class will remain as a placeholder for parking_space in case we will decide to add parking_space/detail.html
     // to show individual space information such as sensor status.
 }
+

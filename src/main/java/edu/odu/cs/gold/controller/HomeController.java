@@ -34,5 +34,4 @@ public class HomeController {
     public String logout() {
         return "redirect:/";
     }
-
 }

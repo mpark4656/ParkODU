@@ -24,10 +24,14 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     public static final String COLLECTION_FLOOR = "Floor";
     public static final String COLLECTION_PARKING_SPACE = "ParkingSpace";
     public static final String COLLECTION_BUILDING = "Building";
+
     public static final String COLLECTION_TRAVEL_DISTANCE_DURATION = "TravelDistanceDuration";
+
     public static final String COLLECTION_FLOOR_STATISTIC = "FloorStatistic";
     public static final String COLLECTION_PERMIT_TYPE = "PermitType";
     public static final String COLLECTION_SPACE_TYPE = "SpaceType";
+
+    public static final String COLLECTION_USER = "User";
 
     @Autowired
     public Environment environment;
@@ -116,6 +120,11 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     }
 
     @Bean
+    public UserRepository userRepository() {
+        return new UserRepository(hazelcastInstance(), COLLECTION_USER);
+    }
+
+    @Bean
     public MongoMapStore garageMapStore() {
         return new MongoMapStore(mongoTemplate, COLLECTION_GARAGE, Garage.class);
     }
@@ -143,6 +152,11 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     @Bean
     public MongoMapStore floorStatisticMapStore() {
         return new MongoMapStore(mongoTemplate, COLLECTION_FLOOR_STATISTIC, FloorStatistic.class);
+    }
+
+    @Bean
+    public MongoMapStore userMapStore() {
+        return new MongoMapStore(mongoTemplate, COLLECTION_USER, User.class);
     }
 
     @Bean
@@ -256,6 +270,26 @@ public class ParkODUConfiguration implements ApplicationContextAware {
 
         // Indexed Attributes
         mapConfig.addMapIndexConfig(new MapIndexConfig("floorKey", false));
+
+        return mapConfig;
+    }
+
+    @Bean
+    public MapConfig userRepositoryMapConfig() {
+        MapConfig mapConfig = new MapConfig(COLLECTION_USER);
+
+        // MapStore
+        MapStoreConfig mapStoreConfig = new MapStoreConfig();
+        mapStoreConfig.setImplementation(userMapStore());
+        mapStoreConfig.setEnabled(true);
+        mapStoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.EAGER);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+
+        // Indexed Attributes
+        mapConfig.addMapIndexConfig(new MapIndexConfig("email", false));
+        mapConfig.addMapIndexConfig(new MapIndexConfig("userName", false));
+        mapConfig.addMapIndexConfig(new MapIndexConfig("confirmationToken", false));
+        mapConfig.addMapIndexConfig(new MapIndexConfig("id",false));
 
         return mapConfig;
     }
