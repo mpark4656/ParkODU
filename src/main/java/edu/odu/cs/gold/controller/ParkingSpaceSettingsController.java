@@ -84,7 +84,12 @@ public class ParkingSpaceSettingsController {
     @GetMapping("/create")
     public String create(Model model) {
         ParkingSpace parkingSpace = new ParkingSpace();
+        List<PermitType> permitTypes = new ArrayList<> (permitTypeRepository.findAll());
+        List<SpaceType> spaceTypes = new ArrayList<> (spaceTypeRepository.findAll());
         model.addAttribute("parkingSpace", parkingSpace);
+        model.addAttribute("permitTypes", permitTypes);
+        model.addAttribute("spaceTypes", spaceTypes);
+
         return "settings/parking_space/create";
     }
 
