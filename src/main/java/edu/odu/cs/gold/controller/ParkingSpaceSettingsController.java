@@ -120,10 +120,6 @@ public class ParkingSpaceSettingsController {
     public String setPermitType(@RequestParam("parkingSpaceKey") String parkingSpaceKey,
                                 @RequestParam("permitTypeKey") String permitTypeKey) {
 
-        System.out.println("Parking Space Key is " + parkingSpaceKey);
-        System.out.println("Permit Type Key is " + permitTypeKey);
-
-
         ParkingSpace parkingSpace = parkingSpaceRepository.findByKey(parkingSpaceKey);
         PermitType permitType = permitTypeRepository.findByKey(permitTypeKey);
 
