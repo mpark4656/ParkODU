@@ -100,7 +100,7 @@ public class ParkingSpaceSettingsController {
         ParkingSpace existingParkingSpace = null;
 
         try {
-            existingParkingSpace = parkingSpaceRepository.findByKey(parkingSpace.getGarageKey());
+            existingParkingSpace = parkingSpaceRepository.findByKey(parkingSpace.getParkingSpaceKey());
             if (existingParkingSpace == null) {
                 parkingSpaceRepository.save(parkingSpace);
             }
@@ -108,7 +108,7 @@ public class ParkingSpaceSettingsController {
         catch(Exception e) {
             e.printStackTrace();
         }
-
+        System.out.println(parkingSpace.toString());
         return "settings/parking_space/index";
     }
 
