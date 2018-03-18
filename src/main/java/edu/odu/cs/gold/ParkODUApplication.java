@@ -73,6 +73,11 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         permitTypeRepository.loadAll();
         spaceTypeRepository.loadAll();
 
+        String isEmpty = "";
+        Predicate predicatetemp = Predicates.equal("id",isEmpty);
+        userRepository.deleteByPredicate(predicatetemp);
+
+
         System.out.println("# of Garages loaded from Mongo: " + garageRepository.findAll().size());
         System.out.println("# of Floors loaded from Mongo: " + floorRepository.findAll().size());
         System.out.println("# of ParkingSpaces loaded from Mongo: " + parkingSpaceRepository.findAll().size());
@@ -81,6 +86,8 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         System.out.println("# of TravelDistanceDurations loaded from Mongo: " + travelDistanceDurationRepository.findAll().size());
         System.out.println("# of permit types loaded from Mongo: " + permitTypeRepository.findAll().size());
         System.out.println("# of space types loaded from Mongo: " + spaceTypeRepository.findAll().size());
+        System.out.println("# of PermitTypeRepository loaded from Mongo: " + permitTypeRepository.findAll().size());
+        System.out.println("# of SpaceTypeRepository loaded from Mongo: " + spaceTypeRepository.findAll().size());
 
         if (false) {
                     /*

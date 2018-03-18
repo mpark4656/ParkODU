@@ -36,6 +36,15 @@ public class UserRepository {
         return (User)map.get(key);
     }
 
+    public User findByConfirmationToken(String confirmationToken) {
+        Predicate predicate = Predicates.equal("confirmationToken", confirmationToken);
+        List<User> users = findByPredicate(predicate);
+        if (users != null && !users.isEmpty()) {
+            return users.get(0);
+        }
+        return null;
+    }
+
     public List<User> findByKeys(Set<String> keys) {
         IMap map = hazelcastInstance.getMap(collectionName);
         return new ArrayList<>(map.getAll(keys).values());
