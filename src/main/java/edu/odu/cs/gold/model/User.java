@@ -18,41 +18,37 @@ import java.util.UUID;
 @Table(name = "user")
 public class User implements Serializable{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "userKey")
     private String userKey;
-
-    @Column(name = "email", nullable = false, unique = true)
-    @Email(message = "Please provide a valid e-mail")
-    @NotEmpty(message = "Please provide an e-mail")
     private String email;
-
-    //@Column(name = "userName", nullable = false, unique = true)
-    //@NotEmpty(message = "Please provide username")
     private String userName;
-
-    @Column(name = "password")
-    @Transient
     private String password;
-
-    @Column(name = "firstName")
-    @NotEmpty(message = "Please provide your first name")
     private String firstName;
-
-    @Column(name = "lastName")
-    @NotEmpty(message = "Please provide your last name")
     private String lastName;
-
-    //@Column(name = "role")
-    //@NotEmpty(message = "Please provide your last name")
     private String role;
-
-    @Column(name = "enabled")
     private boolean enabled;
-
-    @Column(name = "confirmationToken")
     private String confirmationToken;
+
+    public User() {
+        this.userKey = UUID.randomUUID().toString();
+    }
+
+    public User(String email,
+                String userName,
+                String password,
+                String firstName,
+                String lastName,
+                String role,
+                boolean enabled,
+                String confirmationToken) {
+        this.email = email;
+        this.userName = userName;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role;
+        this.enabled = enabled;
+        this.confirmationToken = confirmationToken;
+    }
 
     public String getConfirmationToken() {
         return confirmationToken;

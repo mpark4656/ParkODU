@@ -29,8 +29,8 @@ public class UserService {
 
     public boolean userExists(String email) {
         Predicate predicate = Predicates.equal("email", email);
-        int numUsers = userRepository.countByPredicate(predicate);
-        if (numUsers > 0) {
+        List<User> userList = userRepository.findByPredicate(predicate);
+        if (userList.isEmpty()) {
             return true;
         }
         return false;
@@ -40,8 +40,8 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void deleteUser(int id) {
-        Predicate predicate = Predicates.equal("id", id);
+    public void deleteUser(String userKey) {
+        Predicate predicate = Predicates.equal("userKey", userKey);
         userRepository.deleteByPredicate(predicate);
     }
 

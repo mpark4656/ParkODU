@@ -80,17 +80,13 @@
                 <div class="form-group">
                     <label for="userRole" class="col-md-4 control-label">Role</label>
                     <div class="col-md-4">
-                        <select type="text" class="form-control col-md-4" id="userRole" th:value="${user.role}">
-                            <option>admin</option><option>user</option>
-                        </select>
+                        <input type="text" class="form-control col-md-4" id="userRole" th:field="${user.role}"></input>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="userEnabled" class="col-md-4 control-label">Enabled</label>
                     <div class="col-md-4">
-                        <select class="form-control col-md-4" id="userEnabled" th:value="${user.enabled}">
-                            <option>true</option><option>false</option>
-                        </select>
+                        <input type="text" class="form-control col-md-4" id="userEnabled" th:field="${user.enabled}"></input>
                     </div>
                 </div>
                 <div class="form-group">

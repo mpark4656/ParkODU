@@ -80,17 +80,13 @@
                 <div class="form-group">
                     <label for="userRole" class="col-md-4 control-label">Role</label>
                     <div class="col-md-4">
-                        <select type="text" class="form-control " id="userRole" th:value="${user.role}">
-                            <option>admin</option><option>user</option>
-                        </select>
+                        <input type="text" class="form-control " id="userRole" th:field="${user.role}"></input>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="userEnabled" class="col-md-4 control-label">Enabled</label>
                     <div class="col-md-4">
-                        <select class="form-control" id="userEnabled" th:value="${user.enabled}">
-                            <option>true</option><option>false</option>
-                        </select>
+                        <input type="text" class="form-control" id="userEnabled" th:field="${user.enabled}"></input>
                     </div>
                 </div>
                 <div class="form-group">
@@ -141,22 +137,6 @@
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 
-<!--
-<script>
-
-    $(document).ready(function(){
-    $(".userEnabled").change(function(){
-
-    var newValue = $(this).val();
-
-    $.post("/settings/accounts/set_enabled", { userEnabled: newValue })
-        .done(function(data) {
-        });
-    });
-});
-
-</script>
--->
 <script th:inline="javascript">
 $('.delete-user-button').on('click', function()
 {
