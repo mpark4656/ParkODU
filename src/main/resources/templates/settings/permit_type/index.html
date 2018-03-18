@@ -43,44 +43,55 @@
     </div>
 </nav>
 
-<!--
-<div class="text-center submenu">
-    <th:block th:each="itemCategory : ${itemCategories}">
-        <a th:href="@{/gallery/category} + '/' + ${itemCategory.name}" class="submenu-text" th:text="${itemCategory.name}"></a>
-        <span th:if="${itemCategory.key != lastItemCategoryKey}" class="submenu-text">|</span>
-    </th:block>
-</div>
--->
 <div class="container-fluid main-container">
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+            <h1 class="text-center" style="text-transform: uppercase;">Configure Parking Permits</h1>
+            <h4 class="text-center" style="text-transform: uppercase;">Add, remove, and create parking permits here</h4>
+            <hr/>
+        </div>
+    </div>
 
     <!-- Welcome User -->
     <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
 
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <h1 class="text-center" style="text-transform: uppercase;">Settings</h1>
-            <hr/>
+        <div class="col-sm-8 col-md-8 col-sm-6 col-md-offset-1">
+            <p class="text-left">
+                <a href="" class="btn btn-success btn-sm" title="Create Permit Type">Create</a>
+            </p>
+            <table class="table table-bordered table-centered">
+                <thead>
+                <tr>
+                    <th>Parking Permit</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="permitType : ${permitTypes}">
+                    <td>
+                        <input class="form-control permitName" type="text" th:value="${permitType.name}" />
+                    </td>
+                    <td>
+                        <textarea class="form-control permitDescription" wrap="soft" cols="40" rows="1" th:text="${permitType.description}" />
+                    </td>
+                    <td>
+                        <button class="btn btn-danger btn-sm"
+                                title="Delete Permit Type">Delete</button>
+                                <!--th:attr="data-id=${parkingSpace.parkingSpaceKey},data-name=${parkingSpace.number}" -->
+                                <!-- data-toggle="modal" -->
+                                <!-- data-target="#delete-parkingSpace-modal" -->
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <h2 style="text-transform: uppercase;">Facility Management</h2>
-            <ul>
-                <li><a th:href="@{/settings/garage}">Configure Garages</a></li>
-                <li><a th:href="@{/settings/floor}">Configure Floors</a></li>
-                <li><a th:href="@{/settings/parking_space}">Configure Parking Spaces</a></li>
-                <li><a th:href="@{/settings/permit_type/index}">Configure Permit Types</a></li>
-                <li><a th:href="@{/settings/space_type/index}">Configure Space Types</a></li>
-            </ul>
-            <h2 style="text-transform: uppercase;">Account Management</h2>
-            <ul>
-                <li><a th:href="@{/settings/accounts}">Accounts</a></li>
-            </ul>
-            <h2 style="text-transform: uppercase;">Event Management</h2>
+    <br/>
 
-        </div>
-    </div>
     <!-- Footer -->
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>

@@ -5,6 +5,8 @@ import com.hazelcast.query.Predicates;
 import edu.odu.cs.gold.model.*;
 import edu.odu.cs.gold.repository.*;
 import edu.odu.cs.gold.service.GarageService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -154,7 +156,7 @@ public class ParkingSpaceSettingsController {
     @PostMapping("/set_space_number")
     @ResponseBody
     public String setSpaceNumber(@RequestParam("parkingSpaceKey") String parkingSpaceKey,
-                                 @RequestParam("spaceNumber") Integer spaceNumber) {
+                                         @RequestParam("spaceNumber") Integer spaceNumber) {
 
         ParkingSpace parkingSpace = parkingSpaceRepository.findByKey(parkingSpaceKey);
 
@@ -171,7 +173,7 @@ public class ParkingSpaceSettingsController {
         // Check to see if the given space number already exists
         for(ParkingSpace eachParkingSpace : parkingSpaces) {
             if(eachParkingSpace.getNumber().equals(spaceNumber)) {
-                return "The space number " + spaceNumber + " already exists.";
+                return "The number " + spaceNumber.toString() + " already exists. Aborted.";
             }
         }
 
@@ -182,7 +184,7 @@ public class ParkingSpaceSettingsController {
 
         garageService.refresh(parkingSpace.getGarageKey());
 
-        return parkingSpaceKey + "'s space number was set to " + spaceNumber;
+        return parkingSpaceKey + "'s space number was set to " + parkingSpace.getNumber();
     }
 
 
