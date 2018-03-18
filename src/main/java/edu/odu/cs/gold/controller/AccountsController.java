@@ -31,8 +31,12 @@ public class AccountsController {
     private UserService userService;
     private EmailService emailService;
 
-    public AccountsController(UserRepository userRepository) {
+    public AccountsController(UserRepository userRepository,
+                              UserService userService,
+                              EmailService emailService) {
         this.userRepository = userRepository;
+        this.userService = userService;
+        this.emailService = emailService;
     }
 
     @GetMapping({"","/","/index"})
