@@ -71,7 +71,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 		</div>
 	</div>
 
-	<!-- User Role (Admin) -->
+	<!-- User RoleType (Admin) -->
 	<div th:fragment="user-role-admin">
 		<li sec:authorize="hasRole('ADMIN')" class="active"><a th:text="Admin" class="submenu-text" style="..."></a></li>
 		<!--
@@ -79,7 +79,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 		-->
 	</div>
 
-	<!-- User Role (User) -->
+	<!-- User RoleType (User) -->
 	<div th:fragment="user-role-user">
 		<li sec:authorize="isAnonymous()" class="active"><p th:text="User" class="submenu-text" style="..."></p></li>
 		<!--

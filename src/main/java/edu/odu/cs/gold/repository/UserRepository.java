@@ -23,7 +23,7 @@ public class UserRepository {
     }
 
     public String getId(User entity) {
-        return entity.getId();
+        return entity.getUserKey();
     }
 
     public Collection<User> findAll() {

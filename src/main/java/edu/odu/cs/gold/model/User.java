@@ -20,8 +20,8 @@ public class User implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private String id;
+    @Column(name = "userKey")
+    private String userKey;
 
     @Column(name = "email", nullable = false, unique = true)
     @Email(message = "Please provide a valid e-mail")
@@ -58,8 +58,8 @@ public class User implements Serializable{
         return confirmationToken;
     }
 
-    public void generateId() {
-        this.id = UUID.randomUUID().toString();
+    public void generateUserKey() {
+        this.userKey = UUID.randomUUID().toString();
     }
     public void generateConfirmationToken() {
         this.confirmationToken = UUID.randomUUID().toString();
@@ -69,12 +69,12 @@ public class User implements Serializable{
         this.confirmationToken = confirmationToken;
     }
 
-    public String getId() {
-        return id;
+    public String getUserKey() {
+        return userKey;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUserKey(String userKey) {
+        this.userKey = userKey;
     }
 
     public String getPassword() {
@@ -136,15 +136,14 @@ public class User implements Serializable{
     @Override
     public String toString() {
         return "User{" +
-                "confirmationToken='" + confirmationToken + '\'' +
-                ", id='" + id + '\'' +
+                "userKey='" + userKey + '\'' +
+                ",confirmationToken='" + confirmationToken + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
+                ", password='" + "********" + '\'' +
                 ", role='" + role + '\'' +
                 ", enabled=" + enabled +
                 '}';
     }
-
 }

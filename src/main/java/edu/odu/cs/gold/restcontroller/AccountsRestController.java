@@ -47,12 +47,12 @@ public class AccountsRestController {
 
     @PostMapping("/add")
     public ResponseEntity<?> add(@RequestBody User user) {
-        if (user.getId() != null)  {
-            user.setId(UUID.randomUUID().toString());
+        if (user.getUserKey() != null)  {
+            user.setUserKey(UUID.randomUUID().toString());
             user.setConfirmationToken(UUID.randomUUID().toString());
             user.setEnabled(true);
             userRepository.save(user);
-            userService.refresh(user.getId());
+            userService.refresh(user.getUserKey());
             System.out.println("Saved User: " + user);
             return ResponseEntity.ok().build();
         }
@@ -61,7 +61,7 @@ public class AccountsRestController {
 
     @PostMapping("/update")
     public ResponseEntity<?> edit(@RequestBody User user) {
-        User existingUser = userRepository.findByKey(user.getId());
+        User existingUser = userRepository.findByKey(user.getUserKey());
         if (existingUser != null) {
             // Upsert - if null, don't update the field
             if (user.getFirstName() != null) {
@@ -90,11 +90,11 @@ public class AccountsRestController {
 
     @PostMapping("/delete")
     public ResponseEntity<?> delete(@RequestBody User user) {
-        if (user.getId() != null) {
-            User existingUser = userRepository.findByKey(user.getId());
+        if (user.getUserKey() != null) {
+            User existingUser = userRepository.findByKey(user.getUserKey());
             if (existingUser != null) {
-                userRepository.delete(user.getId());
-                System.out.println("Deleted User with userKey: " + user.getId());
+                userRepository.delete(user.getUserKey());
+                System.out.println("Deleted User with userKey: " + user.getUserKey());
                 return ResponseEntity.ok().build();
             }
         }
