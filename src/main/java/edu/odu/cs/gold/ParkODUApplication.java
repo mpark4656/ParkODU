@@ -5,6 +5,8 @@ import com.hazelcast.query.Predicates;
 import edu.odu.cs.gold.model.*;
 import edu.odu.cs.gold.repository.*;
 import edu.odu.cs.gold.service.GoogleMapService;
+import edu.odu.cs.gold.service.PermitTypeService;
+import edu.odu.cs.gold.service.SpaceTypeService;
 import edu.odu.cs.gold.service.UserService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +58,12 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PermitTypeService permitTypeService;
+
+    @Autowired
+    private SpaceTypeService spaceTypeService;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

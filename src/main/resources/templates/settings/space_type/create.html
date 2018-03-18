@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid navbar-container">
+        <div class="col-md-3">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- Main Logo -->
+                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="navbar" class="navbar-collapse collapse navbar-center">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/garage}">Garages</a></li>
+                    <li><a th:href="@{/analytics/locate}">Search</a></li>
+                    <!-- Settings Link -->
+                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
+                </ul>
+                <!--
+                <form class="navbar-form navbar-right">
+                    <input type="text" class="form-control" placeholder="Search..."/>
+                </form>
+                -->
+            </div>
+        </div>
+        <div class="col-md-3">
+            <!-- Social Media Links -->
+            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid main-container">
+
+    <!-- Welcome User -->
+    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+            <h1 class="text-center" style="text-transform: uppercase;">Create Space Type</h1>
+            <hr/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+            <form class="form-horizontal" id="create-space-type-form" role="form" th:action="@{/settings/space_type/create}" method="post">
+                <div class="form-group">
+                    <label for="space-type-name" class="col-md-4 control-label">Space Name</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="space-type-name" th:name="spaceTypeName" required="required"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="space-type-description" class="col-md-4 control-label"  required="required">Space Description</label>
+                    <div class="col-md-8">
+                        <textarea
+                                type="text"
+                                wrap="soft"
+                                row="1"
+                                col="40"
+                                class="form-control"
+                                id="space-type-description"
+                                required="required"
+                                th:name="spaceTypeDescription"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-8 col-md-offset-4">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-primary">Reset</button>
+                    <a th:href="@{/settings/space_type/index}" class="btn btn-primary" title="Back">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <br/>
+
+    <!-- Footer -->
+    <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
+</div>
+
+
+
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<script>
+
+</script>
+
+</body>
+</html>
