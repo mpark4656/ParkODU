@@ -1,44 +1,37 @@
 package edu.odu.cs.gold.controller;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
-
-import edu.odu.cs.gold.model.Floor;
+import edu.odu.cs.gold.model.User;
 import edu.odu.cs.gold.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import edu.odu.cs.gold.service.EmailService;
+import edu.odu.cs.gold.service.UserService;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import edu.odu.cs.gold.model.User;
-import edu.odu.cs.gold.service.EmailService;
-import edu.odu.cs.gold.service.UserService;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class RegisterController {
+
     private UserService userService;
-    @Autowired
     private EmailService emailService;
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    public RegisterController(UserService userService, EmailService emailService) {
+    public RegisterController(UserService userService,
+                              EmailService emailService,
+                              UserRepository userRepository) {
         this.userService = userService;
         this.emailService = emailService;
+        this.userRepository = userRepository;
     }
 
     // Return registration form template
