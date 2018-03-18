@@ -1,5 +1,6 @@
 package edu.odu.cs.gold.controller;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -9,6 +10,7 @@ import javax.validation.Valid;
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
 
+import edu.odu.cs.gold.model.Floor;
 import edu.odu.cs.gold.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -50,10 +52,10 @@ public class RegisterController {
     }
 
     // Return registration form template
-    @GetMapping("/user/register")
+    @GetMapping("/user/create")
     public String showRegistrationPage(Model model, User user){
         model.addAttribute("user", user);
-        return "user/register";
+        return "user/create";
     }
 
     // Process form input data
@@ -91,10 +93,22 @@ public class RegisterController {
     // Process confirmation link
     @RequestMapping(value="/user/confirm", method = RequestMethod.GET)
     public ModelAndView showConfirmationPage(ModelAndView model, @RequestParam("token") String token) {
-        User user = userRepository.findByConfirmationToken(token);
-        System.out.println(user);
+        User user = null;
+        Predicate predicate = Predicates.equal("confirmationToken", token);
+        List<User> userList = userRepository.findByPredicate(predicate);
 
-        if (user == null) { // No token found in DB
+        // 960fedc9-16f4-4753-a49b-c9fe4a807cb0
+        System.out.println("Confirmation Token: " + token);
+
+        if(userList != null && !userList.isEmpty()) {
+
+            user = userList.get(0);
+        }
+        else {
+            System.out.println("List is Empty!");
+        }
+
+        if (userList == null) { // No token found in DB
             model.addObject("invalidToken", "Oops!  This is an invalid confirmation link.");
         }
         else
@@ -106,7 +120,7 @@ public class RegisterController {
     }
 
     // Process confirmation link
-    @RequestMapping(value="/confirm", method = RequestMethod.POST)
+    @RequestMapping(value="/user/confirm", method = RequestMethod.POST)
     public ModelAndView processConfirmationForm(ModelAndView model, BindingResult bindingResult, @RequestParam Map requestParams, RedirectAttributes redir) {
         model.setViewName("user/confirm");
         Zxcvbn passwordCheck = new Zxcvbn();
@@ -119,7 +133,22 @@ public class RegisterController {
             return model;
         }
         // Find the user associated with the reset token
-        User user = userRepository.findByConfirmationToken((String)requestParams.get("token"));
+        //User user = userRepository.findByConfirmationToken((String)requestParams.get("token"));
+        User user = null;
+        Predicate predicate = Predicates.equal("confirmationToken", (String)requestParams.get("token"));
+        List<User> userList = userRepository.findByPredicate(predicate);
+
+        // 960fedc9-16f4-4753-a49b-c9fe4a807cb0
+        System.out.println("Confirmation Token: " + (String)requestParams.get("token"));
+
+        if(userList != null && !userList.isEmpty()) {
+
+            user = userList.get(0);
+        }
+        else {
+            System.out.println("List is Empty!");
+        }
+
         // Set new Password
         user.setPassword(bCryptPasswordEncoder.encode((String)requestParams.get("password")));
         // Set user to enabled
