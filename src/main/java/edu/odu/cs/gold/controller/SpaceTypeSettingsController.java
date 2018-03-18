@@ -49,6 +49,11 @@ public class SpaceTypeSettingsController {
         this.garageService = garageService;
     }
 
+    /**
+     *
+     * @param model
+     * @return
+     */
     @GetMapping({"", "/", "/index"})
     public String index(Model model) {
 

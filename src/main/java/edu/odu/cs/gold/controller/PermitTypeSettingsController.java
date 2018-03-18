@@ -50,7 +50,7 @@ public class PermitTypeSettingsController {
     }
 
     /**
-     * 
+     *
      * @param model
      * @return
      */
