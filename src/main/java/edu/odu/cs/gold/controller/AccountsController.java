@@ -80,29 +80,33 @@ public class AccountsController {
     }
 
     @PostMapping("/newuser")
-    public String newuser(@Valid User user, Model model, HttpServletRequest request, BindingResult bindingResult) {
+    public String newuser(User user, HttpServletRequest request, Model model, BindingResult bindingResult) {
         boolean userExists = userService.userExists(user.getEmail());
         System.out.println("User exists: " + userExists);
-        if (!userExists) {
+        if (userExists) {
+            model.addAttribute("alreadyRegisteredMessage", "Oops!  There is already a user registered with the email provided.");
+            bindingResult.reject("email");
+        }
+        else {
+            // Disable user until they click on confirmation link in email
+            user.setEnabled(false);
+            // Generate random 36-character string token for confirmation link
+            user.setConfirmationToken(UUID.randomUUID().toString());
+            user.setId(UUID.randomUUID().toString());
             user.setRole("user");
-            user.generateConfirmationToken();
-            userRepository.save(user);
+
+            userService.saveUser(user);
             String appUrl = request.getScheme() + "://" + request.getServerName();
             SimpleMailMessage registrationEmail = new SimpleMailMessage();
             registrationEmail.setTo(user.getEmail());
             registrationEmail.setSubject("Registration Confirmation");
-            //TODO - "8083" needs to be removed before push to CS hosted server
-            registrationEmail.setText("To confirm your e-mail address, please click the link below:\n" + appUrl + ":8083/user/confirm?token=" + user.getConfirmationToken());
+            registrationEmail.setText("To confirm your e-mail address, please click the link below:\n"
+                    + appUrl + ":8083/user/confirm?token=" + user.getConfirmationToken());
             registrationEmail.setFrom("noreply@ParkODU.cs.odu.edu");
             emailService.sendEmail(registrationEmail);
             model.addAttribute("confirmationMessage", "A confirmation e-mail has been sent to " + user.getEmail());
         }
-        else {
-            model.addAttribute("alreadyRegisteredMessage", "Oops!  There is already a user registered with the email provided.");
-            bindingResult.reject("email");
-        }
-
-        return "redirect:/settings/accounts/newuser";
+        return "accounts/newuser";
     }
 
     @GetMapping("/edit/{userKey}")
@@ -129,6 +133,16 @@ public class AccountsController {
             e.printStackTrace();
         }
         return "redirect:/settings/accounts/index";
+    }
+
+    @PostMapping("/set_enabled")
+    @ResponseBody
+    public String setAvailability(@RequestParam("userEnabled") boolean userEnabled,
+                                  @RequestParam("id") String userKey) {
+        User user = userRepository.findByKey(userKey);
+        user.setEnabled(userEnabled);
+        userRepository.save(user);
+        return userKey + " enabled: " + userEnabled;
     }
 
     @PostMapping("/delete")

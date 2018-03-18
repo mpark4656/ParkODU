@@ -57,7 +57,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 	<!-- Create User (User) -->
 	<div th:fragment="new-user-user">
-		<li sec:authorize="isAnonymous()" class="active"><a th:href="@{/settings/accounts/newuser}">Create</a></li>
+		<li sec:authorize="isAnonymous()" class="active"><a th:href="@{/user/register}">Create</a></li>
 		<!--
 		<li class="active"><a th:href="@{/newuser}">New User</a></li>
 		-->
