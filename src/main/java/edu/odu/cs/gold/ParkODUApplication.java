@@ -79,12 +79,12 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         travelDistanceDurationRepository.loadAll();
         permitTypeRepository.loadAll();
         spaceTypeRepository.loadAll();
-        //userRepository.loadAll();
+        userRepository.loadAll();
         roleTypeRepository.loadAll();
 
-        // Revove all null stored users at startup
+        // Remove all null stored users at startup
         //String isEmpty = "";
-        //Predicate predicatetemp = Predicates.equal("id",isEmpty);
+        //Predicate predicatetemp = Predicates.equal("userKey",isEmpty);
         //userRepository.deleteByPredicate(predicatetemp);
 
         System.out.println("# of Garages loaded from Mongo: " + garageRepository.findAll().size());
