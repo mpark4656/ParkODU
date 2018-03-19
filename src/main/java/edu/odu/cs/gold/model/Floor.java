@@ -2,6 +2,7 @@ package edu.odu.cs.gold.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 public class Floor implements Serializable {
 
@@ -14,7 +15,7 @@ public class Floor implements Serializable {
     public Double capacity;
     public Date lastUpdated;
 
-    public Floor() {}
+    public Floor() { this.floorKey = UUID.randomUUID().toString(); }
 
     public Floor(String floorKey, String garageKey, String number, Integer availableSpaces, Integer totalSpaces, String description) {
         this.floorKey = floorKey;
