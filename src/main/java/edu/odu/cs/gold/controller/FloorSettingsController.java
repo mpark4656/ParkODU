@@ -79,6 +79,8 @@ public class FloorSettingsController {
     @GetMapping("/create/{garageKey}")
     public String create(@PathVariable("garageKey") String garageKey, Model model) {
         Garage garage = garageRepository.findByKey(garageKey);
+        Floor floor = new Floor();
+        model.addAttribute("floor", floor);
         model.addAttribute("garage", garage);
         return "settings/floor/create";
     }
