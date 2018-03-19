@@ -59,6 +59,9 @@
         <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
             <form class="form-horizontal" id="create-garage-form" role="form" th:action="@{/settings/parking_space/create}" method="post" th:object="${parkingSpace}">
                 <input type="hidden" id="id" th:value="${parkingSpace.parkingSpaceKey}" th:field="${parkingSpace.parkingSpaceKey}"/>
+                <input type="hidden" id="space-id" th:value="${parkingSpace.parkingSpaceKey}" th:field="${parkingSpace.parkingSpaceKey}"/>
+                <input type="hidden" id="garage-id" th:value="${parkingSpace.garageKey}" th:field="${parkingSpace.garageKey}"/>
+                <input type="hidden" id="floor-number" th:value="${parkingSpace.floor}" th:field="${parkingSpace.floor}"/>
                 <div class="form-group">
                     <label for="number" class="col-md-4 control-label">Number</label>
                     <div class="col-md-8">

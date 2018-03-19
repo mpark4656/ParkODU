@@ -105,6 +105,7 @@ public class ParkingSpaceSettingsController {
     @PostMapping("/create")
     public String create(ParkingSpace parkingSpace) {
         ParkingSpace existingParkingSpace = null;
+        String floorKey = "";
 
         if(parkingSpace.getGarageKey() == null || parkingSpace.getGarageKey().isEmpty()) {
             // Unable to create a new parking space. Required attributes are missing
@@ -122,14 +123,26 @@ public class ParkingSpaceSettingsController {
                 parkingSpace.setSpaceType(spaceType.getName());
 
                 parkingSpaceRepository.save(parkingSpace);
-                garageService.refresh(parkingSpace.getGarageKey());   
+                garageService.refresh(parkingSpace.getGarageKey());
+
+                Predicate predicate = Predicates.and(
+                        Predicates.equal("garageKey", parkingSpace.getGarageKey()),
+                        Predicates.equal("number", parkingSpace.getFloor())
+                );
+
+                // findByPredicate() method always returns a list, but we know that there is only one floor that
+                // meets the predicate's criteria (There should be only one)
+                List<Floor> floors = new ArrayList<>(floorRepository.findByPredicate(predicate));
+
+                // Get the floor key from the floor
+                floorKey = floors.get(0).getFloorKey();
             }
         }
         catch(Exception e) {
             e.printStackTrace();
         }
 
-        return "settings/parking_space/floor/";
+        return "redirect:/settings/parking_space/floor/" + floorKey;
     }
 
     /**
