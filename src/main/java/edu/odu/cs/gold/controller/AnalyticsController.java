@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import com.google.maps.model.*;
+
 import java.util.*;
 
 @Controller
@@ -119,10 +121,10 @@ public class AnalyticsController {
                 recommendation.setAvailabilityCount(availabilityCount);
                 recommendation.setTotalCount(totalCount);
 
-                DistanceDuration startingAddressToGarage = googleMapService.getDistanceDuration(startingLocation, garage.getLocation(), GoogleMapService.TravelMode.DRIVING);
+                DistanceDuration startingAddressToGarage = googleMapService.getDistanceDuration(startingLocation, garage.getLocation(), TravelMode.DRIVING);
                 recommendation.setStartingAddressToGarage(startingAddressToGarage);
 
-                DistanceDuration garageToDestinationBuilding = googleMapService.getDistanceDuration(garage.getLocation(), destinationBuilding.getLocation(), GoogleMapService.TravelMode.WALKING);
+                DistanceDuration garageToDestinationBuilding = googleMapService.getDistanceDuration(garage.getLocation(), destinationBuilding.getLocation(), TravelMode.WALKING);
                 recommendation.setGarageToDestinationBuilding(garageToDestinationBuilding);
 
                 // Set Total Distance

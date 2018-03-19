@@ -55,6 +55,8 @@ dependencies {
     compile group: 'org.springframework.data', name: 'spring-data-jpa'
     compile("org.springframework.boot:spring-boot-starter-mail")
 
+    compile group: 'com.google.maps', name: 'google-maps-services', version: '0.1.1'
+
     // Zxcvbn
     compile group: 'com.nulab-inc', name: 'zxcvbn', version: '1.0.0'
 

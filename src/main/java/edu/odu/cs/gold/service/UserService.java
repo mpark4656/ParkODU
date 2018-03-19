@@ -31,9 +31,10 @@ public class UserService {
         Predicate predicate = Predicates.equal("email", email);
         List<User> userList = userRepository.findByPredicate(predicate);
         if (userList.isEmpty()) {
+            return false;
+        } else {
             return true;
         }
-        return false;
     }
 
     public void saveUser(User user) {

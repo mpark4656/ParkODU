@@ -15,6 +15,8 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
+import com.google.maps.model.*;
+
 import java.util.*;
 
 @SpringBootApplication
@@ -77,7 +79,7 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         travelDistanceDurationRepository.loadAll();
         permitTypeRepository.loadAll();
         spaceTypeRepository.loadAll();
-        userRepository.loadAll();
+        //userRepository.loadAll();
         roleTypeRepository.loadAll();
 
         // Revove all null stored users at startup
@@ -95,6 +97,7 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         System.out.println("# of SpaceTypes loaded from Mongo: " + spaceTypeRepository.findAll().size());
         System.out.println("# of Users loaded from Mongo: " + userRepository.findAll().size());
         System.out.println("# of Roles loaded from Mongo: " + roleTypeRepository.findAll().size());
+
 
         if (false) {
                     /*
@@ -172,7 +175,7 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
                             Predicates.equal("buildingKey", building.getBuildingKey())
                     );
                     List<TravelDistanceDuration> existingTravelDistanceDurations = travelDistanceDurationRepository.findByPredicate(predicate);
-                    TravelDistanceDuration travelDistanceDuration = googleMapService.getTravelDistanceDuration(garage, building, GoogleMapService.TravelMode.WALKING);
+                    TravelDistanceDuration travelDistanceDuration = googleMapService.getTravelDistanceDuration(garage, building, TravelMode.WALKING);
                     if (!existingTravelDistanceDurations.isEmpty()) {
                         TravelDistanceDuration existingTravelDistanceDuration = existingTravelDistanceDurations.get(0);
                         travelDistanceDuration.setTravelDistanceDurationKey(existingTravelDistanceDuration.getTravelDistanceDurationKey());

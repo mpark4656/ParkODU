@@ -11,7 +11,7 @@ import java.util.UUID;
  *
  */
 
-public class RoleType implements Serializable{
+public class RoleType implements Serializable {
 
     private String roleKey;
     private String name;

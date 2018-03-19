@@ -34,6 +34,7 @@ public class ParkODUConfiguration implements ApplicationContextAware {
 
     public static final String COLLECTION_USER = "User";
     public static final String COLLECTION_ROLE_TYPE = "RoleType";
+    public static final String COLLECTION_RECOMMENDATION = "Recommendation";
 
     @Autowired
     public Environment environment;
@@ -132,6 +133,11 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     }
 
     @Bean
+    public RecommendationRepository recommendationRepository() {
+        return new RecommendationRepository(hazelcastInstance(), COLLECTION_RECOMMENDATION);
+    }
+
+    @Bean
     public MongoMapStore garageMapStore() {
         return new MongoMapStore(mongoTemplate, COLLECTION_GARAGE, Garage.class);
     }
@@ -179,6 +185,11 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     @Bean
     public MongoMapStore spaceTypeMapStore() {
         return new MongoMapStore(mongoTemplate, COLLECTION_SPACE_TYPE, SpaceType.class);
+    }
+
+    @Bean
+    public MongoMapStore recommendationMapStore() {
+        return new MongoMapStore(mongoTemplate, COLLECTION_RECOMMENDATION, Recommendation.class);
     }
 
     @Bean
@@ -358,4 +369,22 @@ public class ParkODUConfiguration implements ApplicationContextAware {
 
         return mapConfig;
     }
+
+    @Bean
+    public MapConfig RecommendationRepositoryMapConfig() {
+        MapConfig mapConfig = new MapConfig(COLLECTION_RECOMMENDATION);
+
+        // MapStore
+        MapStoreConfig mapStoreConfig = new MapStoreConfig();
+        mapStoreConfig.setImplementation(recommendationMapStore());
+        mapStoreConfig.setEnabled(true);
+        mapStoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.EAGER);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+
+        // Indexed Attributes
+        mapConfig.addMapIndexConfig(new MapIndexConfig("recommendationKey", false));
+
+        return mapConfig;
+    }
+
 }
