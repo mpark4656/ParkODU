@@ -1,5 +1,7 @@
 package edu.odu.cs.gold.controller;
 
+import com.hazelcast.query.Predicate;
+import com.hazelcast.query.Predicates;
 import edu.odu.cs.gold.model.Garage;
 import edu.odu.cs.gold.repository.FloorRepository;
 import edu.odu.cs.gold.repository.FloorStatisticRepository;
@@ -55,11 +57,21 @@ public class GarageSettingsController {
      * @return String "settings/garage/index"
      */
     @GetMapping({"","/","/index"})
-    public String index(Model model) {
+    public String index(@RequestParam(value = "successMessage", required = false) String successMessage,
+                        @RequestParam(value = "infoMessage", required = false) String infoMessage,
+                        @RequestParam(value = "warningMessage", required = false) String warningMessage,
+                        @RequestParam(value = "dangerMessage", required = false) String dangerMessage,
+                        Model model) {
 
         List<Garage> garages = new ArrayList<>(garageRepository.findAll());
         garages.sort(Comparator.comparing(Garage::getName));
         model.addAttribute("garages", garages);
+
+        // Alerts
+        if (successMessage != null) { model.addAttribute("successMessage", successMessage); }
+        if (infoMessage != null) { model.addAttribute("infoMessage", infoMessage); }
+        if (warningMessage != null) { model.addAttribute("warningMessage", warningMessage); }
+        if (dangerMessage != null) { model.addAttribute("dangerMessage", dangerMessage); }
 
         return "settings/garage/index";
     }
@@ -73,16 +85,39 @@ public class GarageSettingsController {
     }
 
     @PostMapping("/create")
-    public String create(Garage garage) {
-        Garage existingGarage = null;
+    public String create(Garage garage,
+                         Model model,
+                         RedirectAttributes redirectAttributes) {
+        boolean isSuccessful = false;
+        boolean isDuplicate = false;
         try {
-            existingGarage = garageRepository.findByKey(garage.getGarageKey());
-            if (existingGarage == null) {
+            Predicate predicate = Predicates.or(
+                Predicates.equal("garageKey", garage.getGarageKey()),
+                Predicates.equal("name", garage.getName())
+            );
+            int existingCount = garageRepository.countByPredicate(predicate);
+            if (existingCount == 0) {
                 garageRepository.save(garage);
+                isSuccessful = true;
+            }
+            else {
+                isDuplicate = true;
             }
         }
         catch (Exception e) {
             e.printStackTrace();
+        }
+        // Alerts
+        if (isSuccessful) {
+            redirectAttributes.addAttribute("successMessage", "The Garage " + garage.getName() + " was successfully created.");
+        }
+        else if (isDuplicate) {
+            model.addAttribute("dangerMessage", "A Garage with the name " + garage.getName() + " already exists.");
+            model.addAttribute("garage", garage);
+            return "settings/garage/create";
+        }
+        else {
+            redirectAttributes.addAttribute("dangerMessage", "An error occurred when attempting to create a Garage.");
         }
         return "redirect:/settings/garage/index";
     }
@@ -96,33 +131,74 @@ public class GarageSettingsController {
     }
 
     @PostMapping("/edit")
-    public String edit(Garage garage) {
-        Garage existingGarage = null;
+    public String edit(Garage garage,
+                       Model model,
+                       RedirectAttributes redirectAttributes) {
+        boolean isSuccessful = false;
+        boolean isDuplicate = false;
         try {
-            existingGarage = garageRepository.findByKey(garage.getGarageKey());
-            existingGarage.setName(garage.getName());
-            existingGarage.setDescription(garage.getDescription());
-            existingGarage.setHeightDescription(garage.getHeightDescription());
-            existingGarage.setAddressOne(garage.getAddressOne());
-            existingGarage.setAddressTwo(garage.getAddressTwo());
-            existingGarage.setCity(garage.getCity());
-            existingGarage.setState(garage.getState());
-            existingGarage.setZipCode(garage.getZipCode());
-            garageRepository.save(existingGarage);
+            Predicate predicate = Predicates.and(
+                    Predicates.equal("garageKey", garage.getGarageKey()),
+                    Predicates.equal("name", garage.getName())
+            );
+            int existingCount = garageRepository.countByPredicate(predicate);
+            if (existingCount == 1) {
+                Garage existingGarage = garageRepository.findByKey(garage.getGarageKey());
+                existingGarage.setLatitude(garage.getLatitude());
+                existingGarage.setLongitude(garage.getLongitude());
+                existingGarage.setName(garage.getName());
+                existingGarage.setDescription(garage.getDescription());
+                existingGarage.setHeightDescription(garage.getHeightDescription());
+                existingGarage.setAddress(garage.getAddress());
+                existingGarage.setAddressOne(garage.getAddressOne());
+                existingGarage.setAddressTwo(garage.getAddressTwo());
+                existingGarage.setCity(garage.getCity());
+                existingGarage.setState(garage.getState());
+                existingGarage.setZipCode(garage.getZipCode());
+                garageRepository.save(existingGarage);
+                isSuccessful = true;
+            }
+            else {
+                isDuplicate = true;
+            }
         }
         catch (Exception e) {
             e.printStackTrace();
+        }
+        // Alerts
+        if (isSuccessful) {
+            redirectAttributes.addAttribute("successMessage", "The Garage " + garage.getName() + " was successfully updated.");
+        }
+        else if (isDuplicate) {
+            model.addAttribute("dangerMessage", "A Garage with the name " + garage.getName() + " already exists.");
+            model.addAttribute("garage", garage);
+            return "settings/garage/edit";
+        }
+        else {
+            redirectAttributes.addAttribute("dangerMessage", "An error occurred when attempting to update a Garage.");
         }
         return "redirect:/settings/garage/index";
     }
 
     @PostMapping("/delete")
-    public String delete(@RequestParam("garageKey") String garageKey) {
+    public String delete(@RequestParam("garageKey") String garageKey,
+                         RedirectAttributes redirectAttributes) {
+        boolean isSuccessful = false;
+        Garage garage = null;
         try {
+            garage = garageRepository.findByKey(garageKey);
             garageRepository.delete(garageKey);
+            isSuccessful = true;
         }
         catch (Exception e) {
             e.printStackTrace();
+        }
+        // Alerts
+        if (isSuccessful) {
+            redirectAttributes.addAttribute("successMessage", "The Garage " + garage.getName() + " was successfully deleted.");
+        }
+        else {
+            redirectAttributes.addAttribute("dangerMessage", "An error occurred when attempting to delete a Garage.");
         }
         return "redirect:/settings/garage/index";
     }
