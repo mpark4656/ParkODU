@@ -124,25 +124,13 @@ public class ParkingSpaceSettingsController {
 
                 parkingSpaceRepository.save(parkingSpace);
                 garageService.refresh(parkingSpace.getGarageKey());
-
-                Predicate predicate = Predicates.and(
-                        Predicates.equal("garageKey", parkingSpace.getGarageKey()),
-                        Predicates.equal("number", parkingSpace.getFloor())
-                );
-
-                // findByPredicate() method always returns a list, but we know that there is only one floor that
-                // meets the predicate's criteria (There should be only one)
-                List<Floor> floors = new ArrayList<>(floorRepository.findByPredicate(predicate));
-
-                // Get the floor key from the floor
-                floorKey = floors.get(0).getFloorKey();
             }
         }
         catch(Exception e) {
             e.printStackTrace();
         }
 
-        return "redirect:/settings/parking_space/floor/" + floorKey;
+        return "settings/parking_space/floor/";
     }
 
     /**
