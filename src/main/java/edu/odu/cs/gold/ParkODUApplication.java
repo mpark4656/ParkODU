@@ -5,6 +5,8 @@ import com.hazelcast.query.Predicates;
 import edu.odu.cs.gold.model.*;
 import edu.odu.cs.gold.repository.*;
 import edu.odu.cs.gold.service.GoogleMapService;
+import edu.odu.cs.gold.service.PermitTypeService;
+import edu.odu.cs.gold.service.SpaceTypeService;
 import edu.odu.cs.gold.service.UserService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +59,12 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PermitTypeService permitTypeService;
+
+    @Autowired
+    private SpaceTypeService spaceTypeService;
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
@@ -73,14 +81,18 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         permitTypeRepository.loadAll();
         spaceTypeRepository.loadAll();
 
+        String isEmpty = "";
+        Predicate predicatetemp = Predicates.equal("id",isEmpty);
+        userRepository.deleteByPredicate(predicatetemp);
+
         System.out.println("# of Garages loaded from Mongo: " + garageRepository.findAll().size());
         System.out.println("# of Floors loaded from Mongo: " + floorRepository.findAll().size());
         System.out.println("# of ParkingSpaces loaded from Mongo: " + parkingSpaceRepository.findAll().size());
         System.out.println("# of FloorStatistics loaded from Mongo: " + floorStatisticRepository.findAll().size());
         System.out.println("# of Buildings loaded from Mongo: " + buildingRepository.findAll().size());
         System.out.println("# of TravelDistanceDurations loaded from Mongo: " + travelDistanceDurationRepository.findAll().size());
-        System.out.println("# of Permit Types loaded from Mongo: " + permitTypeRepository.findAll().size());
-        System.out.println("# of Space Types loaded from Mongo: " + spaceTypeRepository.findAll().size());
+        System.out.println("# of permit types loaded from Mongo: " + permitTypeRepository.findAll().size());
+        System.out.println("# of space types loaded from Mongo: " + spaceTypeRepository.findAll().size());
 
         if (false) {
                     /*

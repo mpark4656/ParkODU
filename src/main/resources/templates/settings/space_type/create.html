@@ -50,52 +50,38 @@
 
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <h1 class="text-center" style="text-transform: uppercase;">Create Parking Space</h1>
+            <h1 class="text-center" style="text-transform: uppercase;">Create Space Type</h1>
             <hr/>
         </div>
     </div>
 
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
-            <form class="form-horizontal" id="create-garage-form" role="form" th:action="@{/settings/parking_space/create}" method="post" th:object="${parkingSpace}">
-                <input type="hidden" id="space-id" th:value="${parkingSpace.parkingSpaceKey}" th:field="${parkingSpace.parkingSpaceKey}"/>
-                <input type="hidden" id="garage-id" th:value="${parkingSpace.garageKey}" th:field="${parkingSpace.garageKey}"/>
-                <input type="hidden" id="floor-number" th:value="${parkingSpace.floor}" th:field="${parkingSpace.floor}"/>
+            <form class="form-horizontal" id="create-space-type-form" role="form" th:action="@{/settings/space_type/create}" method="post">
                 <div class="form-group">
-                    <label for="number" class="col-md-4 control-label">Number</label>
+                    <label for="space-type-name" class="col-md-4 control-label">Space Name</label>
                     <div class="col-md-8">
-                        <input type="number" class="form-control" id="number" required="required" th:field="${parkingSpace.number}"/>
+                        <input type="text" class="form-control" id="space-type-name" th:name="spaceTypeName" required="required"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="permitType" class="col-md-4 control-label" required="required">Permit Type</label>
+                    <label for="space-type-description" class="col-md-4 control-label"  required="required">Space Description</label>
                     <div class="col-md-8">
-                        <select class="form-control permitTypeDropdown" id="permitType" th:field="*{permitTypeKey}">
-                            <option th:each="permitType : ${permitTypes}"
-                                    th:text="${permitType.name}"
-                                    th:value="${permitType.permitTypeKey}"
-                                    th:selected="(${parkingSpace.permitTypeKey eq permitType.permitTypeKey})"
-                            >
-                            </option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="spaceType" class="col-md-4 control-label"  required="required">Space Type</label>
-                    <div class="col-md-8">
-                        <select class="form-control spaceTypeDropdown" id="spaceType" th:field="*{spaceTypeKey}">
-                            <option th:each="spaceType : ${spaceTypes}"
-                                    th:text="${spaceType.name}"
-                                    th:value="${spaceType.spaceTypeKey}"
-                                    th:selected="(${parkingSpace.spaceTypeKey eq spaceType.spaceTypeKey})">
-                            </option>
-                        </select>
+                        <textarea
+                                type="text"
+                                wrap="soft"
+                                row="1"
+                                col="40"
+                                class="form-control"
+                                id="space-type-description"
+                                required="required"
+                                th:name="spaceTypeDescription"></textarea>
                     </div>
                 </div>
                 <div class="col-md-8 col-md-offset-4">
                     <button type="submit" class="btn btn-primary">Submit</button>
                     <button type="reset" class="btn btn-primary">Reset</button>
-                    <a th:href="@{/settings/parking_space/index}" class="btn btn-primary" title="Back">Back</a>
+                    <a th:href="@{/settings/space_type/index}" class="btn btn-primary" title="Back">Back</a>
                 </div>
             </form>
         </div>

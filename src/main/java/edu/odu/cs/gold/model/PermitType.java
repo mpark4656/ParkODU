@@ -21,6 +21,7 @@ public class PermitType implements Serializable {
     }
 
     public PermitType(String name, String description) {
+        this.permitTypeKey = UUID.randomUUID().toString();
         this.name = name;
         this.description = description;
     }

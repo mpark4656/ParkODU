@@ -10,6 +10,7 @@ public class Garage implements Serializable {
     private String name;
     private String description;
     private String heightDescription;
+    private String address;
     private String addressOne;
     private String addressTwo;
     private String city;
@@ -65,6 +66,14 @@ public class Garage implements Serializable {
 
     public void setHeightDescription(String heightDescription) {
         this.heightDescription = heightDescription;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getAddressOne() {

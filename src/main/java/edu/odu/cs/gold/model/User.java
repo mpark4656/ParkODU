@@ -28,8 +28,8 @@ public class User implements Serializable{
     @NotEmpty(message = "Please provide an e-mail")
     private String email;
 
-    @Column(name = "userName", nullable = false, unique = true)
-    @NotEmpty(message = "Please provide username")
+    //@Column(name = "userName", nullable = false, unique = true)
+    //@NotEmpty(message = "Please provide username")
     private String userName;
 
     @Column(name = "password")
@@ -44,8 +44,8 @@ public class User implements Serializable{
     @NotEmpty(message = "Please provide your last name")
     private String lastName;
 
-    @Column(name = "role")
-    @NotEmpty(message = "Please provide your last name")
+    //@Column(name = "role")
+    //@NotEmpty(message = "Please provide your last name")
     private String role;
 
     @Column(name = "enabled")
@@ -60,6 +60,9 @@ public class User implements Serializable{
 
     public void generateId() {
         this.id = UUID.randomUUID().toString();
+    }
+    public void generateConfirmationToken() {
+        this.confirmationToken = UUID.randomUUID().toString();
     }
 
     public void setConfirmationToken(String confirmationToken) {

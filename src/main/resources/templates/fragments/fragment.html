@@ -63,14 +63,6 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 		-->
 	</div>
 
-	<!--Create User (Admin) -->
-	<div th:fragment="new-user">
-		<li sec:authorize="hasRole('ADMIN')" class="active"><a th:href="@{/user/register}">Create</a></li>
-		<!--
-		<li class="active"><a th:href="@{/newuser}">New User</a></li>
-		-->
-	</div>
-
 	<!-- Social Media Links -->
 	<div th:fragment="social-media-links">
 		<div class="social-media-links-container">
@@ -114,6 +106,34 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 				<span class="submenu-text">|</span>
 				<input type="submit" class="logout-button small submenu-text" style="display: inline; margin-left: 5px;" value="Logout"/>
 			</form>
+		</div>
+	</div>
+
+	<!-- Alerts -->
+	<div th:fragment="alerts" th:if="${successMessage ne null or infoMessage ne null or warningMessage ne null or dangerMessage ne null}" class="row">
+		<div th:if="${successMessage ne null}" class="col-md-10 col-md-offset-1">
+			<div class="alert alert-success alert-dismissible text-center" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<span th:utext="${successMessage}"></span>
+			</div>
+		</div>
+		<div th:if="${infoMessage ne null}" class="col-md-10 col-md-offset-1">
+			<div class="alert alert-info alert-dismissible text-center" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<span th:utext="${infoMessage}"></span>
+			</div>
+		</div>
+		<div th:if="${warningMessage ne null}" class="col-md-10 col-md-offset-1">
+			<div class="alert alert-warning alert-dismissible text-center" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<span th:utext="${warningMessage}"></span>
+			</div>
+		</div>
+		<div th:if="${dangerMessage ne null}" class="col-md-10 col-md-offset-1">
+			<div class="alert alert-danger alert-dismissible text-center" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<b>Error:</b>&nbsp;<span th:utext="${dangerMessage}"></span>
+			</div>
 		</div>
 	</div>
 
