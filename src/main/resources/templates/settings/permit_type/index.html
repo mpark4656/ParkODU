@@ -56,10 +56,13 @@
     <!-- Welcome User -->
     <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
 
-
-
+    <!-- Alerts -->
+    <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
     <div class="row">
         <div class="col-sm-8 col-md-8 col-sm-6 col-md-offset-1">
+            <p>
+                <span></span>
+            </p>
             <p class="text-left">
                 <a th:href="@{/settings/permit_type/create}" class="btn btn-success btn-sm" title="Create Permit Type">Create</a>
                 <a th:href="@{/settings/permit_type/index}" class="btn btn-success btn-sm" title="Reload this page">Reload</a>
@@ -144,6 +147,7 @@ $(document).ready(function(){
 
     $.post("/settings/permit_type/set_permit_name", { permitTypeKey : permitTypeKey, permitName: permitName })
         .done(function(data) {
+            $("span").html(data);
         });
     });
 });
@@ -156,6 +160,7 @@ $(document).ready(function(){
 
     $.post("/settings/permit_type/set_permit_description", { permitTypeKey : permitTypeKey, permitDescription: permitDescription })
         .done(function(data) {
+            $("span").html(data);
         });
     });
 });

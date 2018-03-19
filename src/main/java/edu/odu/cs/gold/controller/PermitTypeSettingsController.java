@@ -8,6 +8,8 @@ import edu.odu.cs.gold.service.PermitTypeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,11 +41,21 @@ public class PermitTypeSettingsController {
      * @return String default index page
      */
     @GetMapping({"", "/", "/index"})
-    public String index(Model model) {
+    public String index(@RequestParam(value = "successMessage", required = false) String successMessage,
+                        @RequestParam(value = "infoMessage", required = false) String infoMessage,
+                        @RequestParam(value = "warningMessage", required = false) String warningMessage,
+                        @RequestParam(value = "dangerMessage", required = false) String dangerMessage,
+                        Model model) {
 
         List<PermitType> permitTypes = new ArrayList<>(permitTypeRepository.findAll());
 
         model.addAttribute("permitTypes", permitTypes);
+
+        // Alerts
+        if (successMessage != null) { model.addAttribute("successMessage", successMessage); }
+        if (infoMessage != null) { model.addAttribute("infoMessage", infoMessage); }
+        if (warningMessage != null) { model.addAttribute("warningMessage", warningMessage); }
+        if (dangerMessage != null) { model.addAttribute("dangerMessage", dangerMessage); }
 
         return "settings/permit_type/index";
     }
@@ -65,18 +77,24 @@ public class PermitTypeSettingsController {
      */
     @PostMapping("/create")
     public String create(@RequestParam("permitTypeName") String permitTypeName,
-                         @RequestParam("permitTypeDescription") String permitTypeDescription) {
+                         @RequestParam("permitTypeDescription") String permitTypeDescription,
+                         RedirectAttributes redirectAttributes,
+                         Model model) {
 
         // Do not accept null or empty permit type name
         if(permitTypeName == null || permitTypeName.trim().isEmpty()) {
-            System.err.println("The permit type name cannot be null or empty!");
-            return "redirect:/settings/permit_type/index";
+            model.addAttribute(
+                    "dangerMessage",
+                    "The permit name must be specified.");
+            return "settings/permit_type/create";
         }
 
         // Do not accept null or empty permit type description
         if(permitTypeDescription == null || permitTypeDescription.trim().isEmpty()) {
-            System.err.println("The permit type description cannot be null or empty!");
-            return "redirect:/settings/permit_type/index";
+            model.addAttribute(
+                    "dangerMessage",
+                    "The permit description must be specified.");
+            return "settings/permit_type/create";
         }
 
         // Remove any leading or trailing spaces just to be safe
@@ -89,7 +107,9 @@ public class PermitTypeSettingsController {
         // If any of the existing permit types have the same name as the given name, do not create a new permit
         for(PermitType eachPermitType : permitTypes) {
             if(eachPermitType.getName().equals(permitTypeName)) {
-                System.err.println("The specified permit name already exists!");
+                redirectAttributes.addAttribute(
+                        "dangerMessage",
+                        "The permit name " + permitTypeName + " already exists.");
                 return "redirect:/settings/permit_type/index";
             }
         }
@@ -99,11 +119,15 @@ public class PermitTypeSettingsController {
             // Create a new PermitType object. The unique key is auto-generated in the constructor.
             PermitType permitType = new PermitType(permitTypeName, permitTypeDescription);
             permitTypeRepository.save(permitType);
+            redirectAttributes.addAttribute(
+                    "successMessage",
+                    permitType.getName() + " has been successfully created.");
+            return "redirect:/settings/permit_type/index";
         } catch(Exception e) {
             e.printStackTrace();
+            redirectAttributes.addAttribute("dangerMessage","Exception Raised");
+            return "redirect:/settings/permit_type/index";
         }
-
-        return "redirect:/settings/permit_type/index";
     }
 
     /**
@@ -115,7 +139,7 @@ public class PermitTypeSettingsController {
     @PostMapping("/set_permit_description")
     @ResponseBody
     public String set_description(@RequestParam("permitTypeKey") String permitTypeKey,
-                           @RequestParam("permitDescription") String permitDescription) {
+                                  @RequestParam("permitDescription") String permitDescription) {
 
         PermitType permitType = permitTypeRepository.findByKey(permitTypeKey);
 
@@ -135,8 +159,7 @@ public class PermitTypeSettingsController {
 
         permitTypeService.refresh(permitType.getPermitTypeKey());
 
-        System.err.println("The permit type description was successfully updated.");
-        return "The description of the permit type, " + permitTypeKey + " was successfully updated";
+        return "Update Successful";
     }
 
     /**
@@ -167,8 +190,7 @@ public class PermitTypeSettingsController {
 
         permitTypeService.refresh(permitType.getPermitTypeKey());
 
-        System.err.println("The permit type name was successfully updated.");
-        return "The name of the permit type, " + permitTypeKey + " was successfully updated";
+        return "Update Successful";
     }
 
     /**
@@ -177,7 +199,8 @@ public class PermitTypeSettingsController {
      * @return String
      */
     @PostMapping("/delete")
-    public String delete(@RequestParam("permitTypeKey") String permitTypeKey) {
+    public String delete(@RequestParam("permitTypeKey") String permitTypeKey,
+                         Model model) {
 
         if(permitTypeRepository.findByKey(permitTypeKey) != null) {
             // Find out if any of the parking spaces have this permitTypeKey
@@ -185,8 +208,12 @@ public class PermitTypeSettingsController {
             List<ParkingSpace> parkingSpaces = parkingSpaceRepository.findByPredicate(predicate);
 
             if(parkingSpaces.size() > 0) {
-                System.err.println("The specified parking permit is being used by existing parking spaces.");
-                return "redirect:/settings/permit_type/index";
+
+                model.addAttribute(
+                        "dangerMessage",
+                        "The specified parking permit is being used by existing parking spaces.");
+                model.addAttribute("permitTypes", new ArrayList<>(permitTypeRepository.findAll()));
+                return "settings/permit_type/index";
             }
 
             try {
@@ -196,11 +223,15 @@ public class PermitTypeSettingsController {
                 e.printStackTrace();
             }
 
-            System.err.println("The permit type " + permitTypeKey + " was successfully deleted");
+            model.addAttribute("successMessage", "The permit " + permitTypeKey + " was successfully deleted");
         } else {
-            System.err.println("The permit type " + permitTypeKey + " does not exist");
+            model.addAttribute(
+                    "dangerMessage",
+                    "The specified parking permit is being used by existing parking spaces.");
+            model.addAttribute("permitTypes", new ArrayList<>(permitTypeRepository.findAll()));
+            return "settings/permit_type/index";
         }
 
-        return "redirect:/settings/permit_type/index";
+        return "settings/permit_type/index";
     }
 }
