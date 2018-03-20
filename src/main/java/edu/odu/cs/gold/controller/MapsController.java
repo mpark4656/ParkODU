@@ -43,17 +43,24 @@ public class MapsController {
         this.recommendationRepository = recommendationRepository;
     }
 
+    @GetMapping({"","/","/index"})
+    public String index(Model model) {
+        return "navigate/index";
+    }
+
     @GetMapping("/navigate")
     public String directions(Model model,
-                             @PathVariable("orig") String orig,
-                             @PathVariable("dest") String dest) {
+                             @RequestParam("latitude") String latitude,
+                             @RequestParam("longitude") String longitude,
+                             @RequestParam("destination") String destination) {
 
-        Garage garage = garageRepository.findByKey(dest);
+        Garage garage = garageRepository.findByKey(destination);
         GoogleMapService mapService = new GoogleMapService();
-        String test = mapService.convertAddress(orig);
+        //String test = mapService.convertAddress(orig);
 
-        model.addAttribute("origin", test);
-        model.addAttribute("location", garage.getLocation());
+        model.addAttribute("latitude", latitude);
+        model.addAttribute("longitude", longitude);
+        model.addAttribute("destination", garage.getLocation());
         model.addAttribute("travelMode", TravelMode.DRIVING.toString());
         //Predicate predicate = Predicates.equal("recommendationKey", recommendationKey);
         //Recommendation recommendation = recommendationRepository.findByKey(recommendationKey);
@@ -61,6 +68,7 @@ public class MapsController {
         //GoogleMapService mapService = new GoogleMapService();
         //mapService.buildDirections(recommendation.getStartingAddress(),garage.getLocation(),TravelMode.DRIVING);
 
-        return "maps/navigate";
+        return "maps/navigate/index";
     }
+
 }
