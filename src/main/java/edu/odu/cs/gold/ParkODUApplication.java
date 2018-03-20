@@ -94,9 +94,9 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         roleTypeRepository.loadAll();
 
         // Remove all null stored users at startup
-        //String isEmpty = "";
-        //Predicate predicatetemp = Predicates.equal("userKey",isEmpty);
-        //userRepository.deleteByPredicate(predicatetemp);
+        String isEmpty = "";
+        Predicate predicatetemp = Predicates.equal("userKey",isEmpty);
+        userRepository.deleteByPredicate(predicatetemp);
 
         System.out.println("# of Garages loaded from Mongo: " + garageRepository.findAll().size());
         System.out.println("# of Floors loaded from Mongo: " + floorRepository.findAll().size());
@@ -108,6 +108,13 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         System.out.println("# of SpaceTypes loaded from Mongo: " + spaceTypeRepository.findAll().size());
         System.out.println("# of Users loaded from Mongo: " + userRepository.findAll().size());
         System.out.println("# of Roles loaded from Mongo: " + roleTypeRepository.findAll().size());
+
+
+        Collection<User> users = userRepository.findAll();
+        for (User user : users) {
+            System.out.println(user);
+        }
+
 
 
         if (false) {

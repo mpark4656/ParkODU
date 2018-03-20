@@ -75,15 +75,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="users : ${user}">
-                    <td th:text="${users.firstName}"></td>
-                    <td th:text="${users.lastName}"></td>
-                    <td th:text="${users.email}"></td>
-                    <td th:text="${users.role}"></td>
-                    <td th:text="${users.enabled}"></td>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.firstName}"></td>
+                    <td th:text="${user.lastName}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.role}"></td>
+                    <td th:text="${user.enabled}"></td>
                     <td>
-                        <a th:href="@{/settings/accounts/edit} + '/' + ${users.userKey}" class="btn btn-primary btn-sm">Edit</a>
-                        <button class="btn btn-danger btn-sm delete-user-button" title="Delete User" th:attr="data-id=${users.userKey}" data-toggle="modal" data-target="#delete-user-modal">Delete</button>
+                        <a th:href="@{/settings/accounts/edit} + '/' + ${user.userKey}" class="btn btn-primary btn-sm">Edit</a>
+                        <button class="btn btn-danger btn-sm delete-user-button" title="Delete User" th:attr="data-id=${user.userKey}" data-toggle="modal" data-target="#delete-user-modal">Delete</button>
                     </td>
                 </tr>
                 </tbody>

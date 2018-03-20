@@ -15,27 +15,24 @@ import sun.security.util.Password;
 import java.io.Serializable;
 import java.util.UUID;
 
-@Entity
-@Table(name = "user")
+
 public class User implements Serializable{
 
     private String userKey;
     private String email;
     private String userName;
-    private Password password;
+    private String password;
     private String firstName;
     private String lastName;
     private String role;
     private boolean enabled;
     private String confirmationToken;
 
-    public User() {
-        this.userKey = UUID.randomUUID().toString();
-    }
+    public User() { }
 
     public User(String email,
                 String userName,
-                Password password,
+                String password,
                 String firstName,
                 String lastName,
                 String role,
@@ -74,11 +71,11 @@ public class User implements Serializable{
         this.userKey = userKey;
     }
 
-    public Password getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(Password password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 

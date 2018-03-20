@@ -47,10 +47,9 @@ public class AccountsController {
                         @RequestParam(value = "dangerMessage", required = false) String dangerMessage,
                         Model model) {
 
-
         List<User> users = new ArrayList<>(userRepository.findAll());
         users.sort(Comparator.comparing(User::getFirstName));
-        model.addAttribute("user", users);
+        model.addAttribute("users", users);
 
         // Alerts
         if (successMessage != null) {
@@ -89,6 +88,7 @@ public class AccountsController {
             int existingCount = userRepository.countByPredicate(predicate);
             if (existingCount == 0) {
                 user.setConfirmationToken(UUID.randomUUID().toString());
+                user.generateUserKey();
                 userRepository.save(user);
                 isSuccessful = true;
             }
@@ -102,12 +102,12 @@ public class AccountsController {
 
         // Alerts
         if (isSuccessful) {
-            redirectAttributes.addAttribute("successMessage", "The User " + user.getEmail() + " was successfully created.");
+            redirectAttributes.addAttribute("successMessage", "The user " + user.getEmail() + " was successfully created.");
         }
         else if (isDuplicate) {
-            model.addAttribute("dangerMessage", "A User with the name " + user.getEmail() + " already exists.");
+            model.addAttribute("dangerMessage", "The user " + user.getEmail() + " already exists.");
             model.addAttribute("user", user);
-            return "settings/garage/create";
+            return "settings/accounts/create";
         }
         else {
             redirectAttributes.addAttribute("dangerMessage", "An error occurred when attempting to create a User.");
@@ -116,16 +116,16 @@ public class AccountsController {
         return "redirect:/settings/accounts/index";
     }
 
-    @GetMapping("/newuser")
-    public String newuser(Model model) {
+    @GetMapping("/register")
+    public String register(Model model) {
         User user = new User();
         user.generateUserKey();
         model.addAttribute("user", user);
-        return "accounts/newuser";
+        return "accounts/register";
     }
 
-    @PostMapping("/newuser")
-    public String newuser(User user, HttpServletRequest request, Model model, BindingResult bindingResult) {
+    @PostMapping("/register")
+    public String register(User user, HttpServletRequest request, Model model, BindingResult bindingResult) {
         boolean userExists = userService.userExists(user.getEmail());
         System.out.println("User exists: " + userExists);
         if (userExists) {
@@ -148,7 +148,7 @@ public class AccountsController {
             emailService.sendEmail(registrationEmail);
             model.addAttribute("confirmationMessage", "A confirmation e-mail has been sent to " + user.getEmail());
         }
-        return "accounts/newuser";
+        return "accounts/register";
     }
 
     @GetMapping("/edit/{userKey}")
@@ -192,9 +192,9 @@ public class AccountsController {
 
         // Alerts
         if (isSuccessful) {
-            redirectAttributes.addAttribute("successMessage", "The Garage " + user.getEmail() + " was successfully updated.");
+            redirectAttributes.addAttribute("successMessage", "The user " + user.getEmail() + " was successfully updated.");
         } else if (isDuplicate) {
-            model.addAttribute("dangerMessage", "A Garage with the name " + user.getEmail() + " already exists.");
+            model.addAttribute("dangerMessage", "The user " + user.getEmail() + " already exists.");
             model.addAttribute("user", user);
             return "settings/accounts/edit";
         } else {
