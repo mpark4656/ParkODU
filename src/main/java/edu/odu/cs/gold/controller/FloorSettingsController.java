@@ -99,8 +99,11 @@ public class FloorSettingsController {
         System.err.println("The garage key is " + floor.getGarageKey());
 
         if(floor.getGarageKey() == null || floor.getGarageKey().isEmpty()) {
-            model.addAttribute("dangerMessage", "The garage key cannot be null or empty.");
             System.err.println("The garage key is null or empty");
+            List<Garage> garages = new ArrayList<>(garageRepository.findAll());
+            garages.sort(Comparator.comparing(Garage::getName));
+            model.addAttribute("dangerMessage", "The garage key cannot be null or empty.");
+            model.addAttribute("garages", garages);
             return "settings/floor/index";
         }
 
