@@ -190,7 +190,9 @@ public class FloorSettingsController {
             } else {
                 Predicate predicate = Predicates.and(
                         Predicates.equal("number", floor.getNumber()),
-                        Predicates.equal("garageKey", floor.getGarageKey()));
+                        Predicates.equal("garageKey", floor.getGarageKey())
+                );
+
                 int count = floorRepository.countByPredicate(predicate);
 
                 if(count > 0) {
