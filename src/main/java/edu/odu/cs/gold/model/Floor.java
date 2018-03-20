@@ -6,14 +6,14 @@ import java.util.UUID;
 
 public class Floor implements Serializable {
 
-    public String floorKey;
-    public String garageKey;
-    public String number;
-    public Integer availableSpaces;
-    public Integer totalSpaces;
-    public String description;
-    public Double capacity;
-    public Date lastUpdated;
+    private String floorKey;
+    private String garageKey;
+    private String number;
+    private Integer availableSpaces;
+    private Integer totalSpaces;
+    private String description;
+    private Double capacity;
+    private Date lastUpdated;
 
     public Floor() { this.floorKey = UUID.randomUUID().toString(); }
 

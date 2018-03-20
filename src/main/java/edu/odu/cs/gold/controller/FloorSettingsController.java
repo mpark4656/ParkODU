@@ -84,6 +84,8 @@ public class FloorSettingsController {
     public String create(@PathVariable("garageKey") String garageKey, Model model) {
         Garage garage = garageRepository.findByKey(garageKey);
         Floor floor = new Floor();
+        floor.setGarageKey(garage.getGarageKey());
+        System.err.println("The garage key is " + garage.getGarageKey());
         model.addAttribute("floor", floor);
         model.addAttribute("garage", garage);
         return "settings/floor/create";
@@ -96,6 +98,7 @@ public class FloorSettingsController {
         boolean isSuccessful = false;
         boolean isDuplicate = false;
 
+        System.err.println(floor.toString());
         System.err.println("The garage key is " + floor.getGarageKey());
 
         if(floor.getGarageKey() == null || floor.getGarageKey().isEmpty()) {
@@ -121,7 +124,7 @@ public class FloorSettingsController {
 
             for(int i = 0; i < floor.getTotalSpaces(); i++) {
                 ParkingSpace parkingSpace = new ParkingSpace();
-                parkingSpace.setGarageKey(floor.garageKey);
+                parkingSpace.setGarageKey(floor.getGarageKey());
                 parkingSpace.setLastUpdated(new Date());
                 parkingSpace.setFloor(floor.getNumber());
                 parkingSpace.setNumber(i + 1);
