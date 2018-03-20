@@ -86,36 +86,27 @@ public class FloorSettingsController {
     }
 
     @PostMapping("/create")
-    public String create(@RequestParam("garageKey") String garageKey,
-                         @RequestParam("number") String number,
-                         @RequestParam("totalSpaces") Integer totalSpaces,
-                         @RequestParam("description") String description,
+    public String create(Floor floor,
                          RedirectAttributes redirectAttributes,
                          Model model) {
         boolean isSuccessful = false;
         boolean isDuplicate = false;
 
 
-        if(garageKey == null || garageKey.isEmpty()) {
+        if(floor.getGarageKey() == null || floor.getGarageKey().isEmpty()) {
             model.addAttribute("dangerMessage", "The garage key cannot be null or empty.");
             return "settings/floor/index";
         }
 
 
         Predicate predicate = Predicates.and(
-                Predicates.equal("garageKey", garageKey),
-                Predicates.equal("number", number)
+                Predicates.equal("garageKey", floor.getGarageKey()),
+                Predicates.equal("number", floor.getNumber())
         );
 
         int existingCount = floorRepository.countByPredicate(predicate);
 
         if(existingCount == 0) {
-
-            Floor floor = new Floor();
-            floor.setGarageKey(garageKey);
-            floor.setNumber(number);
-            floor.setTotalSpaces(totalSpaces);
-            floor.setDescription(description);
             floor.setLastUpdated(new Date());
             floorRepository.save(floor);
 
@@ -134,20 +125,20 @@ public class FloorSettingsController {
         }
 
         if(isSuccessful) {
-            Garage garage = garageRepository.findByKey(garageKey);
+            Garage garage = garageRepository.findByKey(floor.getGarageKey());
             redirectAttributes.addAttribute(
                     "successMessage",
                     "The floor was successfully created in garage " + garage.getName());
         }
 
         if(isDuplicate) {
-            Garage garage = garageRepository.findByKey(garageKey);
+            Garage garage = garageRepository.findByKey(floor.getGarageKey());
             redirectAttributes.addAttribute(
                     "dangerMessage",
                     "The specified floor already exists in " + garage.getName());
         }
 
-        return "redirect:/settings/floor/garage/" + garageKey;
+        return "redirect:/settings/floor/garage/" + floor.getGarageKey();
     }
 
     /**
