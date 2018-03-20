@@ -177,29 +177,36 @@ public class FloorSettingsController {
         boolean isSuccessful = false;
         boolean isDuplicate = false;
 
+        Floor oldFloor = floorRepository.findByKey(floor.getFloorKey());
+
         try {
-            Predicate predicate = Predicates.and(
-                    Predicates.equal("floorKey", floor.getFloorKey()),
-                    Predicates.equal("garageKey", floor.getGarageKey()),
-                    Predicates.equal("totalSpaces", floor.getTotalSpaces()),
-                    Predicates.equal("number", floor.getNumber())
-            );
-            int existingCount = floorRepository.countByPredicate(predicate);
-            if (existingCount <= 1) {
+            if(floor.getNumber().equals(oldFloor.getNumber())) {
                 Floor existingFloor = floorRepository.findByKey(floor.getFloorKey());
                 existingFloor.setLastUpdated(new Date());
                 existingFloor.setDescription(floor.getDescription());
                 existingFloor.setNumber(floor.getNumber());
                 floorRepository.save(existingFloor);
                 isSuccessful = true;
-            }
-            else {
-                isDuplicate = true;
+            } else {
+                Predicate predicate = Predicates.equal("number", floor.getNumber());
+                int count = floorRepository.countByPredicate(predicate);
+
+                if(count > 0) {
+                    isDuplicate = true;
+                }else {
+                    Floor existingFloor = floorRepository.findByKey(floor.getFloorKey());
+                    existingFloor.setLastUpdated(new Date());
+                    existingFloor.setDescription(floor.getDescription());
+                    existingFloor.setNumber(floor.getNumber());
+                    floorRepository.save(existingFloor);
+                    isSuccessful = true;
+                }
             }
         }
         catch (Exception e) {
             e.printStackTrace();
         }
+
         // Alerts
         if (isSuccessful) {
             redirectAttributes.addAttribute(

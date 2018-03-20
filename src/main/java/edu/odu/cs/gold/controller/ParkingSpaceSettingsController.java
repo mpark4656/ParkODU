@@ -124,6 +124,7 @@ public class ParkingSpaceSettingsController {
         List<PermitType> permitTypes = new ArrayList<> (permitTypeRepository.findAll());
         List<SpaceType> spaceTypes = new ArrayList<> (spaceTypeRepository.findAll());
 
+        model.addAttribute("floor", floor);
         model.addAttribute("parkingSpace", parkingSpace);
         model.addAttribute("permitTypes", permitTypes);
         model.addAttribute("spaceTypes", spaceTypes);
