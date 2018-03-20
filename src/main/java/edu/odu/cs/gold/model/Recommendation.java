@@ -1,5 +1,9 @@
 package edu.odu.cs.gold.model;
 
+import edu.odu.cs.gold.repository.BuildingRepository;
+import edu.odu.cs.gold.repository.GarageRepository;
+import edu.odu.cs.gold.repository.RecommendationRepository;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
@@ -31,9 +35,10 @@ public class Recommendation implements Serializable{
 
     private String recommendationKey;
 
-    private Date arrivalTime;
+    private BuildingRepository buildingRepository;
+    private GarageRepository garageRepository;
 
-    public Recommendation() { this.recommendationKey = UUID.randomUUID().toString(); }
+    private Date arrivalTime;
 
     public String getRecommendationKey() {return recommendationKey;}
 
@@ -47,6 +52,9 @@ public class Recommendation implements Serializable{
         this.startingAddress = startingAddress;
     }
 
+    public void generateRecommendationKey() {
+        this.recommendationKey = UUID.randomUUID().toString();
+    }
 
     public Garage getGarage() {
         return garage;

@@ -84,6 +84,17 @@
         </div>
     </div>
 
+
+    <table class="table table-bordered table-centered">
+        <tbody>
+        <tr th:text="${origin}"></tr>
+        <tr th:text="${location.latitude}"></tr>
+        <tr th:text="${location.longitude}"></tr>
+        <tr th:text="${travelMode}"></tr>
+        </tbody>
+    </table>
+</div>
+
     <!-- Footer -->
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>

@@ -55,6 +55,9 @@
         </div>
     </div>
 
+    <!-- Alerts -->
+    <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
+
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
             <form class="form-horizontal" id="create-user-form" role="form" th:action="@{/settings/accounts/create}" method="post" th:object="${user}">
@@ -77,16 +80,24 @@
                         <input type="email" class="form-control col-md-4" id="userEmail" th:field="${user.email}"/>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="userRole" class="col-md-4 control-label">Role</label>
+                <div class="form-group" th:attr="data-key=${user.role}">
+                    <label class="col-md-4 control-label">Role</label>
                     <div class="col-md-4">
-                        <input type="text" class="form-control col-md-4" id="userRole" th:field="${user.role}"></input>
+                        <select type="text" class="form-control" th:field="${user.role}">
+                            <option th:each="roleType : ${roleTypes}"
+                                    th:text="${roleType.name}"
+                                    th:value="${roleType.name}"
+                                    th:selected="(${user.role eq roleType.name})">
+                            </option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="userEnabled" class="col-md-4 control-label">Enabled</label>
+                    <label class="col-md-4 control-label">Enabled</label>
                     <div class="col-md-4">
-                        <input type="text" class="form-control col-md-4" id="userEnabled" th:field="${user.enabled}"></input>
+                        <select type="text" class="form-control" th:field="${user.enabled}">
+                            <option value="true">true</option><option value="false">false</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
@@ -103,9 +114,6 @@
             </form>
         </div>
     </div>
-
-    <br/>
-
     <!-- Footer -->
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>

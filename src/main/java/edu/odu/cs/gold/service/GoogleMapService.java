@@ -1,6 +1,7 @@
 package edu.odu.cs.gold.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.google.maps.*;
 import edu.odu.cs.gold.model.*;
 import edu.odu.cs.gold.repository.BuildingRepository;
@@ -102,6 +103,12 @@ public class GoogleMapService {
     //    private String getTravelMode() { return travelMode; }
     //
     //}
+
+    public String convertAddress(String address) {
+        GeoApiContext context = new GeoApiContext().setApiKey(GOOGLE_MAPS_API_KEY);
+        return GeocodingApi.geocode(context,address).resultType().toString();
+    }
+
 
     public void buildDirections(String startingLocation,
                                 Location destination,
