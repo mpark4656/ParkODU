@@ -213,18 +213,20 @@ public class FloorSettingsController {
             return "settings/floor/index";
         }
         else {
-            Predicate predicate = Predicates.and(
+            Predicate spacePredicate = Predicates.and(
                     Predicates.equal("garageKey", existingFloor.getGarageKey()),
                     Predicates.equal("floor", existingFloor.getNumber())
             );
             String garageKey = existingFloor.getGarageKey();
 
-            parkingSpaceRepository.deleteByPredicate(predicate);
+            parkingSpaceRepository.deleteByPredicate(spacePredicate);
             floorRepository.delete(floorKey);
-
             garageService.refresh(garageKey);
+
+            Predicate floorPredicate = Predicates.equal("garageKey", garageKey);
+            List<Floor> floors = floorRepository.findByPredicate(floorPredicate);
             Garage garage = garageRepository.findByKey(garageKey);
-            model.addAttribute("garage", garage);
+            model.addAttribute("floors", floors);
             model.addAttribute("successMessage", "The floor key was deleted.");
             return "settings/floor/garage";
         }
