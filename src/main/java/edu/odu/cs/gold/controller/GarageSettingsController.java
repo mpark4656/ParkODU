@@ -137,9 +137,10 @@ public class GarageSettingsController {
         boolean isSuccessful = false;
         boolean isDuplicate = false;
         try {
+            Garage tempGarage = garageRepository.findByKey(garage.getGarageKey());
             Predicate predicate = Predicates.and(
                     Predicates.equal("garageKey", garage.getGarageKey()),
-                    Predicates.equal("name", garage.getName())
+                    Predicates.equal("name", tempGarage.getName())
             );
             int existingCount = garageRepository.countByPredicate(predicate);
             if (existingCount <= 1) {
