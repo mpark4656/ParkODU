@@ -86,29 +86,18 @@
 
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-
-            <!--
-            <p class="text-right">
-                <a th:href="@{/analytics/locate}" class="btn btn-primary">New Search</a>
-            </p>
-            -->
             <table class="table table-bordered table-centered">
                 <thead>
                 <tr>
-                    <th rowspan="2" width="10%">Starting Latitude</th>
-                    <th rowspan="2" width="10%">Starting Longitude</th>
-                    <th rowspan="2" span="2" width="10%">Destination Latitude</th>
-                    <th rowspan="2" width="10%">Destination Longitude</th>
+                    <th rowspan="2" width="10%">Starting Location</th>
+                    <th rowspan="2" width="10%">Destination Location</th>
                     <th rowspan="2" width="10%">TravelMode</th>
                 </tr>
-
                 </thead>
                 <tbody>
                 <tr>
-                    <td th:text="${latitude}"></td>
-                    <td th:text="${longitude}"></td>
-                    <td th:text="${destination.latitude}"></td>
-                    <td th:text="${destination.longitude}"></td>
+                    <td th:text="${latitude} + ',' + ${longitude}"></td>
+                    <td th:text="${destination.latitude} + ',' + ${destination.longitude}"></td>
                     <td th:text="${travelMode}"></td>
                 </tr>
                 </tbody>
@@ -125,5 +114,4 @@
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 
 </body>
-
 </html>

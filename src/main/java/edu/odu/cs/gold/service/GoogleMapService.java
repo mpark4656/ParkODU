@@ -3,6 +3,7 @@ package edu.odu.cs.gold.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.maps.*;
+import com.hazelcast.com.eclipsesource.json.Json;
 import edu.odu.cs.gold.model.*;
 import edu.odu.cs.gold.repository.BuildingRepository;
 import edu.odu.cs.gold.repository.GarageRepository;
@@ -110,13 +111,13 @@ public class GoogleMapService {
     }
 
 
-    public void buildDirections(String startingLocation,
-                                Location destination,
-                                TravelMode travelMode) {
+    public void buildDirections(Location startingLocation,
+                                Location destination) {
         GeoApiContext context = new GeoApiContext().setApiKey(GOOGLE_MAPS_API_KEY);
 
         DirectionsApiRequest apiRequest = DirectionsApi.newRequest(context);
-        apiRequest.origin(startingLocation);
+        LatLng latLng = new LatLng(startingLocation.getLatitude(),startingLocation.getLongitude());
+        apiRequest.origin(latLng);
         apiRequest.destination(new LatLng(destination.getLatitude(),destination.getLongitude()));
         apiRequest.mode(TravelMode.DRIVING);
 
