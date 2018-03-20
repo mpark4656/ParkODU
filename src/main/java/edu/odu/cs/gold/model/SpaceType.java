@@ -23,6 +23,7 @@ public class SpaceType implements Serializable {
     }
 
     public SpaceType(String name, String description) {
+        this.spaceTypeKey = UUID.randomUUID().toString();
         this.name = name;
         this.description = description;
     }

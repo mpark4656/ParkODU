@@ -50,18 +50,40 @@
 
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <h1 class="text-center" style="text-transform: uppercase;">Garage Settings</h1>
+            <h1 class="text-center" style="text-transform: uppercase;">Create Permit Type</h1>
             <hr/>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <ul>
-                <li th:each="garage : ${garages}">
-                <a th:href="@{/settings/floor/garage} + '/' + ${garage.garageKey}" th:text="${garage.name}"></a>
-                </li>
-            </ul>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+            <form class="form-horizontal" id="create-permit-type-form" role="form" th:action="@{/settings/permit_type/create}" method="post">
+                <div class="form-group">
+                    <label for="permit-type-name" class="col-md-4 control-label">Permit Name</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="permit-type-name" th:name="permitTypeName" required="required"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="permit-type-description" class="col-md-4 control-label"  required="required">Permit Description</label>
+                    <div class="col-md-8">
+                        <textarea
+                                type="text"
+                                wrap="soft"
+                                row="1"
+                                col="40"
+                                class="form-control"
+                                id="permit-type-description"
+                                required="required"
+                                th:name="permitTypeDescription"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-8 col-md-offset-4">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-primary">Reset</button>
+                    <a th:href="@{/settings/permit_type/index}" class="btn btn-primary" title="Back">Back</a>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -71,8 +93,14 @@
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
 
+
+
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<script>
+
+</script>
 
 </body>
 </html>

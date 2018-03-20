@@ -115,10 +115,10 @@ input:checked + .slider:before {
     </div>
 
     <div class="row">
-        <div class="col-xs-6 col-sm-6 col-md-10 col-md-offset-1">
+        <div class="col-sm-10 col-sm-10 col-md-10 col-md-offset-1">
             <p class="text-left">
                 <a th:href="@{/settings/parking_space/create} + '/' + ${garage.garageKey} + '/' + ${floor.floorKey}" class="btn btn-success btn-sm" title="Create Parking Space">Create</a>
-                <a th:href="@{/settings/parking_space/floor} + '/' + ${floor.floorKey}" class="btn btn-success btn-sm" title="Reload this page">Refresh</a>
+                <a th:href="@{/settings/parking_space/floor} + '/' + ${floor.floorKey}" class="btn btn-success btn-sm" title="Reload this page">Reload</a>
             </p>
             <table class="table table-bordered table-centered">
                 <thead>
@@ -134,15 +134,14 @@ input:checked + .slider:before {
                 <tbody>
                     <tr th:each="parkingSpace : ${parkingSpaces}">
                         <td>
-                            <input class="spaceNumberBox" type="number" min="1" th:value="${parkingSpace.number}" th:attr="data-key=${parkingSpace.parkingSpaceKey}"/>
+                            <input class="text-center spaceNumberBox" type="number" min="1" th:value="${parkingSpace.number}" th:attr="data-key=${parkingSpace.parkingSpaceKey}"/>
                         </td>
                         <td>
                             <select class="form-control permitTypeDropdown" th:attr="data-key=${parkingSpace.parkingSpaceKey}">
                                 <option th:each="permitType : ${permitTypes}"
                                         th:text="${permitType.name}"
                                         th:value="${permitType.permitTypeKey}"
-                                        th:selected="(${parkingSpace.permitTypeKey eq permitType.permitTypeKey})"
-                                        >
+                                        th:selected="(${parkingSpace.permitTypeKey eq permitType.permitTypeKey})">
                                 </option>
                             </select>
                         </td>
@@ -166,7 +165,6 @@ input:checked + .slider:before {
                             </label>
                         </td>
                         <td th:text="${parkingSpace.lastUpdated}">
-
                         </td>
                         <td>
                             <button class="btn btn-danger btn-sm delete-parkingSpace-button"
@@ -222,6 +220,19 @@ $(document).ready(function(){
          //console.log(varKey);
          //console.log(varType);
 
+        var parkingSpaceKey = $(this).val();
+
+        if ($(this).prop('checked')) {
+            $.post("/settings/parking_space/set_availability", { parkingSpaceKey: parkingSpaceKey, available: "true" })
+                .done(function(data) {
+                    //alert(data);
+                });
+        }
+        else {
+            $.post("/settings/parking_space/set_availability", { parkingSpaceKey: parkingSpaceKey, available: "false" })
+                .done(function(data) {
+                    //alert(data);
+                });
         }
     });
 });
@@ -270,5 +281,6 @@ $('.delete-parkingSpace-button').on('click', function()
     $('#delete-parkingSpace-id').val($(this).data("id"));
 });
 </script>
+
 </body>
 </html>

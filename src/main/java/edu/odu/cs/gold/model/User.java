@@ -10,6 +10,7 @@ import javax.persistence.Table;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Transient;
+import sun.security.util.Password;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -21,7 +22,7 @@ public class User implements Serializable{
     private String userKey;
     private String email;
     private String userName;
-    private String password;
+    private Password password;
     private String firstName;
     private String lastName;
     private String role;
@@ -34,7 +35,7 @@ public class User implements Serializable{
 
     public User(String email,
                 String userName,
-                String password,
+                Password password,
                 String firstName,
                 String lastName,
                 String role,
@@ -50,10 +51,6 @@ public class User implements Serializable{
         this.confirmationToken = confirmationToken;
     }
 
-    public String getConfirmationToken() {
-        return confirmationToken;
-    }
-
     public void generateUserKey() {
         this.userKey = UUID.randomUUID().toString();
     }
@@ -65,6 +62,10 @@ public class User implements Serializable{
         this.confirmationToken = confirmationToken;
     }
 
+    public String getConfirmationToken() {
+        return confirmationToken;
+    }
+
     public String getUserKey() {
         return userKey;
     }
@@ -73,11 +74,11 @@ public class User implements Serializable{
         this.userKey = userKey;
     }
 
-    public String getPassword() {
+    public Password getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(Password password) {
         this.password = password;
     }
 

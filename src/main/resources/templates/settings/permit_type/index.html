@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid navbar-container">
+        <div class="col-md-3">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- Main Logo -->
+                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="navbar" class="navbar-collapse collapse navbar-center">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/garage}">Garages</a></li>
+                    <li><a th:href="@{/analytics/locate}">Search</a></li>
+                    <!-- Settings Link -->
+                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
+                </ul>
+                <!--
+                <form class="navbar-form navbar-right">
+                    <input type="text" class="form-control" placeholder="Search..."/>
+                </form>
+                -->
+            </div>
+        </div>
+        <div class="col-md-3">
+            <!-- Social Media Links -->
+            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid main-container">
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+            <h1 class="text-center" style="text-transform: uppercase;">Configure Parking Permits</h1>
+            <h4 class="text-center" style="text-transform: uppercase;">Add, remove, and create parking permits here</h4>
+            <hr/>
+        </div>
+    </div>
+
+    <!-- Welcome User -->
+    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
+
+    <div class="row">
+        <div class="col-sm-8 col-md-8 col-sm-6 col-md-offset-1">
+            <p class="text-left">
+                <a th:href="@{/settings/permit_type/create}" class="btn btn-success btn-sm" title="Create Permit Type">Create</a>
+                <a th:href="@{/settings/permit_type/index}" class="btn btn-success btn-sm" title="Reload this page">Reload</a>
+            </p>
+            <table class="table table-bordered table-centered">
+                <thead>
+                <tr>
+                    <th>Parking Permit</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="permitType : ${permitTypes}">
+                    <td>
+                        <input
+                                class="form-control text-center permitName"
+                                type="text" th:value="${permitType.name}"
+                                th:attr="data-key=${permitType.permitTypeKey}" />
+                    </td>
+                    <td>
+                        <textarea
+                                class="form-control permitDescription"
+                                wrap="soft"
+                                cols="40"
+                                rows="1"
+                                th:text="${permitType.description}"
+                                th:attr="data-key=${permitType.permitTypeKey}"></textarea>
+                    </td>
+                    <td>
+                        <button
+                            class="btn btn-danger btn-sm delete-permitType-button"
+                            title="Safely Delete Permit Type"
+                            th:attr="data-id=${permitType.permitTypeKey},data-name=${permitType.name}"
+                            data-toggle="modal"
+                            data-target="#delete-permitType-modal">Safe Delete</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <br/>
+
+    <!-- Footer -->
+    <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
+</div>
+
+<!-- Delete Garage Modal -->
+<div class="modal fade" id="delete-permitType-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" role="form" th:action="@{/settings/permit_type/delete}" method="post">
+                <div class="modal-header modal-header-danger">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delete Parking Permit</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center">Are you sure you want to delete the parking permit '<span id="delete-permitType-name-text"></span>'?</p>
+                    <p class="text-center">If any existing parking spaces are using this permit type, no action will be taken.</p>
+                    <p class="text-center"><b>Warning:</b> This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="delete-permitType-id" name="permitTypeKey" required="required"/>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<script>
+$(document).ready(function(){
+    $(".permitName").change(function(){
+
+    var permitTypeKey = $(this).data("key")
+    var permitName = $(this).val();
+
+    $.post("/settings/permit_type/set_permit_name", { permitTypeKey : permitTypeKey, permitName: permitName })
+        .done(function(data) {
+        });
+    });
+});
+
+$(document).ready(function(){
+    $(".permitDescription").change(function(){
+
+    var permitTypeKey = $(this).data("key")
+    var permitDescription = $(this).val();
+
+    $.post("/settings/permit_type/set_permit_description", { permitTypeKey : permitTypeKey, permitDescription: permitDescription })
+        .done(function(data) {
+        });
+    });
+});
+</script>
+
+<script th:inline="javascript">
+$('.delete-permitType-button').on('click', function()
+{
+    $('#delete-permitType-name-text').text($(this).data("name"));
+    $('#delete-permitType-id').val($(this).data("id"));
+});
+</script>
+</body>
+</html>

@@ -8,8 +8,10 @@ import javax.validation.Valid;
 
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import edu.odu.cs.gold.model.User;
+import edu.odu.cs.gold.repository.UserRepository;
+import edu.odu.cs.gold.service.EmailService;
+import edu.odu.cs.gold.service.UserService;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +38,7 @@ public class RegisterController {
         this.emailService = emailService;
         this.userRepository = userRepository;
     }
+
     // Return registration form template
     @GetMapping("/user/register")
     public String showRegistrationPage(Model model, User user){
