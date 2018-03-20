@@ -143,7 +143,7 @@ public class GarageSettingsController {
                     Predicates.equal("name", tempGarage.getName())
             );
             int existingCount = garageRepository.countByPredicate(predicate);
-            if (existingCount == 1) {
+            if (existingCount <= 1) {
                 Garage existingGarage = garageRepository.findByKey(garage.getGarageKey());
                 existingGarage.setLatitude(garage.getLatitude());
                 existingGarage.setLongitude(garage.getLongitude());

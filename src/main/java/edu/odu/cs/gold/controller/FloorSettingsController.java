@@ -150,6 +150,81 @@ public class FloorSettingsController {
         return "redirect:/settings/floor/garage/" + floor.getGarageKey();
     }
 
+    @GetMapping("/edit/{floorKey}")
+    public String edit(@PathVariable("floorKey") String floorKey,
+                       @RequestParam(value = "successMessage", required = false) String successMessage,
+                       @RequestParam(value = "infoMessage", required = false) String infoMessage,
+                       @RequestParam(value = "warningMessage", required = false) String warningMessage,
+                       @RequestParam(value = "dangerMessage", required = false) String dangerMessage,
+                       Model model) {
+
+        Floor floor = floorRepository.findByKey(floorKey);
+        model.addAttribute("floor", floor);
+
+        // Alerts
+        if (successMessage != null) { model.addAttribute("successMessage", successMessage); }
+        if (infoMessage != null) { model.addAttribute("infoMessage", infoMessage); }
+        if (warningMessage != null) { model.addAttribute("warningMessage", warningMessage); }
+        if (dangerMessage != null) { model.addAttribute("dangerMessage", dangerMessage); }
+
+        return "settings/floor/edit";
+    }
+
+    @PostMapping("/edit")
+    public String edit(Floor floor,
+                       Model model,
+                       RedirectAttributes redirectAttributes) {
+        boolean isSuccessful = false;
+        boolean isDuplicate = false;
+
+        try {
+            Predicate predicate = Predicates.and(
+                    Predicates.equal("floorKey", floor.getFloorKey()),
+                    Predicates.equal("garageKey", floor.getGarageKey()),
+                    Predicates.equal("totalSpaces", floor.getTotalSpaces()),
+                    Predicates.equal("number", floor.getNumber())
+            );
+            int existingCount = floorRepository.countByPredicate(predicate);
+            if (existingCount <= 1) {
+                Floor existingFloor = floorRepository.findByKey(floor.getFloorKey());
+                existingFloor.setLastUpdated(new Date());
+                existingFloor.setDescription(floor.getDescription());
+                existingFloor.setNumber(floor.getNumber());
+                floorRepository.save(existingFloor);
+                isSuccessful = true;
+            }
+            else {
+                isDuplicate = true;
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        // Alerts
+        if (isSuccessful) {
+            redirectAttributes.addAttribute(
+                    "successMessage", "The floor " +
+                            floor.getNumber() +
+                            " was successfully updated.");
+        }
+        else if (isDuplicate) {
+            model.addAttribute(
+                    "dangerMessage",
+                    "A floor with the number " +
+                            floor.getNumber() +
+                            " already exists.");
+            model.addAttribute("floor", floor);
+            return "settings/floor/edit";
+        }
+        else {
+            redirectAttributes.addAttribute(
+                    "dangerMessage",
+                    "An error occurred when attempting to update a floor.");
+        }
+
+        return "redirect:/settings/floor/garage/" + floor.getGarageKey();
+    }
+
     /**
      * This method returns "settings/floor/garage" with a Garage object and
      * a collection of Floor objects found in the garage.
@@ -213,24 +288,21 @@ public class FloorSettingsController {
             return "settings/floor/index";
         }
         else {
-            Predicate predicate = Predicates.and(
+            Predicate spacePredicate = Predicates.and(
                     Predicates.equal("garageKey", existingFloor.getGarageKey()),
                     Predicates.equal("floor", existingFloor.getNumber())
             );
             String garageKey = existingFloor.getGarageKey();
 
-            parkingSpaceRepository.deleteByPredicate(predicate);
+            parkingSpaceRepository.deleteByPredicate(spacePredicate);
             floorRepository.delete(floorKey);
-
             garageService.refresh(garageKey);
-            Garage garage = garageRepository.findByKey(garageKey);
-            model.addAttribute("garage", garage);
 
             Predicate floorPredicate = Predicates.equal("garageKey", garageKey);
-            List<Floor> floors = new ArrayList<>(floorRepository.findByPredicate(floorPredicate));
-            model.addAttribute("floors", floors);
-
+            List<Floor> floors = floorRepository.findByPredicate(floorPredicate);
             floors.sort(Comparator.comparing(Floor::getNumber));
+            Garage garage = garageRepository.findByKey(garageKey);
+            model.addAttribute("floors", floors);
             model.addAttribute("successMessage", "The floor key was deleted.");
             return "settings/floor/garage";
         }
