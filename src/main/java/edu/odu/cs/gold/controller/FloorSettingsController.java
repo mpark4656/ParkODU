@@ -7,6 +7,7 @@ import edu.odu.cs.gold.model.Garage;
 import edu.odu.cs.gold.model.ParkingSpace;
 import edu.odu.cs.gold.model.SpaceType;
 import edu.odu.cs.gold.repository.*;
+import edu.odu.cs.gold.service.GarageService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,17 +34,20 @@ public class FloorSettingsController {
     private ParkingSpaceRepository parkingSpaceRepository;
     private FloorStatisticRepository floorStatisticRepository;
     private SpaceTypeRepository spaceTypeRepository;
+    private GarageService garageService;
 
     public FloorSettingsController(GarageRepository garageRepository,
                            FloorRepository floorRepository,
                            ParkingSpaceRepository parkingSpaceRepository,
                            FloorStatisticRepository floorStatisticRepository,
-                           SpaceTypeRepository spaceTypeRepository) {
+                           SpaceTypeRepository spaceTypeRepository,
+                           GarageService garageService) {
         this.garageRepository = garageRepository;
         this.floorRepository = floorRepository;
         this.parkingSpaceRepository = parkingSpaceRepository;
         this.floorStatisticRepository = floorStatisticRepository;
         this.spaceTypeRepository = spaceTypeRepository;
+        this.garageService = garageService;
     }
 
     /**
@@ -92,9 +96,11 @@ public class FloorSettingsController {
         boolean isSuccessful = false;
         boolean isDuplicate = false;
 
+        System.err.println("The garage key is " + floor.getGarageKey());
 
         if(floor.getGarageKey() == null || floor.getGarageKey().isEmpty()) {
             model.addAttribute("dangerMessage", "The garage key cannot be null or empty.");
+            System.err.println("The garage key is null or empty");
             return "settings/floor/index";
         }
 
@@ -119,12 +125,15 @@ public class FloorSettingsController {
                 parkingSpaceRepository.save(parkingSpace);
             }
 
+            garageService.refresh(floor.getGarageKey());
             isSuccessful = true;
         } else {
             isDuplicate = true;
         }
 
         if(isSuccessful) {
+            System.err.println("The floor was created successfully");
+            System.err.println(floor.toString());
             Garage garage = garageRepository.findByKey(floor.getGarageKey());
             redirectAttributes.addAttribute(
                     "successMessage",
@@ -132,6 +141,7 @@ public class FloorSettingsController {
         }
 
         if(isDuplicate) {
+            System.err.println("The floor was NOT created successfully");
             Garage garage = garageRepository.findByKey(floor.getGarageKey());
             redirectAttributes.addAttribute(
                     "dangerMessage",
