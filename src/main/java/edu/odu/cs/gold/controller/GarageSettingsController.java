@@ -29,21 +29,9 @@ import java.util.List;
 public class GarageSettingsController {
 
     private GarageRepository garageRepository;
-    private FloorRepository floorRepository;
-    private ParkingSpaceRepository parkingSpaceRepository;
-    private FloorStatisticRepository floorStatisticRepository;
-    private GarageService garageService;
 
-    public GarageSettingsController(GarageRepository garageRepository,
-                            FloorRepository floorRepository,
-                            ParkingSpaceRepository parkingSpaceRepository,
-                            FloorStatisticRepository floorStatisticRepository,
-                            GarageService garageService) {
+    public GarageSettingsController(GarageRepository garageRepository) {
         this.garageRepository = garageRepository;
-        this.floorRepository = floorRepository;
-        this.parkingSpaceRepository = parkingSpaceRepository;
-        this.floorStatisticRepository = floorStatisticRepository;
-        this.garageService = garageService;
     }
 
     /**
@@ -138,11 +126,11 @@ public class GarageSettingsController {
         boolean isDuplicate = false;
         try {
             Predicate predicate = Predicates.and(
-                    Predicates.equal("garageKey", garage.getGarageKey()),
+                    Predicates.notEqual("garageKey", garage.getGarageKey()),
                     Predicates.equal("name", garage.getName())
             );
-            int existingCount = garageRepository.countByPredicate(predicate);
-            if (existingCount == 1) {
+            int duplicateCount = garageRepository.countByPredicate(predicate);
+            if (duplicateCount == 0) {
                 Garage existingGarage = garageRepository.findByKey(garage.getGarageKey());
                 existingGarage.setLatitude(garage.getLatitude());
                 existingGarage.setLongitude(garage.getLongitude());
@@ -187,8 +175,10 @@ public class GarageSettingsController {
         Garage garage = null;
         try {
             garage = garageRepository.findByKey(garageKey);
-            garageRepository.delete(garageKey);
-            isSuccessful = true;
+            if (garage != null) {
+                garageRepository.delete(garageKey);
+                isSuccessful = true;
+            }
         }
         catch (Exception e) {
             e.printStackTrace();
