@@ -60,8 +60,8 @@
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
             <form class="form-horizontal" id="create-floor-form" role="form" th:action="@{/settings/floor/create}" method="post" th:object="${floor}">
-                <input type="text" id="floor-id" th:value="${floor.floorKey}" th:field="${floor.floorKey}"/>
-                <input type="text" id="garage-id" th:value="${garage.garageKey}" th:field="${floor.garageKey}"/>
+                <input type="hidden" id="floor-id" th:value="${floor.floorKey}" th:field="${floor.floorKey}"/>
+                <input type="hidden" id="garage-id" th:value="${garage.garageKey}" th:field="${floor.garageKey}"/>
                 <div class="form-group">
                     <label for="number" class="col-md-4 control-label">Number</label>
                     <div class="col-md-8">
@@ -83,7 +83,7 @@
                 <div class="col-md-8 col-md-offset-4">
                     <button type="submit" class="btn btn-primary">Submit</button>
                     <button type="reset" class="btn btn-primary">Reset</button>
-                    <a th:href="@{/settings/floor/garage}" class="btn btn-primary" title="Back">Back</a>
+                    <a th:href="@{'/settings/floor/garage/' + ${floor.garageKey}}" class="btn btn-primary" title="Back">Back</a>
                 </div>
             </form>
         </div>

@@ -136,6 +136,7 @@ public class GarageSettingsController {
                        RedirectAttributes redirectAttributes) {
         boolean isSuccessful = false;
         boolean isDuplicate = false;
+
         try {
             Garage tempGarage = garageRepository.findByKey(garage.getGarageKey());
             Predicate predicate = Predicates.and(
