@@ -50,36 +50,57 @@
 
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <h1 class="text-center" style="text-transform: uppercase;">Account Management</h1>
+            <h1 class="text-center" style="text-transform: uppercase;">Edit User</h1>
             <hr/>
-            <p class="text-left">
-                <a th:href="@{/settings/accounts/create}" class="btn btn-success btn-sm" title="Create User">Create</a>
-            </p>
-            <table class="table table-bordered table-centered">
-                <thead>
-                <tr>
-                    <th width="20%">First Name</th>
-                    <th width="20%">Last Name</th>
-                    <th width="20%">Email</th>
-                    <th width="10%">Role</th>
-                    <th width="10%">Enabled</th>
-                    <th width="20%">Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="users : ${user}">
-                    <td th:text="${users.firstName}"></td>
-                    <td th:text="${users.lastName}"></td>
-                    <td th:text="${users.email}"></td>
-                    <td th:text="${users.role}"></td>
-                    <td th:text="${users.enabled}"></td>
-                    <td>
-                        <a th:href="@{/settings/accounts/edit} + '/' + ${users.id}" class="btn btn-primary btn-sm">Edit</a>
-                        <button class="btn btn-danger btn-sm delete-user-button" title="Delete User" th:attr="data-id=${users.id}" data-toggle="modal" data-target="#delete-user-modal">Delete</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+            <form class="form-horizontal" id="edit-user-form" role="form" th:action="@{/settings/accounts/edit}" method="post" th:object="${user}">
+                <input type="hidden" id="id" th:value="${user.userKey}" th:field="${user.userKey}"/>
+                <div class="form-group">
+                    <label for="userFirstName" class="col-md-4 control-label">First Name</label>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control col-md-4" id="userFirstName" required="required" th:field="${user.firstName}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="userlastName" class="col-md-4 control-label">Last Name</label>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control col-md-4" id="userLastName" th:field="${user.lastName}"></input>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="userEmail" class="col-md-4 control-label">Email</label>
+                    <div class="col-md-4">
+                        <input type="email" class="form-control" id="userEmail" th:field="${user.email}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="userRole" class="col-md-4 control-label">Role</label>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control " id="userRole" th:field="${user.role}"></input>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="userEnabled" class="col-md-4 control-label">Enabled</label>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" id="userEnabled" th:field="${user.enabled}"></input>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="userPassword" class="col-md-4 control-label">Password</label>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" id="userPassword"  th:field="${user.password}"/>
+                    </div>
+                </div>
+                <div class="col-md-8 col-md-offset-4">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-primary">Reset</button>
+                    <a th:href="@{/settings/accounts/index}" class="btn btn-primary" title="Back">Back</a>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -89,7 +110,7 @@
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
 
-<!-- Delete User Modal -->
+<!-- Delete Garage Modal -->
 <div class="modal fade" id="delete-user-modal" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -99,7 +120,7 @@
                     <h4 class="modal-title">Delete User</h4>
                 </div>
                 <div class="modal-body">
-                    <p class="text-center">Are you sure you want to delete this user?</p>
+                    <p class="text-center">Are you sure you want to delete the User?</p>
                     <p class="text-center"><b>Warning:</b> This action cannot be undone.</p>
                 </div>
                 <div class="modal-footer">
@@ -111,7 +132,7 @@
         </div>
     </div>
 </div>
-<!-- End Delete User Modal -->
+<!-- End Delete Garage Modal -->
 
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
