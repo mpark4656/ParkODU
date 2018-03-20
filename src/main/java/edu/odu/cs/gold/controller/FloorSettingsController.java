@@ -177,15 +177,30 @@ public class FloorSettingsController {
         boolean isSuccessful = false;
         boolean isDuplicate = false;
 
+        Floor oldFloor = floorRepository.findByKey(floor.getFloorKey());
+
+
         try {
+            if (floor.getNumber().equals(oldFloor.getNumber())) {
+                isSuccessful = true;
+            }
+            else {
+                Predicate predicate = Predicates.equal("number", floor.getNumber());
+                int count = floorRepository.countByPredicate(predicate);
+
+                if(count > 0) {
+                    isDuplicate = true;
+                }
+            }
+
             Predicate predicate = Predicates.and(
                     Predicates.equal("floorKey", floor.getFloorKey()),
                     Predicates.equal("garageKey", floor.getGarageKey()),
-                    Predicates.equal("totalSpaces", floor.getTotalSpaces()),
                     Predicates.equal("number", floor.getNumber())
             );
             int existingCount = floorRepository.countByPredicate(predicate);
-            if (existingCount <= 1) {
+
+            if (existingCount == 1 ) {
                 Floor existingFloor = floorRepository.findByKey(floor.getFloorKey());
                 existingFloor.setLastUpdated(new Date());
                 existingFloor.setDescription(floor.getDescription());
