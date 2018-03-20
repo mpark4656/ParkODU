@@ -6,7 +6,6 @@
     <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
 </head>
 <body>
-
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid navbar-container">
         <div class="col-md-3">
@@ -37,7 +36,6 @@
                 -->
             </div>
         </div>
-
         <div class="col-md-1">
             <div id="navbar" class="navbar-collapse collapse navbar-center">
                 <ul class="nav navbar-nav">
@@ -46,25 +44,20 @@
                 </ul>
             </div>
         </div>
-
         <div class="col-md-1">
             <div id="navbar" class="navbar-collapse collapse navbar-center">
                 <ul class="nav navbar-nav">
                     <!-- Create User -->
                     <!--/*/ <th:block th:include="fragments/fragment :: new-user" /> /*/-->
-                    <!-- Create User (Admin) -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: new-user-user" /> /*/-->
                 </ul>
             </div>
         </div>
-
         <div class="col-md-1">
             <!-- Social Media Links -->
             <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
         </div>
     </div>
 </nav>
-
 <!--
 <div class="text-center submenu">
     <th:block th:each="itemCategory : ${itemCategories}">
@@ -73,24 +66,19 @@
     </th:block>
 </div>
 -->
-
 <div class="container-fluid main-container">
     <!-- Welcome User -->
     <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
-
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
             <h1 class="text-center" style="text-transform: uppercase;">Welcome to ParkODU!</h1>
         </div>
     </div>
-
     <!-- Footer -->
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
-
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
-
 </body>
 
 </html>

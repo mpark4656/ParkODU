@@ -61,8 +61,14 @@
         <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
             <h1 class="text-center" style="text-transform: uppercase;">Login</h1>
             <div class="row text-center" >
+                <!--
                 <p th:if="${confirmationSuccess}" class="alert alert-success align-center col-md-6-offset-2" role="alert" th:text="${confirmationSuccess}"></p>
                 <p th:if="${confirmationError}" class="alert alert-danger align-center col-md-6-offset-2" role="alert" th:text="${confirmationError}"></p>
+                -->
+
+                <!-- Alerts -->
+                <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
+
             </div>
 
                 <form th:action="@{/login}" method="post">

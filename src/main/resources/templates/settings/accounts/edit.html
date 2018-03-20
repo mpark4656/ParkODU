@@ -55,6 +55,9 @@
         </div>
     </div>
 
+    <!-- Alerts -->
+    <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
+
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
             <form class="form-horizontal" id="edit-user-form" role="form" th:action="@{/settings/accounts/edit}" method="post" th:object="${user}">
@@ -77,22 +80,30 @@
                         <input type="email" class="form-control" id="userEmail" th:field="${user.email}"/>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="userRole" class="col-md-4 control-label">Role</label>
+                <div class="form-group" th:attr="data-key=${user.role}">
+                    <label class="col-md-4 control-label">Role</label>
                     <div class="col-md-4">
-                        <input type="text" class="form-control " id="userRole" th:field="${user.role}"></input>
+                        <select type="text" class="form-control" th:field="${user.role}">
+                            <option th:each="roleType : ${roleTypes}"
+                                    th:text="${roleType.name}"
+                                    th:value="${roleType.name}"
+                                    th:selected="(${user.role eq roleType.name})">
+                            </option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="userEnabled" class="col-md-4 control-label">Enabled</label>
+                    <label class="col-md-4 control-label">Enabled</label>
                     <div class="col-md-4">
-                        <input type="text" class="form-control" id="userEnabled" th:field="${user.enabled}"></input>
+                        <select type="text" class="form-control" th:field="${user.enabled}">
+                            <option value="true">true</option><option value="false">false</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="userPassword" class="col-md-4 control-label">Password</label>
+                    <label class="col-md-4 control-label">Password</label>
                     <div class="col-md-4">
-                        <input type="text" class="form-control" id="userPassword"  th:field="${user.password}"/>
+                        <button class="btn btn-danger btn-sm reset-password-button" title="Reset Password" th:attr="data-id=${user.userKey}" data-toggle="modal" data-target="#user-password-modal">Reset Password</button>
                     </div>
                 </div>
                 <div class="col-md-8 col-md-offset-4">
@@ -110,37 +121,36 @@
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
 
-<!-- Delete Garage Modal -->
-<div class="modal fade" id="delete-user-modal" role="dialog">
+<!-- Reset User Password Modal -->
+<div class="modal fade" id="user-password-modal">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" role="form" th:action="@{/settings/accounts/delete}" method="post">
+            <form class="form-horizontal" role="form" th:action="@{#}" method="post">
                 <div class="modal-header modal-header-danger">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Delete User</h4>
+                    <h4 class="modal-title">Change Password</h4>
                 </div>
                 <div class="modal-body">
-                    <p class="text-center">Are you sure you want to delete the User?</p>
-                    <p class="text-center"><b>Warning:</b> This action cannot be undone.</p>
+                    <input class="password" th:field="${user.password}"/>
                 </div>
                 <div class="modal-footer">
-                    <input type="hidden" id="delete-user-id" name="userKey" required="required"/>
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <input type="hidden" id="user-password-reset" name="userKey" required="required"/>
+                    <button type="submit" class="btn btn-danger">Change Password</button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-<!-- End Delete Garage Modal -->
+<!-- End Reset User Password Modal -->
 
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 
 <script th:inline="javascript">
-$('.delete-user-button').on('click', function()
+$('.reset-password-button').on('click', function()
 {
-    $('#delete-user-id').val($(this).data("id"));
+    $('#user-password-reset').val($(this).data("id"));
 });
 </script>
 

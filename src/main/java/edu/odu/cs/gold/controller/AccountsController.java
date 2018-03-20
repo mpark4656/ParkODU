@@ -2,12 +2,11 @@ package edu.odu.cs.gold.controller;
 
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
-import edu.odu.cs.gold.model.Floor;
-import edu.odu.cs.gold.model.Garage;
-import edu.odu.cs.gold.repository.GarageRepository;
+import edu.odu.cs.gold.repository.RoleTypeRepository;
 import edu.odu.cs.gold.repository.UserRepository;
 import edu.odu.cs.gold.service.UserService;
 import edu.odu.cs.gold.model.User;
+import edu.odu.cs.gold.model.RoleType;
 import edu.odu.cs.gold.service.EmailService;
 
 import org.springframework.mail.SimpleMailMessage;
@@ -31,13 +30,16 @@ public class AccountsController {
     private UserRepository userRepository;
     private UserService userService;
     private EmailService emailService;
+    private RoleTypeRepository roleTypeRepository;
 
     public AccountsController(UserRepository userRepository,
                               UserService userService,
-                              EmailService emailService) {
+                              EmailService emailService,
+                              RoleTypeRepository roleTypeRepository) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.emailService = emailService;
+        this.roleTypeRepository = roleTypeRepository;
     }
 
     @GetMapping({"", "/", "/index"})
@@ -70,7 +72,9 @@ public class AccountsController {
     @GetMapping("/create")
     public String create(Model model) {
         User user = new User();
+        List<RoleType> roleTypes = new ArrayList<> (roleTypeRepository.findAll());
         model.addAttribute("user", user);
+        model.addAttribute("roleTypes", roleTypes);
         return "settings/accounts/create";
     }
 
@@ -155,7 +159,9 @@ public class AccountsController {
     public String edit(@PathVariable("userKey") String userKey,
                        Model model) {
         User user = userRepository.findByKey(userKey);
+        List<RoleType> roleTypes = new ArrayList<> (roleTypeRepository.findAll());
         model.addAttribute("user", user);
+        model.addAttribute("roleTypes", roleTypes);
         return "settings/accounts/edit";
     }
 

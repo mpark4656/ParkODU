@@ -109,14 +109,6 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         System.out.println("# of Users loaded from Mongo: " + userRepository.findAll().size());
         System.out.println("# of Roles loaded from Mongo: " + roleTypeRepository.findAll().size());
 
-
-        Collection<User> users = userRepository.findAll();
-        for (User user : users) {
-            System.out.println(user);
-        }
-
-
-
         if (false) {
                     /*
             Predicate predicate = Predicates.and(

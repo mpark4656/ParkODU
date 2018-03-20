@@ -24,6 +24,7 @@ public class AnalyticsController {
     private GoogleMapService googleMapService;
     private PermitTypeRepository permitTypeRepository;
     private SpaceTypeRepository spaceTypeRepository;
+    private RecommendationRepository recommendationRepository;
 
     public AnalyticsController(GarageRepository garageRepository,
                                BuildingRepository buildingRepository,
@@ -31,7 +32,8 @@ public class AnalyticsController {
                                TravelDistanceDurationRepository travelDistanceDurationRepository,
                                GoogleMapService googleMapService,
                                PermitTypeRepository permitTypeRepository,
-                               SpaceTypeRepository spaceTypeRepository) {
+                               SpaceTypeRepository spaceTypeRepository,
+                               RecommendationRepository recommendationRepository) {
         this.garageRepository = garageRepository;
         this.buildingRepository = buildingRepository;
         this.parkingSpaceRepository = parkingSpaceRepository;
@@ -39,6 +41,7 @@ public class AnalyticsController {
         this.googleMapService = googleMapService;
         this.permitTypeRepository = permitTypeRepository;
         this.spaceTypeRepository = spaceTypeRepository;
+        this.recommendationRepository = recommendationRepository;
     }
 
     @GetMapping({"","/","/index"})
@@ -114,6 +117,7 @@ public class AnalyticsController {
             }
             if (minSpaces <= availabilityCount) {
                 Recommendation recommendation = new Recommendation();
+                recommendation.generateRecommendationKey();
                 recommendation.setStartingAddress(startingAddress);
                 recommendation.setGarage(garage);
                 recommendation.setDestinationBuilding(destinationBuilding);
@@ -134,9 +138,9 @@ public class AnalyticsController {
                 recommendation.setTotalDurationValue(recommendation.getStartingAddressToGarageDurationValue() + recommendation.getGarageToDestinationBuildingDurationValue());
 
                 recommendations.add(recommendation);
+                //recommendationRepository.save(recommendation);
             }
         }
-
 
         // Default sort by closest Garage to Destination Building
         recommendations.sort(Comparator.comparing(Recommendation::getGarageToDestinationBuildingDistanceValue));
@@ -148,7 +152,6 @@ public class AnalyticsController {
             Set<String> permitTypeKeySet = new HashSet<String> (permitTypeKeys);
             permitTypes = new ArrayList<> (permitTypeRepository.findByKeys(permitTypeKeySet));
         }
-
 
         model.addAttribute("startingAddress", startingAddress);
         model.addAttribute("permitTypes", permitTypes);
