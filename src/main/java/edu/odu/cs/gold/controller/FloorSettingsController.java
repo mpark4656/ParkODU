@@ -84,8 +84,6 @@ public class FloorSettingsController {
     public String create(@PathVariable("garageKey") String garageKey, Model model) {
         Garage garage = garageRepository.findByKey(garageKey);
         Floor floor = new Floor();
-        floor.setGarageKey(garage.getGarageKey());
-        System.err.println("The garage key is " + garage.getGarageKey());
         model.addAttribute("floor", floor);
         model.addAttribute("garage", garage);
         return "settings/floor/create";
@@ -99,17 +97,14 @@ public class FloorSettingsController {
         boolean isDuplicate = false;
 
         System.err.println(floor.toString());
-        System.err.println("The garage key is " + floor.getGarageKey());
 
         if(floor.getGarageKey() == null || floor.getGarageKey().isEmpty()) {
-            System.err.println("The garage key is null or empty");
             List<Garage> garages = new ArrayList<>(garageRepository.findAll());
             garages.sort(Comparator.comparing(Garage::getName));
             model.addAttribute("dangerMessage", "The garage key cannot be null or empty.");
             model.addAttribute("garages", garages);
             return "settings/floor/index";
         }
-
 
         Predicate predicate = Predicates.and(
                 Predicates.equal("garageKey", floor.getGarageKey()),
@@ -138,8 +133,6 @@ public class FloorSettingsController {
         }
 
         if(isSuccessful) {
-            System.err.println("The floor was created successfully");
-            System.err.println(floor.toString());
             Garage garage = garageRepository.findByKey(floor.getGarageKey());
             redirectAttributes.addAttribute(
                     "successMessage",
@@ -147,7 +140,6 @@ public class FloorSettingsController {
         }
 
         if(isDuplicate) {
-            System.err.println("The floor was NOT created successfully");
             Garage garage = garageRepository.findByKey(floor.getGarageKey());
             redirectAttributes.addAttribute(
                     "dangerMessage",
@@ -198,4 +190,13 @@ public class FloorSettingsController {
         return "settings/floor/garage";
     }
 
+    /*
+    @PostMapping("/delete")
+    public String delete(@RequestParam("floorKey") String floorKey) {
+
+        if(floorKey == null || floorKey.isEmpty()) {
+
+        }
+    }
+    */
 }
