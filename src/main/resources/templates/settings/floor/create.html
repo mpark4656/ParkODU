@@ -61,23 +61,23 @@
         <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
             <form class="form-horizontal" id="create-floor-form" role="form" th:action="@{/settings/floor/create}" method="post" th:object="${floor}">
                 <input type="hidden" id="garage-id" th:value="${garage.garageKey}" th:field="${floor.garageKey}"/>
-                <input type="hidden" id="floor-id" th:value="${floor.floorKey}" th:field="${floor.floorKey"/>
+                <input type="hidden" id="floor-id" th:value="${floor.floorKey}" th:field="${floor.floorKey}"/>
                 <div class="form-group">
                     <label for="number" class="col-md-4 control-label">Number</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" id="number" required="required" th:field="${floor.number}"/>
+                        <input type="text" class="form-control" id="number" placeholder="The number or name of the floor." required="required" th:field="${floor.number}"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="description" class="col-md-4 control-label">Description</label>
                     <div class="col-md-8">
-                        <textarea rows="4" cols="50" class="form-control" id="description" required="required" th:field="${floor.description}"></textarea>
+                        <textarea rows="4" cols="50" class="form-control" id="description" placeholder="A description of the properties of this floor." required="required" th:field="${floor.description}"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="totalSpaces" class="col-md-4 control-label">Total Spaces</label>
                     <div class="col-md-8">
-                        <input type="number" class="form-control" id="totalSpaces" min="0" value="0" th:field="${floor.totalSpaces}"/>
+                        <input type="number" class="form-control" id="totalSpaces" placeholder="The total spaces on this floor." min="0" value="0" th:field="${floor.totalSpaces}"/>
                     </div>
                 </div>
                 <div class="col-md-8 col-md-offset-4">

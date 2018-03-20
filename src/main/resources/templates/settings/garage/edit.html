@@ -119,13 +119,15 @@
                 <div class="form-group">
                     <label for="state" class="col-md-4 control-label">State</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" id="state" th:field="${garage.state}" pattern="^[A-Z]{2}$" title="Two uppercase letters abbreviating the State name"/>
+                        <input type="text" class="form-control" id="state" th:field="${garage.state}" pattern="^[A-Z]{2}$"
+                               placeholder="Two uppercase letters abbreviating the State name" title="Two uppercase letters abbreviating the State name"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="zipCode" class="col-md-4 control-label">Zip Code</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" id="zipCode" th:field="${garage.zipCode}" pattern="^\d{5}$" title="Five digits"/>
+                        <input type="text" class="form-control" id="zipCode" th:field="${garage.zipCode}" pattern="^\d{5}$"
+                               placeholder="Five digits" title="Five digits"/>
                     </div>
                 </div>
                 <div class="col-md-8 col-md-offset-4">
