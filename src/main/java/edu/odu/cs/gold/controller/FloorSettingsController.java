@@ -84,6 +84,7 @@ public class FloorSettingsController {
     public String create(@PathVariable("garageKey") String garageKey, Model model) {
         Garage garage = garageRepository.findByKey(garageKey);
         Floor floor = new Floor();
+        floor.setGarageKey(garage.getGarageKey());
         model.addAttribute("floor", floor);
         model.addAttribute("garage", garage);
         return "settings/floor/create";
@@ -190,13 +191,42 @@ public class FloorSettingsController {
         return "settings/floor/garage";
     }
 
-    /*
     @PostMapping("/delete")
-    public String delete(@RequestParam("floorKey") String floorKey) {
+    public String delete(@RequestParam("floorKey") String floorKey,
+                         Model model) {
 
         if(floorKey == null || floorKey.isEmpty()) {
+            List<Garage> garages = new ArrayList<>(garageRepository.findAll());
+            garages.sort(Comparator.comparing(Garage::getName));
+            model.addAttribute("dangerMessage", "The floor key cannot be null or empty.");
+            model.addAttribute("garages", garages);
+            return "settings/floor/index";
+        }
 
+        Floor existingFloor = floorRepository.findByKey(floorKey);
+
+        if(existingFloor == null) {
+            List<Garage> garages = new ArrayList<>(garageRepository.findAll());
+            garages.sort(Comparator.comparing(Garage::getName));
+            model.addAttribute("dangerMessage", "The floor key was not found.");
+            model.addAttribute("garages", garages);
+            return "settings/floor/index";
+        }
+        else {
+            Predicate predicate = Predicates.and(
+                    Predicates.equal("garageKey", existingFloor.getGarageKey()),
+                    Predicates.equal("floor", existingFloor.getNumber())
+            );
+            String garageKey = existingFloor.getGarageKey();
+
+            parkingSpaceRepository.deleteByPredicate(predicate);
+            floorRepository.delete(floorKey);
+
+            garageService.refresh(garageKey);
+            Garage garage = garageRepository.findByKey(garageKey);
+            model.addAttribute("garage", garage);
+            model.addAttribute("successMessage", "The floor key was deleted.");
+            return "settings/floor/garage";
         }
     }
-    */
 }
