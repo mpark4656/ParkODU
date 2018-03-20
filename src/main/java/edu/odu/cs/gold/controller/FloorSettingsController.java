@@ -188,7 +188,11 @@ public class FloorSettingsController {
                 floorRepository.save(existingFloor);
                 isSuccessful = true;
             } else {
-                Predicate predicate = Predicates.equal("number", floor.getNumber());
+                Predicate predicate = Predicates.and(
+                        Predicates.equal("number", floor.getNumber()),
+                        Predicates.equal("garageKey", floor.getGarageKey())
+                );
+
                 int count = floorRepository.countByPredicate(predicate);
 
                 if(count > 0) {
