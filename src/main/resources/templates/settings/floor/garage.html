@@ -78,7 +78,7 @@
                     <td th:text="${floor.lastUpdated}"></td>
                     <td>
                         <a th:href="@{/settings/floor/edit} + '/' + ${floor.floorKey}" class="btn btn-primary btn-sm">Edit</a>
-                        <button class="btn btn-danger btn-sm delete-garage-button"
+                        <button class="btn btn-danger btn-sm delete-floor-button"
                                 title="Delete Floor"
                                 th:attr="data-id=${floor.floorKey},data-name=${floor.number}"
                                 data-toggle="modal"

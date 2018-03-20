@@ -77,13 +77,13 @@
                 <div class="form-group">
                     <label for="totalSpaces" class="col-md-4 control-label">Total Spaces</label>
                     <div class="col-md-8">
-                        <input type="number" class="form-control" id="totalSpaces" placeholder="The total spaces on this floor." min="0" value="0" th:field="${floor.totalSpaces}"/>
+                        <input type="number" class="form-control" id="totalSpaces"  min="0" value="0" th:field="${floor.totalSpaces}" readonly="readonly"/>
                     </div>
                 </div>
                 <div class="col-md-8 col-md-offset-4">
                     <button type="submit" class="btn btn-primary">Submit</button>
                     <button type="reset" class="btn btn-primary">Reset</button>
-                    <a th:href="@{/settings/floor/index}" class="btn btn-primary" title="Back">Back</a>
+                    <a th:href="@{/settings/floor/garage}" class="btn btn-primary" title="Back">Back</a>
                 </div>
             </form>
         </div>

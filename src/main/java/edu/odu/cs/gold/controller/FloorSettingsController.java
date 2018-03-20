@@ -225,6 +225,12 @@ public class FloorSettingsController {
             garageService.refresh(garageKey);
             Garage garage = garageRepository.findByKey(garageKey);
             model.addAttribute("garage", garage);
+
+            Predicate floorPredicate = Predicates.equal("garageKey", garageKey);
+            List<Floor> floors = new ArrayList<>(floorRepository.findByPredicate(floorPredicate));
+            model.addAttribute("floors", floors);
+
+            floors.sort(Comparator.comparing(Floor::getNumber));
             model.addAttribute("successMessage", "The floor key was deleted.");
             return "settings/floor/garage";
         }

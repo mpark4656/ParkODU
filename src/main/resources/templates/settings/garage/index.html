@@ -67,12 +67,14 @@
                 <thead>
                 <tr>
                     <th>Name</th>
+                    <th>Last Updated</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="garage : ${garages}">
                     <td th:text="${garage.name}"></td>
+                    <td th:text="${garage.lastUpdated"></td>
                     <td>
                         <a th:href="@{/settings/garage/edit} + '/' + ${garage.garageKey}" class="btn btn-primary btn-sm">Edit</a>
                         <button class="btn btn-danger btn-sm delete-garage-button" title="Delete Garage" th:attr="data-id=${garage.garageKey},data-name=${garage.name}" data-toggle="modal" data-target="#delete-garage-modal">Delete</button>
