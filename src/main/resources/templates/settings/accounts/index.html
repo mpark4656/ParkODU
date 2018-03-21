@@ -66,9 +66,10 @@
             <table class="table table-bordered table-centered">
                 <thead>
                 <tr>
-                    <th width="20%">First Name</th>
-                    <th width="20%">Last Name</th>
+                    <th width="15%">First Name</th>
+                    <th width="15%">Last Name</th>
                     <th width="20%">Email</th>
+                    <th width="15%">Username</th>
                     <th width="10%">Role</th>
                     <th width="10%">Enabled</th>
                     <th width="20%">Actions</th>
@@ -79,6 +80,7 @@
                     <td th:text="${user.firstName}"></td>
                     <td th:text="${user.lastName}"></td>
                     <td th:text="${user.email}"></td>
+                    <td th:text="${user.userName}"></td>
                     <td th:text="${user.roleType}"></td>
                     <td th:text="${user.enabled}"></td>
                     <td>
