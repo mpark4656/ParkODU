@@ -10,56 +10,46 @@ import javax.persistence.Table;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Transient;
+import sun.security.util.Password;
 
 import java.io.Serializable;
 import java.util.UUID;
 
-@Entity
-@Table(name = "user")
+
 public class User implements Serializable{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private String id;
-
-    @Column(name = "email", nullable = false, unique = true)
-    @Email(message = "Please provide a valid e-mail")
-    @NotEmpty(message = "Please provide an e-mail")
+    private String userKey;
     private String email;
-
-    //@Column(name = "userName", nullable = false, unique = true)
-    //@NotEmpty(message = "Please provide username")
     private String userName;
-
-    @Column(name = "password")
-    @Transient
     private String password;
-
-    @Column(name = "firstName")
-    @NotEmpty(message = "Please provide your first name")
     private String firstName;
-
-    @Column(name = "lastName")
-    @NotEmpty(message = "Please provide your last name")
     private String lastName;
-
-    //@Column(name = "role")
-    //@NotEmpty(message = "Please provide your last name")
     private String role;
-
-    @Column(name = "enabled")
     private boolean enabled;
-
-    @Column(name = "confirmationToken")
     private String confirmationToken;
 
-    public String getConfirmationToken() {
-        return confirmationToken;
+    public User() { }
+
+    public User(String email,
+                String userName,
+                String password,
+                String firstName,
+                String lastName,
+                String role,
+                boolean enabled,
+                String confirmationToken) {
+        this.email = email;
+        this.userName = userName;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role;
+        this.enabled = enabled;
+        this.confirmationToken = confirmationToken;
     }
 
-    public void generateId() {
-        this.id = UUID.randomUUID().toString();
+    public void generateUserKey() {
+        this.userKey = UUID.randomUUID().toString();
     }
     public void generateConfirmationToken() {
         this.confirmationToken = UUID.randomUUID().toString();
@@ -69,12 +59,16 @@ public class User implements Serializable{
         this.confirmationToken = confirmationToken;
     }
 
-    public String getId() {
-        return id;
+    public String getConfirmationToken() {
+        return confirmationToken;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getUserKey() {
+        return userKey;
+    }
+
+    public void setUserKey(String userKey) {
+        this.userKey = userKey;
     }
 
     public String getPassword() {
@@ -136,15 +130,14 @@ public class User implements Serializable{
     @Override
     public String toString() {
         return "User{" +
-                "confirmationToken='" + confirmationToken + '\'' +
-                ", id='" + id + '\'' +
+                "userKey='" + userKey + '\'' +
+                ",confirmationToken='" + confirmationToken + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
+                ", password='" + "********" + '\'' +
                 ", role='" + role + '\'' +
                 ", enabled=" + enabled +
                 '}';
     }
-
 }

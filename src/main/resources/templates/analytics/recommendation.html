@@ -54,7 +54,7 @@
             <hr/>
             <dl class="dl-horizontal">
                 <dt>Starting Address</dt>
-                <dd th:text="${startingAddress}"></dd>
+                <dd id="startingAddress-location" th:text="${startingAddress}"></dd>
                 <dt>Permit Types</dt>
                 <dd>
                     <th:block th:each="permitType : ${permitTypes}">
@@ -93,8 +93,9 @@
                 </thead>
                 <tbody>
                     <tr th:each="recommendation : ${recommendations}">
-                        <td style="text-align: left;"><a th:href="@{/garage/details} + '/' + ${recommendation.garage.garageKey}" th:text="${recommendation.garage.name}"></a>
-                            <p class="text-left"><a th:href="@{/navigate}" class="btn btn-primary">Navigate</a></p>
+                        <td style="text-align: left;">
+                            <a th:href="@{/maps/navigate} + '?orig=' + ${startingAddress} + '&amp;dest=' + ${recommendation.garage.garageKey}" class="btn btn-primary btn-sm align-right">Navigate</a>
+                            <a th:href="@{/garage/details} + '/' + ${recommendation.garage.garageKey}" th:text="${recommendation.garage.name}"></a>
                         </td>
                         <td th:text="${recommendation.availabilityCount}"></td>
                         <td th:text="${recommendation.startingAddressToGarageDistanceText}"></td>
@@ -118,6 +119,14 @@
 
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<script th:inline="javascript">
+$('.navigate-button').on('click', function()
+{
+    $('#navigate-id').val($(this).data('startingAddress'));
+
+});
+</script>
 
 </body>
 </html>

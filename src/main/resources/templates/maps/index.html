@@ -16,6 +16,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
                 </button>
                 <!-- Main Logo -->
                 <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
@@ -36,7 +37,28 @@
                 -->
             </div>
         </div>
-        <div class="col-md-3">
+
+        <div class="col-md-1">
+            <div id="navbar" class="navbar-collapse collapse navbar-center">
+                <ul class="nav navbar-nav">
+                    <!-- Login -->
+                    <!--/*/ <th:block th:include="fragments/fragment :: user-login" /> /*/-->
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <div id="navbar" class="navbar-collapse collapse navbar-center">
+                <ul class="nav navbar-nav">
+                    <!-- Create User -->
+                    <!--/*/ <th:block th:include="fragments/fragment :: new-user" /> /*/-->
+                    <!-- Create User (Admin) -->
+                    <!--/*/ <th:block th:include="fragments/fragment :: new-user-user" /> /*/-->
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-1">
             <!-- Social Media Links -->
             <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
         </div>
@@ -55,40 +77,20 @@
 <div class="container-fluid main-container">
     <!-- Welcome User -->
     <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
+
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
-            <h1 class="text-center" style="text-transform: uppercase;">Login</h1>
-            <div class="row text-center" >
-                <!-- Alerts -->
-                <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
-            </div>
-                <form th:action="@{/login}" method="post">
-                    <div class="form-horizontal">
-                    <div class="form-group">
-                        <label for="username" class="control-label col-md-4">Username</label>
-                        <div class="col-md-8">
-                            <input type="text" name="username" id="username" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="password" class="control-label col-md-4">Password</label>
-                        <div class="col-md-8">
-                            <input type="password" name="password" id="password" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-8 col-md-offset-4">
-                            <input type="submit" value="Submit" class="btn btn-primary" />
-                        </div>
-                    </div>
-                </div>
-            </form>
+            <h1 class="text-center" style="text-transform: uppercase;">Directions</h1>
         </div>
     </div>
+
     <!-- Footer -->
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
+
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
 </body>
+
 </html>

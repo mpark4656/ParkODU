@@ -3,72 +3,56 @@ package edu.odu.cs.gold.repository;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.query.Predicate;
-
-import com.hazelcast.query.Predicates;
-import edu.odu.cs.gold.model.User;
+import edu.odu.cs.gold.model.RoleType;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-public class UserRepository {
+
+public class RoleTypeRepository {
 
     private HazelcastInstance hazelcastInstance;
     private String collectionName;
 
-    public UserRepository(HazelcastInstance hazelcastInstance, String collectionName) {
+    public RoleTypeRepository(HazelcastInstance hazelcastInstance, String collectionName) {
         this.hazelcastInstance = hazelcastInstance;
         this.collectionName = collectionName;
     }
 
-    public String getId(User entity) {
-        return entity.getUserKey();
+    public String getId(RoleType entity) {
+        return entity.getRoleKey();
     }
 
-    public Collection<User> findAll() {
+    public Collection<RoleType> findAll() {
         IMap map = hazelcastInstance.getMap(collectionName);
         return map.values();
     }
 
-    public User findByKey(String key) {
+    public RoleType findByKey(String key) {
         IMap map = hazelcastInstance.getMap(collectionName);
-        return (User)map.get(key);
+        return (RoleType)map.get(key);
     }
 
-    public User findByConfirmationToken(String confirmationToken) {
-        Predicate predicate = Predicates.equal("confirmationToken", confirmationToken);
-        List<User> users = findByPredicate(predicate);
-        if (users != null && !users.isEmpty()) {
-            return users.get(0);
-        }
-        return null;
-    }
-
-    public List<User> findByKeys(Set<String> keys) {
+    public List<RoleType> findByKeys(Set<String> keys) {
         IMap map = hazelcastInstance.getMap(collectionName);
         return new ArrayList<>(map.getAll(keys).values());
     }
 
-    public List<User> findByPredicate(Predicate predicate) {
+    public List<RoleType> findByPredicate(Predicate predicate) {
         IMap map = hazelcastInstance.getMap(collectionName);
         return new ArrayList<>(map.values(predicate));
     }
 
-    public int countByPredicate(Predicate predicate) {
-        IMap map = hazelcastInstance.getMap(collectionName);
-        System.out.println(map.getName());
-        return map.values(predicate).size();
-    }
-
-    public void save(User entity) {
+    public void save(RoleType entity) {
         IMap map = hazelcastInstance.getMap(collectionName);
         map.set(getId(entity), entity);
     }
 
-    public void save(Collection<User> entities) {
+    public void save(Collection<RoleType> entities) {
         IMap map = hazelcastInstance.getMap(collectionName);
-        for (User entity : entities) {
+        for (RoleType entity : entities) {
             map.set(getId(entity), entity);
         }
     }
@@ -78,10 +62,15 @@ public class UserRepository {
         map.delete(key);
     }
 
+    public int countByPredicate(Predicate predicate) {
+        IMap map = hazelcastInstance.getMap(collectionName);
+        return map.values(predicate).size();
+    }
+
     public int deleteByPredicate(Predicate predicate) {
         IMap map = hazelcastInstance.getMap(collectionName);
-        List<User> entities = this.findByPredicate(predicate);
-        for (User entity : entities) {
+        List<RoleType> entities = this.findByPredicate(predicate);
+        for (RoleType entity : entities) {
             map.delete(getId(entity));
         }
         return entities.size();

@@ -4,6 +4,8 @@ import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
 import edu.odu.cs.gold.model.*;
 import edu.odu.cs.gold.repository.*;
+import edu.odu.cs.gold.service.*;
+
 import edu.odu.cs.gold.service.GoogleMapService;
 import edu.odu.cs.gold.service.PermitTypeService;
 import edu.odu.cs.gold.service.SpaceTypeService;
@@ -17,6 +19,8 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.access.method.P;
+
+import com.google.maps.model.*;
 
 import java.util.*;
 
@@ -57,7 +61,13 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
     private UserRepository userRepository;
 
     @Autowired
+    private RoleTypeRepository roleTypeRepository;
+
+    @Autowired
     private UserService userService;
+
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private PermitTypeService permitTypeService;
@@ -80,9 +90,12 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         travelDistanceDurationRepository.loadAll();
         permitTypeRepository.loadAll();
         spaceTypeRepository.loadAll();
+        userRepository.loadAll();
+        roleTypeRepository.loadAll();
 
+        // Remove all null stored users at startup
         String isEmpty = "";
-        Predicate predicatetemp = Predicates.equal("id",isEmpty);
+        Predicate predicatetemp = Predicates.equal("userKey",isEmpty);
         userRepository.deleteByPredicate(predicatetemp);
 
         System.out.println("# of Garages loaded from Mongo: " + garageRepository.findAll().size());
@@ -91,8 +104,10 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         System.out.println("# of FloorStatistics loaded from Mongo: " + floorStatisticRepository.findAll().size());
         System.out.println("# of Buildings loaded from Mongo: " + buildingRepository.findAll().size());
         System.out.println("# of TravelDistanceDurations loaded from Mongo: " + travelDistanceDurationRepository.findAll().size());
-        System.out.println("# of permit types loaded from Mongo: " + permitTypeRepository.findAll().size());
-        System.out.println("# of space types loaded from Mongo: " + spaceTypeRepository.findAll().size());
+        System.out.println("# of PermitTypes loaded from Mongo: " + permitTypeRepository.findAll().size());
+        System.out.println("# of SpaceTypes loaded from Mongo: " + spaceTypeRepository.findAll().size());
+        System.out.println("# of Users loaded from Mongo: " + userRepository.findAll().size());
+        System.out.println("# of Roles loaded from Mongo: " + roleTypeRepository.findAll().size());
 
         if (false) {
                     /*
@@ -140,12 +155,6 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
             parkingSpaceRepository.save(parkingSpaces);
         }
 
-
-
-
-
-
-
         // Duplicate FloorStatistics to all Levels
         if (false) {
             Predicate floorPredicate = Predicates.notEqual("floorKey", "7545a113-e926-4d89-8a16-13fc00215bd8");
@@ -176,7 +185,7 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
                             Predicates.equal("buildingKey", building.getBuildingKey())
                     );
                     List<TravelDistanceDuration> existingTravelDistanceDurations = travelDistanceDurationRepository.findByPredicate(predicate);
-                    TravelDistanceDuration travelDistanceDuration = googleMapService.getTravelDistanceDuration(garage, building, GoogleMapService.TravelMode.WALKING);
+                    TravelDistanceDuration travelDistanceDuration = googleMapService.getTravelDistanceDuration(garage, building, TravelMode.WALKING);
                     if (!existingTravelDistanceDurations.isEmpty()) {
                         TravelDistanceDuration existingTravelDistanceDuration = existingTravelDistanceDurations.get(0);
                         travelDistanceDuration.setTravelDistanceDurationKey(existingTravelDistanceDuration.getTravelDistanceDurationKey());
