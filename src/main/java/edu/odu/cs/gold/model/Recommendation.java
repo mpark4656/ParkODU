@@ -1,9 +1,15 @@
 package edu.odu.cs.gold.model;
 
+import edu.odu.cs.gold.repository.BuildingRepository;
+import edu.odu.cs.gold.repository.GarageRepository;
+import edu.odu.cs.gold.repository.RecommendationRepository;
+
+import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 // Transient POJO built dynamically
-public class Recommendation {
+public class Recommendation implements Serializable{
 
     private String startingAddress;
     private Garage garage;
@@ -27,7 +33,16 @@ public class Recommendation {
     private String totalDurationText;
     private Integer totalDurationValue;
 
+    private String recommendationKey;
+
+    private BuildingRepository buildingRepository;
+    private GarageRepository garageRepository;
+
     private Date arrivalTime;
+
+    public String getRecommendationKey() {return recommendationKey;}
+
+    public void setRecommendationKey(String recommendationKey) {this.recommendationKey = recommendationKey;}
 
     public String getStartingAddress() {
         return startingAddress;
@@ -35,6 +50,10 @@ public class Recommendation {
 
     public void setStartingAddress(String startingAddress) {
         this.startingAddress = startingAddress;
+    }
+
+    public void generateRecommendationKey() {
+        this.recommendationKey = UUID.randomUUID().toString();
     }
 
     public Garage getGarage() {
@@ -186,8 +205,9 @@ public class Recommendation {
     @Override
     public String toString() {
         return "Recommendation{" +
-                "startingAddress='" + startingAddress + '\'' +
-                ", garage=" + garage +
+                "recommendationKey='" + recommendationKey + '\'' +
+                ", startingAddress='" + startingAddress + '\'' +
+                ", garageKey='" + garage.getGarageKey() + '\'' +
                 ", destinationBuilding=" + destinationBuilding +
                 ", availabilityCount=" + availabilityCount +
                 ", totalCount=" + totalCount +

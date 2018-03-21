@@ -137,13 +137,12 @@ public class GarageSettingsController {
         boolean isSuccessful = false;
         boolean isDuplicate = false;
         try {
-            Garage tempGarage = garageRepository.findByKey(garage.getGarageKey());
             Predicate predicate = Predicates.and(
-                    Predicates.equal("garageKey", garage.getGarageKey()),
-                    Predicates.equal("name", tempGarage.getName())
+                    Predicates.notEqual("garageKey", garage.getGarageKey()),
+                    Predicates.equal("name", garage.getName())
             );
-            int existingCount = garageRepository.countByPredicate(predicate);
-            if (existingCount <= 1) {
+            int duplicateCount = garageRepository.countByPredicate(predicate);
+            if (duplicateCount == 0) {
                 Garage existingGarage = garageRepository.findByKey(garage.getGarageKey());
                 existingGarage.setLatitude(garage.getLatitude());
                 existingGarage.setLongitude(garage.getLongitude());
@@ -188,8 +187,10 @@ public class GarageSettingsController {
         Garage garage = null;
         try {
             garage = garageRepository.findByKey(garageKey);
-            garageRepository.delete(garageKey);
-            isSuccessful = true;
+            if (garage != null) {
+                garageRepository.delete(garageKey);
+                isSuccessful = true;
+            }
         }
         catch (Exception e) {
             e.printStackTrace();

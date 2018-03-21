@@ -7,12 +7,14 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.7.RELEASE")
+        classpath("net.saliman:gradle-cobertura-plugin:2.5.4")
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
+apply plugin: 'cobertura'
 apply plugin: 'org.springframework.boot'
 
 jar {
@@ -29,6 +31,11 @@ jar {
     manifest {
         attributes("Main-Class": "edu.odu.cs.gold.ParkODUApplication" )
     }
+}
+
+javadoc {
+    source = sourceSets.main.allJava
+    classpath = configurations.compile
 }
 
 sourceCompatibility = 1.8
@@ -55,6 +62,9 @@ dependencies {
     compile group: 'org.springframework.data', name: 'spring-data-jpa'
     compile("org.springframework.boot:spring-boot-starter-mail")
 
+    // Google Maps
+    compile group: 'com.google.maps', name: 'google-maps-services', version: '0.1.1'
+
     // Zxcvbn
     compile group: 'com.nulab-inc', name: 'zxcvbn', version: '1.0.0'
 
@@ -71,4 +81,5 @@ dependencies {
 
     // Testing
     testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 }
