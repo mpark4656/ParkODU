@@ -24,15 +24,24 @@ public class EmailService implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
+    /**
+     *
+     * @param applicationContext
+     * @throws BeansException
+     */
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
 
+    /**
+     *
+     * @param email
+     */
+
     @Async
     public void sendEmail(SimpleMailMessage email) {
         mailSender.send(email);
     }
-
-
 }

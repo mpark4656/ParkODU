@@ -25,16 +25,39 @@ public class GoogleMapService {
 
     public static final String GOOGLE_MAPS_API_KEY = "AIzaSyCK-F1dqhEye7aaQdd9dd69-oMMokv2pVA";
 
+    /**
+     *
+     * @param garage
+     * @param building
+     * @return
+     */
+
     // Default Travel Mode: WALKING
     public TravelDistanceDuration getTravelDistanceDuration(Garage garage, Building building) {
         DistanceDuration distanceDuration = getDistanceDuration(garage.getLocation(), building.getLocation(), TravelMode.WALKING);
         return new TravelDistanceDuration(garage.getGarageKey(), building.getBuildingKey(), distanceDuration, "Walking");
     }
 
+    /**
+     *
+     * @param garage
+     * @param building
+     * @param travelMode
+     * @return
+     */
+
     public TravelDistanceDuration getTravelDistanceDuration(Garage garage, Building building, TravelMode travelMode) {
         DistanceDuration distanceDuration = getDistanceDuration(garage.getLocation(), building.getLocation(), travelMode);
         return new TravelDistanceDuration(garage.getGarageKey(), building.getBuildingKey(), distanceDuration, "Walking");
     }
+
+    /**
+     *
+     * @param origin
+     * @param destination
+     * @param travelMode
+     * @return
+     */
 
     public DistanceDuration getDistanceDuration(Location origin, Location destination, TravelMode travelMode) {
 
@@ -87,23 +110,6 @@ public class GoogleMapService {
             }
         }
     }
-
-    //public enum TravelMode {
-
-    //    DRIVING ("Driving"),
-    //    WALKING ("Walking"),
-    //    BICYCLING ("Bicycling"),
-    //    TRANSIT ("Transit");
-
-    //    private final String travelMode;
-    //
-    //    TravelMode(String travelMode) {
-    //        this.travelMode = travelMode;
-    //    }
-
-    //    private String getTravelMode() { return travelMode; }
-    //
-    //}
 
     public String convertAddressToLatLon(String address) {
         GeoApiContext context = new GeoApiContext().setApiKey(GOOGLE_MAPS_API_KEY);

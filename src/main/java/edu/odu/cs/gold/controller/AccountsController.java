@@ -32,6 +32,14 @@ public class AccountsController {
     private EmailService emailService;
     private RoleTypeRepository roleTypeRepository;
 
+    /**
+     *
+     * @param userRepository
+     * @param userService
+     * @param emailService
+     * @param roleTypeRepository
+     */
+
     public AccountsController(UserRepository userRepository,
                               UserService userService,
                               EmailService emailService,
@@ -41,6 +49,16 @@ public class AccountsController {
         this.emailService = emailService;
         this.roleTypeRepository = roleTypeRepository;
     }
+
+    /**
+     *
+     * @param successMessage
+     * @param infoMessage
+     * @param warningMessage
+     * @param dangerMessage
+     * @param model
+     * @return
+     */
 
     @GetMapping({"", "/", "/index"})
     public String index(@RequestParam(value = "successMessage", required = false) String successMessage,
@@ -69,6 +87,12 @@ public class AccountsController {
         return "settings/accounts/index";
     }
 
+    /**
+     *
+     * @param model
+     * @return
+     */
+
     @GetMapping("/create")
     public String create(Model model) {
         User user = new User();
@@ -77,6 +101,14 @@ public class AccountsController {
         model.addAttribute("roleTypes", roleTypes);
         return "settings/accounts/create";
     }
+
+    /**
+     *
+     * @param user
+     * @param model
+     * @param redirectAttributes
+     * @return
+     */
 
     @PostMapping("/create")
     public String create(User user,
@@ -120,6 +152,12 @@ public class AccountsController {
         return "redirect:/settings/accounts/index";
     }
 
+    /**
+     *
+     * @param model
+     * @return
+     */
+
     @GetMapping("/register")
     public String register(Model model) {
         User user = new User();
@@ -127,6 +165,15 @@ public class AccountsController {
         model.addAttribute("user", user);
         return "accounts/register";
     }
+
+    /**
+     *
+     * @param user
+     * @param request
+     * @param model
+     * @param bindingResult
+     * @return
+     */
 
     @PostMapping("/register")
     public String register(User user, HttpServletRequest request, Model model, BindingResult bindingResult) {
@@ -155,6 +202,13 @@ public class AccountsController {
         return "accounts/register";
     }
 
+    /**
+     *
+     * @param userKey
+     * @param model
+     * @return
+     */
+
     @GetMapping("/edit/{userKey}")
     public String edit(@PathVariable("userKey") String userKey,
                        Model model) {
@@ -164,6 +218,14 @@ public class AccountsController {
         model.addAttribute("roleTypes", roleTypes);
         return "settings/accounts/edit";
     }
+
+    /**
+     *
+     * @param user
+     * @param model
+     * @param redirectAttributes
+     * @return
+     */
 
     @PostMapping("/edit")
     public String edit(User user,
@@ -210,6 +272,13 @@ public class AccountsController {
         return "redirect:/settings/accounts/index";
     }
 
+    /**
+     *
+     * @param userEnabled
+     * @param userKey
+     * @return
+     */
+
     @PostMapping("/set_enabled")
     @ResponseBody
     public String setAvailability(@RequestParam("userEnabled") boolean userEnabled,
@@ -219,6 +288,13 @@ public class AccountsController {
         userRepository.save(user);
         return userKey + " enabled: " + userEnabled;
     }
+
+    /**
+     *
+     * @param userKey
+     * @param redirectAttributes
+     * @return
+     */
 
     @PostMapping("/delete")
     public String delete(@RequestParam("userKey") String userKey,
