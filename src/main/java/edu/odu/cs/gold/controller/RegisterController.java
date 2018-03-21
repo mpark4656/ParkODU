@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class RegisterController {
+
     private UserService userService;
     private EmailService emailService;
     private UserRepository userRepository;
@@ -38,6 +39,7 @@ public class RegisterController {
     public RegisterController(UserService userService,
                               EmailService emailService,
                               UserRepository userRepository) {
+
         this.userService = userService;
         this.emailService = emailService;
         this.userRepository = userRepository;
@@ -123,7 +125,7 @@ public class RegisterController {
             } else {
                 userList.get(0).setEnabled(true);
                 userService.saveUser(userList.get(0));
-                model.addAttribute("successMessage", "Confirmation link success!");
+                model.addAttribute("successMessage", "Confirmation link valid!");
                 redirectAttributes.addAttribute("attr","successMessage");
             }
         } else {
@@ -147,7 +149,7 @@ public class RegisterController {
             model.addAttribute("successMessage","Confirmation link verified!");
         }
         if(param == "confirmationLinkError") {
-            model.addAttribute("dangerMessage", "Oops! Confirmation Link not valid!");
+            model.addAttribute("dangerMessage", "Oops! Confirmation link not valid!");
         }
         else {
             // DO NOTHING

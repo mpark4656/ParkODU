@@ -8,16 +8,16 @@ import edu.odu.cs.gold.model.*;
 import edu.odu.cs.gold.repository.BuildingRepository;
 import edu.odu.cs.gold.repository.GarageRepository;
 import org.springframework.stereotype.Service;
+import edu.odu.cs.gold.model.Location;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import java.util.*;
 
+import com.google.maps.*;
+import com.google.gson.*;
 import com.google.maps.model.*;
 
 @Service
@@ -105,34 +105,31 @@ public class GoogleMapService {
     //
     //}
 
-    public String convertAddress(String address) {
+    public String convertAddressToLatLon(String address) {
         GeoApiContext context = new GeoApiContext().setApiKey(GOOGLE_MAPS_API_KEY);
-        return GeocodingApi.geocode(context,address).resultType().toString();
+        return GeocodingApi.geocode(context,address).toString();
     }
 
-
-    public void buildDirections(Location startingLocation,
-                                Location destination) {
+    public String convertLatLonToAddress(Location location) {
         GeoApiContext context = new GeoApiContext().setApiKey(GOOGLE_MAPS_API_KEY);
+        GeocodingResult[] results = GeocodingApi.newRequest(context)
+                .latlng(new LatLng(location.getLatitude(),location
+                        .getLongitude())).awaitIgnoreError();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(results);
+    }
 
-        DirectionsApiRequest apiRequest = DirectionsApi.newRequest(context);
-        LatLng latLng = new LatLng(startingLocation.getLatitude(),startingLocation.getLongitude());
-        apiRequest.origin(latLng);
-        apiRequest.destination(new LatLng(destination.getLatitude(),destination.getLongitude()));
-        apiRequest.mode(TravelMode.DRIVING);
+    public String buildDirections(Location startingLocation,
+                                Location destination) {
 
-        apiRequest.setCallback(new PendingResult.Callback<DirectionsRoute[]>() {
-            @Override
-            public void onResult(DirectionsRoute[] result) {
-                DirectionsRoute[] routes = result;
-                System.out.print(routes.toString());
-            }
+        GeoApiContext context = new GeoApiContext().setApiKey(GOOGLE_MAPS_API_KEY);
+        DirectionsRoute[] route = DirectionsApi.newRequest(context)
+                .destination(new LatLng(destination.getLatitude(),destination.getLongitude()))
+                .origin(new LatLng(startingLocation.getLatitude(),startingLocation.getLongitude()))
+                .mode(TravelMode.DRIVING).awaitIgnoreError();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(route);
 
-            @Override
-            public void onFailure(Throwable e) {
-                System.out.print(e.toString());
-            }
-        });
     }
 
 

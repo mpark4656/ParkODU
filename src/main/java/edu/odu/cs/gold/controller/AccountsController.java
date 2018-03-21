@@ -185,7 +185,7 @@ public class AccountsController {
                 existingUser.setLastName(user.getLastName());
                 existingUser.setEmail(user.getEmail());
                 existingUser.setPassword(user.getPassword());
-                existingUser.setRole(user.getRole());
+                existingUser.setRole(user.getRoleType());
                 existingUser.setEnabled(user.getEnabled());
                 userRepository.save(existingUser);
                 isSuccessful = true;

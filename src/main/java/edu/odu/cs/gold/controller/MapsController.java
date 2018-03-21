@@ -59,12 +59,15 @@ public class MapsController {
         Location startingLocation = new Location();
         startingLocation.setLatitude(latitude);
         startingLocation.setLongitude(longitude);
-        mapService.buildDirections(startingLocation,garage.getLocation());
+        String directions = mapService.buildDirections(startingLocation,garage.getLocation());
 
         model.addAttribute("latitude", latitude);
         model.addAttribute("longitude", longitude);
         model.addAttribute("destination", garage.getLocation());
         model.addAttribute("travelMode", TravelMode.DRIVING.toString());
+        model.addAttribute("directions", directions);
+
+        System.out.println(directions);
 
         return "maps/navigate/index";
     }

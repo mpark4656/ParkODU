@@ -46,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers("/**").permitAll();
-
+/*
         http.authorizeRequests()
                 .antMatchers("/",
                         "/index",
@@ -78,7 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login")
                 .and()
                 .httpBasic();
-
+*/
         http.csrf().disable(); // Required for Spring Security to work
     }
 

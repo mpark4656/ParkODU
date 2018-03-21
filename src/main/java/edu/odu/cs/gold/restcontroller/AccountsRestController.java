@@ -76,8 +76,8 @@ public class AccountsRestController {
             if (user.getPassword() != null) {
                 existingUser.setPassword(user.getPassword());
             }
-            if (user.getRole() != null) {
-                existingUser.setRole(user.getRole());
+            if (user.getRoleType() != null) {
+                existingUser.setRole(user.getRoleType());
             }
             existingUser.setEnabled(user.getEnabled());
 
