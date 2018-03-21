@@ -25,7 +25,9 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <body>
 	<!-- Main Logo -->
 	<div th:fragment="main-logo">
-		<a class="navbar-brand" th:href="@{/}">ParkODU</a>
+		<a class="navbar-brand" th:href="@{/}">
+			<img th:src="@{/img} + '/' + 'odupark_logo_02.png'" alt="Park ODU Logo" style="border: 1px solid black; width: 30%;"/>
+		</a>
 	</div>
 	<!--
 	<a class="navbar-brand" th:href="@{/}"><img src="./img/delightful_indulgence_logo.png" alt="Delightful Indulgence Logo"/></a>
