@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -48,7 +49,7 @@ public class PermitTypeSettingsController {
                         Model model) {
 
         List<PermitType> permitTypes = new ArrayList<>(permitTypeRepository.findAll());
-
+        permitTypes.sort(Comparator.comparing(PermitType::getName));
         model.addAttribute("permitTypes", permitTypes);
 
         // Alerts
