@@ -136,7 +136,7 @@ public class RegisterController {
      * GET method user/login the prepares login page after confirmation link submission
      * @param model MVC
      * @param param parameter passed from redirectionAttributes in user/confirm GET method
-     * @return
+     * @return user/login
      */
 
     @RequestMapping("/user/login")
