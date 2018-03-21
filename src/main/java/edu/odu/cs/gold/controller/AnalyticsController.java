@@ -154,6 +154,8 @@ public class AnalyticsController {
         }
 
         model.addAttribute("startingAddress", startingAddress);
+        model.addAttribute("startingLatitude", startingLatitude);
+        model.addAttribute("startingLongitude", startingLongitude);
         model.addAttribute("permitTypes", permitTypes);
         model.addAttribute("destinationBuilding", destinationBuilding);
         model.addAttribute("recommendations", recommendations);

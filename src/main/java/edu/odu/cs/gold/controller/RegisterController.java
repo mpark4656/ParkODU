@@ -76,7 +76,9 @@ public class RegisterController {
 
     // Process confirmation link
     @GetMapping("/user/confirm")
-    public String showConfirmationPage(Model model, @RequestParam("token") String token, RedirectAttributes redirectAttributes) {
+    public String showConfirmationPage(Model model,
+                                       @RequestParam("token") String token,
+                                       RedirectAttributes redirectAttributes) {
         Predicate predicate = Predicates.equal("confirmationToken", token);
         List<User> userList = userRepository.findByPredicate(predicate);
         System.out.println("Confirmation Token: " + token);

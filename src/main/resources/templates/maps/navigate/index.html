@@ -84,19 +84,41 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
 
-    <table class="table table-bordered table-centered">
-        <tbody>
-        <tr th:text="${origin}"></tr>
-        <tr th:text="${location.latitude}"></tr>
-        <tr th:text="${location.longitude}"></tr>
-        <tr th:text="${travelMode}"></tr>
-        </tbody>
-    </table>
-</div>
+            <!--
+            <p class="text-right">
+                <a th:href="@{/analytics/locate}" class="btn btn-primary">New Search</a>
+            </p>
+            -->
+            <table class="table table-bordered table-centered">
+                <thead>
+                <tr>
+                    <th rowspan="2" width="10%">Starting Latitude</th>
+                    <th rowspan="2" width="10%">Starting Longitude</th>
+                    <th rowspan="2" span="2" width="10%">Destination Latitude</th>
+                    <th rowspan="2" width="10%">Destination Longitude</th>
+                    <th rowspan="2" width="10%">TravelMode</th>
+                </tr>
+
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${latitude}"></td>
+                    <td th:text="${longitude}"></td>
+                    <td th:text="${destination.latitude}"></td>
+                    <td th:text="${destination.longitude}"></td>
+                    <td th:text="${travelMode}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <!-- Footer -->
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
+
 </div>
 
 <!-- Scripts -->
