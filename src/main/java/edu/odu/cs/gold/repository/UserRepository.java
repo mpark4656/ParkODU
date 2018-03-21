@@ -6,6 +6,7 @@ import com.hazelcast.query.Predicate;
 
 import com.hazelcast.query.Predicates;
 import edu.odu.cs.gold.model.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,6 +39,15 @@ public class UserRepository {
 
     public User findByConfirmationToken(String confirmationToken) {
         Predicate predicate = Predicates.equal("confirmationToken", confirmationToken);
+        List<User> users = findByPredicate(predicate);
+        if (users != null && !users.isEmpty()) {
+            return users.get(0);
+        }
+        return null;
+    }
+
+    public User findByEmail(String email) {
+        Predicate predicate = Predicates.equal("email", email);
         List<User> users = findByPredicate(predicate);
         if (users != null && !users.isEmpty()) {
             return users.get(0);
