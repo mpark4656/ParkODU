@@ -38,12 +38,20 @@ public class SpaceTypeSettingsController {
      * @return String default index page
      */
     @GetMapping({"", "/", "/index"})
-    public String index(Model model) {
+    public String index(@RequestParam(value = "successMessage", required = false) String successMessage,
+                        @RequestParam(value = "infoMessage", required = false) String infoMessage,
+                        @RequestParam(value = "warningMessage", required = false) String warningMessage,
+                        @RequestParam(value = "dangerMessage", required = false) String dangerMessage,
+                        Model model) {
 
         List<SpaceType> spaceTypes = new ArrayList<>(spaceTypeRepository.findAll());
-
         model.addAttribute("spaceTypes", spaceTypes);
 
+        // Alerts
+        if (successMessage != null) { model.addAttribute("successMessage", successMessage); }
+        if (infoMessage != null) { model.addAttribute("infoMessage", infoMessage); }
+        if (warningMessage != null) { model.addAttribute("warningMessage", warningMessage); }
+        if (dangerMessage != null) { model.addAttribute("dangerMessage", dangerMessage); }
         return "settings/space_type/index";
     }
 
@@ -52,7 +60,18 @@ public class SpaceTypeSettingsController {
      * @return String settings/space_type/create.html
      */
     @GetMapping("/create")
-    public String create() {
+    public String create(@RequestParam(value = "successMessage", required = false) String successMessage,
+                         @RequestParam(value = "infoMessage", required = false) String infoMessage,
+                         @RequestParam(value = "warningMessage", required = false) String warningMessage,
+                         @RequestParam(value = "dangerMessage", required = false) String dangerMessage,
+                         Model model) {
+
+        // Alerts
+        if (successMessage != null) { model.addAttribute("successMessage", successMessage); }
+        if (infoMessage != null) { model.addAttribute("infoMessage", infoMessage); }
+        if (warningMessage != null) { model.addAttribute("warningMessage", warningMessage); }
+        if (dangerMessage != null) { model.addAttribute("dangerMessage", dangerMessage); }
+
         return "settings/space_type/create";
     }
 

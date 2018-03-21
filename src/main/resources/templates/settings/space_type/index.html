@@ -56,8 +56,13 @@
     <!-- Welcome User -->
     <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
 
+    <!-- Alerts -->
+    <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
     <div class="row">
         <div class="col-sm-8 col-md-8 col-sm-6 col-md-offset-1">
+            <p>
+                <span></span>
+            </p>
             <p class="text-left">
                 <a th:href="@{/settings/space_type/create}" class="btn btn-success btn-sm" title="Create Space Type">Create</a>
                 <a th:href="@{/settings/space_type/index}" class="btn btn-success btn-sm" title="Reload this page">Reload</a>
@@ -142,6 +147,7 @@ $(document).ready(function(){
 
     $.post("/settings/space_type/set_space_name", { spaceTypeKey : spaceTypeKey, spaceName: spaceName })
         .done(function(data) {
+            $("span").html(data);
         });
     });
 });
@@ -154,6 +160,7 @@ $(document).ready(function(){
 
     $.post("/settings/space_type/set_space_description", { spaceTypeKey : spaceTypeKey, spaceDescription: spaceDescription })
         .done(function(data) {
+            $("span").html(data);
         });
     });
 });
