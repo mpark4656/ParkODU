@@ -76,7 +76,7 @@ public class AnalyticsController {
                          @RequestParam(name = "minSpaces", required = false) Integer minSpaces,
                          Model model) {
 
-        Location startingLocation = new Location(startingAddress, startingLatitude, startingLongitude);
+        Location startingLocation = new Location(startingLatitude, startingLongitude);
         Building destinationBuilding = buildingRepository.findByKey(destinationBuildingId);
 
         Predicate permitPredicate = null;
