@@ -7,6 +7,8 @@ import com.hazelcast.com.eclipsesource.json.Json;
 import edu.odu.cs.gold.model.*;
 import edu.odu.cs.gold.repository.BuildingRepository;
 import edu.odu.cs.gold.repository.GarageRepository;
+import org.apache.tomcat.jni.Time;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import edu.odu.cs.gold.model.Location;
 
@@ -15,6 +17,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import com.google.maps.*;
 import com.google.gson.*;
@@ -111,9 +114,51 @@ public class GoogleMapService {
         }
     }
 
-    public String convertAddressToLatLon(String address) {
+
+
+/*
+    public TravelDistanceDuration calculateDrivingDistanceDurationWithAddress(Garage garage, String startingAddress) {
         GeoApiContext context = new GeoApiContext().setApiKey(GOOGLE_MAPS_API_KEY);
-        return GeocodingApi.geocode(context,address).toString();
+        DistanceMatrix distanceMatrix = DistanceMatrixApi.newRequest(context)
+                .origins(startingAddress)
+                .destinations(garage.getAddress())
+                .departureTime(DateTime.now())
+                .mode(TravelMode.DRIVING)
+                .units(Unit.valueOf("minutes"))
+                .awaitIgnoreError();
+        return new TravelDistanceDuration(garage.getGarageKey(),
+                startingAddress,
+                distanceMatrix.destinationAddresses,
+                distanceMatrix.rows[0],
+                distanceMatrix.rows[0].elements,
+                distanceMatrix.rows[0].elements.length),
+                TravelMode.DRIVING.toString();
+    }
+*//*
+    public TravelDistanceDuration calculateWalkingDistanceDurationWithAddress(Garage garage, Building building) {
+        GeoApiContext context = new GeoApiContext().setApiKey(GOOGLE_MAPS_API_KEY);
+        DistanceMatrix distanceMatrix = DistanceMatrixApi.newRequest(context)
+                .origins(garage.getAddress())
+                .destinations(building.getAddress())
+                .departureTime(DateTime.now())
+                .mode(TravelMode.WALKING)
+                .units(Unit.valueOf("minutes"))
+                .awaitIgnoreError();
+        return new TravelDistanceDuration(garage.getGarageKey(),
+                building.getBuildingKey(),
+                new DistanceDuration(distanceMatrix.originAddresses,
+                        distanceMatrix.destinationAddresses,
+                        distanceMatrix.rows[0],
+                        distanceMatrix.rows[0].elements,
+                        distanceMatrix.rows[0].elements.length),
+                        TravelMode.WALKING.toString());
+    }
+*/
+    public Location convertAddressToLatLng(String address) {
+        GeoApiContext context = new GeoApiContext().setApiKey(GOOGLE_MAPS_API_KEY);
+        GeocodingResult[] results = GeocodingApi.newRequest(context).address(address).awaitIgnoreError();
+        Gson gson = new GsonBuilder().serializeSpecialFloatingPointValues().create();
+        return new Location(results[0].geometry.location.lat,results[0].geometry.location.lng);
     }
 
     public String convertLatLonToAddress(Location location) {
@@ -122,22 +167,42 @@ public class GoogleMapService {
                 .latlng(new LatLng(location.getLatitude(),location
                         .getLongitude())).awaitIgnoreError();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(results);
+        return gson.toJson(results[0].formattedAddress);
     }
 
-    public String buildDirections(Location startingLocation,
-                                Location destination) {
-
+    public String buildDirectionsWithLatLng(Location startingLocation, Location destinationLocation) {
         GeoApiContext context = new GeoApiContext().setApiKey(GOOGLE_MAPS_API_KEY);
         DirectionsRoute[] route = DirectionsApi.newRequest(context)
-                .destination(new LatLng(destination.getLatitude(),destination.getLongitude()))
-                .origin(new LatLng(startingLocation.getLatitude(),startingLocation.getLongitude()))
-                .mode(TravelMode.DRIVING).awaitIgnoreError();
+                .destination(new LatLng(
+                        destinationLocation.getLatitude(),
+                        destinationLocation.getLongitude()))
+                .origin(new LatLng(
+                        startingLocation.getLatitude(),
+                        startingLocation.getLongitude()))
+                .mode(TravelMode.DRIVING)
+                .optimizeWaypoints(true)
+                .awaitIgnoreError();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(route);
-
+        return gson.toJson(route[0].waypointOrder);
     }
 
+    public String buildDirectionsWithAddress(String startingAddress, String destinationAddress) {
+        GeoApiContext context = new GeoApiContext().setApiKey(GOOGLE_MAPS_API_KEY);
+        DirectionsRoute[] route = DirectionsApi.newRequest(context)
+                .destination(destinationAddress)
+                .origin(startingAddress)
+                .mode(TravelMode.DRIVING)
+                .optimizeWaypoints(true)
+                .awaitIgnoreError();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(route[0].waypointOrder);
+    }
 
+    public int addDistance(TravelDistanceDuration walking, TravelDistanceDuration driving) {
+        return (walking.getDistanceValue() + driving.getDistanceValue());
+    }
 
+    public int addDuration(TravelDistanceDuration walking, TravelDistanceDuration driving) {
+        return (walking.getDurationValue() + driving.getDurationValue());
+    }
 }

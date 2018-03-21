@@ -59,7 +59,7 @@ public class MapsController {
         Location startingLocation = new Location();
         startingLocation.setLatitude(latitude);
         startingLocation.setLongitude(longitude);
-        String directions = mapService.buildDirections(startingLocation,garage.getLocation());
+        String directions = mapService.buildDirectionsWithLatLng(startingLocation,garage.getLocation());
 
         model.addAttribute("latitude", latitude);
         model.addAttribute("longitude", longitude);

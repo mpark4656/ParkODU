@@ -176,7 +176,7 @@ public class Garage implements Serializable {
     }
 
     public Location getLocation() {
-        return new Location(garageKey, name, latitude, longitude);
+        return new Location(latitude, longitude);
     }
 
     @Override

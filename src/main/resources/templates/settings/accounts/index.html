@@ -79,7 +79,7 @@
                     <td th:text="${user.firstName}"></td>
                     <td th:text="${user.lastName}"></td>
                     <td th:text="${user.email}"></td>
-                    <td th:text="${user.role}"></td>
+                    <td th:text="${user.roleType}"></td>
                     <td th:text="${user.enabled}"></td>
                     <td>
                         <a th:href="@{/settings/accounts/edit} + '/' + ${user.userKey}" class="btn btn-primary btn-sm">Edit</a>
