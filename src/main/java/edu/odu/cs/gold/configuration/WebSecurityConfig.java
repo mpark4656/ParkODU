@@ -1,5 +1,6 @@
 package edu.odu.cs.gold.configuration;
 
+import edu.odu.cs.gold.repository.UserRepository;
 import edu.odu.cs.gold.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,8 +28,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public UserDetailsService userDetailsService() {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername("admin").password("awesome8").roles("ADMIN").build());
-        manager.createUser(User.withUsername("user").password("awesome8").roles("USER").build());
+        //manager.createUser(User.withUsername("admin").password("awesome8").roles("admin").build());
+        //manager.createUser(User.withUsername("user").password("awesome8").roles("user").build());
         return manager;
     }
 
@@ -45,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers("/**").permitAll();
-        /*
+/*
         http.authorizeRequests()
                 .antMatchers("/",
                         "/index",
@@ -57,19 +58,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/analytics/**",
                         "/floor/**",
                         "/garage/**",
-                        "/newuser/**")
+                        "/user/register/**",
+                        "/user/confirm/**")
                 .permitAll()
-                .antMatchers("/user/register").permitAll()
-                .antMatchers("/user/confirm").permitAll()
                 .antMatchers("/settings/**")
-                .hasRole("ADMIN")
+                .hasRole("admin")
                 .anyRequest()
                 .authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
-                .usernameParameter("username")
+                .usernameParameter("email")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/", true)
                 .and()
@@ -78,7 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login")
                 .and()
                 .httpBasic();
-        */
+*/
         http.csrf().disable(); // Required for Spring Security to work
     }
 

@@ -9,6 +9,7 @@ public class Building implements Serializable {
     private String name;
     private Double latitude;
     private Double longitude;
+    private String address;
 
     public Building() {
         buildingKey = UUID.randomUUID().toString();
@@ -52,9 +53,12 @@ public class Building implements Serializable {
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
+    public String getAddress() {return address;}
+
+    public void setAddress() {this.address = address;}
 
     public Location getLocation() {
-        return new Location(buildingKey, name, latitude, longitude);
+        return new Location(latitude, longitude);
     }
 
     @Override
