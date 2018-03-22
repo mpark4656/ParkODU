@@ -155,6 +155,7 @@ public class GarageSettingsController {
                        RedirectAttributes redirectAttributes) {
         boolean isSuccessful = false;
         boolean isDuplicate = false;
+
         try {
             Predicate predicate = Predicates.and(
                     Predicates.notEqual("garageKey", garage.getGarageKey()),
