@@ -118,6 +118,7 @@ input:checked + .slider:before {
 
     <div class="row">
         <div class="col-sm-10 col-sm-10 col-md-10 col-md-offset-1">
+            <span class="auto-update-message"></span>
             <p class="text-left">
                 <a th:href="@{/settings/parking_space/create} + '/' + ${garage.garageKey} + '/' + ${floor.floorKey}" class="btn btn-success btn-sm" title="Create Parking Space">Create</a>
                 <a th:href="@{/settings/parking_space/floor} + '/' + ${floor.floorKey}" class="btn btn-success btn-sm" title="Reload this page">Reload</a>
@@ -227,13 +228,13 @@ $(document).ready(function(){
         if ($(this).prop('checked')) {
             $.post("/settings/parking_space/set_availability", { parkingSpaceKey: parkingSpaceKey, available: "true" })
                 .done(function(data) {
-                    //alert(data);
+                    $(".auto-update-message").html(data);
                 });
         }
         else {
             $.post("/settings/parking_space/set_availability", { parkingSpaceKey: parkingSpaceKey, available: "false" })
                 .done(function(data) {
-                    //alert(data);
+                    $(".auto-update-message").html(data);
                 });
         }
     });
@@ -247,6 +248,7 @@ $(document).ready(function(){
 
     $.post("/settings/parking_space/set_permit_type", { parkingSpaceKey: parkingSpaceKey, permitTypeKey: permitTypeKey })
         .done(function(data) {
+            $(".auto-update-message").html(data);
         });
     });
 });
@@ -259,6 +261,7 @@ $(document).ready(function(){
 
     $.post("/settings/parking_space/set_space_type", { parkingSpaceKey: parkingSpaceKey, spaceTypeKey: spaceTypeKey })
         .done(function(data) {
+            $(".auto-update-message").html(data);
         });
     });
 });
@@ -271,6 +274,7 @@ $(document).ready(function(){
 
     $.post("/settings/parking_space/set_space_number", { parkingSpaceKey: parkingSpaceKey, spaceNumber: spaceNumber })
         .done(function(data) {
+            $(".auto-update-message").html(data);
         });
     });
 });
