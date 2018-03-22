@@ -4,6 +4,7 @@ import com.hazelcast.config.*;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import edu.odu.cs.gold.model.*;
+import edu.odu.cs.gold.model.RoleType;
 import edu.odu.cs.gold.mongo.MongoMapStore;
 import edu.odu.cs.gold.repository.*;
 import org.springframework.beans.BeansException;
@@ -32,6 +33,8 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     public static final String COLLECTION_SPACE_TYPE = "SpaceType";
 
     public static final String COLLECTION_USER = "User";
+    public static final String COLLECTION_ROLE_TYPE = "RoleType";
+    public static final String COLLECTION_RECOMMENDATION = "Recommendation";
 
     @Autowired
     public Environment environment;
@@ -125,6 +128,16 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     }
 
     @Bean
+    public RoleTypeRepository roleTypeRepository() {
+        return new RoleTypeRepository(hazelcastInstance(), COLLECTION_ROLE_TYPE);
+    }
+
+    @Bean
+    public RecommendationRepository recommendationRepository() {
+        return new RecommendationRepository(hazelcastInstance(), COLLECTION_RECOMMENDATION);
+    }
+
+    @Bean
     public MongoMapStore garageMapStore() {
         return new MongoMapStore(mongoTemplate, COLLECTION_GARAGE, Garage.class);
     }
@@ -155,6 +168,11 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     }
 
     @Bean
+    public MongoMapStore roleTypeMapStore() {
+        return new MongoMapStore(mongoTemplate, COLLECTION_ROLE_TYPE, RoleType.class);
+    }
+
+    @Bean
     public MongoMapStore userMapStore() {
         return new MongoMapStore(mongoTemplate, COLLECTION_USER, User.class);
     }
@@ -170,6 +188,11 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     }
 
     @Bean
+    public MongoMapStore recommendationMapStore() {
+        return new MongoMapStore(mongoTemplate, COLLECTION_RECOMMENDATION, Recommendation.class);
+    }
+
+    @Bean
     public MapConfig garageRepositoryMapConfig() {
         MapConfig mapConfig = new MapConfig(COLLECTION_GARAGE);
 
@@ -182,7 +205,6 @@ public class ParkODUConfiguration implements ApplicationContextAware {
 
         return mapConfig;
     }
-
 
     @Bean
     public MapConfig floorRepositoryMapConfig() {
@@ -286,10 +308,28 @@ public class ParkODUConfiguration implements ApplicationContextAware {
         mapConfig.setMapStoreConfig(mapStoreConfig);
 
         // Indexed Attributes
+        mapConfig.addMapIndexConfig(new MapIndexConfig("userKey",false));
         mapConfig.addMapIndexConfig(new MapIndexConfig("email", false));
-        mapConfig.addMapIndexConfig(new MapIndexConfig("userName", false));
         mapConfig.addMapIndexConfig(new MapIndexConfig("confirmationToken", false));
-        mapConfig.addMapIndexConfig(new MapIndexConfig("id",false));
+        //mapConfig.addMapIndexConfig(new MapIndexConfig("userName", false));
+
+        return mapConfig;
+    }
+
+    @Bean
+    public MapConfig roleTypeRepositoryMapConfig() {
+        MapConfig mapConfig = new MapConfig(COLLECTION_ROLE_TYPE);
+
+        // MapStore
+        MapStoreConfig mapStoreConfig = new MapStoreConfig();
+        mapStoreConfig.setImplementation(roleTypeMapStore());
+        mapStoreConfig.setEnabled(true);
+        mapStoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.EAGER);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+
+        // Indexed Attributes
+        mapConfig.addMapIndexConfig(new MapIndexConfig("roleKey", false));
+        mapConfig.addMapIndexConfig(new MapIndexConfig("name", false));
 
         return mapConfig;
     }
@@ -329,4 +369,22 @@ public class ParkODUConfiguration implements ApplicationContextAware {
 
         return mapConfig;
     }
+
+    @Bean
+    public MapConfig RecommendationRepositoryMapConfig() {
+        MapConfig mapConfig = new MapConfig(COLLECTION_RECOMMENDATION);
+
+        // MapStore
+        MapStoreConfig mapStoreConfig = new MapStoreConfig();
+        mapStoreConfig.setImplementation(recommendationMapStore());
+        mapStoreConfig.setEnabled(true);
+        mapStoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.EAGER);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+
+        // Indexed Attributes
+        mapConfig.addMapIndexConfig(new MapIndexConfig("recommendationKey", false));
+
+        return mapConfig;
+    }
+
 }

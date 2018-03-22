@@ -1,7 +1,10 @@
 package edu.odu.cs.gold.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.maps.*;
 import edu.odu.cs.gold.model.*;
+import edu.odu.cs.gold.repository.BuildingRepository;
+import edu.odu.cs.gold.repository.GarageRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -11,6 +14,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import java.util.*;
+
+import com.google.maps.model.*;
+
 @Service
 public class GoogleMapService {
 
@@ -19,12 +26,12 @@ public class GoogleMapService {
     // Default Travel Mode: WALKING
     public TravelDistanceDuration getTravelDistanceDuration(Garage garage, Building building) {
         DistanceDuration distanceDuration = getDistanceDuration(garage.getLocation(), building.getLocation(), TravelMode.WALKING);
-        return new TravelDistanceDuration(garage.getGarageKey(), building.getBuildingKey(), distanceDuration, TravelMode.WALKING.travelMode);
+        return new TravelDistanceDuration(garage.getGarageKey(), building.getBuildingKey(), distanceDuration, "Walking");
     }
 
     public TravelDistanceDuration getTravelDistanceDuration(Garage garage, Building building, TravelMode travelMode) {
         DistanceDuration distanceDuration = getDistanceDuration(garage.getLocation(), building.getLocation(), travelMode);
-        return new TravelDistanceDuration(garage.getGarageKey(), building.getBuildingKey(), distanceDuration, travelMode.travelMode);
+        return new TravelDistanceDuration(garage.getGarageKey(), building.getBuildingKey(), distanceDuration, "Walking");
     }
 
     public DistanceDuration getDistanceDuration(Location origin, Location destination, TravelMode travelMode) {
@@ -79,20 +86,47 @@ public class GoogleMapService {
         }
     }
 
-    public enum TravelMode {
+    //public enum TravelMode {
 
-        DRIVING ("Driving"),
-        WALKING ("Walking"),
-        BICYCLING ("Bicycling"),
-        TRANSIT ("Transit");
+    //    DRIVING ("Driving"),
+    //    WALKING ("Walking"),
+    //    BICYCLING ("Bicycling"),
+    //    TRANSIT ("Transit");
 
-        private final String travelMode;
+    //    private final String travelMode;
+    //
+    //    TravelMode(String travelMode) {
+    //        this.travelMode = travelMode;
+    //    }
 
-        TravelMode(String travelMode) {
-            this.travelMode = travelMode;
-        }
+    //    private String getTravelMode() { return travelMode; }
+    //
+    //}
 
-        private String getTravelMode() { return travelMode; }
+    public void buildDirections(String startingLocation,
+                                Location destination,
+                                TravelMode travelMode) {
+        GeoApiContext context = new GeoApiContext().setApiKey(GOOGLE_MAPS_API_KEY);
 
+        DirectionsApiRequest apiRequest = DirectionsApi.newRequest(context);
+        apiRequest.origin(startingLocation);
+        apiRequest.destination(new LatLng(destination.getLatitude(),destination.getLongitude()));
+        apiRequest.mode(TravelMode.DRIVING);
+
+        apiRequest.setCallback(new PendingResult.Callback<DirectionsRoute[]>() {
+            @Override
+            public void onResult(DirectionsRoute[] result) {
+                DirectionsRoute[] routes = result;
+                System.out.print(routes.toString());
+            }
+
+            @Override
+            public void onFailure(Throwable e) {
+                System.out.print(e.toString());
+            }
+        });
     }
+
+
+
 }

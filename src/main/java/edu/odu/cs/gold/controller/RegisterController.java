@@ -1,23 +1,26 @@
 package edu.odu.cs.gold.controller;
 
+import java.util.List;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
-import edu.odu.cs.gold.model.User;
-import edu.odu.cs.gold.repository.UserRepository;
-import edu.odu.cs.gold.service.EmailService;
-import edu.odu.cs.gold.service.UserService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.util.List;
-import java.util.UUID;
+import edu.odu.cs.gold.model.User;
+import edu.odu.cs.gold.service.EmailService;
+import edu.odu.cs.gold.service.UserService;
+import edu.odu.cs.gold.repository.UserRepository;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class RegisterController {
@@ -33,7 +36,6 @@ public class RegisterController {
         this.emailService = emailService;
         this.userRepository = userRepository;
     }
-
     // Return registration form template
     @GetMapping("/user/register")
     public String showRegistrationPage(Model model, User user){
@@ -48,7 +50,7 @@ public class RegisterController {
         boolean userExists = userService.userExists(user.getEmail());
         System.out.println("User exists: " + userExists);
         if (userExists) {
-            model.addAttribute("alreadyRegisteredMessage", "Oops!  There is already a user registered with the email provided.");
+            model.addAttribute("alreadyRegisteredMessage", "Oops! Existing user is currently registered using " + user.getEmail());
             bindingResult.reject("email");
         }
         else {
@@ -56,7 +58,7 @@ public class RegisterController {
             user.setEnabled(false);
             // Generate random 36-character string token for confirmation link
             user.setConfirmationToken(UUID.randomUUID().toString());
-            user.setId(UUID.randomUUID().toString());
+            user.setUserKey(UUID.randomUUID().toString());
             user.setRole("user");
             userService.saveUser(user);
             String appUrl = request.getScheme() + "://" + request.getServerName();
@@ -74,20 +76,36 @@ public class RegisterController {
 
     // Process confirmation link
     @GetMapping("/user/confirm")
-    public String showConfirmationPage(Model model, @RequestParam("token") String token) {
+    public String showConfirmationPage(Model model, @RequestParam("token") String token, RedirectAttributes redirectAttributes) {
         Predicate predicate = Predicates.equal("confirmationToken", token);
         List<User> userList = userRepository.findByPredicate(predicate);
         System.out.println("Confirmation Token: " + token);
         if (userList != null && !userList.isEmpty()) {
             if(userList.get(0).getEnabled() == true) {
-                // Do nothing
+                model.addAttribute("confirmationLinkError", "Oops! Confirmation link not valid");
+                redirectAttributes.addAttribute("attr","confirmationLinkError");
             } else {
                 userList.get(0).setEnabled(true);
                 userService.saveUser(userList.get(0));
+                redirectAttributes.addAttribute("attr","confirmationLinkSuccess");
             }
         } else {
             System.out.println("");
         }
-        return "redirect:/login";
+        return "redirect:/user/login";
+    }
+
+    @RequestMapping("/user/login")
+    public String login(Model model,@RequestParam("attr") String param) {
+        if(param == "confirmationSuccess") {
+            model.addAttribute("confirmationLinkSucess","Confirmation link verified!");
+        }
+        if(param == "confirmationLinkError") {
+            model.addAttribute("confirmationError", "Oops! Confirmation Link not valid!");
+        }
+        else {
+            // DO NOTHING
+        }
+        return "user/login";
     }
 }

@@ -31,18 +31,18 @@ public class AccountsController {
     private UserService userService;
     private EmailService emailService;
 
-    public AccountsController(UserRepository userRepository) {
+    public AccountsController(UserRepository userRepository,
+                              UserService userService,
+                              EmailService emailService) {
         this.userRepository = userRepository;
+        this.userService = userService;
+        this.emailService = emailService;
     }
 
     @GetMapping({"","/","/index"})
     public String index(Model model) {
-
         List<User> users = new ArrayList<>(userRepository.findAll());
-        for( User entity: users) {
-            System.out.println(entity.toString());
-        }
-        users.sort(Comparator.comparing(User::getEmail));
+        users.sort(Comparator.comparing(User::getFirstName));
         model.addAttribute("user", users);
         return "accounts/index";
     }
@@ -50,18 +50,24 @@ public class AccountsController {
     @GetMapping("/create")
     public String create(Model model) {
         User user = new User();
-        user.generateId();
         model.addAttribute("user", user);
         return "accounts/create";
     }
 
     @PostMapping("/create")
     public String create(User user) {
-        User existingUser = null;
+        User existingUser0 = null;
+        User existingUser1 = null;
         try {
-            existingUser = userRepository.findByKey(user.getId());
-            if (existingUser == null) {
-                user.generateConfirmationToken();
+            existingUser0 = userRepository.findByKey(user.getUserKey());
+            existingUser1 = userRepository.findByKey(user.getEmail());
+            if (existingUser0 == null && existingUser1 == null) {
+                user.setConfirmationToken(UUID.randomUUID().toString());
+                userRepository.save(user);
+            }
+            if (existingUser0 != null && existingUser1 == null) {
+                user.setUserKey(UUID.randomUUID().toString());
+                user.setConfirmationToken(UUID.randomUUID().toString());
                 userRepository.save(user);
             }
         }
@@ -73,8 +79,7 @@ public class AccountsController {
 
     @GetMapping("/newuser")
     public String newuser(Model model) {
-       User user = new User();
-        user.generateId();
+        User user = new User();
         model.addAttribute("user", user);
         return "accounts/newuser";
     }
@@ -92,9 +97,7 @@ public class AccountsController {
             user.setEnabled(false);
             // Generate random 36-character string token for confirmation link
             user.setConfirmationToken(UUID.randomUUID().toString());
-            user.setId(UUID.randomUUID().toString());
             user.setRole("user");
-
             userService.saveUser(user);
             String appUrl = request.getScheme() + "://" + request.getServerName();
             SimpleMailMessage registrationEmail = new SimpleMailMessage();
@@ -116,11 +119,11 @@ public class AccountsController {
         return "accounts/edit";
     }
 
-    @PostMapping("/edit/{userKey}")
+    @PostMapping("/edit")
     public String updatePost(User user) {
         User existingUser = null;
         try {
-            existingUser = userRepository.findByKey(user.getId());
+            existingUser = userRepository.findByKey(user.getUserKey());
             existingUser.setFirstName(user.getFirstName());
             existingUser.setLastName(user.getLastName());
             existingUser.setEmail(user.getEmail());
@@ -138,7 +141,7 @@ public class AccountsController {
     @PostMapping("/set_enabled")
     @ResponseBody
     public String setAvailability(@RequestParam("userEnabled") boolean userEnabled,
-                                  @RequestParam("id") String userKey) {
+                                  @RequestParam("userKey") String userKey) {
         User user = userRepository.findByKey(userKey);
         user.setEnabled(userEnabled);
         userRepository.save(user);
