@@ -84,25 +84,25 @@ public class GarageSettingsControllerTests {
         parkingSpaceOne = new ParkingSpace();
         parkingSpaceOne.setParkingSpaceKey(PARKING_SPACE_ONE_KEY);
         parkingSpaceOne.setGarageKey(GARAGE_ONE_KEY);
-        parkingSpaceOne.setFloor(FLOOR_ONE_NUMBER);
+        parkingSpaceOne.setFloor(PARKING_SPACE_ONE_FLOOR);
         parkingSpaceOne.setNumber(PARKING_SPACE_ONE_NUMBER);
 
         parkingSpaceTwo = new ParkingSpace();
         parkingSpaceTwo.setParkingSpaceKey(PARKING_SPACE_TWO_KEY);
         parkingSpaceTwo.setGarageKey(GARAGE_ONE_KEY);
-        parkingSpaceTwo.setFloor(FLOOR_ONE_NUMBER);
+        parkingSpaceTwo.setFloor(PARKING_SPACE_TWO_FLOOR);
         parkingSpaceTwo.setNumber(PARKING_SPACE_TWO_NUMBER);
 
         parkingSpaceThree = new ParkingSpace();
         parkingSpaceThree.setParkingSpaceKey(PARKING_SPACE_THREE_KEY);
         parkingSpaceThree.setGarageKey(GARAGE_TWO_KEY);
-        parkingSpaceThree.setFloor(FLOOR_TWO_NUMBER);
+        parkingSpaceThree.setFloor(PARKING_SPACE_THREE_FLOOR);
         parkingSpaceThree.setNumber(PARKING_SPACE_THREE_NUMBER);
 
         parkingSpaceFour = new ParkingSpace();
         parkingSpaceFour.setParkingSpaceKey(PARKING_SPACE_FOUR_KEY);
         parkingSpaceFour.setGarageKey(GARAGE_TWO_KEY);
-        parkingSpaceFour.setFloor(FLOOR_TWO_NUMBER);
+        parkingSpaceFour.setFloor(PARKING_SPACE_FOUR_FLOOR);
         parkingSpaceFour.setNumber(PARKING_SPACE_FOUR_NUMBER);
 
         Collection<Garage> garages = new ArrayList<>();
