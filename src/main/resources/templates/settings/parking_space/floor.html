@@ -65,47 +65,16 @@ input:checked + .slider:before {
 </head>
 <body>
 
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid navbar-container">
-        <div class="col-md-3">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <!-- Main Logo -->
-                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div id="navbar" class="navbar-collapse collapse navbar-center">
-                <ul class="nav navbar-nav">
-                    <li><a th:href="@{/garage}">Garages</a></li>
-                    <li><a th:href="@{/analytics/locate}">Search</a></li>
-                    <!-- Settings Link -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
-                </ul>
-                <!--
-                <form class="navbar-form navbar-right">
-                    <input type="text" class="form-control" placeholder="Search..."/>
-                </form>
-                -->
-            </div>
-        </div>
-        <div class="col-md-3">
-            <!-- Social Media Links -->
-            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
-        </div>
-    </div>
-</nav>
+<!-- Navigation Bar -->
+<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
 
 <div class="container-fluid main-container">
 
     <!-- Welcome User -->
     <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
 
+    <!-- Alerts -->
+    <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
             <h1 class="text-center" style="text-transform: uppercase;" th:text="'Level ' + ${floor.number} + ' - ' + ${floor.description}"></h1>
@@ -116,7 +85,10 @@ input:checked + .slider:before {
 
     <div class="row">
         <div class="col-sm-10 col-sm-10 col-md-10 col-md-offset-1">
-            <p class="text-left">
+            <p>
+                <span class="auto-update-message"></span>
+            </p>
+            <p class="text-right">
                 <a th:href="@{/settings/parking_space/create} + '/' + ${garage.garageKey} + '/' + ${floor.floorKey}" class="btn btn-success btn-sm" title="Create Parking Space">Create</a>
                 <a th:href="@{/settings/parking_space/floor} + '/' + ${floor.floorKey}" class="btn btn-success btn-sm" title="Reload this page">Reload</a>
             </p>
@@ -225,13 +197,13 @@ $(document).ready(function(){
         if ($(this).prop('checked')) {
             $.post("/settings/parking_space/set_availability", { parkingSpaceKey: parkingSpaceKey, available: "true" })
                 .done(function(data) {
-                    //alert(data);
+                    $(".auto-update-message").html(data);
                 });
         }
         else {
             $.post("/settings/parking_space/set_availability", { parkingSpaceKey: parkingSpaceKey, available: "false" })
                 .done(function(data) {
-                    //alert(data);
+                    $(".auto-update-message").html(data);
                 });
         }
     });
@@ -245,6 +217,7 @@ $(document).ready(function(){
 
     $.post("/settings/parking_space/set_permit_type", { parkingSpaceKey: parkingSpaceKey, permitTypeKey: permitTypeKey })
         .done(function(data) {
+            $(".auto-update-message").html(data);
         });
     });
 });
@@ -257,6 +230,7 @@ $(document).ready(function(){
 
     $.post("/settings/parking_space/set_space_type", { parkingSpaceKey: parkingSpaceKey, spaceTypeKey: spaceTypeKey })
         .done(function(data) {
+            $(".auto-update-message").html(data);
         });
     });
 });
@@ -269,6 +243,7 @@ $(document).ready(function(){
 
     $.post("/settings/parking_space/set_space_number", { parkingSpaceKey: parkingSpaceKey, spaceNumber: spaceNumber })
         .done(function(data) {
+            $(".auto-update-message").html(data);
         });
     });
 });
