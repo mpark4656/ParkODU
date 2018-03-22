@@ -50,8 +50,13 @@ public class ParkingSpaceSettingsController {
 
     /**
      * Return the default index page with garages model and floors model
+     *
+     * @param successMessage String
+     * @param infoMessage String
+     * @param warningMessage String
+     * @param dangerMessage String
      * @param model Model
-     * @return String
+     * @return String "settings/parking_space/index"
      */
     @GetMapping({"", "/", "/index"})
     public String index(@RequestParam(value = "successMessage", required = false) String successMessage,
@@ -81,9 +86,14 @@ public class ParkingSpaceSettingsController {
     /**
      * Return settings/parking_space/floor.index with garage, floor, parkingSpaces, permitTypes,
      * and spaceTypes models
+     *
+     * @param successMessage String
+     * @param infoMessage String
+     * @param warningMessage String
+     * @param dangerMessage String
      * @param floorKey String
      * @param model Model
-     * @return String
+     * @return String "settings/parking_space/floor"
      */
     @GetMapping("/floor/{floorKey}")
     public String floor(@RequestParam(value = "successMessage", required = false) String successMessage,
@@ -129,10 +139,15 @@ public class ParkingSpaceSettingsController {
     /**
      * Return the settings/parking_space/create.html page
      * Models include parkingSpace, permitTypes, and spaceTypes
-     * @param garageKey String garageKey
-     * @param floorKey String floorKey
-     * @param model Model model
-     * @return String
+     *
+     * @param successMessage String
+     * @param infoMessage String
+     * @param warningMessage String
+     * @param dangerMessage String
+     * @param garageKey String
+     * @param floorKey String
+     * @param model Model
+     * @return String "settings/parking_space/create"
      */
     @GetMapping("/create/{garageKey}/{floorKey}")
     public String create(@RequestParam(value = "successMessage", required = false) String successMessage,
@@ -172,12 +187,19 @@ public class ParkingSpaceSettingsController {
     /**
      * Post method to create a new parking space
      * User is redirected back to settings/parking_space/floor.html
+     *
      * @param parkingSpace ParkingSpace
-     * @return String redirection
+     * @param redirectAttributes RedirectAttributes
+     * @return String redirection to previous page
      */
     @PostMapping("/create")
     public String create(ParkingSpace parkingSpace,
                          RedirectAttributes redirectAttributes) {
+
+        boolean isSuccessful = false;
+        boolean isDuplicateSpaceKey = false;
+        boolean exceptionRaised = false;
+
         ParkingSpace existingParkingSpace = parkingSpaceRepository.findByKey(parkingSpace.getParkingSpaceKey());
 
         // Create predicate to find the floorKey of the floor that this parking space is located on
@@ -194,7 +216,7 @@ public class ParkingSpaceSettingsController {
         String floorKey = floors.get(0).getFloorKey();
 
         try {
-            // If the existingParkingSpace is null, it means the garageKey is unique
+            // If the existingParkingSpace is null, it means the space key is unique
             if (existingParkingSpace == null) {
 
                 // Find all parking spaces that share the same garage key and floor level
@@ -230,32 +252,44 @@ public class ParkingSpaceSettingsController {
 
                 parkingSpaceRepository.save(parkingSpace);
                 garageService.refresh(parkingSpace.getGarageKey());
-
-                redirectAttributes.addAttribute(
-                        "successMessage",
-                        "The space number, " +
-                                parkingSpace.getNumber() +
-                                ", has been successfully created.");
-
-
-                return "redirect:/settings/parking_space/floor/" + floorKey;
+                isSuccessful = true;
             }
             else {
-                redirectAttributes.addAttribute(
-                        "dangerMessage",
-                        "The specified parking space already exists.");
-                return "redirect:/settings/parking_space/create/" +
-                        parkingSpace.getGarageKey() + "/" +
-                        floorKey;
+                isDuplicateSpaceKey = true;
             }
         }
         catch(Exception e) {
             e.printStackTrace();
+            exceptionRaised = true;
+        }
+
+
+        if(isSuccessful) {
+            redirectAttributes.addAttribute(
+                    "successMessage",
+                    "The space number, " +
+                            parkingSpace.getNumber() +
+                            ", has been successfully created.");
+
+            return "redirect:/settings/parking_space/floor/" + floorKey;
+        }
+
+        if(isDuplicateSpaceKey) {
+            redirectAttributes.addAttribute(
+                    "dangerMessage",
+                    "The specified parking space key already exists.");
+            return "redirect:/settings/parking_space/create/" +
+                    parkingSpace.getGarageKey() + "/" +
+                    floorKey;
+        }
+
+        if(exceptionRaised) {
             redirectAttributes.addAttribute(
                     "dangerMessage",
                     "Unknown error has occurred.");
-            return "redirect:/settings/parking_space/index";
         }
+
+        return "redirect:/settings/parking_space/index";
     }
 
     /**
@@ -381,6 +415,7 @@ public class ParkingSpaceSettingsController {
      * settings/parking_space/floor/{floorKey}
      *
      * @param parkingSpaceKey String
+     * @param redirectAttributes RedirectAttributes
      * @return String
      */
     @PostMapping("/delete")
