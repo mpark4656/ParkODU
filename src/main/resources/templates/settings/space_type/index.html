@@ -56,9 +56,14 @@
     <!-- Welcome User -->
     <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
 
+    <!-- Alerts -->
+    <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
     <div class="row">
         <div class="col-sm-8 col-md-8 col-sm-6 col-md-offset-1">
-            <p class="text-left">
+            <p>
+                <span class="auto-update-message"></span>
+            </p>
+            <p class="text-right">
                 <a th:href="@{/settings/space_type/create}" class="btn btn-success btn-sm" title="Create Space Type">Create</a>
                 <a th:href="@{/settings/space_type/index}" class="btn btn-success btn-sm" title="Reload this page">Reload</a>
             </p>
@@ -83,7 +88,7 @@
                                 class="form-control spaceDescription"
                                 wrap="soft"
                                 cols="40"
-                                rows="1"
+                                rows="4"
                                 th:text="${spaceType.description}"
                                 th:attr="data-key=${spaceType.spaceTypeKey}"></textarea>
                     </td>
@@ -93,7 +98,7 @@
                                 title="Safely Delete Space Type"
                                 th:attr="data-id=${spaceType.spaceTypeKey},data-name=${spaceType.name}"
                                 data-toggle="modal"
-                                data-target="#delete-spaceType-modal">Safe Delete</button>
+                                data-target="#delete-spaceType-modal">Delete</button>
                     </td>
                 </tr>
                 </tbody>
@@ -142,6 +147,7 @@ $(document).ready(function(){
 
     $.post("/settings/space_type/set_space_name", { spaceTypeKey : spaceTypeKey, spaceName: spaceName })
         .done(function(data) {
+            $(".auto-update-message").html(data);
         });
     });
 });
@@ -154,6 +160,7 @@ $(document).ready(function(){
 
     $.post("/settings/space_type/set_space_description", { spaceTypeKey : spaceTypeKey, spaceDescription: spaceDescription })
         .done(function(data) {
+            $(".auto-update-message").html(data);
         });
     });
 });

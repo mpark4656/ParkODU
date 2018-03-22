@@ -65,13 +65,16 @@
                 <div class="form-group">
                     <label for="name" class="col-md-4 control-label">Name</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" id="name" required="required" th:field="${garage.name}"/>
+                        <input type="text" class="form-control" id="name" required="required" th:field="${garage.name}"
+                               placeholder="Garage Name"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="description" class="col-md-4 control-label">Description</label>
                     <div class="col-md-8">
-                        <textarea rows="4" cols="50" class="form-control" id="description" th:field="${garage.description}"></textarea>
+                        <textarea rows="4" cols="50" class="form-control" id="description" th:field="${garage.description}"
+                                  placeholder="Enter a description for the garage.">
+                        </textarea>
                     </div>
                 </div>
                 <div class="form-group">
@@ -113,19 +116,22 @@
                 <div class="form-group">
                     <label for="city" class="col-md-4 control-label">City</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" id="city" th:field="${garage.city}"/>
+                        <input type="text" class="form-control" id="city" th:field="${garage.city}"
+                               placeholder="City"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="state" class="col-md-4 control-label">State</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" id="state" th:field="${garage.state}" pattern="^[A-Z]{2}$" title="Two uppercase letters abbreviating the State name"/>
+                        <input type="text" class="form-control" id="state" th:field="${garage.state}" pattern="^[A-Z]{2}$"
+                               placeholder="Two uppercase letters abbreviating the State name" title="Two uppercase letters abbreviating the State name"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="zipCode" class="col-md-4 control-label">Zip Code</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" id="zipCode" th:field="${garage.zipCode}" pattern="^\d{5}$" title="Five digits"/>
+                        <input type="text" class="form-control" id="zipCode" th:field="${garage.zipCode}" pattern="^\d{5}$"
+                               placeholder="Five digits" title="Five digits"/>
                     </div>
                 </div>
                 <div class="col-md-8 col-md-offset-4">

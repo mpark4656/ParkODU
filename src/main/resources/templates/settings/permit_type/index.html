@@ -56,9 +56,14 @@
     <!-- Welcome User -->
     <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
 
+    <!-- Alerts -->
+    <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
     <div class="row">
         <div class="col-sm-8 col-md-8 col-sm-6 col-md-offset-1">
-            <p class="text-left">
+            <p>
+                <span class="auto-update-message"></span>
+            </p>
+            <p class="text-right">
                 <a th:href="@{/settings/permit_type/create}" class="btn btn-success btn-sm" title="Create Permit Type">Create</a>
                 <a th:href="@{/settings/permit_type/index}" class="btn btn-success btn-sm" title="Reload this page">Reload</a>
             </p>
@@ -83,7 +88,7 @@
                                 class="form-control permitDescription"
                                 wrap="soft"
                                 cols="40"
-                                rows="1"
+                                rows="4"
                                 th:text="${permitType.description}"
                                 th:attr="data-key=${permitType.permitTypeKey}"></textarea>
                     </td>
@@ -93,7 +98,7 @@
                             title="Safely Delete Permit Type"
                             th:attr="data-id=${permitType.permitTypeKey},data-name=${permitType.name}"
                             data-toggle="modal"
-                            data-target="#delete-permitType-modal">Safe Delete</button>
+                            data-target="#delete-permitType-modal">Delete</button>
                     </td>
                 </tr>
                 </tbody>
@@ -142,6 +147,7 @@ $(document).ready(function(){
 
     $.post("/settings/permit_type/set_permit_name", { permitTypeKey : permitTypeKey, permitName: permitName })
         .done(function(data) {
+            $(".auto-update-message").html(data);
         });
     });
 });
@@ -154,6 +160,7 @@ $(document).ready(function(){
 
     $.post("/settings/permit_type/set_permit_description", { permitTypeKey : permitTypeKey, permitDescription: permitDescription })
         .done(function(data) {
+            $(".auto-update-message").html(data);
         });
     });
 });

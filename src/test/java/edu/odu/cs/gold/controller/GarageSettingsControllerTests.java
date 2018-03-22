@@ -53,7 +53,7 @@ public class GarageSettingsControllerTests {
         doNothing().when(garageRepository).save(any(Garage.class));
         doNothing().when(garageRepository).delete(anyString());
 
-        garageSettingsController = new GarageSettingsController(garageRepository);
+        //garageSettingsController = new GarageSettingsController(garageRepository);
     }
 
     @Test

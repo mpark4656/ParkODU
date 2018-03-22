@@ -48,6 +48,8 @@
     <!-- Welcome User -->
     <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
 
+    <!-- Alerts -->
+    <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
             <h1 class="text-center" style="text-transform: uppercase;">Create Parking Space</h1>
@@ -95,7 +97,7 @@
                 <div class="col-md-8 col-md-offset-4">
                     <button type="submit" class="btn btn-primary">Submit</button>
                     <button type="reset" class="btn btn-primary">Reset</button>
-                    <a th:href="@{/settings/parking_space/index}" class="btn btn-primary" title="Back">Back</a>
+                    <a th:href="@{'/settings/parking_space/floor/' + ${floor.floorKey}}" class="btn btn-primary" title="Back">Back</a>
                 </div>
             </form>
         </div>
