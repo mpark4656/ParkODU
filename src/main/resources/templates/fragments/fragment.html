@@ -47,7 +47,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 						<li><a th:href="@{/garage}">Garages</a></li>
 						<li><a th:href="@{/analytics/locate}">Search</a></li>
 						<div>
-							<li sec:authorize="hasRole('ADMIN')"><a th:href="@{/settings}">Settings</a></li>
+							<li sec:authorize="hasRole('admin')"><a th:href="@{/settings}">Settings</a></li>
 							<!--
                             <li><a th:href="@{/settings}">Settings</a></li>
                             -->
