@@ -1,25 +1,25 @@
 package edu.odu.cs.gold.controller;
 
 import com.hazelcast.query.Predicate;
+import com.hazelcast.query.Predicates;
 import edu.odu.cs.gold.model.Floor;
 import edu.odu.cs.gold.model.Garage;
 import edu.odu.cs.gold.model.ParkingSpace;
 import edu.odu.cs.gold.repository.FloorRepository;
 import edu.odu.cs.gold.repository.GarageRepository;
 import edu.odu.cs.gold.repository.ParkingSpaceRepository;
+import edu.odu.cs.gold.service.GarageService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.ui.ExtendedModelMap;
-import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.UUID;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
-public class GarageSettingsControllerTests {
+public class GarageControllerTests {
 
     private static String GARAGE_ONE_KEY = "00000000000000000000000000000001";
     private static String GARAGE_TWO_KEY = "00000000000000000000000000000002";
@@ -44,23 +44,23 @@ public class GarageSettingsControllerTests {
     private static Integer PARKING_SPACE_THREE_NUMBER = 1;
     private static Integer PARKING_SPACE_FOUR_NUMBER = 2;
 
-    private GarageSettingsController garageSettingsController;
+    private GarageController garageController;
     private GarageRepository garageRepository;
     private FloorRepository floorRepository;
     private ParkingSpaceRepository parkingSpaceRepository;
+    private GarageService garageService;
 
     private Garage garageOne;
     private Garage garageTwo;
     private Floor floorOne;
     private Floor floorTwo;
-    private ParkingSpace  parkingSpaceOne;
+    private ParkingSpace parkingSpaceOne;
     private ParkingSpace  parkingSpaceTwo;
     private ParkingSpace  parkingSpaceThree;
     private ParkingSpace  parkingSpaceFour;
 
     @Before
     public void setup() {
-
         garageOne = new Garage();
         garageOne.setGarageKey(GARAGE_ONE_KEY);
         garageOne.setName(GARAGE_ONE_NAME);
@@ -140,127 +140,48 @@ public class GarageSettingsControllerTests {
         doNothing().when(parkingSpaceRepository).save(any(ParkingSpace.class));
         doNothing().when(parkingSpaceRepository).delete(anyString());
 
-        garageSettingsController = new GarageSettingsController(
-                garageRepository,
-                floorRepository,
-                parkingSpaceRepository);
+        garageService = new GarageService(garageRepository, floorRepository, parkingSpaceRepository);
+        garageController = new GarageController(garageRepository, floorRepository, garageService);
     }
 
     @Test
     public void testIndex() {
         ExtendedModelMap model = new ExtendedModelMap();
-        String returnURL = garageSettingsController.index(null, null, null, null, model);
-
-        assertEquals("settings/garage/index", returnURL);
+        String returnURL = garageController.index(model);
         Collection<Garage> garages = (Collection)model.get("garages");
-        assertTrue(garages.size() == 2); // Asserts that the number of Garages to be displayed in index.html is 2
+
+        // Check that the returned string is correct
+        assertEquals("garage/index", returnURL);
+
+        // Check the size of the collection is the same
+        assertTrue(garages.size() == 2);
+
+        // Check that the garages are equal but not same reference
+        assertEquals(garages, garageRepository.findAll());
     }
 
     @Test
-    public void testCreate_Get() {
+    public void testDetails() {
         ExtendedModelMap model = new ExtendedModelMap();
-        String returnURL = garageSettingsController.create(model);
+        String returnURL = garageController.details(garageOne.getGarageKey(), model);
+        Garage garage = (Garage)model.get("garage");
+        Collection<Floor> floors = (Collection)model.get("floors");
 
-        assertEquals("settings/garage/create", returnURL);
-        assertTrue(model.containsKey("garage"));
-    }
+        // Test with garageOne
+        assertEquals("garage/details", returnURL);
+        assertEquals(garage, garageOne);
+        assertEquals(floors,
+                floorRepository.findByPredicate(Predicates.equal("garageKey", garageOne.getGarageKey())));
 
-    @Test
-    public void testCreate_Post_Success() {
-        Garage newGarage = new Garage();
-        newGarage.setGarageKey("0000000000000000000000000000003");
-        newGarage.setName("NewGarage");
+        // Test with garageTwo
+        model = new ExtendedModelMap();
+        returnURL = garageController.details(garageTwo.getGarageKey(), model);
+        garage = (Garage)model.get("garage");
+        floors = (Collection)model.get("floors");
 
-        // This mocks that if countByPredicate is called, then it will return an integer value of 0 to mock that there is no duplicates with the same garageKey or name as the new Garage
-        when(garageRepository.countByPredicate(any(Predicate.class))).thenReturn(0);
-
-        ExtendedModelMap model = new ExtendedModelMap();
-        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
-        String returnURL = garageSettingsController.create(newGarage, model, redirectAttributes);
-
-        assertEquals("redirect:/settings/garage/index", returnURL);
-        assertFalse(model.containsKey("garage"));
-        assertTrue(redirectAttributes.containsKey("successMessage"));
-    }
-
-    @Test
-    public void testCreate_Post_Duplicate() {
-        Garage newGarage = new Garage();
-        newGarage.setGarageKey(GARAGE_ONE_KEY);
-        newGarage.setName(GARAGE_ONE_NAME);
-
-        // This mocks that if countByPredicate is called, then it will return an integer value of 1 to mock that there exists a Garage with the same name
-        when(garageRepository.countByPredicate(any(Predicate.class))).thenReturn(1);
-
-        ExtendedModelMap model = new ExtendedModelMap();
-        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
-        String returnURL = garageSettingsController.create(newGarage, model, redirectAttributes);
-
-        assertEquals("settings/garage/create", returnURL);
-        assertTrue(model.containsKey("garage"));
-        assertTrue(model.containsKey("dangerMessage"));
-    }
-
-    @Test
-    public void testEdit_Get() {
-        ExtendedModelMap model = new ExtendedModelMap();
-        String returnURL = garageSettingsController.edit(GARAGE_ONE_KEY, model);
-
-        assertEquals("settings/garage/edit", returnURL);
-        assertTrue(model.get("garage").equals(garageOne));
-    }
-
-    @Test
-    public void testEdit_Post_Success() {
-        Garage editedGarage = new Garage();
-        editedGarage.setGarageKey(GARAGE_ONE_KEY);
-        editedGarage.setName("EditedTest1");
-
-        ExtendedModelMap model = new ExtendedModelMap();
-        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
-        String returnURL = garageSettingsController.edit(editedGarage, model, redirectAttributes);
-
-        assertEquals("redirect:/settings/garage/index", returnURL);
-        assertFalse(model.containsKey("garage"));
-        assertTrue(redirectAttributes.containsKey("successMessage"));
-    }
-
-    @Test
-    public void testEdit_Post_Duplicate() {
-
-        Garage editedGarage = new Garage();
-        editedGarage.setGarageKey(GARAGE_ONE_KEY);
-        editedGarage.setName(GARAGE_ONE_NAME);
-
-        // This mocks that if countByPredicate is called, then it will return an integer value of 1 to mock that there exists a Garage with the same name
-        when(garageRepository.countByPredicate(any(Predicate.class))).thenReturn(1);
-
-        ExtendedModelMap model = new ExtendedModelMap();
-        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
-        String returnURL = garageSettingsController.edit(editedGarage, model, redirectAttributes);
-
-        assertEquals("settings/garage/edit", returnURL);
-        assertTrue(model.containsKey("garage"));
-        assertTrue(model.containsKey("dangerMessage"));
-    }
-
-    @Test
-    public void testDelete_Post_Success() {
-        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
-        String returnURL = garageSettingsController.delete(GARAGE_ONE_KEY, redirectAttributes);
-
-        assertEquals("redirect:/settings/garage/index", returnURL);
-        assertTrue(redirectAttributes.containsKey("successMessage"));
-    }
-
-    @Test
-    public void testDelete_Post_Fail() {
-        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
-        String randomUUID = UUID.randomUUID().toString();
-        when(garageRepository.findByKey(randomUUID)).thenReturn(null);
-        String returnURL = garageSettingsController.delete(randomUUID, redirectAttributes);
-
-        assertEquals("redirect:/settings/garage/index", returnURL);
-        assertTrue(redirectAttributes.containsKey("dangerMessage"));
+        assertEquals("garage/details", returnURL);
+        assertEquals(garage, garageTwo);
+        assertEquals(floors,
+                floorRepository.findByPredicate(Predicates.equal("garageKey", garageTwo.getGarageKey())));
     }
 }
