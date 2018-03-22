@@ -116,7 +116,7 @@ public class PermitTypeSettingsController {
 
         // If any of the existing permit types have the same name as the specified name, do not create a new permit
         for(PermitType eachPermitType : permitTypes) {
-            if(eachPermitType.getName().equals(permitTypeName)) {
+            if(eachPermitType.getName().toUpperCase().equals(permitTypeName.toUpperCase())) {
                 redirectAttributes.addAttribute(
                         "dangerMessage",
                         permitTypeName + " already exists.");
@@ -168,7 +168,6 @@ public class PermitTypeSettingsController {
 
         permitType.setDescription(permitDescription.trim());
         permitTypeRepository.save(permitType);
-
         permitTypeService.refresh(permitType.getPermitTypeKey());
 
         return permitType.getName() + "'s description was updated successfully.";
@@ -199,7 +198,6 @@ public class PermitTypeSettingsController {
 
         permitType.setName(permitName.trim());
         permitTypeRepository.save(permitType);
-
         permitTypeService.refresh(permitType.getPermitTypeKey());
 
         return permitName + " was updated successfully.";
