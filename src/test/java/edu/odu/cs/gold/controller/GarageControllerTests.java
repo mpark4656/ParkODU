@@ -1,6 +1,5 @@
 package edu.odu.cs.gold.controller;
 
-import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
 import edu.odu.cs.gold.model.Floor;
 import edu.odu.cs.gold.model.Garage;
