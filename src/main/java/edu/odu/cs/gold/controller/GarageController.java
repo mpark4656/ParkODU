@@ -29,19 +29,13 @@ public class GarageController {
 
     private GarageRepository garageRepository;
     private FloorRepository floorRepository;
-    private ParkingSpaceRepository parkingSpaceRepository;
-    private FloorStatisticRepository floorStatisticRepository;
     private GarageService garageService;
 
     public GarageController(GarageRepository garageRepository,
                             FloorRepository floorRepository,
-                            ParkingSpaceRepository parkingSpaceRepository,
-                            FloorStatisticRepository floorStatisticRepository,
                             GarageService garageService) {
         this.garageRepository = garageRepository;
         this.floorRepository = floorRepository;
-        this.parkingSpaceRepository = parkingSpaceRepository;
-        this.floorStatisticRepository = floorStatisticRepository;
         this.garageService = garageService;
     }
 

@@ -1,21 +1,15 @@
 package edu.odu.cs.gold.restcontroller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
 import edu.odu.cs.gold.model.Floor;
 import edu.odu.cs.gold.model.Garage;
-import edu.odu.cs.gold.model.ParkingSpace;
 import edu.odu.cs.gold.repository.FloorRepository;
 import edu.odu.cs.gold.repository.GarageRepository;
 import edu.odu.cs.gold.repository.ParkingSpaceRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

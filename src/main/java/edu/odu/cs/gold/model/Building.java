@@ -7,6 +7,7 @@ public class Building implements Serializable {
 
     private String buildingKey;
     private String name;
+    private String description;
     private Double latitude;
     private Double longitude;
     private String address;
@@ -38,6 +39,10 @@ public class Building implements Serializable {
         this.name = name;
     }
 
+    public String getDescription() { return description; }
+
+    public void setDescription(String description) { this.description = description; }
+
     public Double getLatitude() {
         return latitude;
     }
@@ -53,9 +58,10 @@ public class Building implements Serializable {
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
+
     public String getAddress() {return address;}
 
-    public void setAddress() {this.address = address;}
+    public void setAddress(String address) {this.address = address;}
 
     public Location getLocation() {
         return new Location(latitude, longitude);
