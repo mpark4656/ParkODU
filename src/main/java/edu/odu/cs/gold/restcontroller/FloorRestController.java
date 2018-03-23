@@ -230,6 +230,7 @@ public class FloorRestController {
             // Set to Available
             else if(number < 0) {
                 number = Math.abs(number);
+
                 // Find all unavailable spaces on this floor
                 Predicate predicate = Predicates.and(
                         Predicates.equal("garageKey", floor.getGarageKey()),
