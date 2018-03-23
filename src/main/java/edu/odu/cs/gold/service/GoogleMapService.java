@@ -26,9 +26,6 @@ import com.google.maps.model.*;
 @Service
 public class GoogleMapService {
 
-    private DistanceMatrixRow distanceMatrixRow;
-    private GoogleMapService googleMapService;
-
     public static final String GOOGLE_MAPS_API_KEY = "AIzaSyCK-F1dqhEye7aaQdd9dd69-oMMokv2pVA";
 
     public DistanceMatrix calculateDistanceDurationWithAddress(Garage garage, String startingAddress,TravelMode travelMode) {
