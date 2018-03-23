@@ -1,5 +1,7 @@
 package edu.odu.cs.gold.controller;
 
+import com.hazelcast.query.Predicate;
+import com.hazelcast.query.Predicates;
 import edu.odu.cs.gold.model.Floor;
 import edu.odu.cs.gold.model.Garage;
 import edu.odu.cs.gold.model.ParkingSpace;
@@ -10,11 +12,17 @@ import edu.odu.cs.gold.service.GarageService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.ui.ExtendedModelMap;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
@@ -144,6 +152,10 @@ public class FloorSettingsControllerTests {
         doNothing().when(parkingSpaceRepository).save(any(ParkingSpace.class));
         doNothing().when(parkingSpaceRepository).delete(anyString());
 
+        garageService = mock(GarageService.class);
+        doNothing().when(garageService).refresh(garageOne.getGarageKey());
+        doNothing().when(garageService).refresh(garageTwo.getGarageKey());
+
         floorSettingsController = new FloorSettingsController(
                 garageRepository,
                 floorRepository,
@@ -154,7 +166,7 @@ public class FloorSettingsControllerTests {
     @Test
     public void testIndex() {
         ExtendedModelMap model = new ExtendedModelMap();
-        String urlReturn = floorSettingsController.index(
+        String returnURL = floorSettingsController.index(
                 null,
                 null,
                 null,
@@ -162,7 +174,7 @@ public class FloorSettingsControllerTests {
                 model);
 
         Collection<Garage> garages = (Collection) model.get("garages");
-        assertEquals("settings/floor/index",urlReturn);
+        assertEquals("settings/floor/index",returnURL);
         assertEquals(garageRepository.findAll(), garages);
         assertNull((String) model.get("successMessage"));
         assertNull((String) model.get("infoMessage"));
@@ -175,7 +187,7 @@ public class FloorSettingsControllerTests {
         ExtendedModelMap model = new ExtendedModelMap();
         String successMessage = "SUCCESSSSSSSS";
 
-        String urlReturn = floorSettingsController.index(
+        String returnURL = floorSettingsController.index(
                 successMessage,
                 null,
                 null,
@@ -183,12 +195,466 @@ public class FloorSettingsControllerTests {
                 model);
 
         Collection<Garage> garages = (Collection) model.get("garages");
-        assertEquals("settings/floor/index",urlReturn);
+        assertEquals("settings/floor/index",returnURL);
         assertEquals(garageRepository.findAll(), garages);
         assertTrue(model.containsKey("successMessage"));
         assertEquals(successMessage, model.get("successMessage"));
         assertNull((String) model.get("infoMessage"));
         assertNull((String) model.get("warningMessage"));
         assertNull((String) model.get("dangerMessage"));
+    }
+
+    @Test
+    public void testIndexInfoMessage() {
+        ExtendedModelMap model = new ExtendedModelMap();
+        String infoMessage = "Information";
+
+        String returnURL = floorSettingsController.index(
+                null,
+                infoMessage,
+                null,
+                null,
+                model);
+
+        Collection<Garage> garages = (Collection) model.get("garages");
+        assertEquals("settings/floor/index",returnURL);
+        assertEquals(garageRepository.findAll(), garages);
+        assertTrue(model.containsKey("infoMessage"));
+        assertEquals(infoMessage, model.get("infoMessage"));
+        assertNull((String) model.get("successMessage"));
+        assertNull((String) model.get("warningMessage"));
+        assertNull((String) model.get("dangerMessage"));
+    }
+
+    @Test
+    public void testIndexWarningMessage() {
+        ExtendedModelMap model = new ExtendedModelMap();
+        String warningMessage = "warning";
+
+        String returnURL = floorSettingsController.index(
+                null,
+                null,
+                warningMessage,
+                null,
+                model);
+
+        Collection<Garage> garages = (Collection) model.get("garages");
+        assertEquals("settings/floor/index",returnURL);
+        assertEquals(garageRepository.findAll(), garages);
+        assertTrue(model.containsKey("warningMessage"));
+        assertEquals(warningMessage, model.get("warningMessage"));
+        assertNull((String) model.get("infoMessage"));
+        assertNull((String) model.get("successMessage"));
+        assertNull((String) model.get("dangerMessage"));
+    }
+
+    @Test
+    public void testIndexDangerMessage() {
+        ExtendedModelMap model = new ExtendedModelMap();
+        String dangerMessage = "DANGER!";
+
+        String returnURL = floorSettingsController.index(
+                null,
+                null,
+                null,
+                dangerMessage,
+                model);
+
+        Collection<Garage> garages = (Collection) model.get("garages");
+        assertEquals("settings/floor/index",returnURL);
+        assertEquals(garageRepository.findAll(), garages);
+        assertTrue(model.containsKey("dangerMessage"));
+        assertEquals(dangerMessage, model.get("dangerMessage"));
+        assertNull((String) model.get("infoMessage"));
+        assertNull((String) model.get("successMessage"));
+        assertNull((String) model.get("warningMessage"));
+    }
+
+    @Test
+    public void testGarageNoMessage() {
+        ExtendedModelMap model = new ExtendedModelMap();
+
+        List<Floor> floors = new ArrayList<> ();
+        when(floorRepository.findByPredicate(any(Predicate.class))).thenReturn(floors);
+        floors.add(floorOne);
+
+        String returnURL = floorSettingsController.garage(
+                garageOne.getGarageKey(),
+                null,
+                null,
+                null,
+                null,
+                model);
+
+        List<Floor> returnFloors = (ArrayList<Floor>)model.get("floors");
+
+        assertEquals(garageOne, model.get("garage"));
+        assertEquals(1, returnFloors.size());
+        assertEquals(floors, returnFloors);
+        assertEquals("settings/floor/garage", returnURL);
+        assertNull(model.get("successMessage"));
+        assertNull(model.get("infoMessage"));
+        assertNull(model.get("warningMessage"));
+        assertNull(model.get("dangerMessage"));
+    }
+
+    @Test
+    public void testGarageSuccessMessage() {
+        ExtendedModelMap model = new ExtendedModelMap();
+
+        List<Floor> floors = new ArrayList<> ();
+        when(floorRepository.findByPredicate(any(Predicate.class))).thenReturn(floors);
+        floors.add(floorTwo);
+
+        String successMessage = "It's success, Bruh!";
+
+        String returnURL = floorSettingsController.garage(
+                garageTwo.getGarageKey(),
+                successMessage,
+                null,
+                null,
+                null,
+                model);
+
+        List<Floor> returnFloors = (ArrayList<Floor>)model.get("floors");
+
+        assertEquals(garageTwo, model.get("garage"));
+        assertEquals(1, returnFloors.size());
+        assertEquals(floors, returnFloors);
+        assertEquals("settings/floor/garage", returnURL);
+        assertTrue(model.containsKey("successMessage"));
+
+        assertEquals(successMessage, model.get("successMessage"));
+        assertNull(model.get("infoMessage"));
+        assertNull(model.get("warningMessage"));
+        assertNull(model.get("dangerMessage"));
+    }
+
+    @Test
+    public void testGarageInfoMessage() {
+        ExtendedModelMap model = new ExtendedModelMap();
+
+        List<Floor> floors = new ArrayList<> ();
+        when(floorRepository.findByPredicate(any(Predicate.class))).thenReturn(floors);
+        floors.add(floorTwo);
+
+        String infoMessage = "It's INFO, Bruh!";
+
+        String returnURL = floorSettingsController.garage(
+                garageTwo.getGarageKey(),
+                null,
+                infoMessage,
+                null,
+                null,
+                model);
+
+        List<Floor> returnFloors = (ArrayList<Floor>)model.get("floors");
+
+        assertEquals(garageTwo, model.get("garage"));
+        assertEquals(1, returnFloors.size());
+        assertEquals(floors, returnFloors);
+        assertEquals("settings/floor/garage", returnURL);
+        assertTrue(model.containsKey("infoMessage"));
+
+        assertEquals(infoMessage, model.get("infoMessage"));
+        assertNull(model.get("successMessage"));
+        assertNull(model.get("warningMessage"));
+        assertNull(model.get("dangerMessage"));
+    }
+
+    @Test
+    public void testGarageWarningMessage() {
+        ExtendedModelMap model = new ExtendedModelMap();
+
+        List<Floor> floors = new ArrayList<> ();
+        when(floorRepository.findByPredicate(any(Predicate.class))).thenReturn(floors);
+        floors.add(floorTwo);
+
+        String warningMessage = "It's a warning, Bruh!";
+
+        String returnURL = floorSettingsController.garage(
+                garageTwo.getGarageKey(),
+                null,
+                null,
+                warningMessage,
+                null,
+                model);
+
+        List<Floor> returnFloors = (ArrayList<Floor>)model.get("floors");
+
+        assertEquals(garageTwo, model.get("garage"));
+        assertEquals(1, returnFloors.size());
+        assertEquals(floors, returnFloors);
+        assertEquals("settings/floor/garage", returnURL);
+        assertTrue(model.containsKey("warningMessage"));
+
+        assertEquals(warningMessage, model.get("warningMessage"));
+        assertNull(model.get("successMessage"));
+        assertNull(model.get("infoMessage"));
+        assertNull(model.get("dangerMessage"));
+    }
+
+    @Test
+    public void testGarageDangerMessage() {
+        ExtendedModelMap model = new ExtendedModelMap();
+
+        List<Floor> floors = new ArrayList<> ();
+        when(floorRepository.findByPredicate(any(Predicate.class))).thenReturn(floors);
+        floors.add(floorTwo);
+
+        String dangerMessage = "It's DANGEROUS, Bruh!";
+
+        String returnURL = floorSettingsController.garage(
+                garageTwo.getGarageKey(),
+                null,
+                null,
+                null,
+                dangerMessage,
+                model);
+
+        List<Floor> returnFloors = (ArrayList<Floor>)model.get("floors");
+
+        assertEquals(garageTwo, model.get("garage"));
+        assertEquals(1, returnFloors.size());
+        assertEquals(floors, returnFloors);
+        assertEquals("settings/floor/garage", returnURL);
+        assertTrue(model.containsKey("dangerMessage"));
+
+        assertEquals(dangerMessage, model.get("dangerMessage"));
+        assertNull(model.get("successMessage"));
+        assertNull(model.get("infoMessage"));
+        assertNull(model.get("warningMessage"));
+    }
+
+    @Test
+    public void testCreate_Get_NoMessage() {
+        ExtendedModelMap model =new ExtendedModelMap();
+
+        String returnURL = floorSettingsController.create(
+                null,
+                null,
+                null,
+                null,
+                garageOne.getGarageKey(),
+                model
+        );
+
+        Floor returnFloor = (Floor)model.get("floor");
+
+        assertEquals("settings/floor/create", returnURL);
+        assertTrue(model.containsKey("floor"));
+        assertTrue(model.containsKey("garage"));
+        assertEquals(garageOne, model.get("garage"));
+        assertEquals(garageOne.getGarageKey(), returnFloor.getGarageKey());
+        assertNull(model.get("successMessage"));
+        assertNull(model.get("infoMessage"));
+        assertNull(model.get("warningMessage"));
+        assertNull(model.get("dangerMessage"));
+    }
+
+    @Test
+    public void testCreate_Get_SuccessMessage() {
+        ExtendedModelMap model =new ExtendedModelMap();
+        String successMessage = "It's success, Bruh";
+
+        String returnURL = floorSettingsController.create(
+                successMessage,
+                null,
+                null,
+                null,
+                garageOne.getGarageKey(),
+                model
+        );
+
+        Floor returnFloor = (Floor)model.get("floor");
+
+        assertEquals("settings/floor/create", returnURL);
+        assertTrue(model.containsKey("floor"));
+        assertTrue(model.containsKey("garage"));
+        assertEquals(garageOne, model.get("garage"));
+        assertEquals(garageOne.getGarageKey(), returnFloor.getGarageKey());
+        assertTrue(model.containsKey("successMessage"));
+        assertEquals(successMessage, model.get("successMessage"));
+        assertNull(model.get("infoMessage"));
+        assertNull(model.get("warningMessage"));
+        assertNull(model.get("dangerMessage"));
+    }
+
+    @Test
+    public void testCreate_Get_InfoMessage() {
+        ExtendedModelMap model =new ExtendedModelMap();
+        String infoMessage = "It's INFORMATION, Bruh";
+
+        String returnURL = floorSettingsController.create(
+                null,
+                infoMessage,
+                null,
+                null,
+                garageOne.getGarageKey(),
+                model
+        );
+
+        Floor returnFloor = (Floor)model.get("floor");
+
+        assertEquals("settings/floor/create", returnURL);
+        assertTrue(model.containsKey("floor"));
+        assertTrue(model.containsKey("garage"));
+        assertEquals(garageOne, model.get("garage"));
+        assertEquals(garageOne.getGarageKey(), returnFloor.getGarageKey());
+        assertTrue(model.containsKey("infoMessage"));
+        assertEquals(infoMessage, model.get("infoMessage"));
+        assertNull(model.get("successMessage"));
+        assertNull(model.get("warningMessage"));
+        assertNull(model.get("dangerMessage"));
+    }
+
+    @Test
+    public void testCreate_Get_WarningMessage() {
+        ExtendedModelMap model =new ExtendedModelMap();
+        String warningMessage = "It's warning, Bruh";
+
+        String returnURL = floorSettingsController.create(
+                null,
+                null,
+                warningMessage,
+                null,
+                garageOne.getGarageKey(),
+                model
+        );
+
+        Floor returnFloor = (Floor)model.get("floor");
+
+        assertEquals("settings/floor/create", returnURL);
+        assertTrue(model.containsKey("floor"));
+        assertTrue(model.containsKey("garage"));
+        assertEquals(garageOne, model.get("garage"));
+        assertEquals(garageOne.getGarageKey(), returnFloor.getGarageKey());
+        assertTrue(model.containsKey("warningMessage"));
+        assertEquals(warningMessage, model.get("warningMessage"));
+        assertNull(model.get("successMessage"));
+        assertNull(model.get("infoMessage"));
+        assertNull(model.get("dangerMessage"));
+    }
+
+    @Test
+    public void testCreate_Get_DangerMessage() {
+        ExtendedModelMap model =new ExtendedModelMap();
+        String dangerMessage = "It's danger, Bruh";
+
+        String returnURL = floorSettingsController.create(
+                null,
+                null,
+                null,
+                dangerMessage,
+                garageOne.getGarageKey(),
+                model
+        );
+
+        Floor returnFloor = (Floor)model.get("floor");
+
+        assertEquals("settings/floor/create", returnURL);
+        assertTrue(model.containsKey("floor"));
+        assertTrue(model.containsKey("garage"));
+        assertEquals(garageOne, model.get("garage"));
+        assertEquals(garageOne.getGarageKey(), returnFloor.getGarageKey());
+        assertTrue(model.containsKey("dangerMessage"));
+        assertEquals(dangerMessage, model.get("dangerMessage"));
+        assertNull(model.get("successMessage"));
+        assertNull(model.get("infoMessage"));
+        assertNull(model.get("warningMessage"));
+    }
+
+    @Test
+    public void testCreate_Post_NullGarageKey() {
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+        Floor floor= new Floor();
+
+        String returnURL = floorSettingsController.create(
+                floor,
+                redirectAttributes
+        );
+
+        assertEquals(
+                "redirect:/settings/floor/index",
+                returnURL);
+        assertEquals("redirect:/settings/floor/index",returnURL);
+        assertTrue(redirectAttributes.containsKey("dangerMessage"));
+        assertEquals("The garage key cannot be null or empty.",
+                redirectAttributes.get("dangerMessage"));
+    }
+
+    @Test
+    public void testCreate_Post_EmptyGarageKey() {
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+        Floor floor= new Floor();
+        floor.setGarageKey("");
+
+        String returnURL = floorSettingsController.create(
+                floor,
+                redirectAttributes
+        );
+
+        assertEquals(
+                "redirect:/settings/floor/index",
+                returnURL);
+        assertFalse(redirectAttributes.containsKey("successMessage"));
+        assertTrue(redirectAttributes.containsKey("dangerMessage"));
+
+        assertEquals("redirect:/settings/floor/index",returnURL);
+        assertTrue(redirectAttributes.containsKey("dangerMessage"));
+        assertEquals("The garage key cannot be null or empty.",
+                redirectAttributes.get("dangerMessage"));
+    }
+
+    @Test
+    public void testCreate_Post_Duplicate() {
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+        Floor floor= new Floor();
+        floor.setGarageKey(garageOne.getGarageKey());
+        floor.setTotalSpaces(2);
+
+        when(floorRepository.countByPredicate(any(Predicate.class))).thenReturn(1);
+
+        String returnURL = floorSettingsController.create(
+                floor,
+                redirectAttributes
+        );
+
+        assertEquals(
+                "redirect:/settings/floor/create/" + garageOne.getGarageKey(),
+                returnURL);
+        assertFalse(redirectAttributes.containsKey("successMessage"));
+        assertTrue(redirectAttributes.containsKey("dangerMessage"));
+        assertEquals("successMessage",
+                "The floor " +
+                        floor.getNumber() +
+                        " already exists in " +
+                        garageOne.getName(), redirectAttributes.get("dangerMessage"));
+    }
+
+    @Test
+    public void testCreate_Post_Success() {
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+        Floor floor= new Floor();
+        floor.setGarageKey(garageOne.getGarageKey());
+        floor.setTotalSpaces(2);
+
+        when(floorRepository.countByPredicate(any(Predicate.class))).thenReturn(0);
+
+        String returnURL = floorSettingsController.create(
+                floor,
+                redirectAttributes
+        );
+
+        assertEquals(
+                "redirect:/settings/floor/garage/" + garageOne.getGarageKey(),
+                returnURL);
+        assertTrue(redirectAttributes.containsKey("successMessage"));
+        assertFalse(redirectAttributes.containsKey("dangerMessage"));
+        assertEquals("successMessage",
+                "The floor, " +
+                        floor.getNumber() +
+                        ", was successfully created in garage " +
+                        garageOne.getName(), redirectAttributes.get("successMessage"));
     }
 }
