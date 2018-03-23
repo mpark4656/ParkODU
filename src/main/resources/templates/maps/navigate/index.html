@@ -6,7 +6,45 @@
     <!-- Head -->
     <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
 
+    <style>
+      #right-panel {
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
 
+      #right-panel select, #right-panel input {
+        font-size: 15px;
+      }
+
+      #right-panel select {
+        width: 100%;
+      }
+
+      #right-panel i {
+        font-size: 12px;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 96%;
+        float: left;
+        width: 63%;
+        height: 96%;
+      }
+      #right-panel {
+        float: right;
+        width: 34%;
+        height: 196%;
+      }
+      .panel {
+        height: 100%;
+        overflow: auto;
+      }
+    </style>
 
 </head>
 <body>
@@ -32,6 +70,9 @@
     <div id="map">
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCK-F1dqhEye7aaQdd9dd69-oMMokv2pVA"></script>
     </div>
+    <div id="right-panel">
+        <p>Total Distance: <span id="total"></span></p>
+    </div>
 
     <script th:inline="javascript" >
         /*<![CDATA[*/
@@ -48,11 +89,6 @@
             var markerArray = [];
             var div = document.getElementById('map');
 
-            div.style.position = 'absolute';
-            div.style.height = '89%';
-            div.style.width = '100%';
-            div.style.bottom = '40px';
-
             var latlng = new google.maps.LatLng(parseFloat(destLat),parseFloat(destLon));
             var mapOptions = {
                 zoom: 15,
@@ -62,11 +98,19 @@
             map = new google.maps.Map(div, mapOptions);
 
             var directionsService = new google.maps.DirectionsService;
-            var directionsDisplay = new google.maps.DirectionsRenderer({map: map});
+            var directionsDisplay = new google.maps.DirectionsRenderer({map: map,
+                panel: document.getElementById('right-panel'),
+                draggable: true
+            });
+
             var stepDisplay = new google.maps.InfoWindow;
 
             // Display the route between the initial start and end selections.
             calculateAndDisplayRoute(directionsDisplay, directionsService, markerArray, stepDisplay, map);
+
+            directionsDisplay.addListener('directions_changed', function() {
+                computeTotalDistance(directionsDisplay.getDirections());
+            });
         }
 
         function calculateAndDisplayRoute(directionsDisplay, directionsService,

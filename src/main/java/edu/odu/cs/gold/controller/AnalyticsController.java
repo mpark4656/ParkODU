@@ -93,6 +93,14 @@ public class AnalyticsController {
         List<Garage> garages = new ArrayList<>(garageRepository.findAll());
 
         for (Garage garage : garages) {
+
+            DistanceMatrix distanceMatrix = googleMapService.calculateDistanceDurationWithAddress(garage,startingAddress,TravelMode.DRIVING);
+
+            System.out.println("Distance: ");
+            System.out.println(distanceMatrix.rows[0].elements[0].distance.toString());
+            System.out.println("Duration: ");
+            System.out.println(distanceMatrix.rows[0].elements[0].duration.humanReadable.toString());
+
             int availabilityCount = 0;
             int totalCount = 0;
             if (permitPredicate != null) {
@@ -125,10 +133,12 @@ public class AnalyticsController {
                 recommendation.setAvailabilityCount(availabilityCount);
                 recommendation.setTotalCount(totalCount);
 
-                DistanceDuration startingAddressToGarage = googleMapService.getDistanceDuration(startingLocation, garage.getLocation(), TravelMode.DRIVING);
+                DistanceMatrix startingAddressToGarage = googleMapService.calculateDistanceDurationWithAddress(garage, startingAddress, TravelMode.DRIVING);
                 recommendation.setStartingAddressToGarage(startingAddressToGarage);
 
-                DistanceDuration garageToDestinationBuilding = googleMapService.getDistanceDuration(garage.getLocation(), destinationBuilding.getLocation(), TravelMode.WALKING);
+                DistanceMatrix garageToDestinationBuilding = googleMapService.calculateDistanceDurationWithAddress(garage, destinationBuilding.getAddress(),TravelMode.WALKING);
+                        //getDistanceDuration(garage, destinationBuilding.getAddress(), TravelMode.WALKING);
+
                 recommendation.setGarageToDestinationBuilding(garageToDestinationBuilding);
 
                 // Set Total Distance
