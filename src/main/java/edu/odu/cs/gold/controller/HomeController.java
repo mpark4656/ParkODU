@@ -21,21 +21,19 @@ public class HomeController {
         return "settings/index";
     }
 
-    @RequestMapping("/login")
-    public String login(Model model) {
-
-
+    @GetMapping("/login")
+    public String login() {
         return "home/login";
     }
 
     // Login form with error
-    @RequestMapping("/login-error")
+    @GetMapping("/login-error")
     public String loginError(Model model) {
         model.addAttribute("loginError", true);
         return "home/login";
     }
 
-    @RequestMapping("/logout")
+    @GetMapping("/logout")
     public String logout() {
         return "redirect:/";
     }
