@@ -19,33 +19,35 @@
 </nav>
 
     <div id="maps">
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCK-F1dqhEye7aaQdd9dd69-oMMokv2pVA&amp;callback=initMap" async="async" defer="defer"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCK-F1dqhEye7aaQdd9dd69-oMMokv2pVA"></script>
     </div>
 
     <script th:inline="javascript" >
 
         var geocode;
         var map;
-        function initMap() {
+        window.onload = function () {
 
              /*<![CDATA[*/
-            var destLat = /*[[${destination.latitude}]]*/;
-            var destLon = /*[[${destination.longitude}]]*/;
+            // testing purposes
+            var destLat = /*[[${startingLocation.latitude}]]*/;
+            var destLon = /*[[${startingLocation.longitude}]]*/;
+            //var destLat = /*[[${destination.latitude}]]*/;
+            //var destLon = /*[[${destination.longitude}]]*/;
             /*]]>*/
 
             var div = document.getElementById('maps');
+            div.style.position = 'absolute';
             div.style.height = '95%';
-            div.style.position = 'fixed';
-            div.style.padding = '10px';
-            div.querySelectorAll('*')
+            div.style.width = '100%';
 
             var latlng = new google.maps.LatLng(parseFloat(destLat),parseFloat(destLon));
             var mapOptions = {
                 zoom: 15,
                 center: latlng,
             };
-
             map = new google.maps.Map(div, mapOptions);
+
         }
         //    var markerArray = [];
         //    var directionsService = new google.maps.DirectionsService;
