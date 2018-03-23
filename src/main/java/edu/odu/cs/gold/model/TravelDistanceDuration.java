@@ -1,5 +1,7 @@
 package edu.odu.cs.gold.model;
 
+import com.google.maps.model.DistanceMatrix;
+
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -9,9 +11,9 @@ public class TravelDistanceDuration implements Serializable {
     private String garageKey;
     private String buildingKey;
     private String distanceText;
-    private Integer distanceValue;
+    private long distanceValue;
     private String durationText;
-    private Integer durationValue;
+    private long durationValue;
     private String travelMode;
 
     private transient String garageName;
@@ -25,15 +27,15 @@ public class TravelDistanceDuration implements Serializable {
 
     public TravelDistanceDuration(String garageKey,
                                   String buildingKey,
-                                  DistanceDuration distanceDuration,
+                                  DistanceMatrix distanceDuration,
                                   String travelMode) {
         this.travelDistanceDurationKey = UUID.randomUUID().toString();
         this.garageKey = garageKey;
         this.buildingKey = buildingKey;
-        this.distanceText = distanceDuration.rows.get(0).elements.get(0).distance.text;
-        this.distanceValue = Integer.parseInt(distanceDuration.rows.get(0).elements.get(0).distance.value);
-        this.durationText = distanceDuration.rows.get(0).elements.get(0).duration.text;
-        this.durationValue = Integer.parseInt(distanceDuration.rows.get(0).elements.get(0).duration.value);
+        this.distanceText = distanceDuration.rows[0].elements[0].distance.humanReadable;
+        this.distanceValue = distanceDuration.rows[0].elements[0].distance.inMeters;
+        this.durationText = distanceDuration.rows[0].elements[0].duration.humanReadable;
+        this.durationValue = distanceDuration.rows[0].elements[0].duration.inSeconds;
         this.travelMode = travelMode;
     }
 
@@ -84,7 +86,7 @@ public class TravelDistanceDuration implements Serializable {
         this.distanceText = distanceText;
     }
 
-    public Integer getDistanceValue() {
+    public long getDistanceValue() {
         return distanceValue;
     }
 
@@ -103,7 +105,7 @@ public class TravelDistanceDuration implements Serializable {
         this.durationText = durationText;
     }
 
-    public Integer getDurationValue() {
+    public long getDurationValue() {
         return durationValue;
     }
 
