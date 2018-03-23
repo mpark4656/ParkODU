@@ -1,7 +1,6 @@
 package edu.odu.cs.gold.controller;
 
 import com.hazelcast.query.Predicate;
-import com.hazelcast.query.Predicates;
 import edu.odu.cs.gold.model.Floor;
 import edu.odu.cs.gold.model.Garage;
 import edu.odu.cs.gold.model.ParkingSpace;
@@ -657,4 +656,224 @@ public class FloorSettingsControllerTests {
                         ", was successfully created in garage " +
                         garageOne.getName(), redirectAttributes.get("successMessage"));
     }
+
+    @Test
+    public void testEdit_Get_NoMessage() {
+        ExtendedModelMap model = new ExtendedModelMap();
+
+        String returnURL = floorSettingsController.edit(
+                floorOne.getFloorKey(),
+                null,
+                null,
+                null,
+                null,
+                model
+        );
+
+        assertEquals("settings/floor/edit",returnURL);
+        assertTrue(model.containsKey("floor"));
+        assertEquals(floorOne, model.get("floor"));
+
+        assertFalse(model.containsKey("successMessage"));
+        assertFalse(model.containsKey("infoMessage"));
+        assertFalse(model.containsKey("warningMessage"));
+        assertFalse(model.containsKey("dangerMessage"));
+    }
+
+    @Test
+    public void testEdit_Get_SuccessMessage() {
+        ExtendedModelMap model = new ExtendedModelMap();
+
+        String successMessage = "SUCCESS";
+
+        String returnURL = floorSettingsController.edit(
+                floorOne.getFloorKey(),
+                successMessage,
+                null,
+                null,
+                null,
+                model
+        );
+
+        assertEquals("settings/floor/edit",returnURL);
+        assertTrue(model.containsKey("floor"));
+        assertEquals(floorOne, model.get("floor"));
+        assertTrue(model.containsKey("successMessage"));
+        assertEquals(successMessage, model.get("successMessage"));
+
+        assertFalse(model.containsKey("infoMessage"));
+        assertFalse(model.containsKey("warningMessage"));
+        assertFalse(model.containsKey("dangerMessage"));
+    }
+
+    @Test
+    public void testEdit_Get_InfoMessage() {
+        ExtendedModelMap model = new ExtendedModelMap();
+
+        String infoMessage = "INFORMACION";
+
+        String returnURL = floorSettingsController.edit(
+                floorOne.getFloorKey(),
+                null,
+                infoMessage,
+                null,
+                null,
+                model
+        );
+
+        assertEquals("settings/floor/edit",returnURL);
+        assertTrue(model.containsKey("floor"));
+        assertEquals(floorOne, model.get("floor"));
+        assertTrue(model.containsKey("infoMessage"));
+        assertEquals(infoMessage, model.get("infoMessage"));
+
+        assertFalse(model.containsKey("successMessage"));
+        assertFalse(model.containsKey("warningMessage"));
+        assertFalse(model.containsKey("dangerMessage"));
+    }
+
+    @Test
+    public void testEdit_Get_WarningMessage() {
+        ExtendedModelMap model = new ExtendedModelMap();
+
+        String warningMessage = "W A R N I N G";
+
+        String returnURL = floorSettingsController.edit(
+                floorOne.getFloorKey(),
+                null,
+                null,
+                warningMessage,
+                null,
+                model
+        );
+
+        assertEquals("settings/floor/edit",returnURL);
+        assertTrue(model.containsKey("floor"));
+        assertEquals(floorOne, model.get("floor"));
+        assertTrue(model.containsKey("warningMessage"));
+        assertEquals(warningMessage, model.get("warningMessage"));
+
+        assertFalse(model.containsKey("successMessage"));
+        assertFalse(model.containsKey("infoMessage"));
+        assertFalse(model.containsKey("dangerMessage"));
+    }
+
+    @Test
+    public void testEdit_Get_DangerMessage() {
+        ExtendedModelMap model = new ExtendedModelMap();
+
+        String dangerMessage = "REGNAD";
+
+        String returnURL = floorSettingsController.edit(
+                floorOne.getFloorKey(),
+                null,
+                null,
+                null,
+                dangerMessage,
+                model
+        );
+
+        assertEquals("settings/floor/edit",returnURL);
+        assertTrue(model.containsKey("floor"));
+        assertEquals(floorOne, model.get("floor"));
+        assertTrue(model.containsKey("dangerMessage"));
+        assertEquals(dangerMessage, model.get("dangerMessage"));
+
+        assertFalse(model.containsKey("successMessage"));
+        assertFalse(model.containsKey("infoMessage"));
+        assertFalse(model.containsKey("warningMessage"));
+    }
+
+    @Test
+    public void testEdit_Post_SameFloorNumber() {
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+
+        Floor floor = new Floor();
+        floor.setNumber("1");
+        floor.setFloorKey(floorOne.getFloorKey());
+        floor.setGarageKey(garageOne.getGarageKey());
+
+        String returnURL = floorSettingsController.edit(
+                floor,
+                redirectAttributes
+        );
+
+        assertEquals(
+                "redirect:/settings/floor/garage/" + floor.getGarageKey(),
+                returnURL
+        );
+
+        assertTrue(redirectAttributes.containsKey("successMessage"));
+        assertEquals(
+                "The floor " +
+                        floor.getNumber() +
+                        " was successfully updated.",
+                redirectAttributes.get("successMessage"));
+
+        assertFalse(redirectAttributes.containsKey("dangerMessage"));
+    }
+
+    @Test
+    public void testEdit_Post_Duplicate() {
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+
+        Floor floor = new Floor();
+        floor.setNumber("2");
+        floor.setFloorKey(floorOne.getFloorKey());
+        floor.setGarageKey(garageOne.getGarageKey());
+
+        when(floorRepository.countByPredicate(any(Predicate.class))).thenReturn(1);
+
+        String returnURL = floorSettingsController.edit(
+                floor,
+                redirectAttributes
+        );
+
+        assertEquals(
+                "redirect:/settings/floor/edit/" + floor.getFloorKey(),
+                returnURL
+        );
+
+        assertTrue(redirectAttributes.containsKey("dangerMessage"));
+        assertEquals(
+                "A floor with the number " +
+                        floor.getNumber() +
+                        " already exists.",
+                redirectAttributes.get("dangerMessage"));
+
+        assertFalse(redirectAttributes.containsKey("successMessage"));
+    }
+
+    @Test
+    public void testEdit_Post_DifferentFloorNumber_Success() {
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+
+        Floor floor = new Floor();
+        floor.setNumber("2");
+        floor.setFloorKey(floorOne.getFloorKey());
+        floor.setGarageKey(garageOne.getGarageKey());
+
+        when(floorRepository.countByPredicate(any(Predicate.class))).thenReturn(0);
+
+        String returnURL = floorSettingsController.edit(
+                floor,
+                redirectAttributes
+        );
+
+        assertEquals(
+                "redirect:/settings/floor/garage/" + floor.getGarageKey(),
+                returnURL
+        );
+
+        assertTrue(redirectAttributes.containsKey("successMessage"));
+        assertEquals(
+                "The floor " +
+                        floor.getNumber() +
+                        " was successfully updated.",
+                redirectAttributes.get("successMessage"));
+
+        assertFalse(redirectAttributes.containsKey("dangerMessage"));
+    }
+
+
 }
