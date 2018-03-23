@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
@@ -183,7 +184,7 @@ public class ParkingSpaceSettingsControllerTests {
         floors.add(floorOne);
         floors.add(floorTwo);
 
-        Collection<ParkingSpace> parkingSpaces = new ArrayList<> ();
+        List<ParkingSpace> parkingSpaces = new ArrayList<> ();
         parkingSpaces.add(parkingSpaceOne);
         parkingSpaces.add(parkingSpaceTwo);
         parkingSpaces.add(parkingSpaceThree);
@@ -239,14 +240,13 @@ public class ParkingSpaceSettingsControllerTests {
         when(spaceTypeRepository.findByKey(SPACE_KEY_THREE)).thenReturn(spaceTypeThree);
         when(spaceTypeRepository.findByKey(SPACE_KEY_FOUR)).thenReturn(spaceTypeFour);
         when(spaceTypeRepository.findAll()).thenReturn(spaceTypes);
+        when(parkingSpaceRepository.findByPredicate(any(Predicate.class))).thenReturn(parkingSpaces);
         doNothing().when(spaceTypeRepository).save(any(SpaceType.class));
         doNothing().when(spaceTypeRepository).delete(anyString());
 
         garageService = new GarageService(garageRepository, floorRepository, parkingSpaceRepository);
 
         garageService = mock(GarageService.class);
-        doNothing().when(garageService).refresh(GARAGE_ONE_KEY);
-        doNothing().when(garageService).refresh(GARAGE_TWO_KEY);
         doNothing().when(garageService).refresh(GARAGE_ONE_KEY);
         doNothing().when(garageService).refresh(GARAGE_TWO_KEY);
         doNothing().when(garageService).save(any(Garage.class));
@@ -276,6 +276,11 @@ public class ParkingSpaceSettingsControllerTests {
 
     @Test
     public void testFloor() {
+        List<ParkingSpace> floorOneParkingSpaces = new ArrayList<>();
+        floorOneParkingSpaces.add(parkingSpaceOne);
+        floorOneParkingSpaces.add(parkingSpaceTwo);
+        when(parkingSpaceRepository.findByPredicate(any(Predicate.class))).thenReturn(floorOneParkingSpaces);
+
         ExtendedModelMap model = new ExtendedModelMap();
         String returnURL = parkingSpaceSettingsController.floor(null,null,null,null, FLOOR_ONE_KEY, model);
 
@@ -283,30 +288,19 @@ public class ParkingSpaceSettingsControllerTests {
         assertTrue(model.get("floor").equals(floorOne));
         assertTrue(model.get("garage").equals(garageOne));
 
-
-
         Collection<ParkingSpace> parkingSpaces = (Collection)model.get("parkingSpaces");
-        System.out.println(parkingSpaces.size());
-
-        Predicate predicate = Predicates.and(
-                Predicates.equal("garageKey", GARAGE_ONE_KEY),
-                Predicates.equal("floor", FLOOR_ONE_NUMBER)
-        );
-
-        assertEquals(parkingSpaces, parkingSpaceRepository.findByPredicate(predicate));
-        System.out.println(parkingSpaces.size());
-
-
+        assertTrue(parkingSpaces.size() == 2);
+        Collection<PermitType> permitTypes = (Collection)model.get("permitTypes");
+        assertTrue(permitTypes.size() == 4);
+        Collection<SpaceType> spaceTypes = (Collection)model.get("spaceTypes");
+        assertTrue(spaceTypes.size() == 4);
     }
-
     @Test
     public void testCreate_get() {
         ExtendedModelMap model = new ExtendedModelMap();
         String returnURL = parkingSpaceSettingsController.create(null,null,null,
                                                                 null, GARAGE_ONE_KEY, FLOOR_ONE_KEY, model);
         assertEquals("settings/parking_space/create", returnURL);
-
-
         assertTrue(model.get("floor").equals(floorOne));
         assertTrue(model.containsKey("floor"));
         assertTrue(model.containsKey("parkingSpace"));
@@ -318,27 +312,113 @@ public class ParkingSpaceSettingsControllerTests {
 
         Collection<ParkingSpace> spaceTypes = (Collection)model.get("spaceTypes");
         assertTrue(permitTypes.size() == 4);
-
-
     }
 
     @Test
     public void testCreate_post_success() {
+        ParkingSpace newParkingSpace = new ParkingSpace();
+        newParkingSpace.setParkingSpaceKey("00000000000000000000000000000020");
+        newParkingSpace.setNumber(5);
+        newParkingSpace.setFloor("1");
+        newParkingSpace.setGarageKey("00000000000000000000000000000001");
+        newParkingSpace.setPermitTypeKey("00000000000000000000000000000009");
+        newParkingSpace.setSpaceTypeKey("00000000000000000000000000000013");
 
+        String floorKey = "00000000000000000000000000000003";
+        when(parkingSpaceRepository.findByKey("00000000000000000000000000000020")).thenReturn(null);
+
+        List<Floor> matchingFloor = new ArrayList<>();
+        matchingFloor.add(floorOne);
+        when(floorRepository.findByPredicate(any(Predicate.class))).thenReturn(matchingFloor);
+
+
+        ExtendedModelMap model = new ExtendedModelMap();
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+        String returnURL = parkingSpaceSettingsController.create(newParkingSpace, redirectAttributes);
+
+        assertEquals("redirect:/settings/parking_space/floor/" + FLOOR_ONE_KEY, returnURL);
+        assertTrue(redirectAttributes.containsKey("successMessage"));
     }
 
     @Test
     public void testCreate_post_duplicate() {
+        ParkingSpace newParkingSpace = new ParkingSpace();
+        newParkingSpace.setParkingSpaceKey("0000000000000000000000000000005");
+        newParkingSpace.setNumber(1);
+        newParkingSpace.setFloor("1");
+        newParkingSpace.setGarageKey("00000000000000000000000000000001");
 
+        String floorKey = "00000000000000000000000000000003";
+
+        List<Floor> matchingFloor = new ArrayList<>();
+        matchingFloor.add(floorOne);
+        when(floorRepository.findByPredicate(any(Predicate.class))).thenReturn(matchingFloor);
+
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+        String returnURL = parkingSpaceSettingsController.create(newParkingSpace, redirectAttributes);
+
+        assertEquals("redirect:/settings/parking_space/create/" + GARAGE_ONE_KEY + "/" + floorKey, returnURL);
+        assertTrue(redirectAttributes.containsKey("dangerMessage"));
+    }
+
+
+    @Test
+    public void testSetSpaceNumber_success() {
+        String returnString = parkingSpaceSettingsController.setSpaceNumber(PARKING_SPACE_ONE_KEY,5);
+
+        assertEquals("The space number was set to 5", returnString);
     }
 
     @Test
-    public void testSetSpaceNumber() {
+    public void testSetSpaceNumber_duplicate() {
+        String returnString = parkingSpaceSettingsController.setSpaceNumber(PARKING_SPACE_ONE_KEY,2);
+
+        assertEquals("The number, 2, already exists.", returnString);
+    }
+
+    @Test
+    public void testSetSpaceType() {
+        String returnString = parkingSpaceSettingsController.setSpaceType(PARKING_SPACE_ONE_KEY, SPACE_KEY_TWO);
+
+        assertEquals("The space type of the space number " + PARKING_SPACE_ONE_NUMBER + " was set to " + SPACE_TYPE_TWO_NAME,
+                returnString);
+    }
+
+    @Test
+    public void testSetPermitType() {
+        String returnString = parkingSpaceSettingsController.setPermitType(PARKING_SPACE_ONE_KEY, PERMIT_KEY_TWO);
+
+        assertEquals("The permit type of the space number " + PARKING_SPACE_ONE_NUMBER + " was set to " + PERMIT_TYPE_TWO_NAME,
+                returnString);
+    }
+
+    @Test
+    public void testSetAvailability_available() {
+        String returnString = parkingSpaceSettingsController.setAvailability(PARKING_SPACE_ONE_KEY, true);
+
+        assertEquals("The space number " + PARKING_SPACE_ONE_NUMBER + " was set to available",
+                returnString);
+    }
+
+    @Test
+    public void testSetAvailability_unavailable() {
+        String returnString = parkingSpaceSettingsController.setAvailability(PARKING_SPACE_ONE_KEY, false);
+
+        assertEquals("The space number " + PARKING_SPACE_ONE_NUMBER + " was set to unavailable",
+                returnString);
+    }
+
+    @Test
+    public void testDelete_success(){
         ExtendedModelMap model = new ExtendedModelMap();
         RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
-        String returnURL = parkingSpaceSettingsController.setSpaceNumber(PARKING_SPACE_ONE_KEY,5);
+        List<Floor> sameFloor = new ArrayList<>();
+        sameFloor.add(floorOne);
+        when(floorRepository.findByPredicate(any(Predicate.class))).thenReturn(sameFloor);
 
+        String returnURL = parkingSpaceSettingsController.delete(PARKING_SPACE_ONE_KEY, redirectAttributes);
 
-
+        assertTrue(redirectAttributes.containsKey("successMessage"));
+        assertEquals("redirect:/settings/parking_space/floor/" + FLOOR_ONE_KEY, returnURL);
     }
 }
