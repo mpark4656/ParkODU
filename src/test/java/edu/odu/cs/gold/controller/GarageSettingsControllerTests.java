@@ -11,11 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
-
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -23,23 +21,23 @@ import static org.mockito.Mockito.*;
 
 public class GarageSettingsControllerTests {
 
-    private static String GARAGE_ONE_KEY = "00000000000000000000000000000001";
-    private static String GARAGE_TWO_KEY = "00000000000000000000000000000002";
-    private static String FLOOR_ONE_KEY = "00000000000000000000000000000003";
-    private static String FLOOR_TWO_KEY = "00000000000000000000000000000004";
-    private static String PARKING_SPACE_ONE_KEY = "00000000000000000000000000000005";
-    private static String PARKING_SPACE_TWO_KEY = "00000000000000000000000000000006";
-    private static String PARKING_SPACE_THREE_KEY = "00000000000000000000000000000007";
-    private static String PARKING_SPACE_FOUR_KEY = "00000000000000000000000000000008";
+    private static String GARAGE_ONE_KEY = "a0000000000000000000000000000001";
+    private static String GARAGE_TWO_KEY = "a0000000000000000000000000000002";
+    private static String FLOOR_ONE_KEY = "b0000000000000000000000000000001";
+    private static String FLOOR_TWO_KEY = "b0000000000000000000000000000002";
+    private static String PARKING_SPACE_ONE_KEY = "c0000000000000000000000000000001";
+    private static String PARKING_SPACE_TWO_KEY = "c0000000000000000000000000000002";
+    private static String PARKING_SPACE_THREE_KEY = "c0000000000000000000000000000003";
+    private static String PARKING_SPACE_FOUR_KEY = "c0000000000000000000000000000004";
 
     private static String GARAGE_ONE_NAME = "Garage1";
     private static String GARAGE_TWO_NAME = "Garage2";
     private static String FLOOR_ONE_NUMBER = "1";
-    private static String FLOOR_TWO_NUMBER = "1";
+    private static String FLOOR_TWO_NUMBER = "2";
     private static String PARKING_SPACE_ONE_FLOOR = "1";
-    private static String PARKING_SPACE_TWO_FLOOR = "1";
-    private static String PARKING_SPACE_THREE_FLOOR = "1";
-    private static String PARKING_SPACE_FOUR_FLOOR = "1";
+    private static String PARKING_SPACE_TWO_FLOOR = "2";
+    private static String PARKING_SPACE_THREE_FLOOR = "3";
+    private static String PARKING_SPACE_FOUR_FLOOR = "4";
 
     private static Integer PARKING_SPACE_ONE_NUMBER = 1;
     private static Integer PARKING_SPACE_TWO_NUMBER = 2;
@@ -55,10 +53,10 @@ public class GarageSettingsControllerTests {
     private Garage garageTwo;
     private Floor floorOne;
     private Floor floorTwo;
-    private ParkingSpace  parkingSpaceOne;
-    private ParkingSpace  parkingSpaceTwo;
-    private ParkingSpace  parkingSpaceThree;
-    private ParkingSpace  parkingSpaceFour;
+    private ParkingSpace parkingSpaceOne;
+    private ParkingSpace parkingSpaceTwo;
+    private ParkingSpace parkingSpaceThree;
+    private ParkingSpace parkingSpaceFour;
 
     @Before
     public void setup() {
