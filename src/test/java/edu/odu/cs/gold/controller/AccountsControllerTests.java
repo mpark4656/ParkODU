@@ -23,5 +23,43 @@ import static org.mockito.Mockito.*;
 
 public class AccountsControllerTests {
 
+    @Before
+    public void setup() {
+        // TODO
+    }
 
+    @Test
+    public void testIndex() {
+        // TODO
+    }
+
+    @Test
+    public void testCreate_Get() {
+        // TODO
+    }
+
+    @Test
+    public void testCreate_Post() {
+        // TODO
+    }
+
+    @Test
+    public void testEdit_Get() {
+        // TODO
+    }
+
+    @Test
+    public void testEdit_Post() {
+        // TODO
+    }
+
+    @Test
+    public void testDelete_Post() {
+        // TODO
+    }
+
+    @Test
+    public void testUser() {
+        // TODO
+    }
 }
