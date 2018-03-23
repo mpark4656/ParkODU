@@ -1,10 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
 </head>
 <body>
+
+<!-- Navigation Bar -->
+<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
+
+<div class="container-fluid main-container">
+
+    <!-- Welcome User -->
+    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
+
+    <!-- Alerts -->
+    <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+            <h1 class="text-center" style="text-transform: uppercase;">Edit Floor</h1>
+            <hr/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+            <form class="form-horizontal" id="edit-floor-form" role="form" th:action="@{/settings/floor/edit}" method="post" th:object="${floor}">
+                <input type="hidden" id="garage-id" th:value="${floor.garageKey}" th:field="${floor.garageKey}"/>
+                <input type="hidden" id="floor-id" th:value="${floor.floorKey}" th:field="${floor.floorKey}"/>
+                <div class="form-group">
+                    <label for="number" class="col-md-4 control-label">Number</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="number" placeholder="The number or name of the floor." required="required" th:field="${floor.number}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description" class="col-md-4 control-label">Description</label>
+                    <div class="col-md-8">
+                        <textarea rows="4" cols="50" class="form-control" id="description" placeholder="A description of the properties of this floor." required="required" th:field="${floor.description}"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="totalSpaces" class="col-md-4 control-label">Total Spaces</label>
+                    <div class="col-md-8">
+                        <input type="number" class="form-control" id="totalSpaces"  min="0" value="0" th:field="${floor.totalSpaces}" readonly="readonly"/>
+                    </div>
+                </div>
+                <div class="col-md-8 col-md-offset-4">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-primary">Reset</button>
+                    <a th:href="@{'/settings/floor/garage/' +  ${floor.garageKey}}" class="btn btn-primary" title="Back">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <br/>
+
+    <!-- Footer -->
+    <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
+</div>
+
+
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<script>
+</script>
 
 </body>
 </html>

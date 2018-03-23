@@ -2,149 +2,71 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
+
     <!-- Head -->
     <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+
 </head>
 <body>
 
 <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid navbar-container">
-        <div class="col-md-3">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <!-- Main Logo -->
-                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div id="navbar" class="navbar-collapse collapse navbar-center">
-                <ul class="nav navbar-nav">
-                    <li><a th:href="@{/garage}">Garages</a></li>
-                    <li><a th:href="@{/analytics/locate}">Search</a></li>
-                    <!-- Settings Link -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
-                </ul>
-                <!--
-                <form class="navbar-form navbar-right">
-                    <input type="text" class="form-control" placeholder="Search..."/>
-                </form>
-                -->
-            </div>
-        </div>
 
-        <div class="col-md-1">
-            <div id="navbar" class="navbar-collapse collapse navbar-center">
-                <ul class="nav navbar-nav">
-                    <!-- Login -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: user-login" /> /*/-->
-                </ul>
-            </div>
-        </div>
+    <!-- Navigation Bar -->
+    <!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
 
-        <div class="col-md-1">
-            <div id="navbar" class="navbar-collapse collapse navbar-center">
-                <ul class="nav navbar-nav">
-                    <!-- Create User -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: new-user" /> /*/-->
-                    <!-- Create User (Admin) -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: new-user-user" /> /*/-->
-                </ul>
-            </div>
-        </div>
-
-        <div class="col-md-1">
-            <!-- Social Media Links -->
-            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
-        </div>
-    </div>
 </nav>
 
-<!--
-<div class="text-center submenu">
-    <th:block th:each="itemCategory : ${itemCategories}">
-        <a th:href="@{/gallery/category} + '/' + ${itemCategory.name}" class="submenu-text" th:text="${itemCategory.name}"></a>
-        <span th:if="${itemCategory.key != lastItemCategoryKey}" class="submenu-text">|</span>
-    </th:block>
-</div>
--->
+    <div id="maps" style="height: 100%">
+        <div style="height: 95%; position: fixed; width: 100%;">
+            <div class="gm-style" style="postion: fixed;">
+                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCK-F1dqhEye7aaQdd9dd69-oMMokv2pVA&amp;callback=initMap" async="async" defer="defer"></script>
 
-<div class="container-fluid main-container">
-
-    <!-- Welcome User -->
-    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
-
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-8">
-            <h1 class="text-center" style="text-transform: uppercase;">Directions</h1>
+            </div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <table class="table table-bordered table-centered">
-                <thead>
-                <tr>
-                    <th rowspan="2" width="20%">Starting Location</th>
-                    <th rowspan="2" width="20%">Destination Location</th>
-                    <th rowspan="2" width="20%">TravelMode</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td th:text="${latitude} + ',' + ${longitude}"></td>
-                    <td th:text="${destination.latitude} + ',' + ${destination.longitude}"></td>
-                    <td th:text="${travelMode}"></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div id="gm" style="
-        #map {
-            position: absolute;
-            height: 570px;
-            width: 1190px;
-            padding: 100px;
-            margin: 0;
-        }">
-    </div>
+    <script th:inline="javascript" >
+
+        var geocode;
+        var map;
+        function initMap() {
+             /*<![CDATA[*/
+            var destLat = /*[[${destination.latitude}]]*/;
+            var destLon = /*[[${destination.longitude}]]*/;
+            /*]]>*/
+            var latlng = new google.maps.LatLng(parseFloat(destLat),parseFloat(destLon));
+            var mapOptions = {
+                zoom: 15,
+                center: latlng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            map = new google.maps.Map(document.getElementById('maps'), mapOptions);
+        }
+        //    var markerArray = [];
+        //    var directionsService = new google.maps.DirectionsService;
+        //
+        //
+        //
+        //    // Create a renderer for directions and bind it to the map.
+        //    var directionsDisplay = new google.maps.DirectionsRenderer({map: map});
+        //
+        //    // Instantiate an info window to hold step text.
+        //    var stepDisplay = new google.maps.InfoWindow;
+        //
+        //    // Display the route between the initial start and end selections.
+        //    calculateAndDisplayRoute(directionsDisplay, directionsService, markerArray, stepDisplay, map)
+        //
+        //}
+
+
+
+    </script>
 
     <!-- Footer -->
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 
-</div>
+    <!-- Scripts -->
+    <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 
-<!-- Scripts -->
-<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
-
-<!-- Google Maps Embed Directions -->
-<!--/*/ <th:block th:include="fragments/fragment :: google-directions" /> /*/-->
-
-<script th:inline="javascript" >
-
-        function initMap() {
-            /*<![CDATA[*/
-            var destlat = /*[[${destination.latitude}]]*/;
-            var destlon = /*[[${destination.longitude}]]*/;
-            /*]]>*/
-
-            // Instantiate a directions service.
-            var directionsService = new google.maps.DirectionsService;
-
-            var map = new google.maps.Map(document.getElementById('gm'), {
-                center: {
-                    lat: destlat,
-                    lng: destlon
-                },
-                zoom: 15
-            });
-        }
-    </script>
 </body>
 </html>

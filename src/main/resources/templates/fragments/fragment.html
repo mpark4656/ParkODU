@@ -23,9 +23,85 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 </head>
 <body>
+	<!-- Navigation Bar -->
+	<nav th:fragment="navigation-bar" class="navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid navbar-container">
+			<div class="col-md-3">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+						<a class="navbar-brand" th:href="@{/}">
+							<img th:src="@{/img} + '/' + 'odupark_logo_02.png'" alt="Park ODU Logo"
+								 style="height: 100%; top: 0; left: 0; position: absolute"/>
+						</a>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div id="navbar-1" class="navbar-collapse collapse navbar-center">
+					<ul class="nav navbar-nav">
+						<li><a th:href="@{/garage}">Garages</a></li>
+						<li><a th:href="@{/analytics/locate}">Search</a></li>
+						<div>
+							<li sec:authorize="hasRole('admin')"><a th:href="@{/settings}">Settings</a></li>
+							<!--
+                            <li><a th:href="@{/settings}">Settings</a></li>
+                            -->
+						</div>
+					</ul>
+					<!--
+                    <form class="navbar-form navbar-right">
+                        <input type="text" class="form-control" placeholder="Search..."/>
+                    </form>
+                    -->
+				</div>
+			</div>
+			<div class="col-md-1">
+				<div id="navbar-2" class="navbar-collapse collapse navbar-center">
+					<ul class="nav navbar-nav">
+						<div>
+							<li sec:authorize="isAnonymous()"><a th:href="@{/login}">Login</a></li>
+							<!--
+                            <li><a th:href="@{/login}">Login</a></li>
+                            -->
+						</div>
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-1">
+				<div id="navbar-3" class="navbar-collapse collapse navbar-center">
+					<ul class="nav navbar-nav">
+						<div>
+							<li sec:authorize="isAnonymous()"><a th:href="@{/user/register}">Create</a></li>
+							<!--
+                            <li><a th:href="@{/newuser}">New User</a></li>
+                            -->
+						</div>
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-1">
+				<div>
+					<div class="social-media-links-container">
+						<a target="_blank" href="#" class="fa fa-facebook facebook-icon"></a>
+						<a target="_blank" href="#" class="fa fa-instagram instagram-icon"></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>
+
+
 	<!-- Main Logo -->
 	<div th:fragment="main-logo">
-		<a class="navbar-brand" th:href="@{/}">ParkODU</a>
+		<a class="navbar-brand" th:href="@{/}">
+			<img th:src="@{/img} + '/' + 'odupark_logo_02.png'" alt="Park ODU Logo"
+				 style="border: 1px solid black; width: 30%; top: 0; left: 0; position: absolute"/>
+		</a>
 	</div>
 	<!--
 	<a class="navbar-brand" th:href="@{/}"><img src="./img/delightful_indulgence_logo.png" alt="Delightful Indulgence Logo"/></a>
@@ -132,11 +208,6 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 	<!-- Chart.js Scripts -->
 	<div th:fragment="chart-js-scripts">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>
-	</div>
-
-	<!-- Google Maps Embed Directions -->
-	<div th:fragment="google-directions">
-		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCK-F1dqhEye7aaQdd9dd69-oMMokv2pVA&amp;callback=initMap" async="async" defer="defer"></script>
 	</div>
 
 </body>

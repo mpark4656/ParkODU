@@ -7,63 +7,8 @@
 </head>
 <body>
 
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid navbar-container">
-        <div class="col-md-3">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <!-- Main Logo -->
-                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div id="navbar" class="navbar-collapse collapse navbar-center">
-                <ul class="nav navbar-nav">
-                    <li><a th:href="@{/garage}">Garages</a></li>
-                    <li><a th:href="@{/analytics/locate}">Search</a></li>
-                    <!-- Settings Link -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
-                </ul>
-                <!--
-                <form class="navbar-form navbar-right">
-                    <input type="text" class="form-control" placeholder="Search..."/>
-                </form>
-                -->
-            </div>
-        </div>
-
-        <div class="col-md-1">
-            <div id="navbar" class="navbar-collapse collapse navbar-center">
-                <ul class="nav navbar-nav">
-                    <!-- Login -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: user-login" /> /*/-->
-                </ul>
-            </div>
-        </div>
-
-        <div class="col-md-1">
-            <div id="navbar" class="navbar-collapse collapse navbar-center">
-                <ul class="nav navbar-nav">
-                    <!-- Create User -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: new-user" /> /*/-->
-                    <!-- Create User (Admin) -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: new-user-user" /> /*/-->
-                </ul>
-            </div>
-        </div>
-
-        <div class="col-md-1">
-            <!-- Social Media Links -->
-            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
-        </div>
-    </div>
-</nav>
+<!-- Navigation Bar -->
+<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/--></nav>
 
 <!--
 <div class="text-center submenu">

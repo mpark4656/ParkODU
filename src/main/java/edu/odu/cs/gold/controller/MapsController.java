@@ -55,19 +55,16 @@ public class MapsController {
                              @RequestParam("destination") String destination) {
 
         Garage garage = garageRepository.findByKey(destination);
-        GoogleMapService mapService = new GoogleMapService();
-        Location startingLocation = new Location();
-        startingLocation.setLatitude(latitude);
-        startingLocation.setLongitude(longitude);
-        String directions = mapService.buildDirectionsWithLatLng(startingLocation,garage.getLocation());
+        Location startingLocation = new Location(latitude,longitude);
+        //GoogleMapService mapService = new GoogleMapService();
+        //String directions = mapService.buildDirectionsWithLatLng(startingLocation,garage.getLocation());
 
-        model.addAttribute("latitude", latitude);
-        model.addAttribute("longitude", longitude);
+        model.addAttribute("startingLocation", startingLocation);
         model.addAttribute("destination", garage.getLocation());
         model.addAttribute("travelMode", TravelMode.DRIVING.toString());
-        model.addAttribute("directions", directions);
+        //model.addAttribute("directions", directions);
 
-        System.out.println(directions);
+        //System.out.println(directions);
 
         return "maps/navigate/index";
     }
