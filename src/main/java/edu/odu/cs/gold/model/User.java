@@ -1,21 +1,7 @@
 package edu.odu.cs.gold.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.data.annotation.Transient;
-import org.springframework.security.core.userdetails.UserDetails;
-import sun.security.util.Password;
-
 import java.io.Serializable;
 import java.util.UUID;
-
 
 public class User implements Serializable{
 
