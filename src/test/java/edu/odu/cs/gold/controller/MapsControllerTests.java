@@ -86,7 +86,5 @@ public class MapsControllerTests {
         assertTrue(model.containsAttribute("TravelMode"));
         assertTrue(model.containsAttribute("startingLocation"));
         assertTrue(model.containsAttribute("destination"));
-        
-        
     }
 }
