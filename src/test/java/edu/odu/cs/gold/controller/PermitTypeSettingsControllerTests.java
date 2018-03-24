@@ -1,5 +1,6 @@
 package edu.odu.cs.gold.controller;
 
+import com.hazelcast.query.Predicate;
 import edu.odu.cs.gold.model.ParkingSpace;
 import edu.odu.cs.gold.model.PermitType;
 import edu.odu.cs.gold.repository.ParkingSpaceRepository;
@@ -12,6 +13,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
@@ -568,8 +571,62 @@ public class PermitTypeSettingsControllerTests {
     }
 
     @Test
-    public void testDelete_NullPermitType() {
+    public void testDelete_Nonexistent() {
         RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
 
+        String returnURL = permitTypeSettingsController.delete(
+                "DOESNOTEXIST",
+                redirectAttributes
+        );
+
+        assertEquals("redirect:/settings/permit_type/index", returnURL);
+        assertTrue(redirectAttributes.containsKey("dangerMessage"));
+        assertEquals(
+                "Unable to find the specified permit type.",
+                redirectAttributes.get("dangerMessage")
+        );
+    }
+
+    @Test
+    public void testDelete_BeingUsed() {
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+
+        List<ParkingSpace> parkingSpaces = new ArrayList<> ();
+        parkingSpaces.add(parkingSpaceOne);
+
+        when(parkingSpaceRepository.findByPredicate(any(Predicate.class))).thenReturn(parkingSpaces);
+
+        String returnURL = permitTypeSettingsController.delete(
+                PERMIT_TYPE_ONE_KEY,
+                redirectAttributes
+        );
+
+        assertEquals("redirect:/settings/permit_type/index", returnURL);
+        assertTrue(redirectAttributes.containsKey("dangerMessage"));
+        assertEquals(
+                permitTypeOne.getName() + " is being used by existing parking spaces.",
+                redirectAttributes.get("dangerMessage")
+        );
+    }
+
+    @Test
+    public void testDelete_Success() {
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+
+        List<ParkingSpace> parkingSpaces = new ArrayList<> ();
+
+        when(parkingSpaceRepository.findByPredicate(any(Predicate.class))).thenReturn(parkingSpaces);
+
+        String returnURL = permitTypeSettingsController.delete(
+                PERMIT_TYPE_ONE_KEY,
+                redirectAttributes
+        );
+
+        assertEquals("redirect:/settings/permit_type/index", returnURL);
+        assertTrue(redirectAttributes.containsKey("successMessage"));
+        assertEquals(
+                "The permit " + permitTypeOne.getName() + " was successfully deleted",
+                redirectAttributes.get("successMessage")
+        );
     }
 }
