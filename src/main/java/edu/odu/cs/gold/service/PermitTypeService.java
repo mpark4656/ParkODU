@@ -16,24 +16,16 @@ import java.util.List;
 @Service
 public class PermitTypeService {
 
-    private GarageRepository garageRepository;
-    private FloorRepository floorRepository;
     private ParkingSpaceRepository parkingSpaceRepository;
     private PermitTypeRepository permitTypeRepository;
 
     /**
      * Constructor
-     * @param garageRepository GarageRepository
-     * @param floorRepository FloorRepository
      * @param parkingSpaceRepository ParkingSpaceRepository
      * @param permitTypeRepository PermitTypeRepository
      */
-    public PermitTypeService(GarageRepository garageRepository,
-                         FloorRepository floorRepository,
-                         ParkingSpaceRepository parkingSpaceRepository,
-                         PermitTypeRepository permitTypeRepository) {
-        this.garageRepository = garageRepository;
-        this.floorRepository = floorRepository;
+    public PermitTypeService(ParkingSpaceRepository parkingSpaceRepository,
+                            PermitTypeRepository permitTypeRepository) {
         this.parkingSpaceRepository = parkingSpaceRepository;
         this.permitTypeRepository = permitTypeRepository;
     }
