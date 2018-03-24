@@ -67,7 +67,7 @@ public class MapsController {
         model.addAttribute("travelMode", TravelMode.DRIVING.toString());
         model.addAttribute("directions", directions);
 
-        System.out.println(directions);
+        //System.out.println(directions);
 
         return "maps/navigate/index";
     }
