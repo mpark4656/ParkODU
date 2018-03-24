@@ -78,6 +78,9 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+					<li sec:authorize="isAnonymous()">
+						<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Events</button>
+					</li>
                     <li sec:authorize="isAnonymous()">
                         <a th:href="@{/login}">Login</a>
                     </li>
