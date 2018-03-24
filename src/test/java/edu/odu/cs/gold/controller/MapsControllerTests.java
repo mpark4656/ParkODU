@@ -28,7 +28,6 @@ public class MapsControllerTests {
 
     private MapsController mapsController;
     private GarageRepository garageRepository;
-    private BuildingRepository buildingRepository;
 
     private Location locationOne;
     private Location locationTwo;
@@ -65,7 +64,7 @@ public class MapsControllerTests {
 
         locationOne = new Location(LOCATION_ONE_LATITUDE,LOCATION_ONE_LONGITUDE);
 
-        mapsController = new MapsController(garageRepository, null,null);
+        mapsController = new MapsController(garageRepository);
 
         garageService = mock(GarageService.class);
         doNothing().when(garageService).refresh(anyString());
@@ -81,15 +80,12 @@ public class MapsControllerTests {
     @Test
     public void testNavigate_Get() {
         ExtendedModelMap model = new ExtendedModelMap();
-        String returnURL = mapsController.directions(model,LOCATION_TWO_LATITUDE,LOCATION_TWO_LONGITUDE,GARAGE_ONE_KEY);
+        String returnURL = mapsController.navigate(model,LOCATION_TWO_LATITUDE,LOCATION_TWO_LONGITUDE,GARAGE_ONE_KEY);
         assertEquals("maps/navigate/index",returnURL);
 
         assertTrue(model.containsAttribute("travelMode"));
         assertTrue(model.containsAttribute("startingLocation"));
         assertTrue(model.containsAttribute("destination"));
-        assertTrue(model.containsAttribute("latitude"));
-        assertTrue(model.containsAttribute("longitude"));
-        assertTrue(model.containsAttribute("directions"));
 
 
     }
