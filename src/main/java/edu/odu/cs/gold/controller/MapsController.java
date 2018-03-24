@@ -31,9 +31,16 @@ import java.util.List;
 public class MapsController {
 
     private GarageRepository garageRepository;
+    private BuildingRepository buildingRepository;
+    private RecommendationRepository recommendationRepository;
 
-    public MapsController(GarageRepository garageRepository) {
+    public MapsController(GarageRepository garageRepository,
+                          BuildingRepository buildingRepository,
+                          RecommendationRepository recommendationRepository) {
+
         this.garageRepository = garageRepository;
+        this.buildingRepository = buildingRepository;
+        this.recommendationRepository = recommendationRepository;
     }
 
     @GetMapping({"","/","/index"})
@@ -42,22 +49,26 @@ public class MapsController {
     }
 
     @GetMapping("/navigate")
-    public String navigate(Model model,
+    public String directions(Model model,
                              @RequestParam("latitude") Double latitude,
                              @RequestParam("longitude") Double longitude,
-                             @RequestParam("destination") String destinationGarageKey) {
+                             @RequestParam("destination") String destination) {
 
-        Garage garage = garageRepository.findByKey(destinationGarageKey);
-        Location startingLocation = new Location(latitude,longitude);
-        //GoogleMapService mapService = new GoogleMapService();
-        //String directions = mapService.buildDirectionsWithLatLng(startingLocation,garage.getLocation());
+        Garage garage = garageRepository.findByKey(destination);
+        GoogleMapService mapService = new GoogleMapService();
+        Location startingLocation = new Location();
+        startingLocation.setLatitude(latitude);
+        startingLocation.setLongitude(longitude);
+        String directions = mapService.buildDirectionsWithLatLng(startingLocation,garage.getLocation());
 
-        model.addAttribute("startingLocation", startingLocation);
+        model.addAttribute("latitude", latitude);
+        model.addAttribute("longitude", longitude);
         model.addAttribute("destination", garage.getLocation());
         model.addAttribute("travelMode", TravelMode.DRIVING.toString());
-        //model.addAttribute("directions", directions);
+        model.addAttribute("directions", directions);
+        model.addAttribute("startingLocation", startingLocation);
 
-        //System.out.println(directions);
+        System.out.println(directions);
 
         return "maps/navigate/index";
     }
