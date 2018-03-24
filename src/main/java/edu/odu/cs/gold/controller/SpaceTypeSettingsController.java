@@ -94,7 +94,7 @@ public class SpaceTypeSettingsController {
         if(spaceTypeName == null || spaceTypeName.trim().isEmpty()) {
             redirectAttributes.addAttribute(
                     "dangerMessage",
-                    "The space number must be specified.");
+                    "The space name must be specified.");
             return "redirect:/settings/space_type/create";
         }
 
@@ -156,12 +156,10 @@ public class SpaceTypeSettingsController {
 
         // If the space type does not exist
         if(spaceType == null) {
-            System.err.println("The specified space type does not exist.");
-            return "The specified space type, " + spaceTypeKey + ",does not exist!";
+            return "The specified space type, " + spaceTypeKey + ", does not exist!";
         }
 
         if(spaceDescription == null || spaceDescription.trim().isEmpty()) {
-            System.err.println("The specified space description is null or empty");
             return spaceType.getName() + "'s description is null or empty!";
         }
 
@@ -186,12 +184,10 @@ public class SpaceTypeSettingsController {
         SpaceType spaceType = spaceTypeRepository.findByKey(spaceTypeKey);
 
         if(spaceType == null) {
-            System.err.println("The space type does not exist");
-            return "The specified space type, " + spaceTypeKey + "does not exist!";
+            return "The specified space type, " + spaceTypeKey + ", does not exist!";
         }
 
         if(spaceName == null || spaceName.trim().isEmpty()) {
-            System.err.println("The specified space name is null or empty");
             return "The space name is null or empty!";
         }
 
