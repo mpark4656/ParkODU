@@ -12,16 +12,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
@@ -147,13 +143,13 @@ public class FloorSettingsControllerTests {
         when(parkingSpaceRepository.findByKey(PARKING_SPACE_TWO_KEY)).thenReturn(parkingSpaceTwo);
         when(parkingSpaceRepository.findByKey(PARKING_SPACE_THREE_KEY)).thenReturn(parkingSpaceThree);
         when(parkingSpaceRepository.findByKey(PARKING_SPACE_FOUR_KEY)).thenReturn(parkingSpaceFour);
+        when(parkingSpaceRepository.deleteByPredicate(any(Predicate.class))).thenReturn(0);
         when(parkingSpaceRepository.findAll()).thenReturn(parkingSpaces);
         doNothing().when(parkingSpaceRepository).save(any(ParkingSpace.class));
         doNothing().when(parkingSpaceRepository).delete(anyString());
 
         garageService = mock(GarageService.class);
-        doNothing().when(garageService).refresh(garageOne.getGarageKey());
-        doNothing().when(garageService).refresh(garageTwo.getGarageKey());
+        doNothing().when(garageService).refresh(anyString());
 
         floorSettingsController = new FloorSettingsController(
                 garageRepository,
@@ -175,10 +171,10 @@ public class FloorSettingsControllerTests {
         Collection<Garage> garages = (Collection) model.get("garages");
         assertEquals("settings/floor/index",returnURL);
         assertEquals(garageRepository.findAll(), garages);
-        assertNull((String) model.get("successMessage"));
-        assertNull((String) model.get("infoMessage"));
-        assertNull((String) model.get("warningMessage"));
-        assertNull((String) model.get("dangerMessage"));
+        assertFalse(model.containsKey("successMessage"));
+        assertFalse(model.containsKey("infoMessage"));
+        assertFalse(model.containsKey("warningMessage"));
+        assertFalse(model.containsKey("dangerMessage"));
     }
 
     @Test
@@ -198,9 +194,9 @@ public class FloorSettingsControllerTests {
         assertEquals(garageRepository.findAll(), garages);
         assertTrue(model.containsKey("successMessage"));
         assertEquals(successMessage, model.get("successMessage"));
-        assertNull((String) model.get("infoMessage"));
-        assertNull((String) model.get("warningMessage"));
-        assertNull((String) model.get("dangerMessage"));
+        assertFalse(model.containsKey("infoMessage"));
+        assertFalse(model.containsKey("warningMessage"));
+        assertFalse(model.containsKey("dangerMessage"));
     }
 
     @Test
@@ -220,9 +216,9 @@ public class FloorSettingsControllerTests {
         assertEquals(garageRepository.findAll(), garages);
         assertTrue(model.containsKey("infoMessage"));
         assertEquals(infoMessage, model.get("infoMessage"));
-        assertNull((String) model.get("successMessage"));
-        assertNull((String) model.get("warningMessage"));
-        assertNull((String) model.get("dangerMessage"));
+        assertFalse(model.containsKey("successMessage"));
+        assertFalse(model.containsKey("warningMessage"));
+        assertFalse(model.containsKey("dangerMessage"));
     }
 
     @Test
@@ -242,9 +238,9 @@ public class FloorSettingsControllerTests {
         assertEquals(garageRepository.findAll(), garages);
         assertTrue(model.containsKey("warningMessage"));
         assertEquals(warningMessage, model.get("warningMessage"));
-        assertNull((String) model.get("infoMessage"));
-        assertNull((String) model.get("successMessage"));
-        assertNull((String) model.get("dangerMessage"));
+        assertFalse(model.containsKey("infoMessage"));
+        assertFalse(model.containsKey("successMessage"));
+        assertFalse(model.containsKey("dangerMessage"));
     }
 
     @Test
@@ -264,9 +260,9 @@ public class FloorSettingsControllerTests {
         assertEquals(garageRepository.findAll(), garages);
         assertTrue(model.containsKey("dangerMessage"));
         assertEquals(dangerMessage, model.get("dangerMessage"));
-        assertNull((String) model.get("infoMessage"));
-        assertNull((String) model.get("successMessage"));
-        assertNull((String) model.get("warningMessage"));
+        assertFalse(model.containsKey("infoMessage"));
+        assertFalse(model.containsKey("successMessage"));
+        assertFalse(model.containsKey("warningMessage"));
     }
 
     @Test
@@ -291,10 +287,10 @@ public class FloorSettingsControllerTests {
         assertEquals(1, returnFloors.size());
         assertEquals(floors, returnFloors);
         assertEquals("settings/floor/garage", returnURL);
-        assertNull(model.get("successMessage"));
-        assertNull(model.get("infoMessage"));
-        assertNull(model.get("warningMessage"));
-        assertNull(model.get("dangerMessage"));
+        assertFalse(model.containsKey("successMessage"));
+        assertFalse(model.containsKey("infoMessage"));
+        assertFalse(model.containsKey("warningMessage"));
+        assertFalse(model.containsKey("dangerMessage"));
     }
 
     @Test
@@ -324,9 +320,9 @@ public class FloorSettingsControllerTests {
         assertTrue(model.containsKey("successMessage"));
 
         assertEquals(successMessage, model.get("successMessage"));
-        assertNull(model.get("infoMessage"));
-        assertNull(model.get("warningMessage"));
-        assertNull(model.get("dangerMessage"));
+        assertFalse(model.containsKey("infoMessage"));
+        assertFalse(model.containsKey("warningMessage"));
+        assertFalse(model.containsKey("dangerMessage"));
     }
 
     @Test
@@ -356,9 +352,9 @@ public class FloorSettingsControllerTests {
         assertTrue(model.containsKey("infoMessage"));
 
         assertEquals(infoMessage, model.get("infoMessage"));
-        assertNull(model.get("successMessage"));
-        assertNull(model.get("warningMessage"));
-        assertNull(model.get("dangerMessage"));
+        assertFalse(model.containsKey("successMessage"));
+        assertFalse(model.containsKey("warningMessage"));
+        assertFalse(model.containsKey("dangerMessage"));
     }
 
     @Test
@@ -388,9 +384,9 @@ public class FloorSettingsControllerTests {
         assertTrue(model.containsKey("warningMessage"));
 
         assertEquals(warningMessage, model.get("warningMessage"));
-        assertNull(model.get("successMessage"));
-        assertNull(model.get("infoMessage"));
-        assertNull(model.get("dangerMessage"));
+        assertFalse(model.containsKey("successMessage"));
+        assertFalse(model.containsKey("infoMessage"));
+        assertFalse(model.containsKey("dangerMessage"));
     }
 
     @Test
@@ -420,9 +416,9 @@ public class FloorSettingsControllerTests {
         assertTrue(model.containsKey("dangerMessage"));
 
         assertEquals(dangerMessage, model.get("dangerMessage"));
-        assertNull(model.get("successMessage"));
-        assertNull(model.get("infoMessage"));
-        assertNull(model.get("warningMessage"));
+        assertFalse(model.containsKey("successMessage"));
+        assertFalse(model.containsKey("infoMessage"));
+        assertFalse(model.containsKey("warningMessage"));
     }
 
     @Test
@@ -445,10 +441,10 @@ public class FloorSettingsControllerTests {
         assertTrue(model.containsKey("garage"));
         assertEquals(garageOne, model.get("garage"));
         assertEquals(garageOne.getGarageKey(), returnFloor.getGarageKey());
-        assertNull(model.get("successMessage"));
-        assertNull(model.get("infoMessage"));
-        assertNull(model.get("warningMessage"));
-        assertNull(model.get("dangerMessage"));
+        assertFalse(model.containsKey("successMessage"));
+        assertFalse(model.containsKey("infoMessage"));
+        assertFalse(model.containsKey("warningMessage"));
+        assertFalse(model.containsKey("dangerMessage"));
     }
 
     @Test
@@ -474,9 +470,9 @@ public class FloorSettingsControllerTests {
         assertEquals(garageOne.getGarageKey(), returnFloor.getGarageKey());
         assertTrue(model.containsKey("successMessage"));
         assertEquals(successMessage, model.get("successMessage"));
-        assertNull(model.get("infoMessage"));
-        assertNull(model.get("warningMessage"));
-        assertNull(model.get("dangerMessage"));
+        assertFalse(model.containsKey("infoMessage"));
+        assertFalse(model.containsKey("warningMessage"));
+        assertFalse(model.containsKey("dangerMessage"));
     }
 
     @Test
@@ -502,9 +498,9 @@ public class FloorSettingsControllerTests {
         assertEquals(garageOne.getGarageKey(), returnFloor.getGarageKey());
         assertTrue(model.containsKey("infoMessage"));
         assertEquals(infoMessage, model.get("infoMessage"));
-        assertNull(model.get("successMessage"));
-        assertNull(model.get("warningMessage"));
-        assertNull(model.get("dangerMessage"));
+        assertFalse(model.containsKey("successMessage"));
+        assertFalse(model.containsKey("warningMessage"));
+        assertFalse(model.containsKey("dangerMessage"));
     }
 
     @Test
@@ -530,9 +526,9 @@ public class FloorSettingsControllerTests {
         assertEquals(garageOne.getGarageKey(), returnFloor.getGarageKey());
         assertTrue(model.containsKey("warningMessage"));
         assertEquals(warningMessage, model.get("warningMessage"));
-        assertNull(model.get("successMessage"));
-        assertNull(model.get("infoMessage"));
-        assertNull(model.get("dangerMessage"));
+        assertFalse(model.containsKey("successMessage"));
+        assertFalse(model.containsKey("infoMessage"));
+        assertFalse(model.containsKey("dangerMessage"));
     }
 
     @Test
@@ -558,9 +554,9 @@ public class FloorSettingsControllerTests {
         assertEquals(garageOne.getGarageKey(), returnFloor.getGarageKey());
         assertTrue(model.containsKey("dangerMessage"));
         assertEquals(dangerMessage, model.get("dangerMessage"));
-        assertNull(model.get("successMessage"));
-        assertNull(model.get("infoMessage"));
-        assertNull(model.get("warningMessage"));
+        assertFalse(model.containsKey("successMessage"));
+        assertFalse(model.containsKey("infoMessage"));
+        assertFalse(model.containsKey("warningMessage"));
     }
 
     @Test
@@ -875,5 +871,85 @@ public class FloorSettingsControllerTests {
         assertFalse(redirectAttributes.containsKey("dangerMessage"));
     }
 
+    @Test
+    public void testDelete_NullFloorKey() {
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
 
+        String returnURL = floorSettingsController.delete(
+                null,
+                redirectAttributes
+        );
+
+        assertEquals("redirect:/settings/floor/index", returnURL);
+        assertTrue(redirectAttributes.containsKey("dangerMessage"));
+
+        assertEquals(
+                "The floor key cannot be null or empty.",
+                redirectAttributes.get("dangerMessage")
+        );
+
+        assertFalse(redirectAttributes.containsKey("successMessage"));
+    }
+
+    @Test
+    public void testDelete_EmptyFloorKey() {
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+
+        String returnURL = floorSettingsController.delete(
+                "",
+                redirectAttributes
+        );
+
+        assertEquals("redirect:/settings/floor/index", returnURL);
+        assertTrue(redirectAttributes.containsKey("dangerMessage"));
+
+        assertEquals(
+                "The floor key cannot be null or empty.",
+                redirectAttributes.get("dangerMessage")
+        );
+
+        assertFalse(redirectAttributes.containsKey("successMessage"));
+    }
+
+    @Test
+    public void testDelete_NonExistentFloorKey() {
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+
+        String returnURL = floorSettingsController.delete(
+                "THIS IS A FALSE KEY",
+                redirectAttributes
+        );
+
+        assertEquals("redirect:/settings/floor/index", returnURL);
+        assertTrue(redirectAttributes.containsKey("dangerMessage"));
+
+        assertEquals(
+                "The floor key was not found.",
+                redirectAttributes.get("dangerMessage")
+        );
+
+        assertFalse(redirectAttributes.containsKey("successMessage"));
+    }
+
+    @Test
+    public void testDelete_Success() {
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+
+        String returnURL = floorSettingsController.delete(
+                floorOne.getFloorKey(),
+                redirectAttributes
+        );
+
+        assertEquals(
+                "redirect:/settings/floor/garage/" + floorOne.getGarageKey(),
+                returnURL);
+        assertTrue(redirectAttributes.containsKey("successMessage"));
+
+        assertEquals(
+                "The floor was successfully deleted.",
+                redirectAttributes.get("successMessage")
+        );
+
+        assertFalse(redirectAttributes.containsKey("dangerMessage"));
+    }
 }
