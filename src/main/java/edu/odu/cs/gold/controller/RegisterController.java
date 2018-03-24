@@ -132,7 +132,7 @@ public class RegisterController {
                 userList.get(0).setEnabled(true);
                 userService.saveUser(userList.get(0));
                 model.addAttribute("successMessage", "Confirmation link valid!");
-                redirectAttributes.addAttribute("attr","successMessage");
+                redirectAttributes.addAttribute("successMessage","Confirmation link valid!");
             }
         } else {
             System.out.println("");
@@ -160,6 +160,6 @@ public class RegisterController {
         else {
             // DO NOTHING
         }
-        return "home/login";
+        return "redirect:home/login";
     }
 }

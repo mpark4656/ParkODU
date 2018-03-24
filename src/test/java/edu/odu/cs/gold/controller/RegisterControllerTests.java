@@ -11,6 +11,7 @@ import edu.odu.cs.gold.service.EmailService;
 import edu.odu.cs.gold.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
@@ -31,6 +32,7 @@ public class RegisterControllerTests {
 
     private UserService userService;
     private EmailService emailService;
+    private SimpleMailMessage simpleMailMessage;
 
     private User userOne;
     private User userTwo;
@@ -39,12 +41,22 @@ public class RegisterControllerTests {
     private RoleType roleTypeTwo;
 
     private static final String USER_ONE_KEY = "a0000000000000000000000000000001";
+    private static final String ROLETYPE_ONE_KEY = "a0000000000000000000000000000001";
+
+
 
     @Before
     public void setup() {
         // TODO
         userRepository = mock(UserRepository.class);
         when(userRepository.findByKey(USER_ONE_KEY)).thenReturn(userOne);
+
+        roleTypeRepository = mock(RoleTypeRepository.class);
+        when(roleTypeRepository.findByKey(ROLETYPE_ONE_KEY)).thenReturn(roleTypeOne);
+
+        emailService = mock(EmailService.class);
+        doNothing().when(emailService).sendEmail(simpleMailMessage);
+
         registerController = new RegisterController(userService,emailService,userRepository);
     }
 
@@ -81,7 +93,7 @@ public class RegisterControllerTests {
 
         assertTrue(model.containsKey("successMessage"));
         assertEquals("Confirmation link verified!", model.get("successMessage"));
-        assertEquals("home/login", returnURL);
+        assertEquals("redirect:home/login", returnURL);
     }
 
     @Test
