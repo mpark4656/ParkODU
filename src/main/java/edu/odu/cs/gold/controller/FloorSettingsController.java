@@ -30,21 +30,15 @@ public class FloorSettingsController {
     private GarageRepository garageRepository;
     private FloorRepository floorRepository;
     private ParkingSpaceRepository parkingSpaceRepository;
-    private FloorStatisticRepository floorStatisticRepository;
-    private SpaceTypeRepository spaceTypeRepository;
     private GarageService garageService;
 
     public FloorSettingsController(GarageRepository garageRepository,
                            FloorRepository floorRepository,
                            ParkingSpaceRepository parkingSpaceRepository,
-                           FloorStatisticRepository floorStatisticRepository,
-                           SpaceTypeRepository spaceTypeRepository,
                            GarageService garageService) {
         this.garageRepository = garageRepository;
         this.floorRepository = floorRepository;
         this.parkingSpaceRepository = parkingSpaceRepository;
-        this.floorStatisticRepository = floorStatisticRepository;
-        this.spaceTypeRepository = spaceTypeRepository;
         this.garageService = garageService;
     }
 

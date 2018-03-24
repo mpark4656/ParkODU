@@ -188,13 +188,21 @@ public class FloorRestController {
         // 2. Percent must be between 100 and 0 inclusive.
         // 3. Must provide a valid subscription key.
         if(floor == null ||
-            capacity > 100.0 ||
-            capacity < 0 ||
-            !subscriptionKey.equals("2093af49-30d2-4ba3-873b-29970e012656"))
+                capacity == null ||
+                !subscriptionKey.equals("2093af49-30d2-4ba3-873b-29970e012656"))
         {
             return ResponseEntity.badRequest().build();
         }
         else {
+
+            if(capacity > 100.0) {
+                capacity = (float)100.0;
+            }
+
+            if(capacity < 0.0) {
+                capacity = (float)0.0;
+            }
+            
             // Find out how many spaces need to be occupied on this floor for capacity to be at the specified
             // percentage
             int requiredOccupiedSpaces = Math.round(floor.getTotalSpaces() * capacity / 100);

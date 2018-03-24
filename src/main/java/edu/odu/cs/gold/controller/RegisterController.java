@@ -75,11 +75,17 @@ public class RegisterController {
                                           HttpServletRequest request) {
 
         // Lookup user in database by e-mail
-        boolean userExists = userService.userExists(user.getEmail());
-        System.out.println("User exists: " + userExists);
-        if (userExists) {
-            model.addAttribute("dangerMessage", "Oops! Existing user is currently registered using " + user.getEmail());
+        boolean emailExists = userService.userExists(user.getEmail());
+        boolean userExists = userService.userExists(user.getUserName());
+
+        System.out.println("User exists: " + emailExists);
+        if (emailExists ) {
+            model.addAttribute("dangerMessage", "Oops! An existing user is currently has account registered with that email!");
             bindingResult.reject("email");
+        }
+        if (userExists) {
+            model.addAttribute("dangerMessage", "Oops! The "+ user.getUserName() +" is not available!");
+            bindingResult.reject("userName");
         }
         else {
             // Disable user until they click on confirmation link in email
@@ -93,7 +99,7 @@ public class RegisterController {
             SimpleMailMessage registrationEmail = new SimpleMailMessage();
             registrationEmail.setTo(user.getEmail());
             registrationEmail.setSubject("Registration Confirmation");
-            registrationEmail.setText("To confirm your e-mail address, please click the link below:\n"
+            registrationEmail.setText("You have been registered with the username:\n\n" + user.getUserName() + "\n\nTo confirm your e-mail address, please click the link below:\n"
                     + appUrl + ":8083/user/confirm?token=" + user.getConfirmationToken());
             registrationEmail.setFrom("noreply@ParkODU.cs.odu.edu");
             emailService.sendEmail(registrationEmail);
@@ -131,17 +137,17 @@ public class RegisterController {
         } else {
             System.out.println("");
         }
-        return "redirect:/user/login";
+        return "user/login";
     }
 
     /**
      * GET method user/login the prepares login page after confirmation link submission
      * @param model MVC
      * @param param parameter passed from redirectionAttributes in user/confirm GET method
-     * @return user/login
+     * @return String home/login
      */
 
-    @RequestMapping("/user/login")
+    @GetMapping("/user/login")
     public String login(Model model,
                         @RequestParam("attr") String param) {
 
@@ -154,6 +160,6 @@ public class RegisterController {
         else {
             // DO NOTHING
         }
-        return "user/login";
+        return "home/login";
     }
 }

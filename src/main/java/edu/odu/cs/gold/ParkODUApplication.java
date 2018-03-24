@@ -175,7 +175,7 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
                 }
             }
         }
-
+/*
         // Generate Walking Distance Data for all Buildings from all Garages
         if (false) {
             List<Garage> garages = new ArrayList<>(garageRepository.findAll());
@@ -205,7 +205,7 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
             }
             travelDistanceDurationRepository.save(travelDistanceDurations);
         }
-
+*/
         /*
         if (false) {
             Building collegeOfHealthSciences = new Building("College of Health Sciences", 36.885792, -76.302185);
