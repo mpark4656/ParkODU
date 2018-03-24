@@ -8,6 +8,8 @@ import edu.odu.cs.gold.service.PermitTypeService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.ui.ExtendedModelMap;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import static junit.framework.TestCase.assertEquals;
@@ -63,11 +65,13 @@ public class PermitTypeSettingsControllerTests {
         parkingSpaceOne.setParkingSpaceKey(PARKING_SPACE_ONE_KEY);
         parkingSpaceOne.setFloor(PARKING_SPACE_ONE_FLOOR);
         parkingSpaceOne.setNumber(PARKING_SPACE_ONE_NUMBER);
+        parkingSpaceOne.setPermitTypeKey(PERMIT_TYPE_ONE_KEY);
 
         parkingSpaceTwo = new ParkingSpace();
         parkingSpaceTwo.setParkingSpaceKey(PARKING_SPACE_TWO_KEY);
         parkingSpaceTwo.setFloor(PARKING_SPACE_TWO_FLOOR);
         parkingSpaceTwo.setNumber(PARKING_SPACE_TWO_NUMBER);
+        parkingSpaceTwo.setPermitTypeKey(PERMIT_TYPE_TWO_KEY);
 
         Collection<ParkingSpace> parkingSpaces = new ArrayList<> ();
         parkingSpaces.add(parkingSpaceOne);
@@ -91,10 +95,9 @@ public class PermitTypeSettingsControllerTests {
         doNothing().when(permitTypeRepository).save(any(PermitType.class));
         doNothing().when(permitTypeRepository).delete(anyString());
 
-        permitTypeService = new PermitTypeService(
-                parkingSpaceRepository,
-                permitTypeRepository
-        );
+        permitTypeService = mock(PermitTypeService.class);
+        doNothing().when(permitTypeService).refresh(anyString());
+        doNothing().when(permitTypeService).refresh();
 
         permitTypeSettingsController = new PermitTypeSettingsController(
                 parkingSpaceRepository,
@@ -350,5 +353,223 @@ public class PermitTypeSettingsControllerTests {
         assertFalse(model.containsKey("successMessage"));
         assertFalse(model.containsKey("infoMessage"));
         assertFalse(model.containsKey("warningMessage"));
+    }
+
+    @Test
+    public void testCreate_Post_NullName() {
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+
+        String returnURL = permitTypeSettingsController.create(
+                null,
+                PERMIT_TYPE_ONE_DESCRIPTION,
+                redirectAttributes
+        );
+
+        assertEquals("redirect:/settings/permit_type/create",returnURL);
+        assertTrue(redirectAttributes.containsKey("dangerMessage"));
+        assertEquals(
+                "The permit name must be specified.",
+                redirectAttributes.get("dangerMessage")
+        );
+    }
+
+    @Test
+    public void testCreate_Post_EmptyName() {
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+
+        String returnURL = permitTypeSettingsController.create(
+                "",
+                PERMIT_TYPE_ONE_DESCRIPTION,
+                redirectAttributes
+        );
+
+        assertEquals("redirect:/settings/permit_type/create",returnURL);
+        assertTrue(redirectAttributes.containsKey("dangerMessage"));
+        assertEquals(
+                "The permit name must be specified.",
+                redirectAttributes.get("dangerMessage")
+        );
+    }
+
+    @Test
+    public void testCreate_Post_NullDescription() {
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+
+        String returnURL = permitTypeSettingsController.create(
+                PERMIT_TYPE_ONE_NAME,
+                null,
+                redirectAttributes
+        );
+
+        assertEquals("redirect:/settings/permit_type/create",returnURL);
+        assertTrue(redirectAttributes.containsKey("dangerMessage"));
+        assertEquals(
+                "The permit description must be specified.",
+                redirectAttributes.get("dangerMessage")
+        );
+    }
+
+    @Test
+    public void testCreate_Post_EmptyDescription() {
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+
+        String returnURL = permitTypeSettingsController.create(
+                PERMIT_TYPE_ONE_NAME,
+                "",
+                redirectAttributes
+        );
+
+        assertEquals("redirect:/settings/permit_type/create",returnURL);
+        assertTrue(redirectAttributes.containsKey("dangerMessage"));
+        assertEquals(
+                "The permit description must be specified.",
+                redirectAttributes.get("dangerMessage")
+        );
+    }
+
+    @Test
+    public void testCreate_Post_Duplicate() {
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+
+        String returnURL = permitTypeSettingsController.create(
+                PERMIT_TYPE_ONE_NAME,
+                PERMIT_TYPE_ONE_DESCRIPTION,
+                redirectAttributes
+        );
+
+        assertEquals("redirect:/settings/permit_type/create",returnURL);
+        assertTrue(redirectAttributes.containsKey("dangerMessage"));
+        assertEquals(
+                permitTypeOne.getName() + " already exists.",
+                redirectAttributes.get("dangerMessage")
+        );
+    }
+
+    @Test
+    public void testCreate_Post_Success() {
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+
+        String returnURL = permitTypeSettingsController.create(
+                "UNIQUE PERMIT",
+                "UNIQUE DESCRIPTIOn",
+                redirectAttributes
+        );
+
+        assertEquals("redirect:/settings/permit_type/index",returnURL);
+        assertTrue(redirectAttributes.containsKey("successMessage"));
+        assertEquals(
+                "UNIQUE PERMIT has been successfully created.",
+                redirectAttributes.get("successMessage")
+        );
+    }
+
+    @Test
+    public void testSetDescription_NonexistentPermitKey() {
+        String returnURL = permitTypeSettingsController.set_description(
+                "NONEXISTENT",
+                PERMIT_TYPE_ONE_DESCRIPTION
+        );
+
+        assertEquals(
+                "The specified permit type, NONEXISTENT,does not exist!",
+                returnURL
+        );
+    }
+
+    @Test
+    public void testSetDescription_NullDescription() {
+        String returnURL = permitTypeSettingsController.set_description(
+                PERMIT_TYPE_ONE_KEY,
+                null
+        );
+
+        assertEquals(
+                PERMIT_TYPE_ONE_NAME + "'s description is null or empty!",
+                returnURL
+        );
+    }
+
+    @Test
+    public void testSetDescription_EmptyDescription() {
+        String returnURL = permitTypeSettingsController.set_description(
+                PERMIT_TYPE_ONE_KEY,
+                ""
+        );
+
+        assertEquals(
+                PERMIT_TYPE_ONE_NAME + "'s description is null or empty!",
+                returnURL
+        );
+    }
+
+    @Test
+    public void testSetDescription_Success() {
+        String returnURL = permitTypeSettingsController.set_description(
+                PERMIT_TYPE_ONE_KEY,
+                "NEW DESCRIPTION"
+        );
+
+        assertEquals(
+                PERMIT_TYPE_ONE_NAME + "'s description was updated successfully.",
+                returnURL
+        );
+    }
+
+    @Test
+    public void testSetPermitName_NonexistentPermitKey() {
+        String returnURL = permitTypeSettingsController.set_name(
+                "DOESNOTEXIST",
+                "NAME"
+        );
+
+        assertEquals(
+                "The specified permit type, DOESNOTEXIST, does not exist!",
+                returnURL
+        );
+    }
+
+    @Test
+    public void testSetPermitName_NullPermitName() {
+        String returnURL = permitTypeSettingsController.set_name(
+                PERMIT_TYPE_ONE_KEY,
+                null
+        );
+
+        assertEquals(
+                "The permit name is null or empty!",
+                returnURL
+        );
+    }
+
+    @Test
+    public void testSetPermitName_EmptyPermitName() {
+        String returnURL = permitTypeSettingsController.set_name(
+                PERMIT_TYPE_ONE_KEY,
+                ""
+        );
+
+        assertEquals(
+                "The permit name is null or empty!",
+                returnURL
+        );
+    }
+
+    @Test
+    public void testSetPermitName_Success() {
+        String returnURL = permitTypeSettingsController.set_name(
+                PERMIT_TYPE_ONE_KEY,
+                "NEWNAME"
+        );
+
+        assertEquals(
+                "NEWNAME was updated successfully.",
+                returnURL
+        );
+    }
+
+    @Test
+    public void testDelete_NullPermitType() {
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+
     }
 }

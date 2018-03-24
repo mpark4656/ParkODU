@@ -157,12 +157,10 @@ public class PermitTypeSettingsController {
 
         // If the permit type does not exist
         if(permitType == null) {
-            System.err.println("The specified permit type does not exist.");
             return "The specified permit type, " + permitTypeKey + ",does not exist!";
         }
 
         if(permitDescription == null || permitDescription.trim().isEmpty()) {
-            System.err.println("The specified permit description is null or empty");
             return permitType.getName() + "'s description is null or empty!";
         }
 
@@ -187,12 +185,10 @@ public class PermitTypeSettingsController {
         PermitType permitType = permitTypeRepository.findByKey(permitTypeKey);
 
         if(permitType == null) {
-            System.err.println("The permit type does not exist");
             return "The specified permit type, " + permitTypeKey + ", does not exist!";
         }
 
         if(permitName == null || permitName.trim().isEmpty()) {
-            System.err.println("The permit name is null or empty");
             return "The permit name is null or empty!";
         }
 
