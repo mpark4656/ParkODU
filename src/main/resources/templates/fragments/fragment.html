@@ -24,83 +24,6 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 </head>
 <body>
 	<!-- Navigation Bar -->
-	<!--
-	<nav th:fragment="navigation-bar" class="navbar navbar-default navbar-fixed-top">
-		<div class="container-fluid navbar-container">
-            <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#myNavbar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" th:href="@{/}" style="padding:0">
-                        <img th:src="@{/img} + '/' + 'odupark_logo_02.png'" alt="Park ODU Logo"
-                             style="height: 100%;"/>
-                    </a>
-            </div>
-            <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a th:href="@{/garage}">Garages</a>
-                    </li>
-                    <li>
-                        <a th:href="@{/analytics/locate}">Search</a>
-                    </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            Configurations (Admin Only)
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a th:href="@{/settings/garage}">Garages</a>
-                            </li>
-                            <li>
-                                <a th:href="@{/settings/floor}">Floors</a>
-                            </li>
-                            <li>
-                                <a th:href="@{/settings/parking_space}">Parking Spaces</a>
-                            </li>
-							<li>
-								<a th:href="@{/settings/building}">Buildings</a>
-							</li>
-                            <li>
-                                <a th:href="@{/settings/permit_type}">Permit Types</a>
-                            </li>
-                            <li>
-                                <a th:href="@{/settings/space_type}">Space Types</a>
-                            </li>
-                            <li>
-                                <a th:href="@{/settings/accounts}">Accounts</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li sec:authorize="isAnonymous()">
-                        <a th:href="@{/login}">Login</a>
-                    </li>
-                    <li sec:authorize="isAnonymous()">
-                        <a th:href="@{/user/register}">Create</a>
-                    </li>
-                    <li>
-                        <a href="#">Settings</a>
-                    </li>
-                    <li>
-                        <div class="social-media-links-container">
-                            <a target="_blank" href="#" class="fa fa-facebook facebook-icon"></a>
-                            <a target="_blank" href="#" class="fa fa-instagram instagram-icon"></a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-		</div>
-	</nav>
-	-->
-
-	<!-- Navigation Bar -->
 	<nav th:fragment="navigation-bar" class="navbar navbar-default navbar-fixed-top">
 		<div class="container navbar-container">
 			<div class="navbar-header">
@@ -116,7 +39,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 				<ul class="nav navbar-nav">
 					<li><a th:href="@{/garage}">Garages</a></li>
 					<li><a th:href="@{/analytics/locate}">Search</a></li>
-					<li class="dropdown">
+					<li sec:authorize="hasAuthority('ADMIN')" class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li class="dropdown-header">Configurations</li>
@@ -133,57 +56,26 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 					</li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a th:href="@{/login}">Login</a></li>
-					<li><a th:href="@{/user/register}">Register</a></li>
-					<li><a href="#"><i class="fas fa-cog fa-lg"></i></a></li>
+					<li sec:authorize="isAuthenticated()" style="padding: 15px; background: none; color: rgba(0, 48, 87, 1);">Welcome <span sec:authentication="name"></span>!</li>
+					<li sec:authorize="isAnonymous()"><a th:href="@{/login}">Login</a></li>
+					<li sec:authorize="isAnonymous()"><a th:href="@{/user/register}">Register</a></li>
+					<li sec:authorize="isAuthenticated()" class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cog fa-lg"></i></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Preferences</a></li>
+							<li role="separator" class="divider"></li>
+							<li>
+								<form th:action="@{/logout}" method="POST">
+									<a href="#" onclick="this.parentNode.submit()">Log Out</a>
+								</form>
+							</li>
+						</ul>
+					</li>
 				</ul>
 			</div>
 		</div>
 	</nav>
-
-	<!-- Settings Link -->
-	<div th:fragment="settings-link">
-		<li sec:authorize="hasRole('ADMIN')"><a th:href="@{/settings}">Settings</a></li>
-		<!--
-		<li><a th:href="@{/settings}">Settings</a></li>
-		-->
-	</div>
-
-	<!-- Settings Link (Active) -->
-	<div th:fragment="settings-link-active">
-		<li sec:authorize="hasRole('ADMIN')" class="active"><a th:href="@{/settings}">Settings</a></li>
-		<!--
-		<li class="active"><a th:href="@{/settings}">Settings</a></li>
-		-->
-	</div>
-
-	<!-- Login -->
-	<div th:fragment="user-login">
-		<li sec:authorize="isAnonymous()"><a th:href="@{/login}">Login</a></li>
-		<!--
-		<li><a th:href="@{/login}">Login</a></li>
-		-->
-	</div>
-
-	<!-- Create User -->
-	<div th:fragment="new-user">
-		<li sec:authorize="isAnonymous()"><a th:href="@{/user/register}">Create</a></li>
-		<!--
-		<li><a th:href="@{/newuser}">New User</a></li>
-		-->
-	</div>
-
-	<!-- Welcome User -->
-	<div th:fragment="welcome-user">
-		<div sec:authorize="isAuthenticated()" class="text-right">
-			<form th:action="@{/logout}" method="POST">
-				<p class="submenu-text" style="display: inline;">Welcome <span sec:authentication="name"></span></p>
-				<span class="submenu-text">|</span>
-				<input type="submit" class="logout-button small submenu-text" style="display: inline; margin-left: 5px;" value="Logout"/>
-			</form>
-		</div>
-	</div>
-
+	
 	<!-- Alerts -->
 	<div th:fragment="alerts" th:if="${successMessage ne null or infoMessage ne null or warningMessage ne null or dangerMessage ne null}" class="row">
 		<div th:if="${successMessage ne null}" class="col-md-10 col-md-offset-1">
