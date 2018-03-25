@@ -18,16 +18,12 @@ import java.util.Comparator;
 import java.util.List;
 
 @Controller
-public class HomeController implements ApplicationContextAware {
+public class HomeController {
 
-    @Autowired
     private GarageRepository garageRepository;
 
-    private ApplicationContext applicationContext;
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
+    public HomeController(GarageRepository garageRepository) {
+        this.garageRepository = garageRepository;
     }
 
     @GetMapping({"","/","/index"})

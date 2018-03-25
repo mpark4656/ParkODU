@@ -110,15 +110,15 @@ public class FloorSettingsControllerTests {
         parkingSpaceFour.setFloor(PARKING_SPACE_FOUR_FLOOR);
         parkingSpaceFour.setNumber(PARKING_SPACE_FOUR_NUMBER);
 
-        Collection<Garage> garages = new ArrayList<>();
+        List<Garage> garages = new ArrayList<>();
         garages.add(garageOne);
         garages.add(garageTwo);
 
-        Collection<Floor> floors = new ArrayList<>();
+        List<Floor> floors = new ArrayList<>();
         floors.add(floorOne);
         floors.add(floorTwo);
 
-        Collection<ParkingSpace> parkingSpaces = new ArrayList<> ();
+        List<ParkingSpace> parkingSpaces = new ArrayList<> ();
         parkingSpaces.add(parkingSpaceOne);
         parkingSpaces.add(parkingSpaceTwo);
         parkingSpaces.add(parkingSpaceThree);

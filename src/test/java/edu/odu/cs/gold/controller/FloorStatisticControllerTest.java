@@ -111,10 +111,10 @@ public class FloorStatisticControllerTest {
         parkingSpaceFour.setNumber(PARKING_SPACE_FOUR_NUMBER);
         parkingSpaceFour.setAvailable(PARKING_SPACE_FOUR_AVAILABLE);
 
-        Collection<Garage> garages = new ArrayList<>();
+        List<Garage> garages = new ArrayList<>();
         garages.add(garageOne);
 
-        Collection<Floor> floors = new ArrayList<>();
+        List<Floor> floors = new ArrayList<>();
         floors.add(floorOne);
 
         List<FloorStatistic> floorStatistics = new ArrayList<>();

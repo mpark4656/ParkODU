@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
@@ -55,7 +56,7 @@ public class MapsControllerTests {
         garageOne.setLatitude(LOCATION_ONE_LATITUDE);
         garageOne.setLongitude(LOCATION_ONE_LONGITUDE);
 
-        Collection<Garage> garages = new ArrayList<>();
+        List<Garage> garages = new ArrayList<>();
         garages.add(garageOne);
 
         garageRepository = mock(GarageRepository.class);

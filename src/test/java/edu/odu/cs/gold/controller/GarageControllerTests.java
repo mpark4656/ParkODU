@@ -60,7 +60,7 @@ public class GarageControllerTests {
         floorTwo.setGarageKey(GARAGE_TWO_KEY);
         floorTwo.setNumber(FLOOR_TWO_NUMBER);
 
-        Collection<Garage> garages = new ArrayList<>();
+        List<Garage> garages = new ArrayList<>();
         garages.add(garageOne);
         garages.add(garageTwo);
 

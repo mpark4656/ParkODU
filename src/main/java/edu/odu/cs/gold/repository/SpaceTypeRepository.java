@@ -22,9 +22,9 @@ public class SpaceTypeRepository {
         return entity.getSpaceTypeKey();
     }
 
-    public Collection<SpaceType> findAll() {
+    public List<SpaceType> findAll() {
         IMap map = hazelcastInstance.getMap(collectionName);
-        return map.values();
+        return new ArrayList<>(map.values());
     }
 
     public SpaceType findByKey(String key) {
