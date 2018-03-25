@@ -9,26 +9,12 @@
 
 <!-- Navigation Bar -->
 <!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/--></nav>
-
-<!--
-<div class="text-center submenu">
-    <th:block th:each="itemCategory : ${itemCategories}">
-        <a th:href="@{/gallery/category} + '/' + ${itemCategory.name}" class="submenu-text" th:text="${itemCategory.name}"></a>
-        <span th:if="${itemCategory.key != lastItemCategoryKey}" class="submenu-text">|</span>
-    </th:block>
-</div>
--->
-
 <div class="container-fluid main-container">
-    <!-- Welcome User -->
-    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
-
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
             <h1 class="text-center" style="text-transform: uppercase;">Directions</h1>
         </div>
     </div>
-
     <!-- Footer -->
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
