@@ -64,7 +64,7 @@
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-5">
-            <h2 class="text-center">Capacity per Hour</h2>
+            <h2 class="text-center">Occupancy per Hour</h2>
             <ul class="nav nav-tabs nav-justified">
                 <li role="presentation" class="active"><a data-toggle="tab" href="#garage-a-chart">Garage A</a></li>
                 <li role="presentation"><a data-toggle="tab" href="#garage-b-chart">Garage B</a></li>
@@ -73,19 +73,19 @@
                 <li role="presentation"><a data-toggle="tab" href="#garage-e-chart">Garage E</a></li>
             </ul>
             <div class="tab-content">
-                <div id="garage-a-chart" class="chartjs-wrapper tab-pane fade in active" style="border-left: 1px solid #dedede; border-bottom: 1px solid #dedede; border-right: 1px solid #dedede;">
+                <div id="garage-a-chart" class="chartjs-wrapper tab-pane fade in active occupancy-chart">
                     <canvas id="garage-a-capacity-per-hour-chart" class="chartjs" width="undefined" height="undefined"></canvas>
                 </div>
-                <div id="garage-b-chart" class="chartjs-wrapper tab-pane fade" style="border-left: 1px solid #dedede; border-bottom: 1px solid #dedede; border-right: 1px solid #dedede;">
+                <div id="garage-b-chart" class="chartjs-wrapper tab-pane fade occupancy-chart">
                     <canvas id="garage-b-capacity-per-hour-chart" class="chartjs" width="undefined" height="undefined"></canvas>
                 </div>
-                <div id="garage-c-chart" class="chartjs-wrapper tab-pane fade" style="border-left: 1px solid #dedede; border-bottom: 1px solid #dedede; border-right: 1px solid #dedede;">
+                <div id="garage-c-chart" class="chartjs-wrapper tab-pane fade occupancy-chart">
                     <canvas id="garage-c-capacity-per-hour-chart" class="chartjs" width="undefined" height="undefined"></canvas>
                 </div>
-                <div id="garage-d-chart" class="chartjs-wrapper tab-pane fade" style="border-left: 1px solid #dedede; border-bottom: 1px solid #dedede; border-right: 1px solid #dedede;">
+                <div id="garage-d-chart" class="chartjs-wrapper tab-pane fade occupancy-chart">
                     <canvas id="garage-d-capacity-per-hour-chart" class="chartjs" width="undefined" height="undefined"></canvas>
                 </div>
-                <div id="garage-e-chart" class="chartjs-wrapper tab-pane fade" style="border-left: 1px solid #dedede; border-bottom: 1px solid #dedede; border-right: 1px solid #dedede;">
+                <div id="garage-e-chart" class="chartjs-wrapper tab-pane fade occupancy-chart">
                     <canvas id="garage-e-capacity-per-hour-chart" class="chartjs" width="undefined" height="undefined"></canvas>
                 </div>
             </div>
@@ -101,6 +101,8 @@
 <!--/*/ <th:block th:include="fragments/fragment :: chart-js-scripts" /> /*/-->
 <script th:inline="javascript">
 /*<![CDATA[*/
+var currentAvailabilityDataString = /*[[${currentAvailabilityDataString}]]*/;
+var currentAvailabilityData = currentAvailabilityDataString.split(',');
 new Chart(document.getElementById("current-availability-chart"),
 {
 	"type": "horizontalBar",
@@ -109,7 +111,7 @@ new Chart(document.getElementById("current-availability-chart"),
 		"datasets": [
 			{
 			"label": "Available Spaces",
-			"data": [13,45,25,32,14,],
+			"data": currentAvailabilityData,
 			"fill": false,
 			"backgroundColor": ["rgba(54, 162, 235, 0.2)","rgba(54, 162, 235, 0.2)","rgba(54, 162, 235, 0.2)","rgba(54, 162, 235, 0.2)","rgba(54, 162, 235, 0.2)",],
 			"borderColor": ["rgb(54, 162, 235)","rgb(54, 162, 235)","rgb(54, 162, 235)","rgb(54, 162, 235)","rgb(54, 162, 235)",],
@@ -155,7 +157,7 @@ new Chart(document.getElementById("garage-a-capacity-per-hour-chart"),
 				"display": true,
 				"scaleLabel": {
 					"display": true,
-					"labelString": "% Capacity"
+					"labelString": "Garage Occupancy"
 				}
 			}]
 		}
@@ -189,7 +191,7 @@ new Chart(document.getElementById("garage-b-capacity-per-hour-chart"),
 				"display": true,
 				"scaleLabel": {
 					"display": true,
-					"labelString": "% Capacity"
+					"labelString": "Garage Occupancy"
 				}
 			}]
 		}
@@ -223,7 +225,7 @@ new Chart(document.getElementById("garage-c-capacity-per-hour-chart"),
 				"display": true,
 				"scaleLabel": {
 					"display": true,
-					"labelString": "% Capacity"
+					"labelString": "Garage Occupancy"
 				}
 			}]
 		}
@@ -257,7 +259,7 @@ new Chart(document.getElementById("garage-d-capacity-per-hour-chart"),
 				"display": true,
 				"scaleLabel": {
 					"display": true,
-					"labelString": "% Capacity"
+					"labelString": "Garage Occupancy"
 				}
 			}]
 		}
@@ -291,7 +293,7 @@ new Chart(document.getElementById("garage-e-capacity-per-hour-chart"),
 				"display": true,
 				"scaleLabel": {
 					"display": true,
-					"labelString": "% Capacity"
+					"labelString": "Garage Occupancy"
 				}
 			}]
 		}

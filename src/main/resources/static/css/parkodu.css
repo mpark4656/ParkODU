@@ -132,3 +132,9 @@ body {
 .carousel-caption h1 {
   color: #FFD700;
 }
+
+.occupancy-chart {
+    border-left: 1px solid #dedede;
+    border-bottom: 1px solid #dedede;
+    border-right: 1px solid #dedede;
+}
