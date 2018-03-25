@@ -76,7 +76,7 @@ public class SpaceTypeSettingsControllerTests {
         parkingSpaceTwo.setNumber(PARKING_SPACE_TWO_NUMBER);
         parkingSpaceTwo.setSpaceTypeKey(PERMIT_TYPE_TWO_KEY);
 
-        Collection<ParkingSpace> parkingSpaces = new ArrayList<> ();
+        List<ParkingSpace> parkingSpaces = new ArrayList<> ();
         parkingSpaces.add(parkingSpaceOne);
         parkingSpaces.add(parkingSpaceTwo);
 
@@ -87,7 +87,7 @@ public class SpaceTypeSettingsControllerTests {
         doNothing().when(parkingSpaceRepository).save(any(ParkingSpace.class));
         doNothing().when(parkingSpaceRepository).delete(anyString());
 
-        Collection<SpaceType> spaceTypes = new ArrayList<> ();
+        List<SpaceType> spaceTypes = new ArrayList<> ();
         spaceTypes.add(spaceTypeOne);
         spaceTypes.add(spaceTypeTwo);
 

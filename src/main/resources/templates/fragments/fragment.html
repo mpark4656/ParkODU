@@ -14,16 +14,17 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 	<title>ParkODU</title>
 
-	<!-- Bootstrap core CSS -->
+	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
 	<!-- Font Awesome -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
-	<!-- Delightful Indulgence Custom Stylesheet -->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/fontawesome-free-5.0.8/web-fonts-with-css/css/fontawesome-all.min.css}"/>
+	<!-- ParkODU Custom Stylesheet -->
 	<link rel="stylesheet" type="text/css" th:href="@{/css/parkodu.css}"/>
 
 </head>
 <body>
 	<!-- Navigation Bar -->
+	<!--
 	<nav th:fragment="navigation-bar" class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid navbar-container">
             <div class="navbar-header">
@@ -97,18 +98,48 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
             </div>
 		</div>
 	</nav>
-
-
-	<!-- Main Logo -->
-	<div th:fragment="main-logo">
-		<a class="navbar-brand" th:href="@{/}">
-			<img th:src="@{/img} + '/' + 'odupark_logo_02.png'" alt="Park ODU Logo"
-				 style="border: 1px solid black; width: 30%; top: 0; left: 0; position: absolute"/>
-		</a>
-	</div>
-	<!--
-	<a class="navbar-brand" th:href="@{/}"><img src="./img/delightful_indulgence_logo.png" alt="Delightful Indulgence Logo"/></a>
 	-->
+
+	<!-- Navigation Bar -->
+	<nav th:fragment="navigation-bar" class="navbar navbar-default navbar-fixed-top">
+		<div class="container navbar-container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" th:href="@{/}"><img th:src="@{/img/odupark_logo_02.png}" alt="ParkODU Logo" title="ParkODU Logo" height="50"/></a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li><a th:href="@{/garage}">Garages</a></li>
+					<li><a th:href="@{/analytics/locate}">Search</a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li class="dropdown-header">Configurations</li>
+							<li><a th:href="@{/settings/building}">Buildings</a></li>
+							<li><a th:href="@{/settings/floor}">Floors</a></li>
+							<li><a th:href="@{/settings/garage}">Garages</a></li>
+							<li><a th:href="@{/settings/parking_space}">Parking Spaces</a></li>
+							<li><a th:href="@{/settings/permit_type}">Permit Types</a></li>
+							<li><a th:href="@{/settings/space_type}">Space Types</a></li>
+							<li role="separator" class="divider"></li>
+							<li class="dropdown-header">Account Management</li>
+							<li><a th:href="@{/settings/accounts}">Accounts</a></li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a th:href="@{/login}">Login</a></li>
+					<li><a th:href="@{/user/register}">Register</a></li>
+					<li><a href="#"><i class="fas fa-cog fa-lg"></i></a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
 
 	<!-- Settings Link -->
 	<div th:fragment="settings-link">
@@ -140,14 +171,6 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 		<!--
 		<li><a th:href="@{/newuser}">New User</a></li>
 		-->
-	</div>
-
-	<!-- Social Media Links -->
-	<div th:fragment="social-media-links">
-		<div class="social-media-links-container">
-			<a target="_blank" href="#" class="fa fa-facebook facebook-icon"></a>
-			<a target="_blank" href="#" class="fa fa-instagram instagram-icon"></a>
-		</div>
 	</div>
 
 	<!-- Welcome User -->
@@ -211,6 +234,11 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 	<!-- Chart.js Scripts -->
 	<div th:fragment="chart-js-scripts">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>
+	</div>
+
+	<!-- Bootstrap Validator Scripts -->
+	<div th:fragment="bootstrap-validator">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
 	</div>
 
 </body>

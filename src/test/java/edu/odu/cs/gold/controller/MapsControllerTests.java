@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
@@ -28,7 +29,6 @@ public class MapsControllerTests {
 
     private MapsController mapsController;
     private GarageRepository garageRepository;
-    private BuildingRepository buildingRepository;
 
     private Location locationOne;
     private Location locationTwo;
@@ -49,25 +49,26 @@ public class MapsControllerTests {
 
     @Before
     public void setup() {
-        mapsController = new MapsController(garageRepository);
+
 
         garageOne = new Garage();
         garageOne.setGarageKey(GARAGE_ONE_KEY);
         garageOne.setLatitude(LOCATION_ONE_LATITUDE);
         garageOne.setLongitude(LOCATION_ONE_LONGITUDE);
 
-        Collection<Garage> garages = new ArrayList<>();
+        List<Garage> garages = new ArrayList<>();
         garages.add(garageOne);
 
         garageRepository = mock(GarageRepository.class);
         when(garageRepository.findByKey(GARAGE_ONE_KEY)).thenReturn(garageOne);
         when(garageRepository.findAll()).thenReturn(garages);
-            
+
         locationOne = new Location(LOCATION_ONE_LATITUDE,LOCATION_ONE_LONGITUDE);
 
+        mapsController = new MapsController(garageRepository);
 
         garageService = mock(GarageService.class);
-            doNothing().when(garageService).refresh(anyString());
+        doNothing().when(garageService).refresh(anyString());
     }
 
     @Test
@@ -83,8 +84,10 @@ public class MapsControllerTests {
         String returnURL = mapsController.navigate(model,LOCATION_TWO_LATITUDE,LOCATION_TWO_LONGITUDE,GARAGE_ONE_KEY);
         assertEquals("maps/navigate/index",returnURL);
 
-        assertTrue(model.containsAttribute("TravelMode"));
+        assertTrue(model.containsAttribute("travelMode"));
         assertTrue(model.containsAttribute("startingLocation"));
         assertTrue(model.containsAttribute("destination"));
+
+
     }
 }

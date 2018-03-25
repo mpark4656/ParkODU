@@ -5,10 +5,7 @@ import com.hazelcast.core.IMap;
 import com.hazelcast.query.Predicate;
 import edu.odu.cs.gold.model.Building;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class BuildingRepository {
 
@@ -24,9 +21,10 @@ public class BuildingRepository {
         return entity.getBuildingKey();
     }
 
-    public Collection<Building> findAll() {
+    public List<Building> findAll() {
         IMap map = hazelcastInstance.getMap(collectionName);
-        return map.values();
+        Collection entities = map.values();
+        return new ArrayList<>(entities);
     }
 
     public Building findByKey(String key) {
@@ -36,7 +34,8 @@ public class BuildingRepository {
 
     public List<Building> findByKeys(Set<String> keys) {
         IMap map = hazelcastInstance.getMap(collectionName);
-        return new ArrayList<>(map.getAll(keys).values());
+        Map entityMap = map.getAll(keys);
+        return new ArrayList<>(entityMap.values());
     }
 
     public List<Building> findByPredicate(Predicate predicate) {
@@ -46,7 +45,8 @@ public class BuildingRepository {
 
     public int countByPredicate(Predicate predicate) {
         IMap map = hazelcastInstance.getMap(collectionName);
-        return map.values(predicate).size();
+        Collection entities = map.values(predicate);
+        return entities.size();
     }
 
     public void save(Building entity) {
@@ -79,5 +79,4 @@ public class BuildingRepository {
         IMap map = hazelcastInstance.getMap(collectionName);
         map.loadAll(false);
     }
-
 }

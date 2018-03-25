@@ -4,6 +4,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.query.Predicate;
 import edu.odu.cs.gold.model.Floor;
+import edu.odu.cs.gold.model.FloorStatistic;
 import edu.odu.cs.gold.model.Garage;
 
 import java.util.*;
@@ -22,9 +23,9 @@ public class GarageRepository {
         return entity.getGarageKey();
     }
 
-    public Collection<Garage> findAll() {
+    public List<Garage> findAll() {
         IMap map = hazelcastInstance.getMap(collectionName);
-        return map.values();
+        return new ArrayList<>(map.values());
     }
 
     public Map findAllMap() {
@@ -71,6 +72,15 @@ public class GarageRepository {
     public void delete(String key) {
         IMap map = hazelcastInstance.getMap(collectionName);
         map.delete(key);
+    }
+
+    public int deleteByPredicate(Predicate predicate) {
+        IMap map = hazelcastInstance.getMap(collectionName);
+        List<Garage> entities = this.findByPredicate(predicate);
+        for (Garage entity : entities) {
+            map.delete(getId(entity));
+        }
+        return entities.size();
     }
 
     public void loadAll() {
