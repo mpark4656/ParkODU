@@ -1,16 +1,24 @@
 package edu.odu.cs.gold.configuration;
 
+import edu.odu.cs.gold.model.RoleType;
 import edu.odu.cs.gold.repository.UserRepository;
 import edu.odu.cs.gold.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Role;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -19,19 +27,61 @@ import org.springframework.security.web.authentication.session.RegisterSessionAu
 import org.springframework.security.web.session.ConcurrentSessionFilter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
+import java.lang.Object.*;
+import java.util.List;
+import java.util.ArrayList;
+
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.hazelcast.query.Predicate;
+import com.hazelcast.query.Predicates;
+import org.springframework.web.bind.annotation.Mapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.security.Principal;
+import java.util.Collection;
+import java.util.Map;
+import java.util.*;
+
+
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private UserRepository userRepository;
+    private User.UserBuilder user;
+    private RoleType roleType;
+
+
+    private Collection<? extends GrantedAuthority> getAuthorities(
+            Collection< Role> roles) {
+        List<GrantedAuthority> authorities
+                = new ArrayList<>();
+        for (Role role:roles) {
+
+            authorities.add(new SimpleGrantedAuthority(roleType.getAccessLevelName()));
+            role.getClass().getResourceAsStream(roleType.getAccessLevelName())
+
+                    .map(p -> new SimpleGrantedAuthority(p.getName()))
+                    .forEach(authorities::);
+        }
+
+        return authorities;
+    }
+
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService(UserDetails userDetails) {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        //manager.createUser(User.withUsername("admin").password("awesome8").roles("admin").build());
-        //manager.createUser(User.withUsername("user").password("awesome8").roles("user").build());
+
+        manager.createUser(userDetails);
+
+
         return manager;
     }
+
+
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -45,8 +95,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/**").permitAll();
-/*
+        //http.authorizeRequests().antMatchers("/**").permitAll();
+
         http.authorizeRequests()
                 .antMatchers("/",
                         "/index",
@@ -63,6 +113,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/settings/**")
                 .hasRole("admin")
+
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -78,7 +129,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login")
                 .and()
                 .httpBasic();
-*/
+
         http.csrf().disable(); // Required for Spring Security to work
     }
 
