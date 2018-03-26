@@ -3,9 +3,7 @@ package edu.odu.cs.gold.controller;
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
 import edu.odu.cs.gold.model.Building;
-import edu.odu.cs.gold.repository.FloorRepository;
 import edu.odu.cs.gold.repository.BuildingRepository;
-import edu.odu.cs.gold.repository.ParkingSpaceRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,15 +24,13 @@ import java.util.List;
 public class BuildingSettingsController {
 
     private BuildingRepository buildingRepository;
-    private FloorRepository floorRepository;
-    private ParkingSpaceRepository parkingSpaceRepository;
 
-    public BuildingSettingsController(BuildingRepository buildingRepository,
-                                    FloorRepository floorRepository,
-                                    ParkingSpaceRepository parkingSpaceRepository) {
+    /**
+     * Constructor
+     * @param buildingRepository BuildingRepository
+     */
+    public BuildingSettingsController(BuildingRepository buildingRepository) {
         this.buildingRepository = buildingRepository;
-        this.floorRepository = floorRepository;
-        this.parkingSpaceRepository = parkingSpaceRepository;
     }
 
     /**
@@ -85,7 +81,7 @@ public class BuildingSettingsController {
      * @param building Building
      * @param model Model
      * @param redirectAttributes RedirectAttributes
-     * @return
+     * @return String redirection to previous page
      */
     @PostMapping("/create")
     public String create(Building building,
