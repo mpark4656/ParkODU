@@ -12,15 +12,11 @@
 
 <div class="container-fluid main-container">
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <h1 class="text-center" style="text-transform: uppercase;">Edit User</h1>
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
+            <h1 class="text-center main-header">Edit User</h1>
             <hr/>
-        </div>
-    </div>
-    <!-- Alerts -->
-    <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+            <!-- Alerts -->
+            <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
             <form class="form-horizontal" id="edit-user-form" role="form" th:action="@{/settings/accounts/edit}" method="post" th:object="${user}">
                 <input type="hidden" id="id" th:value="${user.userKey}" th:field="${user.userKey}"/>
                 <div class="form-group">
@@ -47,30 +43,26 @@
                         <input type="email" class="form-control" id="userUserName" th:field="${user.username}" readonly="readonly"/>
                     </div>
                 </div>
-                <div class="form-group" th:attr="data-key=${user.roleType}">
-                    <label class="col-md-4 control-label">Role</label>
-                    <div class="col-md-4">
-                        <select type="text" class="form-control" th:field="${user.roleType}">
-                            <option th:each="roleType : ${roleTypes}"
-                                    th:text="${roleType.name}"
-                                    th:value="${roleType.name}"
-                                    th:selected="(${user.roleType eq roleType.name})">
-                            </option>
-                        </select>
-                    </div>
-                </div>
                 <div class="form-group">
                     <label class="col-md-4 control-label">Enabled</label>
                     <div class="col-md-4">
                         <select type="text" class="form-control" th:field="${user.enabled}">
-                            <option value="true">true</option><option value="false">false</option>
+                            <option value="true" selected="selected">true</option>
+                            <option value="false">false</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 control-label">Password</label>
-                    <div class="col-md-4">
-                        <button class="btn btn-danger btn-sm reset-password-button" title="Reset Password" th:attr="data-id=${user.userKey}" data-toggle="modal" data-target="#user-password-modal">Reset Password</button>
+                    <label class="col-md-4 control-label">Permissions</label>
+                    <div class="col-md-8">
+                        <th:block th:if="${user.getPermissions().contains('ADMIN')}">
+                            <input id="isAdmin1" name="isAdmin" type="checkbox" value="true" checked="checked"/>
+                            <label for="isAdmin1">Admin</label>
+                        </th:block>
+                        <th:block th:if="!${user.getPermissions().contains('ADMIN')}">
+                            <input id="isAdmin2" name="isAdmin" type="checkbox" value="true"/>
+                            <label for="isAdmin2">Admin</label>
+                        </th:block>
                     </div>
                 </div>
                 <div class="col-md-8 col-md-offset-4">
@@ -81,45 +73,12 @@
             </form>
         </div>
     </div>
-
-    <br/>
-
     <!-- Footer -->
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
 
-<!-- Reset User Password Modal -->
-<div class="modal fade" id="user-password-modal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form class="form-horizontal" role="form" th:action="@{#}" method="post">
-                <div class="modal-header modal-header-danger">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Change Password</h4>
-                </div>
-                <div class="modal-body">
-                    <input class="password" th:field="${user.password}"/>
-                </div>
-                <div class="modal-footer">
-                    <input type="hidden" id="user-password-reset" name="userKey" required="required"/>
-                    <button type="submit" class="btn btn-danger">Change Password</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- End Reset User Password Modal -->
-
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
-
-<script th:inline="javascript">
-$('.reset-password-button').on('click', function()
-{
-    $('#user-password-reset').val($(this).data("id"));
-});
-</script>
 
 </body>
 </html>

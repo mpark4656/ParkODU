@@ -78,28 +78,30 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 	
 	<!-- Alerts -->
 	<div th:fragment="alerts" th:if="${successMessage ne null or infoMessage ne null or warningMessage ne null or dangerMessage ne null}" class="row">
-		<div th:if="${successMessage ne null}" class="col-md-10 col-md-offset-1">
-			<div class="alert alert-success alert-dismissible text-center" role="alert">
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<span th:utext="${successMessage}"></span>
+		<div class="row">
+			<div th:if="${successMessage ne null}" class="col-md-12">
+				<div class="alert alert-success alert-dismissible text-center" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<span th:utext="${successMessage}"></span>
+				</div>
 			</div>
-		</div>
-		<div th:if="${infoMessage ne null}" class="col-md-10 col-md-offset-1">
-			<div class="alert alert-info alert-dismissible text-center" role="alert">
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<span th:utext="${infoMessage}"></span>
+			<div th:if="${infoMessage ne null}" class="col-md-12">
+				<div class="alert alert-info alert-dismissible text-center" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<span th:utext="${infoMessage}"></span>
+				</div>
 			</div>
-		</div>
-		<div th:if="${warningMessage ne null}" class="col-md-10 col-md-offset-1">
-			<div class="alert alert-warning alert-dismissible text-center" role="alert">
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<span th:utext="${warningMessage}"></span>
+			<div th:if="${warningMessage ne null}" class="col-md-12">
+				<div class="alert alert-warning alert-dismissible text-center" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<span th:utext="${warningMessage}"></span>
+				</div>
 			</div>
-		</div>
-		<div th:if="${dangerMessage ne null}" class="col-md-10 col-md-offset-1">
-			<div class="alert alert-danger alert-dismissible text-center" role="alert">
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<b>Error:</b>&nbsp;<span th:utext="${dangerMessage}"></span>
+			<div th:if="${dangerMessage ne null}" class="col-md-12">
+				<div class="alert alert-danger alert-dismissible text-center" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<b>Error:</b>&nbsp;<span th:utext="${dangerMessage}"></span>
+				</div>
 			</div>
 		</div>
 	</div>

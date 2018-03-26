@@ -59,7 +59,7 @@ public class HomeControllerTests {
     @Test
     public void testIndex() {
         ExtendedModelMap model = new ExtendedModelMap();
-        String returnURL = homeController.index(model);
+        String returnURL = homeController.index(model, null);
         assertEquals("home/index", returnURL);
     }
 

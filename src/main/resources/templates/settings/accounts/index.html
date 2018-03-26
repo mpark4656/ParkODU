@@ -11,30 +11,27 @@
 <!-- Navigation Bar -->
 <!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
 
+<!-- Main Content -->
 <div class="container-fluid main-container">
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1">
             <h1 class="text-center" style="text-transform: uppercase;">Account Management</h1>
             <hr/>
-        </div>
-    </div>
-    <!-- Alerts -->
-    <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+            <!-- Alerts -->
+            <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
             <p class="text-right">
                 <a th:href="@{/settings/accounts/create}" class="btn btn-success btn-sm" title="Create User">Create</a>
             </p>
             <table class="table table-bordered table-centered">
                 <thead>
                 <tr>
-                    <th width="15%">First Name</th>
-                    <th width="15%">Last Name</th>
-                    <th width="20%">Email</th>
-                    <th width="15%">Username</th>
-                    <th width="10%">Role</th>
-                    <th width="10%">Enabled</th>
-                    <th width="20%">Actions</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Username</th>
+                    <th>Permissions</th>
+                    <th>Enabled</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -43,23 +40,22 @@
                     <td th:text="${user.lastName}"></td>
                     <td th:text="${user.email}"></td>
                     <td th:text="${user.username}"></td>
-                    <td th:text="${user.roleType}"></td>
+                    <td th:text="${user.permissions}"></td>
                     <td th:text="${user.enabled}"></td>
                     <td>
                         <a th:href="@{/settings/accounts/edit} + '/' + ${user.userKey}" class="btn btn-primary btn-sm">Edit</a>
                         <button class="btn btn-danger btn-sm delete-user-button" title="Delete User" th:attr="data-id=${user.userKey}" data-toggle="modal" data-target="#delete-user-modal">Delete</button>
+                        <button class="btn btn-warning btn-sm reset-password-button" title="Reset Password" th:attr="data-id=${user.userKey},data-firstname=${user.firstName},data-lastname=${user.lastName},data-username=${user.username}" data-toggle="modal" data-target="#reset-password-modal">Reset Password</button>
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
-
-    <br/>
-
     <!-- Footer -->
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
+<!-- End Main Content -->
 
 <!-- Delete User Modal -->
 <div class="modal fade" id="delete-user-modal" role="dialog">
@@ -85,14 +81,86 @@
 </div>
 <!-- End Delete User Modal -->
 
+<!-- Reset Password Modal -->
+<div class="modal fade" id="reset-password-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" id="reset-password-form" role="form" th:action="@{/settings/accounts/reset_password}" method="post">
+                <div class="modal-header modal-header-primary">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Reset Password</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center">You are requesting to reset the password for <b><span id="reset-password-name"></span></b> with username <b><span id="reset-password-username"></span></b></p>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">New Password</label>
+                        <div class="col-md-8">
+                            <input type="password" class="form-control new-password" id="reset-password-new-password" name="password" required="required"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Retype New Password</label>
+                        <div class="col-md-8">
+                            <input type="password" class="form-control new-password" id="reset-password-new-password-again" name="passwordAgain" required="required"/>
+                            <span id="password-mismatch-alert" style="color: red; display: none;">Password Mismatch</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="reset-password-user-id" name="userKey" required="required"/>
+                    <button type="submit" id="reset-password-submit-button" class="btn btn-primary" disabled="disabled">Reset Password</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- End Reset Password Modal -->
+
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 
 <script th:inline="javascript">
+/*<![CDATA[*/
 $('.delete-user-button').on('click', function()
 {
     $('#delete-user-id').val($(this).data("id"));
 });
+$('.reset-password-button').on('click', function()
+{
+    $('#reset-password-user-id').val($(this).data("id"));
+    $('#reset-password-name').text($(this).data("firstname") + ' ' + $(this).data("lastname"));
+    $('#reset-password-username').text($(this).data("username"));
+});
+$(".new-password").on("keyup paste", function(){
+    var password = $('#reset-password-new-password').val();
+    var passwordAgain = $('#reset-password-new-password-again').val();
+    if (password != "" && passwordAgain != "" && password != passwordAgain) {
+        $("#password-mismatch-alert").show();
+        $("#reset-password-submit-button").prop('disabled', true);
+    }
+    else if (password == "" || passwordAgain == "") {
+        $("#password-mismatch-alert").hide();
+        $("#reset-password-submit-button").prop('disabled', true);
+    }
+    else {
+        $("#password-mismatch-alert").hide();
+        $("#reset-password-submit-button").prop('disabled', false);
+    }
+});
+$("#reset-password-form").submit(function(event) {
+    var password = $('#reset-password-new-password').val();
+    var passwordAgain = $('#reset-password-new-password-again').val();
+    if (password != passwordAgain) {
+        $("#password-mismatch-alert").show();
+        $("#reset-password-new-password-again").focus();
+        event.preventDefault();
+    }
+    else {
+        $("#password-mismatch-alert").hide();
+    }
+});
+/*]]>*/
 </script>
 
 </body>

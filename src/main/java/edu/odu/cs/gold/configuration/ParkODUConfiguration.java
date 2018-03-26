@@ -71,7 +71,7 @@ public class ParkODUConfiguration implements ApplicationContextAware {
         }
 
         // Group Configs
-        hazelcastConfig.getGroupConfig().setName(environment.getProperty("hazelcast.group.name", "dev"));
+        hazelcastConfig.getGroupConfig().setName(environment.getProperty("hazelcast.group.name", "parkodu"));
         hazelcastConfig.getGroupConfig().setPassword(environment.getProperty("hazelcast.group.password", ""));
 
         return hazelcastConfig;
