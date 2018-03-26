@@ -11,15 +11,15 @@
 <!-- Main Content -->
 <div class="container-fluid main-container">
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
-            <h1 class="text-center main-header">New User Registration</h1>
-        </div>
-    </div>
-    <!-- Alerts -->
-    <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-4 col-md-offset-4">
             <form autocomplete="off" th:action="@{/user/register}" th:object="${user}" method="post" class="m-t" role="form" data-toggle="validator">
+
+                <div class="text-center" style="margin-bottom: 15px; margin-top: 15px;">
+                    <img th:src="@{/img/odupark_logo_02.png}" alt="ParkODU Logo" title="ParkODU Logo" height="100"/>
+                </div>
+
+                <!-- Alerts -->
+                <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
 
                 <div class="form-group input-group has-feedback col-md-4 col-md-offset-4">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
@@ -50,10 +50,7 @@
                     <span class="glyphicon form-control-feedback " aria-hidden="true"></span>
                 </div>
 
-                <div class="col-md-4 col-md-offset-4">
-                    <button type="submit" class="btn btn-primary">Register</button>
-                    <button type="reset" class="btn btn-primary">Reset</button>
-                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%">Register</button>
 
             </form>
         </div>

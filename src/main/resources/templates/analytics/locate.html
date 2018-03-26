@@ -10,14 +10,12 @@
 <!-- Navigation Bar -->
 <!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
 
+<!-- Main Content -->
 <div class="container-fluid main-container">
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
             <h1 class="text-center main-header">Search</h1>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
+            <hr/>
             <form class="form-horizontal" th:action="@{/analytics/locate}" method="POST">
 
                 <input type="hidden" name="latitude" id="latitude" />
@@ -76,12 +74,10 @@
             </form>
         </div>
     </div>
-
-    <br/>
-
     <!-- Footer -->
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
+<!-- End Main Content -->
 
 <script>
 var startingAddress;

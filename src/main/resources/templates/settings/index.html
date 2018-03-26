@@ -9,17 +9,15 @@
 
 <!-- Navigation Bar -->
 <!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
+
+<!-- Main Content -->
 <div class="container-fluid main-container">
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <h1 class="text-center" style="text-transform: uppercase;">Settings</h1>
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1">
+            <h1 class="text-center main-header">Settings</h1>
             <hr/>
-        </div>
-    </div>
-    <!-- Alerts -->
-    <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+            <!-- Alerts -->
+            <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
             <h2 style="text-transform: uppercase;">Facility Management</h2>
             <ul>
                 <li><a th:href="@{/settings/garage}">Configure Garages</a></li>
@@ -33,15 +31,11 @@
                 <li><a th:href="@{/settings/accounts}">Accounts</a></li>
             </ul>
             <h2 style="text-transform: uppercase;">Event Management</h2>
-
         </div>
     </div>
     <!-- Footer -->
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
-
-<!-- Scripts -->
-<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
-
+<!-- End Main Content -->
 </body>
 </html>
