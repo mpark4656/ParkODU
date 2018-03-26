@@ -37,7 +37,7 @@
                 <div class="form-group">
                     <label for="heightDescription" class="col-md-4 control-label">Height Description</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" id="heightDescription" th:field="${garage.heightDescription}"/>
+                        <input type="text" class="form-control" id="heightDescription" placeholder="For example, 7ft clearance." th:field="${garage.heightDescription}"/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -56,39 +56,6 @@
                     <label for="longitude" class="col-md-4 control-label">Longitude</label>
                     <div class="col-md-8">
                         <input type="text" class="form-control" id="longitude" th:field="${garage.longitude}" readonly="readonly"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="addressOne" class="col-md-4 control-label">Address One</label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" id="addressOne" th:field="${garage.addressOne}"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="addressTwo" class="col-md-4 control-label">Address Two</label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" id="addressTwo" th:field="${garage.addressTwo}"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="city" class="col-md-4 control-label">City</label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" id="city" th:field="${garage.city}"
-                               placeholder="City"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="state" class="col-md-4 control-label">State</label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" id="state" th:field="${garage.state}" pattern="^[A-Z]{2}$"
-                               placeholder="Two uppercase letters abbreviating the State name" title="Two uppercase letters abbreviating the State name"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="zipCode" class="col-md-4 control-label">Zip Code</label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" id="zipCode" th:field="${garage.zipCode}" pattern="^\d{5}$"
-                               placeholder="Five digits" title="Five digits"/>
                     </div>
                 </div>
                 <div class="col-md-8 col-md-offset-4">
