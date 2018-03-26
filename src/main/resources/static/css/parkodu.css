@@ -79,7 +79,7 @@ body {
 	z-index: 1000;
 	position: fixed;
 	background-color: #fff;
-	border-bottom: 1px solid rgba(0, 48, 87, 1);
+	border-bottom: 1px solid rgb(181, 181, 181);
 }
 
 .navbar-brand {
@@ -96,8 +96,8 @@ body {
 	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
-	background-color: #fff;
-	//background-color: #D0DDFF;
+	//background-color: #fff;
+	background-color: #D0DDFF;
 }
 
 .main-header {
@@ -149,4 +149,28 @@ body {
 	color: #333;
 	white-space: nowrap;
 	text-decoration: none;
+}
+
+.navbar-toggle .icon-bar {
+    background-color: rgba(0, 48, 87, 1);
+}
+
+.table-bordered, .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
+    border: 1px solid #999;
+}
+
+hr {
+    border-top: 1px solid #999;
+}
+
+.table-header-centered > thead > tr > th {
+    text-align: center;
+}
+
+.parkodu-container {
+    background-color: white;margin-top: 75px;padding-bottom: 30px;padding-left: 40px;padding-right: 40px; border-radius: 10px;
+}
+
+.table-centered th, .table-centered td {
+    text-align: center;
 }
