@@ -225,6 +225,45 @@ public class AccountsController {
         return "redirect:/settings/accounts/index";
     }
 
+    @PostMapping("/reset_password")
+    public String reset_password(@RequestParam("userKey") String userKey,
+                                 @RequestParam("password") String password,
+                                 @RequestParam("passwordAgain") String passwordAgain,
+                                 RedirectAttributes redirectAttributes) {
+
+        boolean isSuccessful = false;
+        boolean passwordMismatch = false;
+        String username = null;
+
+        try {
+            if (!password.equals(passwordAgain)) {
+                passwordMismatch = true;
+            }
+            else {
+                User existingUser = userRepository.findByKey(userKey);
+                existingUser.setPassword(password);
+                userRepository.save(existingUser);
+                isSuccessful = true;
+                username = existingUser.getUsername();
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Alerts
+        if (isSuccessful && username != null) {
+            redirectAttributes.addAttribute("successMessage", "The password for " + username + " was successfully changed.");
+        }
+        else if (passwordMismatch) {
+            redirectAttributes.addAttribute("dangerMessage", "Failed to change the password of a User due to a password mismatch.");
+        }
+        else {
+            redirectAttributes.addAttribute("dangerMessage", "An error occurred when attempting to change a User's password.");
+        }
+        return "redirect:/settings/accounts/index";
+    }
+
     /**
      *
      * @param userEnabled
