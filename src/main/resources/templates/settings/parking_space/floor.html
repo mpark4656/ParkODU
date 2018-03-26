@@ -80,6 +80,7 @@ input:checked + .slider:before {
             <p>
                 <span class="auto-update-message"></span>
             </p>
+            <div id="snackbar" class="auto-update-message"></div>
             <p class="text-right">
                 <a th:href="@{/settings/parking_space/create} + '/' + ${garage.garageKey} + '/' + ${floor.floorKey}" class="btn btn-success btn-sm" title="Create Parking Space">Create</a>
                 <a th:href="@{/settings/parking_space/floor} + '/' + ${floor.floorKey}" class="btn btn-success btn-sm" title="Reload this page">Reload</a>
