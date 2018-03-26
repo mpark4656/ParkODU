@@ -47,8 +47,14 @@
                     <label class="col-md-4 control-label">Enabled</label>
                     <div class="col-md-4">
                         <select type="text" class="form-control" th:field="${user.enabled}">
-                            <option value="true" selected="selected">true</option>
-                            <option value="false">false</option>
+                            <th:block th:if="${user.enabled}">
+                                <option value="true" selected="selected">true</option>
+                                <option value="false">false</option>
+                            </th:block>
+                            <th:block th:if="${user.enabled eq false}">
+                                <option value="true">true</option>
+                                <option value="false" selected="selected">false</option>
+                            </th:block>
                         </select>
                     </div>
                 </div>
