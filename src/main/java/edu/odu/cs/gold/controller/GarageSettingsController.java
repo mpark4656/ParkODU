@@ -169,11 +169,6 @@ public class GarageSettingsController {
                 existingGarage.setDescription(garage.getDescription());
                 existingGarage.setHeightDescription(garage.getHeightDescription());
                 existingGarage.setAddress(garage.getAddress());
-                existingGarage.setAddressOne(garage.getAddressOne());
-                existingGarage.setAddressTwo(garage.getAddressTwo());
-                existingGarage.setCity(garage.getCity());
-                existingGarage.setState(garage.getState());
-                existingGarage.setZipCode(garage.getZipCode());
                 garageRepository.save(existingGarage);
                 isSuccessful = true;
             }
