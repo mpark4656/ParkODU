@@ -170,3 +170,7 @@ hr {
 .parkodu-container {
     background-color: white;margin-top: 75px;padding-bottom: 30px;padding-left: 40px;padding-right: 40px; border-radius: 10px;
 }
+
+.table-centered th, .table-centered td {
+    text-align: center;
+}
