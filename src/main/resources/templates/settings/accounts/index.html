@@ -32,7 +32,7 @@
                     <th width="15%">Last Name</th>
                     <th width="20%">Email</th>
                     <th width="15%">Username</th>
-                    <th width="10%">Role</th>
+                    <th width="10%">Permissions</th>
                     <th width="10%">Enabled</th>
                     <th width="20%">Actions</th>
                 </tr>
@@ -43,7 +43,7 @@
                     <td th:text="${user.lastName}"></td>
                     <td th:text="${user.email}"></td>
                     <td th:text="${user.username}"></td>
-                    <td th:text="${user.roleType}"></td>
+                    <td th:text="${user.permissions}"></td>
                     <td th:text="${user.enabled}"></td>
                     <td>
                         <a th:href="@{/settings/accounts/edit} + '/' + ${user.userKey}" class="btn btn-primary btn-sm">Edit</a>

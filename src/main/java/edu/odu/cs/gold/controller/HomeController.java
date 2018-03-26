@@ -27,7 +27,8 @@ public class HomeController {
     }
 
     @GetMapping({"","/","/index"})
-    public String index(Model model) {
+    public String index(Model model,
+                        @RequestParam(value = "error", required = false) String dangerMessage) {
         List<Garage> garages = new ArrayList<>(garageRepository.findAll());
         garages.sort(Comparator.comparing(Garage::getName));
         StringBuilder currentAvailabilityDataString = new StringBuilder();
@@ -35,6 +36,10 @@ public class HomeController {
             currentAvailabilityDataString.append(garage.getAvailableSpaces() + ",");
         }
         model.addAttribute("currentAvailabilityDataString", currentAvailabilityDataString.toString());
+        // Alerts
+        if (dangerMessage != null) {
+            model.addAttribute("dangerMessage", dangerMessage);
+        }
         return "home/index";
     }
 
