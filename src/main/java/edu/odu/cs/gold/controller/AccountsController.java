@@ -198,7 +198,7 @@ public class AccountsController {
                 existingUser.setEmail(user.getEmail());
                 existingUser.setPassword(user.getPassword());
                 existingUser.setRole(user.getRoleType());
-                existingUser.setEnabled(user.getEnabled());
+                existingUser.setEnabled(user.isEnabled());
                 userRepository.save(existingUser);
                 isSuccessful = true;
             } else {

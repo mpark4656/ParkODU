@@ -12,20 +12,14 @@
 <!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
 
 <div class="container-fluid main-container">
-
-    <!-- Welcome User -->
-    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
-
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
             <h1 class="text-center" style="text-transform: uppercase;">Account Management</h1>
             <hr/>
         </div>
     </div>
-
     <!-- Alerts -->
     <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
-
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
             <p class="text-right">
@@ -48,7 +42,7 @@
                     <td th:text="${user.firstName}"></td>
                     <td th:text="${user.lastName}"></td>
                     <td th:text="${user.email}"></td>
-                    <td th:text="${user.userName}"></td>
+                    <td th:text="${user.username}"></td>
                     <td th:text="${user.roleType}"></td>
                     <td th:text="${user.enabled}"></td>
                     <td>

@@ -79,7 +79,7 @@ public class AccountsRestController {
             if (user.getRoleType() != null) {
                 existingUser.setRole(user.getRoleType());
             }
-            existingUser.setEnabled(user.getEnabled());
+            existingUser.setEnabled(user.isEnabled());
 
             userRepository.save(existingUser);
             System.out.println("Updated User: " + existingUser);

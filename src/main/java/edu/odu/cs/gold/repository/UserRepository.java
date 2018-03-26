@@ -27,9 +27,9 @@ public class UserRepository {
         return entity.getUserKey();
     }
 
-    public Collection<User> findAll() {
+    public List<User> findAll() {
         IMap map = hazelcastInstance.getMap(collectionName);
-        return map.values();
+        return new ArrayList<>(map.values());
     }
 
     public User findByKey(String key) {

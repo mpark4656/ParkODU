@@ -176,11 +176,11 @@ public class ParkingSpaceSettingsControllerTests {
         spaceTypeFour.setName(SPACE_TYPE_FOUR_NAME);
         spaceTypeFour.setSpaceTypeKey(SPACE_KEY_FOUR);
 
-        Collection<Garage> garages = new ArrayList<>();
+        List<Garage> garages = new ArrayList<>();
         garages.add(garageOne);
         garages.add(garageTwo);
 
-        Collection<Floor> floors = new ArrayList<>();
+        List<Floor> floors = new ArrayList<>();
         floors.add(floorOne);
         floors.add(floorTwo);
 
@@ -190,13 +190,13 @@ public class ParkingSpaceSettingsControllerTests {
         parkingSpaces.add(parkingSpaceThree);
         parkingSpaces.add(parkingSpaceFour);
 
-        Collection<PermitType> permitTypes = new ArrayList<> ();
+        List<PermitType> permitTypes = new ArrayList<> ();
         permitTypes.add(permitTypeOne);
         permitTypes.add(permitTypeTwo);
         permitTypes.add(permitTypeThree);
         permitTypes.add(permitTypeFour);
 
-        Collection<SpaceType> spaceTypes = new ArrayList<> ();
+        List<SpaceType> spaceTypes = new ArrayList<> ();
         spaceTypes.add(spaceTypeOne);
         spaceTypes.add(spaceTypeTwo);
         spaceTypes.add(spaceTypeThree);

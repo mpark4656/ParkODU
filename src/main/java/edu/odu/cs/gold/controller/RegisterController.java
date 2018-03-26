@@ -76,7 +76,7 @@ public class RegisterController {
 
         // Lookup user in database by e-mail
         boolean emailExists = userService.userExists(user.getEmail());
-        boolean userExists = userService.userExists(user.getUserName());
+        boolean userExists = userService.userExists(user.getUsername());
 
         System.out.println("User exists: " + emailExists);
         if (emailExists ) {
@@ -84,7 +84,7 @@ public class RegisterController {
             bindingResult.reject("email");
         }
         if (userExists) {
-            model.addAttribute("dangerMessage", "Oops! The "+ user.getUserName() +" is not available!");
+            model.addAttribute("dangerMessage", "Oops! The "+ user.getUsername() +" is not available!");
             bindingResult.reject("userName");
         }
         else {
@@ -99,7 +99,7 @@ public class RegisterController {
             SimpleMailMessage registrationEmail = new SimpleMailMessage();
             registrationEmail.setTo(user.getEmail());
             registrationEmail.setSubject("Registration Confirmation");
-            registrationEmail.setText("You have been registered with the username:\n\n" + user.getUserName() + "\n\nTo confirm your e-mail address, please click the link below:\n"
+            registrationEmail.setText("You have been registered with the username:\n\n" + user.getUsername() + "\n\nTo confirm your e-mail address, please click the link below:\n"
                     + appUrl + ":8083/user/confirm?token=" + user.getConfirmationToken());
             registrationEmail.setFrom("noreply@ParkODU.cs.odu.edu");
             emailService.sendEmail(registrationEmail);
@@ -125,7 +125,7 @@ public class RegisterController {
         List<User> userList = userRepository.findByPredicate(predicate);
         System.out.println("Confirmation Token: " + token);
         if (userList != null && !userList.isEmpty()) {
-            if(userList.get(0).getEnabled() == true) {
+            if(userList.get(0).isEnabled() == true) {
                 model.addAttribute("dangerMessage", "Oops! Confirmation link not valid!");
                 redirectAttributes.addAttribute("attr","confirmationLinkError");
             } else {

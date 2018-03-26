@@ -43,9 +43,9 @@ public class MapsController {
 
     @GetMapping("/navigate")
     public String navigate(Model model,
-                             @RequestParam("latitude") Double latitude,
-                             @RequestParam("longitude") Double longitude,
-                             @RequestParam("destination") String destinationGarageKey) {
+                           @RequestParam("latitude") Double latitude,
+                           @RequestParam("longitude") Double longitude,
+                           @RequestParam("destination") String destinationGarageKey) {
 
         Garage garage = garageRepository.findByKey(destinationGarageKey);
         Location startingLocation = new Location(latitude,longitude);

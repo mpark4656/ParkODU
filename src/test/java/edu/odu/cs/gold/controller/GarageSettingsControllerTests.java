@@ -13,6 +13,7 @@ import org.springframework.ui.ExtendedModelMap;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
@@ -103,15 +104,15 @@ public class GarageSettingsControllerTests {
         parkingSpaceFour.setFloor(PARKING_SPACE_FOUR_FLOOR);
         parkingSpaceFour.setNumber(PARKING_SPACE_FOUR_NUMBER);
 
-        Collection<Garage> garages = new ArrayList<>();
+        List<Garage> garages = new ArrayList<>();
         garages.add(garageOne);
         garages.add(garageTwo);
 
-        Collection<Floor> floors = new ArrayList<>();
+        List<Floor> floors = new ArrayList<>();
         floors.add(floorOne);
         floors.add(floorTwo);
 
-        Collection<ParkingSpace> parkingSpaces = new ArrayList<> ();
+        List<ParkingSpace> parkingSpaces = new ArrayList<> ();
         parkingSpaces.add(parkingSpaceOne);
         parkingSpaces.add(parkingSpaceTwo);
         parkingSpaces.add(parkingSpaceThree);

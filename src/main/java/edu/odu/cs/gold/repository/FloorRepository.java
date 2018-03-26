@@ -25,9 +25,9 @@ public class FloorRepository {
         return entity.getFloorKey();
     }
 
-    public Collection<Floor> findAll() {
+    public List<Floor> findAll() {
         IMap map = hazelcastInstance.getMap(collectionName);
-        return map.values();
+        return new ArrayList<>(map.values());
     }
 
     public Floor findByKey(String key) {
