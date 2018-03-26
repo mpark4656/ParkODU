@@ -60,8 +60,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/user/confirm/**",
                         "/maps/**")
                 .permitAll()
-                //.antMatchers("/settings/**")
-                //.hasRole("ADMIN")
                 .antMatchers("/settings/**")
                 .hasAuthority("ADMIN")
                 .anyRequest()
@@ -81,7 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic()
                 .and()
                 .sessionManagement()
-                .maximumSessions(1)
+                .maximumSessions(10)
                 .expiredUrl("/expired")
                 .sessionRegistry(sessionRegistry());
         http.csrf().disable(); // Required for Spring Security to work
