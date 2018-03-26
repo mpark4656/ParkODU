@@ -2,26 +2,18 @@ package edu.odu.cs.gold.controller;
 
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
+import edu.odu.cs.gold.model.RoleType;
+import edu.odu.cs.gold.model.User;
 import edu.odu.cs.gold.repository.RoleTypeRepository;
 import edu.odu.cs.gold.repository.UserRepository;
-import edu.odu.cs.gold.service.UserService;
-import edu.odu.cs.gold.model.User;
-import edu.odu.cs.gold.model.RoleType;
 import edu.odu.cs.gold.service.EmailService;
-
-import org.springframework.mail.SimpleMailMessage;
+import edu.odu.cs.gold.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("/settings/accounts")
@@ -179,6 +171,7 @@ public class AccountsController {
 
     @PostMapping("/edit")
     public String edit(User user,
+                       @RequestParam(value = "isAdmin", required = false) Boolean isAdmin,
                        Model model,
                        RedirectAttributes redirectAttributes) {
 
@@ -196,9 +189,19 @@ public class AccountsController {
                 existingUser.setFirstName(user.getFirstName());
                 existingUser.setLastName(user.getLastName());
                 existingUser.setEmail(user.getEmail());
-                existingUser.setPassword(user.getPassword());
                 existingUser.setRole(user.getRoleType());
                 existingUser.setEnabled(user.isEnabled());
+                if (isAdmin != null && isAdmin == true) {
+                    existingUser.getPermissions().add("ADMIN");
+                }
+                else {
+                    for (Iterator<String> permissionIterator = existingUser.getPermissions().iterator(); permissionIterator.hasNext(); ) {
+                        String permission = permissionIterator.next();
+                        if (permission.equals("ADMIN")) {
+                            permissionIterator.remove();
+                        }
+                    }
+                }
                 userRepository.save(existingUser);
                 isSuccessful = true;
             } else {

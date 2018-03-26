@@ -63,8 +63,20 @@
                     <label class="col-md-4 control-label">Enabled</label>
                     <div class="col-md-4">
                         <select type="text" class="form-control" th:field="${user.enabled}">
-                            <option value="true">true</option><option value="false">false</option>
+                            <option value="true">true</option>
+                            <option value="false">false</option>
                         </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-8 col-md-offset-4">
+                        <th:block th:if="${user.getPermissions().contains('ADMIN')}">
+                            <input name="isAdmin" type="checkbox" value="true" checked="checked"/>
+                        </th:block>
+                        <th:block th:if="!${user.getPermissions().contains('ADMIN')}">
+                            <input name="isAdmin" type="checkbox" value="true"/>
+                        </th:block>
+                        <label>Admin</label>
                     </div>
                 </div>
                 <div class="form-group">
