@@ -33,6 +33,7 @@
         <canvas id="floorStatisticChart"></canvas>
     </div>
 </div>
+
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 
@@ -61,8 +62,9 @@ $(document).ready(function(){
                 });
     });
 });
+</script>
 
-
+<script th:inline="javascript">
 /*<![CDATA[*/
 $(#create).click(function() {
     // FloorStatistics Chart
