@@ -1,0 +1,123 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: HomeController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">edu.odu.cs.gold.controller</a> ]
+</div>
+
+<h1>Coverage Summary for Class: HomeController (edu.odu.cs.gold.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">HomeController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/ 7)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package edu.odu.cs.gold.controller;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import org.springframework.stereotype.Controller;
+<i>4</i>&nbsp;import org.springframework.ui.Model;
+<i>5</i>&nbsp;import org.springframework.web.bind.annotation.GetMapping;
+<i>6</i>&nbsp;import org.springframework.web.bind.annotation.RequestMapping;
+<i>7</i>&nbsp;import org.springframework.web.bind.annotation.RequestParam;
+<i>8</i>&nbsp;import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+<i>9</i>&nbsp;import javax.servlet.http.HttpServletRequest;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;@Controller
+<b class="fc"><i>12</i>&nbsp;public class HomeController {</b>
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    @GetMapping({&quot;&quot;,&quot;/&quot;,&quot;/index&quot;})
+<i>15</i>&nbsp;    public String index() {
+<b class="fc"><i>16</i>&nbsp;        return &quot;home/index&quot;;</b>
+<i>17</i>&nbsp;    }
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    @GetMapping(&quot;/settings&quot;)
+<i>20</i>&nbsp;    public String settings() {
+<b class="fc"><i>21</i>&nbsp;        return &quot;settings/index&quot;;</b>
+<i>22</i>&nbsp;    }
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    @GetMapping(&quot;/login&quot;)
+<i>25</i>&nbsp;    public String login() {
+<b class="fc"><i>26</i>&nbsp;        return &quot;home/login&quot;;</b>
+<i>27</i>&nbsp;    }
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    // Login form with error
+<i>30</i>&nbsp;    @GetMapping(&quot;/login-error&quot;)
+<i>31</i>&nbsp;    public String loginError(Model model) {
+<b class="fc"><i>32</i>&nbsp;        model.addAttribute(&quot;loginError&quot;, true);</b>
+<b class="fc"><i>33</i>&nbsp;        return &quot;home/login&quot;;</b>
+<i>34</i>&nbsp;    }
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    @GetMapping(&quot;/logout&quot;)
+<i>37</i>&nbsp;    public String logout() {
+<b class="fc"><i>38</i>&nbsp;        return &quot;redirect:/&quot;;</b>
+<i>39</i>&nbsp;    }
+<i>40</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2018-03-24 16:39</div>
+</div>
+</body>
+</html>

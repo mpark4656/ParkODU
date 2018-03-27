@@ -18,7 +18,7 @@ public class MongoMapStore implements MapStore, MapLoaderLifecycleSupport {
     public MongoMapStore(MongoTemplate mongoTemplate, String collectionName, Class clazz) {
         this.mongoTemplate = mongoTemplate;
         this.dbCollection = mongoTemplate.getCollection(collectionName);
-        this.mongoDBConverter = new GoldDBConverter(mongoTemplate);
+        this.mongoDBConverter = new ParkODUDBConverter(mongoTemplate);
         this.clazz = clazz;
     }
 

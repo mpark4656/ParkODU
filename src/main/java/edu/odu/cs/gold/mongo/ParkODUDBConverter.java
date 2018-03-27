@@ -26,56 +26,65 @@ import java.util.Date;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-public class GoldDBConverter implements MongoDBConverter {
+public class ParkODUDBConverter implements MongoDBConverter {
 
     private MongoTemplate mongoTemplate;
 
-    public GoldDBConverter(Mongo mongo, String databaseName) {
+    public ParkODUDBConverter(Mongo mongo, String databaseName) {
         this.mongoTemplate = new MongoTemplate(mongo, databaseName);
     }
 
-    public GoldDBConverter(MongoTemplate mongoTemplate) {
+    public ParkODUDBConverter(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
     }
 
-    public DBObject toDBObject(Object obj) {
+    public DBObject toDBObject(Object object) {
         DBObject dbObject = new BasicDBObject();
-        if(isStandardClass(obj.getClass()))
-            obj = new ValueWrapper(obj);
-        mongoTemplate.getConverter().write(obj, dbObject);
+        if (isStandardClass(object.getClass())) {
+            object = new ValueWrapper(object);
+        }
+        mongoTemplate.getConverter().write(object, dbObject);
         return dbObject;
     }
 
     public Object toObject(Class clazz, DBObject dbObject) {
-        if(clazz.equals(ValueWrapper.class))
+        if (clazz.equals(ValueWrapper.class)) {
             return dbObject.get("value");
+        }
         return mongoTemplate.getConverter().read(clazz, dbObject);
     }
 
     public static boolean isStandardClass(Class clazz) {
-        if (clazz.isAssignableFrom(Date.class)) // standard, pass
+        if (clazz.isAssignableFrom(Date.class)) {
             return true;
-        else if (clazz.isAssignableFrom(Number.class)) // standard, pass
+        }
+        else if (clazz.isAssignableFrom(String.class)) {
             return true;
-        else if (clazz.isAssignableFrom(String.class)) // standard, pass
+        }
+        else if (clazz.isAssignableFrom(ObjectId.class)) {
             return true;
-        else if (clazz.isAssignableFrom(ObjectId.class)) // standard, pass
+        }
+        else if (clazz.isAssignableFrom(BSONObject.class)) {
             return true;
-        else if (clazz.isAssignableFrom(BSONObject.class)) // standard, pass
+        }
+        else if (clazz.isAssignableFrom(Boolean.class)) {
             return true;
-        else if (clazz.isAssignableFrom(Boolean.class)) // standard, pass
+        }
+        else if (clazz.isAssignableFrom(Double.class)) {
             return true;
-        else if (clazz.isAssignableFrom(Double.class)) // standard, pass
+        }
+        else if (clazz.isAssignableFrom(Integer.class)) {
             return true;
-        else if (clazz.isAssignableFrom(Integer.class)) // standard, pass
+        }
+        else if (clazz.isAssignableFrom(Long.class)) {
             return true;
-        else if (clazz.isAssignableFrom(Long.class)) // standard, pass
+        }
+        else if (clazz.isAssignableFrom(Pattern.class)) {
             return true;
-        else if (clazz.isAssignableFrom(Pattern.class)) // standard, pass
+        }
+        else if (clazz.isAssignableFrom(UUID.class)) {
             return true;
-        else if (clazz.isAssignableFrom(UUID.class)) // standard, pass
-            return true;
-
+        }
         return false;
     }
 

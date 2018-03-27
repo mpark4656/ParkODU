@@ -94,13 +94,14 @@ public class RegisterController {
             user.generateConfirmationToken();
             user.generateUserKey();
             user.setRole("user");
+            user.getPermissions().add("USER");
             userService.saveUser(user);
             String appUrl = request.getScheme() + "://" + request.getServerName();
             SimpleMailMessage registrationEmail = new SimpleMailMessage();
             registrationEmail.setTo(user.getEmail());
             registrationEmail.setSubject("Registration Confirmation");
             registrationEmail.setText("You have been registered with the username:\n\n" + user.getUsername() + "\n\nTo confirm your e-mail address, please click the link below:\n"
-                    + appUrl + ":8083/user/confirm?token=" + user.getConfirmationToken());
+                    + appUrl + "/user/confirm?token=" + user.getConfirmationToken());
             registrationEmail.setFrom("noreply@ParkODU.cs.odu.edu");
             emailService.sendEmail(registrationEmail);
             model.addAttribute("successMessage", "A confirmation e-mail has been sent to " + user.getEmail());

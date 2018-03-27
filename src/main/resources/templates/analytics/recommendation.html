@@ -10,10 +10,11 @@
 <!-- Navigation Bar -->
 <!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
 
+<!-- Main Content -->
 <div class="container-fluid main-container">
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <h1 class="text-center" style="text-transform: uppercase;">Search Results</h1>
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1">
+            <h1 class="text-center main-header">Search Results</h1>
             <hr/>
             <dl class="dl-horizontal">
                 <dt>Starting Address</dt>
@@ -28,57 +29,50 @@
                 <dt>Destination Building</dt>
                 <dd th:text="${destinationBuilding.name}"></dd>
             </dl>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
             <p class="text-right">
                 <a th:href="@{/analytics/locate}" class="btn btn-primary">New Search</a>
             </p>
             <table class="table table-bordered table-centered">
                 <thead>
-                    <tr>
-                        <th rowspan="2" width="36%">Garage</th>
-                        <th rowspan="2" width="8%">Available Spaces</th>
-                        <th colspan="2" width="16%">Starting Address to Garage (Driving)</th>
-                        <th colspan="2" width="16%">Garage to Destination Building (Walking)</th>
-                        <th rowspan="2" width="8%">Total Distance</th>
-                        <th rowspan="2" width="8%">Total Travel Time</th>
-                        <th rowspan="2" width="8%">Arrival Time</th>
-                    </tr>
-                    <tr>
-                        <th width="8%">Distance</th>
-                        <th width="8%">Travel Time</th>
-                        <th width="8%">Distance</th>
-                        <th width="8%">Travel Time</th>
-                    </tr>
+                <tr>
+                    <th rowspan="2" width="36%">Garage</th>
+                    <th rowspan="2" width="8%">Available Spaces</th>
+                    <th colspan="2" width="16%">Starting Address to Garage (Driving)</th>
+                    <th colspan="2" width="16%">Garage to Destination Building (Walking)</th>
+                    <th rowspan="2" width="8%">Total Distance</th>
+                    <th rowspan="2" width="8%">Total Travel Time</th>
+                    <th rowspan="2" width="8%">Arrival Time</th>
+                </tr>
+                <tr>
+                    <th width="8%">Distance</th>
+                    <th width="8%">Travel Time</th>
+                    <th width="8%">Distance</th>
+                    <th width="8%">Travel Time</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="recommendation : ${recommendations}">
-                        <td style="text-align: left;">
-                            <a th:href="@{/maps/navigate} + '?latitude=' + ${startingLatitude} + '&amp;longitude=' + ${startingLongitude} + '&amp;destination=' + ${recommendation.garage.garageKey}" class="btn btn-primary btn-sm align-right">Navigate</a>
-                            <a th:href="@{/garage/details} + '/' + ${recommendation.garage.garageKey}" th:text="${recommendation.garage.name}"></a>
-                        </td>
-                        <td th:text="${recommendation.availabilityCount}"></td>
-                        <td th:text="${recommendation.startingAddressToGarageDistanceText}"></td>
-                        <td th:text="${recommendation.startingAddressToGarageDurationText}"></td>
-                        <td th:text="${recommendation.garageToDestinationBuildingDistanceText}"></td>
-                        <td th:text="${recommendation.garageToDestinationBuildingDurationText}"></td>
-                        <td th:text="${recommendation.totalDistanceText}"></td>
-                        <td th:text="${recommendation.totalDurationText}"></td>
-                        <td th:text="${#dates.format(recommendation.getArrivalTime(), 'hh:mm a')}"></td>
-                    </tr>
+                <tr th:each="recommendation : ${recommendations}">
+                    <td style="text-align: left;">
+                        <a target="_blank" th:href="@{/maps/navigate} + '?latitude=' + ${startingLatitude} + '&amp;longitude=' + ${startingLongitude} + '&amp;destination=' + ${recommendation.garage.garageKey}" class="btn btn-primary btn-sm align-right">Navigate</a>
+                        <a th:href="@{/garage/details} + '/' + ${recommendation.garage.garageKey}" th:text="${recommendation.garage.name}"></a>
+                    </td>
+                    <td th:text="${recommendation.availabilityCount}"></td>
+                    <td th:text="${recommendation.startingAddressToGarageDistanceText}"></td>
+                    <td th:text="${recommendation.startingAddressToGarageDurationText}"></td>
+                    <td th:text="${recommendation.garageToDestinationBuildingDistanceText}"></td>
+                    <td th:text="${recommendation.garageToDestinationBuildingDurationText}"></td>
+                    <td th:text="${recommendation.totalDistanceText}"></td>
+                    <td th:text="${recommendation.totalDurationText}"></td>
+                    <td th:text="${#dates.format(recommendation.getArrivalTime(), 'hh:mm a')}"></td>
+                </tr>
                 </tbody>
             </table>
         </div>
     </div>
-
-    <br/>
-
     <!-- Footer -->
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
+<!-- End Main Content -->
 
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->

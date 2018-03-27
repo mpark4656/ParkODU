@@ -10,18 +10,14 @@
 <!-- Navigation Bar -->
 <!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
 
+<!-- Main Content -->
 <div class="container-fluid main-container">
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <h1 class="text-center" style="text-transform: uppercase;">Parking Space</h1>
-            <h4 class="text-center" style="text-transform: uppercase;">Settings</h4>
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1">
+            <h1 class="text-center main-header">Parking Space Settings</h1>
             <hr/>
-        </div>
-    </div>
-    <!-- Alerts -->
-    <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+            <!-- Alerts -->
+            <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
             <th:block th:each="garage : ${garages}">
                 <h4 th:text="${garage.name}"></h4>
                 <ul>
@@ -32,12 +28,10 @@
             </th:block>
         </div>
     </div>
-
-    <br/>
-
     <!-- Footer -->
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
+<!-- End Main Content -->
 
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->

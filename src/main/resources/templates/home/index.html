@@ -6,10 +6,12 @@
     <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
 </head>
 <body>
+
 <!-- Navigation Bar -->
 <!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
+
 <!-- Main Content -->
-<div class="container-fluid main-container">
+<div class="container-fluid main-container" style="background-color: #fff;">
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <!-- Carousel -->
@@ -21,7 +23,7 @@
                 </ol>
                 <div class="carousel-inner">
                     <div class="item active">
-                        <img th:src="@{/img/43rd-gallery1.jpg}" alt="Los Angeles" width="100%" height="100px"/>
+                        <img th:src="@{/img/43rd-gallery1.jpg}" alt="Garage" width="100%" height="100px"/>
                         <div class="container">
                             <div class="carousel-caption d-none d-md-block">
                                 <h1>ParkODU</h1>
@@ -30,14 +32,14 @@
                         </div>
                     </div>
                     <div class="item">
-                        <img th:src="@{/img/43rd-gallery2.jpg}" alt="Chicago" width="100%" height="100px"/>
+                        <img th:src="@{/img/43rd-gallery2.jpg}" alt="Garage" width="100%" height="100px"/>
                         <div class="carousel-caption d-none d-md-block">
                             <h1>ParkODU</h1>
                             <p>Designed and developed by Old Dominion University's finest Computer Science undergraduates.</p>
                         </div>
                     </div>
                     <div class="item">
-                        <img th:src="@{/img/43rd-gallery3.jpg}" alt="New York" width="100%" height="100px"/>
+                        <img th:src="@{/img/43rd-gallery3.jpg}" alt="Garage" width="100%" height="100px"/>
                         <div class="carousel-caption d-none d-md-block">
                             <h1>ParkODU</h1>
                             <p>Allow users to view your parking space availability in real-time. With our dynamic garage floor plans, users have the ability to view the exact location of available parking spaces.</p>
@@ -95,10 +97,13 @@
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
 <!-- End Main Content -->
+
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
 <!-- Chart.js Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: chart-js-scripts" /> /*/-->
+
 <script th:inline="javascript">
 /*<![CDATA[*/
 var currentAvailabilityDataString = /*[[${currentAvailabilityDataString}]]*/;

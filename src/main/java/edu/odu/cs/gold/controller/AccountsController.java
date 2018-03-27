@@ -2,26 +2,18 @@ package edu.odu.cs.gold.controller;
 
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
+import edu.odu.cs.gold.model.RoleType;
+import edu.odu.cs.gold.model.User;
 import edu.odu.cs.gold.repository.RoleTypeRepository;
 import edu.odu.cs.gold.repository.UserRepository;
-import edu.odu.cs.gold.service.UserService;
-import edu.odu.cs.gold.model.User;
-import edu.odu.cs.gold.model.RoleType;
 import edu.odu.cs.gold.service.EmailService;
-
-import org.springframework.mail.SimpleMailMessage;
+import edu.odu.cs.gold.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("/settings/accounts")
@@ -32,14 +24,6 @@ public class AccountsController {
     private EmailService emailService;
     private RoleTypeRepository roleTypeRepository;
 
-    /**
-     *
-     * @param userRepository
-     * @param userService
-     * @param emailService
-     * @param roleTypeRepository
-     */
-
     public AccountsController(UserRepository userRepository,
                               UserService userService,
                               EmailService emailService,
@@ -49,16 +33,6 @@ public class AccountsController {
         this.emailService = emailService;
         this.roleTypeRepository = roleTypeRepository;
     }
-
-    /**
-     *
-     * @param successMessage
-     * @param infoMessage
-     * @param warningMessage
-     * @param dangerMessage
-     * @param model
-     * @return
-     */
 
     @GetMapping({"", "/", "/index"})
     public String index(@RequestParam(value = "successMessage", required = false) String successMessage,
@@ -87,12 +61,6 @@ public class AccountsController {
         return "settings/accounts/index";
     }
 
-    /**
-     *
-     * @param model
-     * @return
-     */
-
     @GetMapping("/create")
     public String create(Model model) {
         User user = new User();
@@ -102,34 +70,36 @@ public class AccountsController {
         return "settings/accounts/create";
     }
 
-    /**
-     *
-     * @param user
-     * @param model
-     * @param redirectAttributes
-     * @return
-     */
-
     @PostMapping("/create")
     public String create(User user,
                          Model model,
                          RedirectAttributes redirectAttributes) {
         boolean isSuccessful = false;
-        boolean isDuplicate = false;
+        boolean isUsernameDuplicate = false;
+        boolean isEmailDuplicate = false;
         try {
             Predicate predicate = Predicates.or(
                     Predicates.equal("userKey", user.getUserKey()),
+                    Predicates.equal("username", user.getUsername())
+            );
+            int existingUsernameCount = userRepository.countByPredicate(predicate);
+            predicate = Predicates.or(
+                    Predicates.equal("userKey", user.getUserKey()),
                     Predicates.equal("email",user.getEmail())
             );
-            int existingCount = userRepository.countByPredicate(predicate);
-            if (existingCount == 0) {
+            int existingEmailCount = userRepository.countByPredicate(predicate);
+            if (existingUsernameCount == 0 && existingEmailCount == 0) {
                 user.setConfirmationToken(UUID.randomUUID().toString());
                 user.generateUserKey();
+                user.getPermissions().add("USER");
                 userRepository.save(user);
                 isSuccessful = true;
             }
-            else {
-                isDuplicate = true;
+            if (existingUsernameCount > 0) {
+                isUsernameDuplicate = true;
+            }
+            if (existingEmailCount > 0) {
+                isEmailDuplicate = true;
             }
         }
         catch (Exception e) {
@@ -140,8 +110,16 @@ public class AccountsController {
         if (isSuccessful) {
             redirectAttributes.addAttribute("successMessage", "The user " + user.getEmail() + " was successfully created.");
         }
-        else if (isDuplicate) {
-            model.addAttribute("dangerMessage", "The user " + user.getEmail() + " already exists.");
+        else if (isUsernameDuplicate || isEmailDuplicate) {
+            if (isUsernameDuplicate && isEmailDuplicate) {
+                model.addAttribute("dangerMessage", "A user with the username " + user.getUsername() + " and email " + user.getEmail() + " already exists.");
+            }
+            else if (isUsernameDuplicate) {
+                model.addAttribute("dangerMessage", "A user with the username " + user.getUsername() + " already exists.");
+            }
+            else if (isEmailDuplicate) {
+                model.addAttribute("dangerMessage", "A user with the email " + user.getEmail() + " already exists.");
+            }
             model.addAttribute("user", user);
             return "settings/accounts/create";
         }
@@ -151,13 +129,6 @@ public class AccountsController {
 
         return "redirect:/settings/accounts/index";
     }
-
-    /**
-     *
-     * @param userKey
-     * @param model
-     * @return
-     */
 
     @GetMapping("/edit/{userKey}")
     public String edit(@PathVariable("userKey") String userKey,
@@ -169,16 +140,9 @@ public class AccountsController {
         return "settings/accounts/edit";
     }
 
-    /**
-     *
-     * @param user
-     * @param model
-     * @param redirectAttributes
-     * @return
-     */
-
     @PostMapping("/edit")
     public String edit(User user,
+                       @RequestParam(value = "isAdmin", required = false) Boolean isAdmin,
                        Model model,
                        RedirectAttributes redirectAttributes) {
 
@@ -196,9 +160,19 @@ public class AccountsController {
                 existingUser.setFirstName(user.getFirstName());
                 existingUser.setLastName(user.getLastName());
                 existingUser.setEmail(user.getEmail());
-                existingUser.setPassword(user.getPassword());
                 existingUser.setRole(user.getRoleType());
                 existingUser.setEnabled(user.isEnabled());
+                if (isAdmin != null && isAdmin == true) {
+                    existingUser.getPermissions().add("ADMIN");
+                }
+                else {
+                    for (Iterator<String> permissionIterator = existingUser.getPermissions().iterator(); permissionIterator.hasNext(); ) {
+                        String permission = permissionIterator.next();
+                        if (permission.equals("ADMIN")) {
+                            permissionIterator.remove();
+                        }
+                    }
+                }
                 userRepository.save(existingUser);
                 isSuccessful = true;
             } else {
@@ -222,12 +196,44 @@ public class AccountsController {
         return "redirect:/settings/accounts/index";
     }
 
-    /**
-     *
-     * @param userEnabled
-     * @param userKey
-     * @return
-     */
+    @PostMapping("/reset_password")
+    public String reset_password(@RequestParam("userKey") String userKey,
+                                 @RequestParam("password") String password,
+                                 @RequestParam("passwordAgain") String passwordAgain,
+                                 RedirectAttributes redirectAttributes) {
+
+        boolean isSuccessful = false;
+        boolean passwordMismatch = false;
+        String username = null;
+
+        try {
+            if (!password.equals(passwordAgain)) {
+                passwordMismatch = true;
+            }
+            else {
+                User existingUser = userRepository.findByKey(userKey);
+                existingUser.setPassword(password);
+                userRepository.save(existingUser);
+                isSuccessful = true;
+                username = existingUser.getUsername();
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Alerts
+        if (isSuccessful && username != null) {
+            redirectAttributes.addAttribute("successMessage", "The password for " + username + " was successfully changed.");
+        }
+        else if (passwordMismatch) {
+            redirectAttributes.addAttribute("dangerMessage", "Failed to change the password of a User due to a password mismatch.");
+        }
+        else {
+            redirectAttributes.addAttribute("dangerMessage", "An error occurred when attempting to change a User's password.");
+        }
+        return "redirect:/settings/accounts/index";
+    }
 
     @PostMapping("/set_enabled")
     @ResponseBody
@@ -238,13 +244,6 @@ public class AccountsController {
         userRepository.save(user);
         return userKey + " enabled: " + userEnabled;
     }
-
-    /**
-     *
-     * @param userKey
-     * @param redirectAttributes
-     * @return
-     */
 
     @PostMapping("/delete")
     public String delete(@RequestParam("userKey") String userKey,
