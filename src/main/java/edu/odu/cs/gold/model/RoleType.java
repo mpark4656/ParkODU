@@ -20,12 +20,11 @@ import java.lang.*;
  *
  */
 
-public class RoleType {
+public class RoleType implements Serializable{
 
     private String roleKey;
     private String name;
-    private Integer accessLevel;
-    private String accessLevelName;
+
 
     public RoleType() { }
 
@@ -49,29 +48,13 @@ public class RoleType {
         this.name = name;
     }
 
-    public void setAccessLevel(Integer accessLevel) {
-        this.accessLevel = accessLevel;
-    }
 
-    public Integer getAccessLevel() {
-        return accessLevel;
-    }
-
-    public void setAccessLevelName(String accessLevelName) {
-        this.accessLevelName = accessLevelName;
-    }
-
-    public String getAccessLevelName() {
-        return accessLevelName;
-    }
 
     @Override
     public String toString() {
         return "RoleType{" +
                 "roleKey='" + roleKey + '\'' +
                 ", name='" + name + '\'' +
-                ", accessLevel='" + accessLevel + '\'' +
-                ", accessLevelName='" + accessLevelName + '\'' +
                 '}';
     }
 

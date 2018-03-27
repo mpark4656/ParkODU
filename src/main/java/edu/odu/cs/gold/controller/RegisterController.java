@@ -137,7 +137,7 @@ public class RegisterController {
         } else {
             System.out.println("");
         }
-        return "user/login";
+        return "redirect:user/login";
     }
 
     /**
