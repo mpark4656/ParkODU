@@ -7,41 +7,8 @@
 </head>
 <body>
 
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid navbar-container">
-        <div class="col-md-3">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <!-- Main Logo -->
-                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div id="navbar" class="navbar-collapse collapse navbar-center">
-                <ul class="nav navbar-nav">
-                    <li><a th:href="@{/garage}">Garages</a></li>
-                    <li><a th:href="@{/analytics/locate}">Search</a></li>
-                    <!-- Settings Link -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
-                </ul>
-                <!--
-                <form class="navbar-form navbar-right">
-                    <input type="text" class="form-control" placeholder="Search..."/>
-                </form>
-                -->
-            </div>
-        </div>
-        <div class="col-md-3">
-            <!-- Social Media Links -->
-            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
-        </div>
-    </div>
-</nav>
+<!-- Navigation Bar -->
+<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
 
 <!--
 <div class="text-center submenu">
@@ -53,8 +20,6 @@
 -->
 
 <div class="container-fluid main-container">
-    <!-- Welcome User -->
-    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
             <h1 class="text-center" style="text-transform: uppercase;">Login</h1>
@@ -65,9 +30,9 @@
                 <form th:action="@{/login}" method="post">
                     <div class="form-horizontal">
                     <div class="form-group">
-                        <label for="email" class="control-label col-md-4">Email</label>
+                        <label for="username" class="control-label col-md-4">Username</label>
                         <div class="col-md-8">
-                            <input type="text" name="email" id="email" class="form-control" />
+                            <input type="text" name="username" id="username" class="form-control" />
                         </div>
                     </div>
                     <div class="form-group">

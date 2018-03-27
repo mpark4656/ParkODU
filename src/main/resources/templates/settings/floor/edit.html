@@ -7,80 +7,45 @@
 </head>
 <body>
 
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid navbar-container">
-        <div class="col-md-3">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <!-- Main Logo -->
-                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div id="navbar" class="navbar-collapse collapse navbar-center">
-                <ul class="nav navbar-nav">
-                    <li><a th:href="@{/garage}">Garages</a></li>
-                    <li><a th:href="@{/analytics/locate}">Search</a></li>
-                    <!-- Settings Link -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
-                </ul>
-                <!--
-                <form class="navbar-form navbar-right">
-                    <input type="text" class="form-control" placeholder="Search..."/>
-                </form>
-                -->
-            </div>
-        </div>
-        <div class="col-md-3">
-            <!-- Social Media Links -->
-            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
-        </div>
-    </div>
-</nav>
+<!-- Navigation Bar -->
+<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
 
 <div class="container-fluid main-container">
-
-    <!-- Welcome User -->
-    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
-
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
             <h1 class="text-center" style="text-transform: uppercase;">Edit Floor</h1>
             <hr/>
         </div>
     </div>
-
+    <!-- Alerts -->
+    <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
-            <form class="form-horizontal" id="edit-floor-form" role="form" th:action="@{/settings/floor/edit}" method="post" th:object="${garage}">
-                <input type="hidden" id="id" th:value="${floor.floorKey}" th:field="${floor.floorKey}"/>
+            <form class="form-horizontal" id="edit-floor-form" role="form" th:action="@{/settings/floor/edit}" method="post" th:object="${floor}">
+                <input type="hidden" id="garage-id" th:value="${floor.garageKey}" th:field="${floor.garageKey}"/>
+                <input type="hidden" id="floor-id" th:value="${floor.floorKey}" th:field="${floor.floorKey}"/>
                 <div class="form-group">
-                    <label for="name" class="col-md-4 control-label">Name</label>
+                    <label for="number" class="col-md-4 control-label">Number</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" id="name" required="required" th:field="${floor.number}"/>
+                        <input type="text" class="form-control" id="number" placeholder="The number or name of the floor." required="required" th:field="${floor.number}"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="description" class="col-md-4 control-label">Description</label>
                     <div class="col-md-8">
-                        <textarea rows="4" cols="50" class="form-control" id="description" th:field="${floor.description}"></textarea>
+                        <textarea rows="4" cols="50" class="form-control" id="description" placeholder="A description of the properties of this floor." required="required" th:field="${floor.description}"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="totalSpaces" class="col-md-4 control-label">Total Spaces</label>
                     <div class="col-md-8">
-                        <input type="number" class="form-control" id="totalSpaces" th:field="${floor.totalSpaces}"/>
+                        <input type="number" class="form-control" id="totalSpaces"  min="0" value="0" th:field="${floor.totalSpaces}" readonly="readonly"/>
                     </div>
                 </div>
                 <div class="col-md-8 col-md-offset-4">
                     <button type="submit" class="btn btn-primary">Submit</button>
                     <button type="reset" class="btn btn-primary">Reset</button>
-                    <a th:href="@{/settings/floor/index}" class="btn btn-primary" title="Back">Back</a>
+                    <a th:href="@{'/settings/floor/garage/' +  ${floor.garageKey}}" class="btn btn-primary" title="Back">Back</a>
                 </div>
             </form>
         </div>

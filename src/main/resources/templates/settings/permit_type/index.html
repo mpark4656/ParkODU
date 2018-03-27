@@ -7,44 +7,10 @@
 </head>
 <body>
 
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid navbar-container">
-        <div class="col-md-3">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <!-- Main Logo -->
-                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div id="navbar" class="navbar-collapse collapse navbar-center">
-                <ul class="nav navbar-nav">
-                    <li><a th:href="@{/garage}">Garages</a></li>
-                    <li><a th:href="@{/analytics/locate}">Search</a></li>
-                    <!-- Settings Link -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
-                </ul>
-                <!--
-                <form class="navbar-form navbar-right">
-                    <input type="text" class="form-control" placeholder="Search..."/>
-                </form>
-                -->
-            </div>
-        </div>
-        <div class="col-md-3">
-            <!-- Social Media Links -->
-            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
-        </div>
-    </div>
-</nav>
+<!-- Navigation Bar -->
+<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
 
 <div class="container-fluid main-container">
-
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
             <h1 class="text-center" style="text-transform: uppercase;">Configure Parking Permits</h1>
@@ -52,15 +18,14 @@
             <hr/>
         </div>
     </div>
-
-    <!-- Welcome User -->
-    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
-
-
-
+    <!-- Alerts -->
+    <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
     <div class="row">
         <div class="col-sm-8 col-md-8 col-sm-6 col-md-offset-1">
-            <p class="text-left">
+            <p>
+                <span class="auto-update-message"></span>
+            </p>
+            <p class="text-right">
                 <a th:href="@{/settings/permit_type/create}" class="btn btn-success btn-sm" title="Create Permit Type">Create</a>
                 <a th:href="@{/settings/permit_type/index}" class="btn btn-success btn-sm" title="Reload this page">Reload</a>
             </p>
@@ -85,7 +50,7 @@
                                 class="form-control permitDescription"
                                 wrap="soft"
                                 cols="40"
-                                rows="1"
+                                rows="4"
                                 th:text="${permitType.description}"
                                 th:attr="data-key=${permitType.permitTypeKey}"></textarea>
                     </td>
@@ -95,7 +60,7 @@
                             title="Safely Delete Permit Type"
                             th:attr="data-id=${permitType.permitTypeKey},data-name=${permitType.name}"
                             data-toggle="modal"
-                            data-target="#delete-permitType-modal">Safe Delete</button>
+                            data-target="#delete-permitType-modal">Delete</button>
                     </td>
                 </tr>
                 </tbody>
@@ -144,6 +109,7 @@ $(document).ready(function(){
 
     $.post("/settings/permit_type/set_permit_name", { permitTypeKey : permitTypeKey, permitName: permitName })
         .done(function(data) {
+            $(".auto-update-message").html(data);
         });
     });
 });
@@ -156,6 +122,7 @@ $(document).ready(function(){
 
     $.post("/settings/permit_type/set_permit_description", { permitTypeKey : permitTypeKey, permitDescription: permitDescription })
         .done(function(data) {
+            $(".auto-update-message").html(data);
         });
     });
 });

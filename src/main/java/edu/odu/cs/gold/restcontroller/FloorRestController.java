@@ -8,6 +8,7 @@ import edu.odu.cs.gold.model.ParkingSpace;
 import edu.odu.cs.gold.repository.FloorRepository;
 import edu.odu.cs.gold.repository.GarageRepository;
 import edu.odu.cs.gold.repository.ParkingSpaceRepository;
+import edu.odu.cs.gold.service.GarageService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -22,13 +23,16 @@ public class FloorRestController {
     private GarageRepository garageRepository;
     private FloorRepository floorRepository;
     private ParkingSpaceRepository parkingSpaceRepository;
+    private GarageService garageService;
 
     public FloorRestController(GarageRepository garageRepository,
                                 FloorRepository floorRepository,
-                                ParkingSpaceRepository parkingSpaceRepository) {
+                                ParkingSpaceRepository parkingSpaceRepository,
+                                GarageService garageService) {
         this.garageRepository = garageRepository;
         this.floorRepository = floorRepository;
         this.parkingSpaceRepository = parkingSpaceRepository;
+        this.garageService = garageService;
     }
 
     @PostMapping("/add")
@@ -170,6 +174,95 @@ public class FloorRestController {
         );
         floorRepository.deleteByPredicate(predicate);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/setCapacity")
+    public ResponseEntity<?> setCapacity(@RequestParam("subscriptionKey") String subscriptionKey,
+                                         @RequestParam("floorKey") String floorKey,
+                                         @RequestParam("capacity") Float capacity) {
+
+        Floor floor = floorRepository.findByKey(floorKey);
+
+        // Requirements
+        // 1. Floor key must be valid.
+        // 2. Percent must be between 100 and 0 inclusive.
+        // 3. Must provide a valid subscription key.
+        if(floor == null ||
+                capacity == null ||
+                !subscriptionKey.equals("2093af49-30d2-4ba3-873b-29970e012656"))
+        {
+            return ResponseEntity.badRequest().build();
+        }
+        else {
+
+            if(capacity > 100.0) {
+                capacity = (float)100.0;
+            }
+
+            if(capacity < 0.0) {
+                capacity = (float)0.0;
+            }
+            
+            // Find out how many spaces need to be occupied on this floor for capacity to be at the specified
+            // percentage
+            int requiredOccupiedSpaces = Math.round(floor.getTotalSpaces() * capacity / 100);
+
+            // Now find out how many spaces are currently occupied on this floor
+            int currentOccupiedSpaces = floor.getTotalSpaces() - floor.getAvailableSpaces();
+
+            // Find out how many spaces need to be set to available or unavailable to reach the specified capacity
+            // percent. If the number if positive, that # of spaces must be set to unavailable. If the number is
+            // negative, that # of spaces must be set to available.
+            int number = requiredOccupiedSpaces - currentOccupiedSpaces;
+
+            // Set to Unavailable
+            if(number > 0) {
+                // Find all available spaces on this floor
+                Predicate predicate = Predicates.and(
+                    Predicates.equal("garageKey", floor.getGarageKey()),
+                    Predicates.equal("floor", floor.getNumber()),
+                    Predicates.equal("available", true)
+                );
+
+                List<ParkingSpace> parkingSpaces = parkingSpaceRepository.findByPredicate(predicate);
+
+                for(int i = 0; i < number; i++) {
+                    ParkingSpace parkingSpace = parkingSpaceRepository.findByKey(parkingSpaces.get(i).getParkingSpaceKey());
+                    parkingSpace.setAvailable(false);
+                    parkingSpace.setLastUpdated(new Date());
+                    parkingSpaceRepository.save(parkingSpace);
+                }
+
+                garageService.refresh(floor.getGarageKey());
+            }
+            // Set to Available
+            else if(number < 0) {
+                number = Math.abs(number);
+
+                // Find all unavailable spaces on this floor
+                Predicate predicate = Predicates.and(
+                        Predicates.equal("garageKey", floor.getGarageKey()),
+                        Predicates.equal("floor", floor.getNumber()),
+                        Predicates.equal("available", false)
+                );
+
+                List<ParkingSpace> parkingSpaces = parkingSpaceRepository.findByPredicate(predicate);
+
+                for(int i = 0; i < number; i++) {
+                    ParkingSpace parkingSpace = parkingSpaceRepository.findByKey(parkingSpaces.get(i).getParkingSpaceKey());
+                    parkingSpace.setAvailable(true);
+                    parkingSpace.setLastUpdated(new Date());
+                    parkingSpaceRepository.save(parkingSpace);
+                }
+            }
+            else {
+                // The capacity is already set
+                // Do Nothing
+            }
+
+            garageService.refresh(floor.getGarageKey());
+            return ResponseEntity.ok().build();
+        }
     }
 
     /**

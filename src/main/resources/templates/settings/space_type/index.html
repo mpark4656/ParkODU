@@ -7,58 +7,25 @@
 </head>
 <body>
 
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid navbar-container">
-        <div class="col-md-3">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <!-- Main Logo -->
-                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div id="navbar" class="navbar-collapse collapse navbar-center">
-                <ul class="nav navbar-nav">
-                    <li><a th:href="@{/garage}">Garages</a></li>
-                    <li><a th:href="@{/analytics/locate}">Search</a></li>
-                    <!-- Settings Link -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
-                </ul>
-                <!--
-                <form class="navbar-form navbar-right">
-                    <input type="text" class="form-control" placeholder="Search..."/>
-                </form>
-                -->
-            </div>
-        </div>
-        <div class="col-md-3">
-            <!-- Social Media Links -->
-            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
-        </div>
-    </div>
-</nav>
+<!-- Navigation Bar -->
+<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
 
 <div class="container-fluid main-container">
-
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <h1 class="text-center" style="text-transform: uppercase;">Configure Parking Spaces</h1>
-            <h4 class="text-center" style="text-transform: uppercase;">Add, remove, and create parking spaces here</h4>
+            <h1 class="text-center" style="text-transform: uppercase;">Configure Parking Space Types</h1>
+            <h4 class="text-center" style="text-transform: uppercase;">Add, remove, and create parking space types here</h4>
             <hr/>
         </div>
     </div>
-
-    <!-- Welcome User -->
-    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
-
+    <!-- Alerts -->
+    <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
     <div class="row">
         <div class="col-sm-8 col-md-8 col-sm-6 col-md-offset-1">
-            <p class="text-left">
+            <p>
+                <span class="auto-update-message"></span>
+            </p>
+            <p class="text-right">
                 <a th:href="@{/settings/space_type/create}" class="btn btn-success btn-sm" title="Create Space Type">Create</a>
                 <a th:href="@{/settings/space_type/index}" class="btn btn-success btn-sm" title="Reload this page">Reload</a>
             </p>
@@ -83,7 +50,7 @@
                                 class="form-control spaceDescription"
                                 wrap="soft"
                                 cols="40"
-                                rows="1"
+                                rows="4"
                                 th:text="${spaceType.description}"
                                 th:attr="data-key=${spaceType.spaceTypeKey}"></textarea>
                     </td>
@@ -93,7 +60,7 @@
                                 title="Safely Delete Space Type"
                                 th:attr="data-id=${spaceType.spaceTypeKey},data-name=${spaceType.name}"
                                 data-toggle="modal"
-                                data-target="#delete-spaceType-modal">Safe Delete</button>
+                                data-target="#delete-spaceType-modal">Delete</button>
                     </td>
                 </tr>
                 </tbody>
@@ -142,6 +109,7 @@ $(document).ready(function(){
 
     $.post("/settings/space_type/set_space_name", { spaceTypeKey : spaceTypeKey, spaceName: spaceName })
         .done(function(data) {
+            $(".auto-update-message").html(data);
         });
     });
 });
@@ -154,6 +122,7 @@ $(document).ready(function(){
 
     $.post("/settings/space_type/set_space_description", { spaceTypeKey : spaceTypeKey, spaceDescription: spaceDescription })
         .done(function(data) {
+            $(".auto-update-message").html(data);
         });
     });
 });

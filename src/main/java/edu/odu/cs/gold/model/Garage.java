@@ -186,6 +186,7 @@ public class Garage implements Serializable {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", heightDescription='" + heightDescription + '\'' +
+                ", address='" + address + '\'' +
                 ", addressOne='" + addressOne + '\'' +
                 ", addressTwo='" + addressTwo + '\'' +
                 ", city='" + city + '\'' +

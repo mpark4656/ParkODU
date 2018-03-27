@@ -22,9 +22,9 @@ public class PermitTypeRepository {
         return entity.getPermitTypeKey();
     }
 
-    public Collection<PermitType> findAll() {
+    public List<PermitType> findAll() {
         IMap map = hazelcastInstance.getMap(collectionName);
-        return map.values();
+        return new ArrayList<>(map.values());
     }
 
     public PermitType findByKey(String key) {

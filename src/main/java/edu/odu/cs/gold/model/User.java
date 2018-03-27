@@ -1,27 +1,21 @@
 package edu.odu.cs.gold.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.data.annotation.Transient;
-import org.springframework.security.core.userdetails.UserDetails;
-import sun.security.util.Password;
+import com.hazelcast.query.Predicate;
+import com.hazelcast.query.Predicates;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
-
 
 public class User implements Serializable{
 
     private String userKey;
     private String email;
-    private String userName;
+    private String username;
     private String password;
     private String firstName;
     private String lastName;
@@ -29,11 +23,12 @@ public class User implements Serializable{
     private String roleTypeKey;
     private boolean enabled;
     private String confirmationToken;
+    private Set<String> permissions;
 
     public User() { }
 
     public User(String email,
-                String userName,
+                String username,
                 String password,
                 String firstName,
                 String lastName,
@@ -42,7 +37,7 @@ public class User implements Serializable{
                 boolean enabled,
                 String confirmationToken) {
         this.email = email;
-        this.userName = userName;
+        this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -106,15 +101,15 @@ public class User implements Serializable{
         this.email = email;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public boolean getEnabled() {
+    public boolean isEnabled() {
         return enabled;
     }
 
@@ -126,19 +121,40 @@ public class User implements Serializable{
         this.enabled = value;
     }
 
+    public Set<String> getPermissions() {
+        if (permissions == null) {
+            permissions = new HashSet<>();
+        }
+        return permissions;
+    }
+
+    public void setPermissions(Set<String> permissions) {
+        this.permissions = permissions;
+    }
+
+    public Set<GrantedAuthority> getAuthorities() {
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        for (String permission : permissions) {
+            GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(permission);
+            authorities.add(grantedAuthority);
+        }
+        return authorities;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "userKey='" + userKey + '\'' +
-                ", confirmationToken='" + confirmationToken + '\'' +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", userName='" + userName + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", roleTypeKey='" + roleTypeKey + '\'' +
                 ", roleType='" + roleType + '\'' +
+                ", roleTypeKey='" + roleTypeKey + '\'' +
                 ", enabled=" + enabled +
+                ", confirmationToken='" + confirmationToken + '\'' +
+                ", permissions=" + permissions +
                 '}';
     }
 }

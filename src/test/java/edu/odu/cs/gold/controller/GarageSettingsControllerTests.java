@@ -1,17 +1,20 @@
 package edu.odu.cs.gold.controller;
 
 import com.hazelcast.query.Predicate;
+import edu.odu.cs.gold.model.Floor;
 import edu.odu.cs.gold.model.Garage;
+import edu.odu.cs.gold.model.ParkingSpace;
+import edu.odu.cs.gold.repository.FloorRepository;
 import edu.odu.cs.gold.repository.GarageRepository;
+import edu.odu.cs.gold.repository.ParkingSpaceRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
-
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
-
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -19,17 +22,42 @@ import static org.mockito.Mockito.*;
 
 public class GarageSettingsControllerTests {
 
-    private static String GARAGE_ONE_KEY = "00000000000000000000000000000001";
-    private static String GARAGE_TWO_KEY = "00000000000000000000000000000002";
+    private static String GARAGE_ONE_KEY = "a0000000000000000000000000000001";
+    private static String GARAGE_TWO_KEY = "a0000000000000000000000000000002";
+    private static String FLOOR_ONE_KEY = "b0000000000000000000000000000001";
+    private static String FLOOR_TWO_KEY = "b0000000000000000000000000000002";
+    private static String PARKING_SPACE_ONE_KEY = "c0000000000000000000000000000001";
+    private static String PARKING_SPACE_TWO_KEY = "c0000000000000000000000000000002";
+    private static String PARKING_SPACE_THREE_KEY = "c0000000000000000000000000000003";
+    private static String PARKING_SPACE_FOUR_KEY = "c0000000000000000000000000000004";
 
-    private static String GARAGE_ONE_NAME = "Test1";
-    private static String GARAGE_TWO_NAME = "Test2";
+    private static String GARAGE_ONE_NAME = "Garage1";
+    private static String GARAGE_TWO_NAME = "Garage2";
+    private static String FLOOR_ONE_NUMBER = "1";
+    private static String FLOOR_TWO_NUMBER = "2";
+    private static String PARKING_SPACE_ONE_FLOOR = "1";
+    private static String PARKING_SPACE_TWO_FLOOR = "2";
+    private static String PARKING_SPACE_THREE_FLOOR = "3";
+    private static String PARKING_SPACE_FOUR_FLOOR = "4";
+
+    private static Integer PARKING_SPACE_ONE_NUMBER = 1;
+    private static Integer PARKING_SPACE_TWO_NUMBER = 2;
+    private static Integer PARKING_SPACE_THREE_NUMBER = 1;
+    private static Integer PARKING_SPACE_FOUR_NUMBER = 2;
 
     private GarageSettingsController garageSettingsController;
     private GarageRepository garageRepository;
+    private FloorRepository floorRepository;
+    private ParkingSpaceRepository parkingSpaceRepository;
 
     private Garage garageOne;
     private Garage garageTwo;
+    private Floor floorOne;
+    private Floor floorTwo;
+    private ParkingSpace parkingSpaceOne;
+    private ParkingSpace parkingSpaceTwo;
+    private ParkingSpace parkingSpaceThree;
+    private ParkingSpace parkingSpaceFour;
 
     @Before
     public void setup() {
@@ -42,9 +70,53 @@ public class GarageSettingsControllerTests {
         garageTwo.setGarageKey(GARAGE_TWO_KEY);
         garageTwo.setName(GARAGE_TWO_NAME);
 
-        Collection<Garage> garages = new ArrayList<>();
+        floorOne = new Floor();
+        floorOne.setFloorKey(FLOOR_ONE_KEY);
+        floorOne.setGarageKey(GARAGE_ONE_KEY);
+        floorOne.setNumber(FLOOR_ONE_NUMBER);
+
+        floorTwo = new Floor();
+        floorTwo.setFloorKey(FLOOR_TWO_KEY);
+        floorTwo.setGarageKey(GARAGE_TWO_KEY);
+        floorTwo.setNumber(FLOOR_TWO_NUMBER);
+
+        parkingSpaceOne = new ParkingSpace();
+        parkingSpaceOne.setParkingSpaceKey(PARKING_SPACE_ONE_KEY);
+        parkingSpaceOne.setGarageKey(GARAGE_ONE_KEY);
+        parkingSpaceOne.setFloor(PARKING_SPACE_ONE_FLOOR);
+        parkingSpaceOne.setNumber(PARKING_SPACE_ONE_NUMBER);
+
+        parkingSpaceTwo = new ParkingSpace();
+        parkingSpaceTwo.setParkingSpaceKey(PARKING_SPACE_TWO_KEY);
+        parkingSpaceTwo.setGarageKey(GARAGE_ONE_KEY);
+        parkingSpaceTwo.setFloor(PARKING_SPACE_TWO_FLOOR);
+        parkingSpaceTwo.setNumber(PARKING_SPACE_TWO_NUMBER);
+
+        parkingSpaceThree = new ParkingSpace();
+        parkingSpaceThree.setParkingSpaceKey(PARKING_SPACE_THREE_KEY);
+        parkingSpaceThree.setGarageKey(GARAGE_TWO_KEY);
+        parkingSpaceThree.setFloor(PARKING_SPACE_THREE_FLOOR);
+        parkingSpaceThree.setNumber(PARKING_SPACE_THREE_NUMBER);
+
+        parkingSpaceFour = new ParkingSpace();
+        parkingSpaceFour.setParkingSpaceKey(PARKING_SPACE_FOUR_KEY);
+        parkingSpaceFour.setGarageKey(GARAGE_TWO_KEY);
+        parkingSpaceFour.setFloor(PARKING_SPACE_FOUR_FLOOR);
+        parkingSpaceFour.setNumber(PARKING_SPACE_FOUR_NUMBER);
+
+        List<Garage> garages = new ArrayList<>();
         garages.add(garageOne);
         garages.add(garageTwo);
+
+        List<Floor> floors = new ArrayList<>();
+        floors.add(floorOne);
+        floors.add(floorTwo);
+
+        List<ParkingSpace> parkingSpaces = new ArrayList<> ();
+        parkingSpaces.add(parkingSpaceOne);
+        parkingSpaces.add(parkingSpaceTwo);
+        parkingSpaces.add(parkingSpaceThree);
+        parkingSpaces.add(parkingSpaceFour);
 
         garageRepository = mock(GarageRepository.class);
         when(garageRepository.findByKey(GARAGE_ONE_KEY)).thenReturn(garageOne);
@@ -53,7 +125,26 @@ public class GarageSettingsControllerTests {
         doNothing().when(garageRepository).save(any(Garage.class));
         doNothing().when(garageRepository).delete(anyString());
 
-        garageSettingsController = new GarageSettingsController(garageRepository);
+        floorRepository = mock(FloorRepository.class);
+        when(floorRepository.findByKey(FLOOR_ONE_KEY)).thenReturn(floorOne);
+        when(floorRepository.findByKey(FLOOR_TWO_KEY)).thenReturn(floorTwo);
+        when(floorRepository.findAll()).thenReturn(floors);
+        doNothing().when(floorRepository).save(any(Floor.class));
+        doNothing().when(floorRepository).delete(anyString());
+
+        parkingSpaceRepository = mock(ParkingSpaceRepository.class);
+        when(parkingSpaceRepository.findByKey(PARKING_SPACE_ONE_KEY)).thenReturn(parkingSpaceOne);
+        when(parkingSpaceRepository.findByKey(PARKING_SPACE_TWO_KEY)).thenReturn(parkingSpaceTwo);
+        when(parkingSpaceRepository.findByKey(PARKING_SPACE_THREE_KEY)).thenReturn(parkingSpaceThree);
+        when(parkingSpaceRepository.findByKey(PARKING_SPACE_FOUR_KEY)).thenReturn(parkingSpaceFour);
+        when(parkingSpaceRepository.findAll()).thenReturn(parkingSpaces);
+        doNothing().when(parkingSpaceRepository).save(any(ParkingSpace.class));
+        doNothing().when(parkingSpaceRepository).delete(anyString());
+
+        garageSettingsController = new GarageSettingsController(
+                garageRepository,
+                floorRepository,
+                parkingSpaceRepository);
     }
 
     @Test

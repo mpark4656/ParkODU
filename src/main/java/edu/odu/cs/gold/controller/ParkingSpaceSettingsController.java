@@ -8,6 +8,7 @@ import edu.odu.cs.gold.service.GarageService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -49,11 +50,20 @@ public class ParkingSpaceSettingsController {
 
     /**
      * Return the default index page with garages model and floors model
+     *
+     * @param successMessage String
+     * @param infoMessage String
+     * @param warningMessage String
+     * @param dangerMessage String
      * @param model Model
-     * @return String
+     * @return String "settings/parking_space/index"
      */
     @GetMapping({"", "/", "/index"})
-    public String index(Model model) {
+    public String index(@RequestParam(value = "successMessage", required = false) String successMessage,
+                        @RequestParam(value = "infoMessage", required = false) String infoMessage,
+                        @RequestParam(value = "warningMessage", required = false) String warningMessage,
+                        @RequestParam(value = "dangerMessage", required = false) String dangerMessage,
+                        Model model) {
 
         List<Garage> garages = new ArrayList<>(garageRepository.findAll());
         garages.sort(Comparator.comparing(Garage::getName));
@@ -64,18 +74,33 @@ public class ParkingSpaceSettingsController {
         model.addAttribute("garages", garages);
         model.addAttribute("floors", floors);
 
+        // Alerts
+        if (successMessage != null) { model.addAttribute("successMessage", successMessage); }
+        if (infoMessage != null) { model.addAttribute("infoMessage", infoMessage); }
+        if (warningMessage != null) { model.addAttribute("warningMessage", warningMessage); }
+        if (dangerMessage != null) { model.addAttribute("dangerMessage", dangerMessage); }
+
         return "settings/parking_space/index";
     }
 
     /**
      * Return settings/parking_space/floor.index with garage, floor, parkingSpaces, permitTypes,
      * and spaceTypes models
+     *
+     * @param successMessage String
+     * @param infoMessage String
+     * @param warningMessage String
+     * @param dangerMessage String
      * @param floorKey String
      * @param model Model
-     * @return String
+     * @return String "settings/parking_space/floor"
      */
     @GetMapping("/floor/{floorKey}")
-    public String floor(@PathVariable("floorKey") String floorKey,
+    public String floor(@RequestParam(value = "successMessage", required = false) String successMessage,
+                        @RequestParam(value = "infoMessage", required = false) String infoMessage,
+                        @RequestParam(value = "warningMessage", required = false) String warningMessage,
+                        @RequestParam(value = "dangerMessage", required = false) String dangerMessage,
+                        @PathVariable("floorKey") String floorKey,
                         Model model) {
 
         Floor floor = floorRepository.findByKey(floorKey);
@@ -93,11 +118,20 @@ public class ParkingSpaceSettingsController {
         List<PermitType> permitTypes = new  ArrayList<> (permitTypeRepository.findAll());
         List<SpaceType> spaceTypes = new ArrayList<> (spaceTypeRepository.findAll());
 
+        spaceTypes.sort(Comparator.comparing(SpaceType::getName));
+        permitTypes.sort(Comparator.comparing(PermitType::getName));
+
         model.addAttribute("garage", garage);
         model.addAttribute("floor", floor);
         model.addAttribute("parkingSpaces", parkingSpaces);
         model.addAttribute("permitTypes", permitTypes);
         model.addAttribute("spaceTypes", spaceTypes);
+
+        // Alerts
+        if (successMessage != null) { model.addAttribute("successMessage", successMessage); }
+        if (infoMessage != null) { model.addAttribute("infoMessage", infoMessage); }
+        if (warningMessage != null) { model.addAttribute("warningMessage", warningMessage); }
+        if (dangerMessage != null) { model.addAttribute("dangerMessage", dangerMessage); }
 
         return "settings/parking_space/floor";
     }
@@ -105,13 +139,22 @@ public class ParkingSpaceSettingsController {
     /**
      * Return the settings/parking_space/create.html page
      * Models include parkingSpace, permitTypes, and spaceTypes
-     * @param garageKey String garageKey
-     * @param floorKey String floorKey
-     * @param model Model model
-     * @return String
+     *
+     * @param successMessage String
+     * @param infoMessage String
+     * @param warningMessage String
+     * @param dangerMessage String
+     * @param garageKey String
+     * @param floorKey String
+     * @param model Model
+     * @return String "settings/parking_space/create"
      */
     @GetMapping("/create/{garageKey}/{floorKey}")
-    public String create(@PathVariable("garageKey") String garageKey,
+    public String create(@RequestParam(value = "successMessage", required = false) String successMessage,
+                         @RequestParam(value = "infoMessage", required = false) String infoMessage,
+                         @RequestParam(value = "warningMessage", required = false) String warningMessage,
+                         @RequestParam(value = "dangerMessage", required = false) String dangerMessage,
+                         @PathVariable("garageKey") String garageKey,
                          @PathVariable("floorKey") String floorKey,
                          Model model) {
 
@@ -124,9 +167,19 @@ public class ParkingSpaceSettingsController {
         List<PermitType> permitTypes = new ArrayList<> (permitTypeRepository.findAll());
         List<SpaceType> spaceTypes = new ArrayList<> (spaceTypeRepository.findAll());
 
+        spaceTypes.sort(Comparator.comparing(SpaceType::getName));
+        permitTypes.sort(Comparator.comparing(PermitType::getName));
+
+        model.addAttribute("floor", floor);
         model.addAttribute("parkingSpace", parkingSpace);
         model.addAttribute("permitTypes", permitTypes);
         model.addAttribute("spaceTypes", spaceTypes);
+
+        // Alerts
+        if (successMessage != null) { model.addAttribute("successMessage", successMessage); }
+        if (infoMessage != null) { model.addAttribute("infoMessage", infoMessage); }
+        if (warningMessage != null) { model.addAttribute("warningMessage", warningMessage); }
+        if (dangerMessage != null) { model.addAttribute("dangerMessage", dangerMessage); }
 
         return "settings/parking_space/create";
     }
@@ -134,37 +187,37 @@ public class ParkingSpaceSettingsController {
     /**
      * Post method to create a new parking space
      * User is redirected back to settings/parking_space/floor.html
+     *
      * @param parkingSpace ParkingSpace
-     * @return String redirection
+     * @param redirectAttributes RedirectAttributes
+     * @return String redirection to previous page
      */
     @PostMapping("/create")
-    public String create(ParkingSpace parkingSpace) {
-        ParkingSpace existingParkingSpace = null;
-        String floorKey = "";
+    public String create(ParkingSpace parkingSpace,
+                         RedirectAttributes redirectAttributes) {
 
-        // Ensure that passed parkingSpace object has a garageKey attribute that is not null or empty
-        if(parkingSpace.getGarageKey() == null || parkingSpace.getGarageKey().isEmpty()) {
-            // Unable to create a new parking space. Required attributes are missing
-            return "redirect:/settings/parking_space/index";
-        }
+        boolean isSuccessful = false;
+        boolean isDuplicateSpaceKey = false;
+        boolean exceptionRaised = false;
+
+        ParkingSpace existingParkingSpace = parkingSpaceRepository.findByKey(parkingSpace.getParkingSpaceKey());
+
+        // Create predicate to find the floorKey of the floor that this parking space is located on
+        Predicate predicate = Predicates.and(
+                Predicates.equal("garageKey", parkingSpace.getGarageKey()),
+                Predicates.equal("number", parkingSpace.getFloor())
+        );
+
+        // findByPredicate() method always returns a list, but we know that there is only one floor that
+        // meets the predicate's criteria (There should be only one)
+        List<Floor> floors = new ArrayList<>(floorRepository.findByPredicate(predicate));
+
+        // Get the floor key from the floor
+        String floorKey = floors.get(0).getFloorKey();
 
         try {
-            existingParkingSpace = parkingSpaceRepository.findByKey(parkingSpace.getParkingSpaceKey());
-
-            // If the existingParkingSpace is null, it means the garageKey is unique
+            // If the existingParkingSpace is null, it means the space key is unique
             if (existingParkingSpace == null) {
-                // Create predicate to find the floorKey of the floor that this parking space is located on
-                Predicate predicate = Predicates.and(
-                        Predicates.equal("garageKey", parkingSpace.getGarageKey()),
-                        Predicates.equal("number", parkingSpace.getFloor())
-                );
-
-                // findByPredicate() method always returns a list, but we know that there is only one floor that
-                // meets the predicate's criteria (There should be only one)
-                List<Floor> floors = new ArrayList<>(floorRepository.findByPredicate(predicate));
-
-                // Get the floor key from the floor
-                floorKey = floors.get(0).getFloorKey();
 
                 // Find all parking spaces that share the same garage key and floor level
                 Predicate spacePredicate = Predicates.and(
@@ -172,16 +225,23 @@ public class ParkingSpaceSettingsController {
                         Predicates.equal("floor", parkingSpace.getFloor())
                 );
 
-                // Check to see if there are duplicate space numbers on the same floor of the same garage
                 List<ParkingSpace> parkingSpaces = parkingSpaceRepository.findByPredicate(spacePredicate);
-                for(ParkingSpace eachParkingSpace : parkingSpaces) {
-                    if(eachParkingSpace.getNumber().equals(parkingSpace.getNumber())) {
-                        System.err.println("Multiple spaces can't have the same space number!");
-                        return "redirect:/settings/parking_space/floor/" + floorKey;
+
+                // Check to see if there are duplicate space numbers on the same floor of the same garage
+                for (ParkingSpace eachParkingSpace : parkingSpaces) {
+                    if (eachParkingSpace.getNumber().equals(parkingSpace.getNumber())) {
+                        redirectAttributes.addAttribute(
+                                "dangerMessage",
+                                "The space number, " +
+                                        parkingSpace.getNumber() +
+                                        ", already exists.");
+                        return "redirect:/settings/parking_space/create/" +
+                                parkingSpace.getGarageKey() + "/" +
+                                floorKey;
                     }
                 }
 
-                /************** Everything checks out OK - save this parking space ******************/
+                // Obtain the permit type and the space type
                 PermitType permitType = permitTypeRepository.findByKey(parkingSpace.getPermitTypeKey());
                 SpaceType spaceType = spaceTypeRepository.findByKey(parkingSpace.getSpaceTypeKey());
 
@@ -192,13 +252,44 @@ public class ParkingSpaceSettingsController {
 
                 parkingSpaceRepository.save(parkingSpace);
                 garageService.refresh(parkingSpace.getGarageKey());
+                isSuccessful = true;
+            }
+            else {
+                isDuplicateSpaceKey = true;
             }
         }
         catch(Exception e) {
             e.printStackTrace();
+            exceptionRaised = true;
         }
 
-        return "redirect:/settings/parking_space/floor/" + floorKey;
+
+        if(isSuccessful) {
+            redirectAttributes.addAttribute(
+                    "successMessage",
+                    "The space number, " +
+                            parkingSpace.getNumber() +
+                            ", has been successfully created.");
+
+            return "redirect:/settings/parking_space/floor/" + floorKey;
+        }
+
+        if(isDuplicateSpaceKey) {
+            redirectAttributes.addAttribute(
+                    "dangerMessage",
+                    "The specified parking space key already exists.");
+            return "redirect:/settings/parking_space/create/" +
+                    parkingSpace.getGarageKey() + "/" +
+                    floorKey;
+        }
+
+        if(exceptionRaised) {
+            redirectAttributes.addAttribute(
+                    "dangerMessage",
+                    "Unknown error has occurred.");
+        }
+
+        return "redirect:/settings/parking_space/index";
     }
 
     /**
@@ -210,7 +301,7 @@ public class ParkingSpaceSettingsController {
     @PostMapping("/set_space_number")
     @ResponseBody
     public String setSpaceNumber(@RequestParam("parkingSpaceKey") String parkingSpaceKey,
-                                         @RequestParam("spaceNumber") Integer spaceNumber) {
+                                 @RequestParam("spaceNumber") Integer spaceNumber) {
 
         ParkingSpace parkingSpace = parkingSpaceRepository.findByKey(parkingSpaceKey);
 
@@ -227,7 +318,7 @@ public class ParkingSpaceSettingsController {
         // Check to see if the given space number already exists
         for(ParkingSpace eachParkingSpace : parkingSpaces) {
             if(eachParkingSpace.getNumber().equals(spaceNumber)) {
-                return "The number " + spaceNumber.toString() + " already exists. Aborted.";
+                return "The number, " + spaceNumber.toString() + ", already exists.";
             }
         }
 
@@ -236,9 +327,8 @@ public class ParkingSpaceSettingsController {
         parkingSpace.setLastUpdated(new Date());
         parkingSpaceRepository.save(parkingSpace);
 
-        return parkingSpaceKey + "'s space number was set to " + parkingSpace.getNumber();
+        return "The space number was set to " + parkingSpace.getNumber();
     }
-
 
     /**
      * Method for setting the space type of the specified parking space
@@ -262,7 +352,7 @@ public class ParkingSpaceSettingsController {
         parkingSpace.setLastUpdated(new Date());
         parkingSpaceRepository.save(parkingSpace);
 
-        return parkingSpaceKey + "'s space type was set to " + spaceType.getName();
+        return "The space type of the space number " + parkingSpace.getNumber() + " was set to " + spaceType.getName();
     }
 
     /**
@@ -291,7 +381,7 @@ public class ParkingSpaceSettingsController {
         // Save to repository
         parkingSpaceRepository.save(parkingSpace);
 
-        return parkingSpaceKey + "'s permit type was set to " + permitType.getName();
+        return "The permit type of the space number " + parkingSpace.getNumber() + " was set to " + permitType.getName();
     }
 
     /**
@@ -312,7 +402,12 @@ public class ParkingSpaceSettingsController {
 
         garageService.refresh(parkingSpace.getGarageKey());
 
-        return parkingSpaceKey + "'s availability was set to " + available;
+        if(available){
+            return "The space number " + parkingSpace.getNumber() + " was set to available";
+        }
+        else{
+            return "The space number " + parkingSpace.getNumber() + " was set to unavailable";
+        }
     }
 
     /**
@@ -320,34 +415,38 @@ public class ParkingSpaceSettingsController {
      * settings/parking_space/floor/{floorKey}
      *
      * @param parkingSpaceKey String
+     * @param redirectAttributes RedirectAttributes
      * @return String
      */
     @PostMapping("/delete")
-    public String delete(@RequestParam("parkingSpaceKey") String parkingSpaceKey) {
-
+    public String delete(@RequestParam("parkingSpaceKey") String parkingSpaceKey,
+                         RedirectAttributes redirectAttributes) {
         ParkingSpace parkingSpace = parkingSpaceRepository.findByKey(parkingSpaceKey);
-
-        // Set up the predicate to find all floors that have the specified garage key and the floor number
-        Predicate predicate = Predicates.and(
-                Predicates.equal("garageKey", parkingSpace.getGarageKey()),
-                Predicates.equal("number", parkingSpace.getFloor())
-        );
-
-        // findByPredicate() method always returns a list, but we know that there is only one floor that
-        // meets the predicate's criteria (There should be only one)
-        List<Floor> floors = new ArrayList<>(floorRepository.findByPredicate(predicate));
-
-        // Get the floor key from the floor
-        String floorKey = floors.get(0).getFloorKey();
+        String floorKey = "";
 
         try {
+            // Set up the predicate to find all floors that have the specified garage key and the floor number
+            Predicate predicate = Predicates.and(
+                    Predicates.equal("garageKey", parkingSpace.getGarageKey()),
+                    Predicates.equal("number", parkingSpace.getFloor())
+            );
+
+            // findByPredicate() method always returns a list, but we know that there is only one floor that
+            // meets the predicate's criteria (There should be only one)
+            List<Floor> floors = new ArrayList<>(floorRepository.findByPredicate(predicate));
+
+            // Get the floor key from the floor
+            floorKey = floors.get(0).getFloorKey();
             parkingSpaceRepository.delete(parkingSpaceKey);
+            garageService.refresh(parkingSpace.getGarageKey());
+            redirectAttributes.addAttribute(
+                    "successMessage",
+                    "The space number "+ parkingSpace.getNumber() + " was successfully deleted.");
         }
         catch (Exception e) {
             e.printStackTrace();
+            redirectAttributes.addAttribute("dangerMessage","Unknown error has occurred.");
         }
-
-        garageService.refresh(parkingSpace.getGarageKey());
 
         // Return back to the /settings/parking_space/floor page
         return "redirect:/settings/parking_space/floor/" + floorKey;

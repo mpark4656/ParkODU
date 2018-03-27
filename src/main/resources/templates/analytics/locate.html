@@ -7,53 +7,17 @@
 </head>
 <body>
 
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid navbar-container">
-        <div class="col-md-3">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <!-- Main Logo -->
-                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div id="navbar" class="navbar-collapse collapse navbar-center">
-                <ul class="nav navbar-nav">
-                    <li><a th:href="@{/garage}">Garages</a></li>
-                    <li><a th:href="@{/analytics/locate}">Search</a></li>
-                    <!-- Settings Link -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
-                </ul>
-                <!--
-                <form class="navbar-form navbar-right">
-                    <input type="text" class="form-control" placeholder="Search..."/>
-                </form>
-                -->
-            </div>
-        </div>
-        <div class="col-md-3">
-            <!-- Social Media Links -->
-            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
-        </div>
-    </div>
-</nav>
+<!-- Navigation Bar -->
+<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
 
 <div class="container-fluid main-container">
-
-    <!-- Welcome User -->
-    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
-
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
-
-            <h1 class="text-center" style="text-transform: uppercase;">Search</h1>
-            <hr/>
-
+            <h1 class="text-center main-header">Search</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
             <form class="form-horizontal" th:action="@{/analytics/locate}" method="POST">
 
                 <input type="hidden" name="latitude" id="latitude" />
@@ -73,21 +37,6 @@
                             <input name="permitTypeKeys" type="checkbox" th:id="${permitType.permitTypeKey}" th:value="${permitType.permitTypeKey}" />
                             <label th:for="${permitType.permitTypeKey}" th:text="${permitType.name}"></label>
                         </div>
-
-
-                        <!--
-                        <input name="permitTypes" id="permitType1" type="checkbox" value="Commuter" />
-                        <label for="permitType1">Commuter</label>
-                        <br/>
-                        <input name="permitTypes" id="permitType2" type="checkbox" value="Faculty" />
-                        <label for="permitType2">Faculty</label>
-                        <br/>
-                        <input name="permitTypes" id="permitType3" type="checkbox" value="Metered" />
-                        <label for="permitType3">Metered</label>
-                        <br/>
-                        <input name="permitTypes" id="permitType4" type="checkbox" value="Quad Resident" />
-                        <label for="permitType4">Quad Resident</label>
-                        -->
                     </div>
                 </div>
 
@@ -102,10 +51,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-md-4">Minimum Available Spaces</label>
-                    <div class="col-md-8">
-                        <input name="minSpaces" id="minSpacesAvail" type="number" min="0" max="50" value="0"/>
-                        <br/>
+                    <label for="minSpacesAvail" class="control-label col-md-4">Minimum Available Spaces</label>
+                    <div class="col-md-2">
+                        <input name="minSpaces" id="minSpacesAvail" type="number" class="form-control" min="0" max="50" value="0"/>
                     </div>
                 </div>
 
@@ -121,6 +69,7 @@
                 <div class="form-group">
                     <div class="col-md-8 col-md-offset-4">
                         <input type="submit" value="Search" class="btn btn-primary" />
+                        <input type="reset" value="Reset" class="btn btn-primary" />
                     </div>
                 </div>
 

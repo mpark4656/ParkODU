@@ -154,56 +154,6 @@ public class AccountsController {
 
     /**
      *
-     * @param model
-     * @return
-     */
-
-    @GetMapping("/register")
-    public String register(Model model) {
-        User user = new User();
-        user.generateUserKey();
-        model.addAttribute("user", user);
-        return "accounts/register";
-    }
-
-    /**
-     *
-     * @param user
-     * @param request
-     * @param model
-     * @param bindingResult
-     * @return
-     */
-
-    @PostMapping("/register")
-    public String register(User user, HttpServletRequest request, Model model, BindingResult bindingResult) {
-        boolean userExists = userService.userExists(user.getEmail());
-        System.out.println("User exists: " + userExists);
-        if (userExists) {
-            model.addAttribute("alreadyRegisteredMessage", "Oops!  There is already a user registered with the email provided.");
-            bindingResult.reject("email");
-        } else {
-            // Disable user until they click on confirmation link in email
-            user.setEnabled(false);
-            // Generate random 36-character string token for confirmation link
-            user.setConfirmationToken(UUID.randomUUID().toString());
-            user.setRole("user");
-            userService.saveUser(user);
-            String appUrl = request.getScheme() + "://" + request.getServerName();
-            SimpleMailMessage registrationEmail = new SimpleMailMessage();
-            registrationEmail.setTo(user.getEmail());
-            registrationEmail.setSubject("Registration Confirmation");
-            registrationEmail.setText("To confirm your e-mail address, please click the link below:\n"
-                    + appUrl + ":8083/user/confirm?token=" + user.getConfirmationToken());
-            registrationEmail.setFrom("noreply@ParkODU.cs.odu.edu");
-            emailService.sendEmail(registrationEmail);
-            model.addAttribute("confirmationMessage", "A confirmation e-mail has been sent to " + user.getEmail());
-        }
-        return "accounts/register";
-    }
-
-    /**
-     *
      * @param userKey
      * @param model
      * @return
@@ -248,7 +198,7 @@ public class AccountsController {
                 existingUser.setEmail(user.getEmail());
                 existingUser.setPassword(user.getPassword());
                 existingUser.setRole(user.getRoleType());
-                existingUser.setEnabled(user.getEnabled());
+                existingUser.setEnabled(user.isEnabled());
                 userRepository.save(existingUser);
                 isSuccessful = true;
             } else {

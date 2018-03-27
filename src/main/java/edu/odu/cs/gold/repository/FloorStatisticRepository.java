@@ -25,9 +25,9 @@ public class FloorStatisticRepository {
         return entity.getFloorStatisticKey();
     }
 
-    public Collection<FloorStatistic> findAll() {
+    public List<FloorStatistic> findAll() {
         IMap map = hazelcastInstance.getMap(collectionName);
-        return map.values();
+        return new ArrayList<>(map.values());
     }
 
     public FloorStatistic findByKey(String key) {

@@ -2,293 +2,185 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
+
     <!-- Head -->
     <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+
+    <style>
+      #right-panel {
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+
+      #right-panel select, #right-panel input {
+        font-size: 15px;
+      }
+
+      #right-panel select {
+        width: 100%;
+      }
+
+      #right-panel i {
+        font-size: 12px;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 96%;
+        float: left;
+        width: 63%;
+        height: 96%;
+      }
+      #right-panel {
+        float: right;
+        width: 34%;
+        height: 196%;
+      }
+      .panel {
+        height: 100%;
+        overflow: auto;
+      }
+    </style>
+
 </head>
 <body>
 
 <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid navbar-container">
-        <div class="col-md-3">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <!-- Main Logo -->
-                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div id="navbar" class="navbar-collapse collapse navbar-center">
-                <ul class="nav navbar-nav">
-                    <li><a th:href="@{/garage}">Garages</a></li>
-                    <li><a th:href="@{/analytics/locate}">Search</a></li>
-                    <!-- Settings Link -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
-                </ul>
-                <!--
-                <form class="navbar-form navbar-right">
-                    <input type="text" class="form-control" placeholder="Search..."/>
-                </form>
-                -->
-            </div>
-        </div>
 
-        <div class="col-md-1">
-            <div id="navbar" class="navbar-collapse collapse navbar-center">
-                <ul class="nav navbar-nav">
-                    <!-- Login -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: user-login" /> /*/-->
-                </ul>
-            </div>
-        </div>
+    <!-- Navigation Bar -->
+    <!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
 
-        <div class="col-md-1">
-            <div id="navbar" class="navbar-collapse collapse navbar-center">
-                <ul class="nav navbar-nav">
-                    <!-- Create User -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: new-user" /> /*/-->
-                    <!-- Create User (Admin) -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: new-user-user" /> /*/-->
-                </ul>
-            </div>
-        </div>
-
-        <div class="col-md-1">
-            <!-- Social Media Links -->
-            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
-        </div>
-    </div>
 </nav>
 
-<!--
-<div class="text-center submenu">
-    <th:block th:each="itemCategory : ${itemCategories}">
-        <a th:href="@{/gallery/category} + '/' + ${itemCategory.name}" class="submenu-text" th:text="${itemCategory.name}"></a>
-        <span th:if="${itemCategory.key != lastItemCategoryKey}" class="submenu-text">|</span>
-    </th:block>
+<div id="floating-panel">
+    <b>Start: </b>
+    <select id="start">
+        <option>start</option>
+    </select>
+    <b>End: </b>
+    <select id="end">
+        <option>end</option>
+    </select>
 </div>
--->
-
-<div class="container-fluid main-container">
-    <!-- Welcome User -->
-    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
-
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
-            <h1 class="text-center" style="text-transform: uppercase;">Directions</h1>
-        </div>
+    <div id="warnings-panel"></div>
+    <div id="map">
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCK-F1dqhEye7aaQdd9dd69-oMMokv2pVA"></script>
+    </div>
+    <div id="right-panel">
+        <p>Total Distance: <span id="total"></span></p>
     </div>
 
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <table class="table table-bordered table-centered">
-                <thead>
-                <tr>
-                    <th rowspan="2" width="20%">Starting Location</th>
-                    <th rowspan="2" width="20%">Destination Location</th>
-                    <th rowspan="2" width="20%">TravelMode</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td th:text="${latitude} + ',' + ${longitude}"></td>
-                    <td th:text="${destination.latitude} + ',' + ${destination.longitude}"></td>
-                    <td th:text="${travelMode}"></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div id="map" class="col-xs-12 col-sm-12 col-md-12 gm-style"
-         style="#map={
-                height=570px;}
-                body, html {
-                height: 100%;
-                width: 100%;
-                }
-                div#content {
-                 width: 100%; height: 100%;
-                }
-                ">
-            <!--
-                <tr aria-rowspan="12" th:="${directions}"/>
-            -->
+    <script th:inline="javascript" >
+        /*<![CDATA[*/
+        var geocode;
+        var map;
+        window.onload = function () {
 
-        <div id="floating-panel"
-             style="#floating-panel {
-                    position: relative;
-                    top: 10px;
-                    left: 25%;
-                    z-index: 5;
-                    background-color: #fff;
-                    padding: 5px;
-                    border: 1px solid #999;
-                    text-align: center;
-                    font-family: 'Roboto','sans-serif';
-                    line-height: 30px;
-                    padding-left: 10px;
-                    }">
+            // testing purposes
+            var destLat = /*[[${startingLocation.latitude}]]*/;
+            var destLon = /*[[${startingLocation.longitude}]]*/;
+            //var destLat = /*[[${destination.latitude}]]*/;
+            //var destLon = /*[[${destination.longitude}]]*/;
 
-            <b>Start: </b>
-            <select id="start">
-                <option th:text="${latitude}+','+${longitude}"></option>
+            var markerArray = [];
+            var div = document.getElementById('map');
 
-            </select>
-            <b>End: </b>
-            <select id="end">
-                <option th:text="${destination.latitude}+','+${destination.longitude}"></option>
+            var latlng = new google.maps.LatLng(parseFloat(destLat),parseFloat(destLon));
+            var mapOptions = {
+                zoom: 15,
+                center: latlng,
+            };
 
-            </select>
-        </div>
+            map = new google.maps.Map(div, mapOptions);
 
-        &nbsp;
-        <div id="warnings-panel"
-             style="#warnings-panel {
-                    width: 100%;
-                    height:10%;
-                    text-align: center;
-                    }">
-        </div>
-        <script th:inline="javascript" >
-            /*<![CDATA[*/
-            function initMap() {
+            var directionsService = new google.maps.DirectionsService;
+            var directionsDisplay = new google.maps.DirectionsRenderer({map: map,
+                panel: document.getElementById('right-panel'),
+                draggable: true
+            });
 
-                var destlat = /*[[${destination.latitude}]]*/;
-                var destlon = /*[[${destination.longitude}]]*/;
+            var stepDisplay = new google.maps.InfoWindow;
 
-                var markerArray = [];
+            // Display the route between the initial start and end selections.
+            calculateAndDisplayRoute(directionsDisplay, directionsService, markerArray, stepDisplay, map);
 
-                // Instantiate a directions service.
-                var directionsService = new google.maps.DirectionsService;
+            directionsDisplay.addListener('directions_changed', function() {
+                computeTotalDistance(directionsDisplay.getDirections());
+            });
+        }
 
-                var map = new google.maps.Map(document.getElementById('map'), {
-                    center: {
-                        lat: destlat,
-                        lng: destlon
-                    },
-                    zoom: 15
-                });
-
-                // Create a renderer for directions and bind it to the map.
-                var directionsDisplay = new google.maps.DirectionsRenderer({map: map});
-
-                // Instantiate an info window to hold step text.
-                var stepDisplay = new google.maps.InfoWindow;
-
-                // Display the route between the initial start and end selections.
-                calculateAndDisplayRoute(directionsDisplay, directionsService, markerArray, stepDisplay, map)
-
+        function calculateAndDisplayRoute(directionsDisplay, directionsService,
+            markerArray, stepDisplay, map) {
+            // First, remove any existing markers from the map.
+            for (var i = 0; i < markerArray.length; i++) {
+                markerArray[i].setMap(null);
             }
 
-            function calculateAndDisplayRoute(directionsDisplay, directionsService, markerArray, stepDisplay, map) {
+            // Retrieve the start and end locations and create a DirectionsRequest using
+            // DRIVING directions.
 
-                // First, remove any existing markers from the map.
-                for (var i = 0; i < markerArray.length; i++) {
-                    markerArray[i].setMap(null);
+            var startlat = /*[[${startingLocation.latitude}]]*/;
+            var startlon = /*[[${startingLocation.longitude}]]*/;
+            var destlat = /*[[${destination.latitude}]]*/;
+            var destlon = /*[[${destination.longitude}]]*/;
+
+            var dirOrig = new google.maps.LatLng(parseFloat(startlat),parseFloat(startlon));
+            var dirDest = new google.maps.LatLng(parseFloat(destlat),parseFloat(destlon));
+
+            directionsService.route({
+
+                origin: dirOrig,
+                destination: dirDest,
+                travelMode: 'DRIVING'
+
+            }, function(response, status) {
+                // Route the directions and pass the response to a function to create
+                // markers for each step.
+                if (status === 'OK') {
+                    document.getElementById('warnings-panel').innerHTML =
+                    '<b>' + response.routes[0].warnings + '</b>';
+                    directionsDisplay.setDirections(response);
+                    showSteps(response, markerArray, stepDisplay, map);
+                } else {
+                    window.alert('Directions request failed due to ' + status);
                 }
+            });
+        }
 
-                var startlat = /*[[${latitude}]]*/;
-                var startlon = /*[[${longitude}]]*/;
-                var destlat  = /*[[${destination.latitude}]]*/;
-                var destlon  = /*[[${destination.longitude}]]*/;
-
-                var geocoder = new google.maps.Geocoder;
-
-                var latlng1 = {lat: parseFloat(startlat), lng: parseFloat(startlon)};
-                var addressOrig = geocoder.geocode({'location': latlng1}, function(results, status) {
-                    var addressOrig = '';
-                    if (status === 'OK') {
-                        if (results[0]) {
-                            addressOrig = results[0];
-                        } else {
-                            window.alert('No results found');
-                        }
-                        return addressOrig
-                    } else {
-                        window.alert('Geocoder failed due to: ' + status);
-                        return addressOrig;
-                    }
-                });
-
-                var latlng2 = {lat: parseFloat(destlat), lng: parseFloat(destlon)};
-                var addressDest = geocoder.geocode({'location': latlng2}, function(results, status) {
-                    var addressDest = '';
-                    if (status === 'OK') {
-
-                        if (results[0]) {
-                            addressDest = results[0];
-                        } else {
-                            window.alert('No results found');
-                        }
-                        return addressDest;
-                    } else {
-                        window.alert('Geocoder failed due to: ' + status);
-                        return addressDest;
-                    }
-                });
-
-                // Retrieve the start and end locations and create a DirectionsRequest using
-                // WALKING directions.
-                directionsService.route({
-                    origin: addressOrig,
-                    destination: addressDest,
-                    travelMode: 'DRIVING'
-                    }, function(response, status) {
-
-                        // Route the directions and pass the response to a function to create
-                        // markers for each step.
-                        if (status === 'OK') {
-                            document.getElementById('warnings-panel').innerHTML =
-                            '<b>' + response.routes[0].warnings + '</b>';
-                            directionsDisplay.setDirections(response);
-                            showSteps(response, markerArray, stepDisplay, map);
-                        } else {
-                            window.alert('Directions request failed due to ' + status);
-                    }
-                });
+        function showSteps(directionResult, markerArray, stepDisplay, map) {
+            // For each step, place a marker, and add the text to the marker's infowindow.
+            // Also attach the marker to an array so we can keep track of it and remove it
+            // when calculating new routes.
+            var myRoute = directionResult.routes[0].legs[0];
+            for (var i = 0; i < myRoute.steps.length; i++) {
+                var marker = markerArray[i] = markerArray[i] || new google.maps.Marker;
+                marker.setMap(map);
+                marker.setPosition(myRoute.steps[i].start_location);
+                attachInstructionText(
+              stepDisplay, marker, myRoute.steps[i].instructions, map);
             }
+        }
 
-            function showSteps(directionResult, markerArray, stepDisplay, map) {
-
-                // For each step, place a marker, and add the text to the marker's infowindow.
-                // Also attach the marker to an array so we can keep track of it and remove it
-                // when calculating new routes.
-                var myRoute = directionResult.routes[0].legs[0];
-                for (var i = 0; i < myRoute.steps.length; i++) {
-                    var marker = markerArray[i] = markerArray[i] || new google.maps.Marker;
-                    marker.setMap(map);
-                    marker.setPosition(myRoute.steps[i].start_location);
-                    attachInstructionText(stepDisplay, marker, myRoute.steps[i].instructions, map);
-                }
-            }
-
-            function attachInstructionText(stepDisplay, marker, text, map) {
-                    google.maps.event.addListener(marker, 'click', function() {
-                    // Open an info window when the marker is clicked on, containing the text
-                    // of the step.
-                    stepDisplay.setContent(text);
-                    stepDisplay.open(map, marker);
-                });
-            }
-         /*]]>*/
-        </script>
-    </div>
+        function attachInstructionText(stepDisplay, marker, text, map) {
+            google.maps.event.addListener(marker, 'click', function() {
+                // Open an info window when the marker is clicked on, containing the text
+                // of the step.
+                stepDisplay.setContent(text);
+                stepDisplay.open(map, marker);
+            });
+        }
+        /*]]>*/
+    </script>
 
     <!-- Footer -->
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 
-</div>
-
-<!-- Scripts -->
-<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
-
-<!-- Google Maps Embed Directions -->
-<!--/*/ <th:block th:include="fragments/fragment :: google-directions" /> /*/-->
+    <!-- Scripts -->
+    <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 
 </body>
 </html>
