@@ -24,6 +24,8 @@ public class User implements Serializable{
     private boolean enabled;
     private String confirmationToken;
     private Set<String> permissions;
+    private Set<String> preferredPermitTypes;
+    private Set<String> preferredSpaceTypes;
 
     public User() { }
 
@@ -132,6 +134,30 @@ public class User implements Serializable{
         this.permissions = permissions;
     }
 
+    public Set<String> getPreferredPermitTypes() {
+        if(preferredPermitTypes == null) {
+            preferredPermitTypes = new HashSet<>();
+        }
+
+        return preferredPermitTypes;
+    }
+
+    public void setPreferredPermitTypes(Set<String> preferredPermitTypes) {
+        this.preferredPermitTypes = preferredPermitTypes;
+    }
+
+    public Set<String> getPreferredSpaceTypes() {
+        if(preferredSpaceTypes == null) {
+            preferredSpaceTypes = new HashSet<>();
+        }
+
+        return preferredSpaceTypes;
+    }
+
+    public void setPreferredSpaceTypes(Set<String> preferredSpaceTypes) {
+        this.preferredSpaceTypes = preferredSpaceTypes;
+    }
+
     public Set<GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new HashSet<>();
         for (String permission : permissions) {
@@ -155,6 +181,8 @@ public class User implements Serializable{
                 ", enabled=" + enabled +
                 ", confirmationToken='" + confirmationToken + '\'' +
                 ", permissions=" + permissions +
+                ", preferredPermitTypes=" + preferredPermitTypes +
+                ", preferredSpaceTypes=" + preferredSpaceTypes +
                 '}';
     }
 }

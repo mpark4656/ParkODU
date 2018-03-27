@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
+
+<!-- Main Content -->
+<div class="container-fluid main-container">
+    <div class="row">
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+            <h1 class="text-center main-header">Preferences</h1>
+            <hr/>
+            <form class="form-horizontal" th:action="@{/user_preference/edit}" method="POST">
+                <div class="form-group">
+                    <input type="hidden" name="userKey" th:value="${user.userKey}" />
+                    <label class="control-label col-md-4">Preferred Permit Types</label>
+                    <div class="col-md-8">
+                        <div th:each="permitType : ${permitTypes}">
+                            <input
+                                    name="preferredPermitTypes"
+                                    type="checkbox"
+                                    th:id="${permitType.permitTypeKey}"
+                                    th:value="${permitType.permitTypeKey}"
+                                    th:checked="${user.getPreferredPermitTypes().contains(permitType.permitTypeKey)}"
+                            />
+                            <label
+                                    th:for="${permitType.permitTypeKey}"
+                                    th:text="${permitType.name}"
+                                    th:title="${permitType.description}"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-4">Preferred Space Types</label>
+                    <div class="col-md-8">
+                        <div th:each="spaceType : ${spaceTypes}">
+                            <input
+                                    name="preferredSpaceTypes"
+                                    type="checkbox"
+                                    th:id="${spaceType.spaceTypeKey}"
+                                    th:value="${spaceType.spaceTypeKey}"
+                                    th:checked="${user.getPreferredSpaceTypes().contains(spaceType.spaceTypeKey)}"
+                            />
+                            <label
+                                    th:for="${spaceType.spaceTypeKey}"
+                                    th:text="${spaceType.name}"
+                                    th:title="${spaceType.description}"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-8 col-md-offset-4">
+                        <input type="submit" value="Submit" class="btn btn-primary" />
+                        <input type="reset" value="Reset" class="btn btn-primary" />
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <!-- Footer -->
+    <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
+</div>
+<!-- End Main Content -->
+
+<script>
+
+</script>
+
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<!-- Google Maps API Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: google-maps-scripts" /> /*/-->
+
+</body>
+</html>
