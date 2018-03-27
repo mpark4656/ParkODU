@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
@@ -46,13 +47,21 @@ public class UserPreferenceController {
         Predicate predicate = Predicates.equal("username", username);
         List<User> users = userRepository.findByPredicate(predicate);
 
-        User user = users.get(0);
-        List<PermitType> permitTypes = new ArrayList<>(permitTypeRepository.findAll());
-        List<SpaceType> spaceTypes = new ArrayList<> (spaceTypeRepository.findAll());
+        if(users.size() != 1) {
+            // Error
+            return "home/index";
+        } else {
+            User user = users.get(0);
+            List<PermitType> permitTypes = new ArrayList<>(permitTypeRepository.findAll());
+            List<SpaceType> spaceTypes = new ArrayList<> (spaceTypeRepository.findAll());
 
-        model.addAttribute("user", user);
-        model.addAttribute("permitTypes", permitTypes);
-        model.addAttribute("spaceTypes", spaceTypes);
+            permitTypes.sort(Comparator.comparing(PermitType::getName));
+            spaceTypes.sort(Comparator.comparing(SpaceType::getName));
+
+            model.addAttribute("user", user);
+            model.addAttribute("permitTypes", permitTypes);
+            model.addAttribute("spaceTypes", spaceTypes);
+        }
 
         return "user_preference/index";
     }
@@ -60,7 +69,7 @@ public class UserPreferenceController {
     @PostMapping("/edit")
     public String edit(@RequestParam("userKey") String userKey,
                        @RequestParam(name = "preferredPermitTypes", required = false) List<String> preferredPermitTypes,
-                       @RequestParam(name = "preferredSpaceTypes",required = false) List<String> preferredSpaceTypes) {
+                       @RequestParam(name = "preferredSpaceTypes", required = false) List<String> preferredSpaceTypes) {
 
         User user = userRepository.findByKey(userKey);
 
