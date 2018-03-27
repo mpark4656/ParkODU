@@ -58,7 +58,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/garage/**",
                         "/user/register/**",
                         "/user/confirm/**",
-                        "/maps/**")
+                        "/maps/**",
+                        "/rest/floor/**",
+                        "/rest/floor/floors/**",
+                        "/rest/garage/**",
+                        "/rest/garage/garages/**",
+                        "/rest/floor/setCapacity/**",
+                        "/rest/parking_space/set_availability/**"
+                        )
                 .permitAll()
                 .antMatchers("/settings/**")
                 .hasAuthority("ADMIN")
