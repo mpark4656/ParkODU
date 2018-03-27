@@ -108,15 +108,21 @@ public class BuildingSettingsController {
         }
         // Alerts
         if (isSuccessful) {
-            redirectAttributes.addAttribute("successMessage", "The Building " + building.getName() + " was successfully created.");
+            redirectAttributes.addAttribute(
+                    "successMessage",
+                    "The Building " + building.getName() + " was successfully created.");
         }
         else if (isDuplicate) {
-            model.addAttribute("dangerMessage", "A Building with the name " + building.getName() + " already exists.");
+            model.addAttribute(
+                    "dangerMessage",
+                    "A Building with the name " + building.getName() + " already exists.");
             model.addAttribute("building", building);
             return "settings/building/create";
         }
         else {
-            redirectAttributes.addAttribute("dangerMessage", "An error occurred when attempting to create a Building.");
+            redirectAttributes.addAttribute(
+                    "dangerMessage",
+                    "An error occurred when attempting to create a Building.");
         }
         return "redirect:/settings/building/index";
     }
