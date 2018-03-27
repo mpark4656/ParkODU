@@ -180,6 +180,10 @@ hr {
     text-align: center;
 }
 
+.welcome-message {
+    padding: 15px; background: none; color: rgba(0, 48, 87, 1);
+}
+
 /* Mobile */
 @media screen and (max-width: 600px) {
     .main-container {
@@ -209,5 +213,8 @@ hr {
     }
     .carousel-caption {
         display: none;
+    }
+    .welcome-message {
+        padding-left: 30px !important;
     }
 }
