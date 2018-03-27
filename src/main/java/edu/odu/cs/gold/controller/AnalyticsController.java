@@ -24,7 +24,6 @@ public class AnalyticsController {
     private GoogleMapService googleMapService;
     private PermitTypeRepository permitTypeRepository;
     private SpaceTypeRepository spaceTypeRepository;
-    private RecommendationRepository recommendationRepository;
 
     public AnalyticsController(GarageRepository garageRepository,
                                BuildingRepository buildingRepository,
@@ -32,8 +31,7 @@ public class AnalyticsController {
                                TravelDistanceDurationRepository travelDistanceDurationRepository,
                                GoogleMapService googleMapService,
                                PermitTypeRepository permitTypeRepository,
-                               SpaceTypeRepository spaceTypeRepository,
-                               RecommendationRepository recommendationRepository) {
+                               SpaceTypeRepository spaceTypeRepository) {
         this.garageRepository = garageRepository;
         this.buildingRepository = buildingRepository;
         this.parkingSpaceRepository = parkingSpaceRepository;
@@ -41,7 +39,6 @@ public class AnalyticsController {
         this.googleMapService = googleMapService;
         this.permitTypeRepository = permitTypeRepository;
         this.spaceTypeRepository = spaceTypeRepository;
-        this.recommendationRepository = recommendationRepository;
     }
 
     @GetMapping({"","/","/index"})
@@ -76,7 +73,7 @@ public class AnalyticsController {
                          @RequestParam(name = "minSpaces", required = false) Integer minSpaces,
                          Model model) {
 
-        Location startingLocation = new Location(startingLatitude, startingLongitude);
+        Location startingLocation = new Location(startingAddress, startingLatitude, startingLongitude);
         Building destinationBuilding = buildingRepository.findByKey(destinationBuildingId);
 
         Predicate permitPredicate = null;
@@ -93,14 +90,6 @@ public class AnalyticsController {
         List<Garage> garages = new ArrayList<>(garageRepository.findAll());
 
         for (Garage garage : garages) {
-
-            DistanceMatrix distanceMatrix = googleMapService.calculateDistanceDurationWithAddress(garage,startingAddress,TravelMode.DRIVING);
-
-            System.out.println("Distance: ");
-            System.out.println(distanceMatrix.rows[0].elements[0].distance.toString());
-            System.out.println("Duration: ");
-            System.out.println(distanceMatrix.rows[0].elements[0].duration.humanReadable.toString());
-
             int availabilityCount = 0;
             int totalCount = 0;
             if (permitPredicate != null) {
@@ -125,7 +114,6 @@ public class AnalyticsController {
             }
             if (minSpaces <= availabilityCount) {
                 Recommendation recommendation = new Recommendation();
-                recommendation.generateRecommendationKey();
                 recommendation.setStartingAddress(startingAddress);
                 recommendation.setGarage(garage);
                 recommendation.setDestinationBuilding(destinationBuilding);
@@ -133,12 +121,10 @@ public class AnalyticsController {
                 recommendation.setAvailabilityCount(availabilityCount);
                 recommendation.setTotalCount(totalCount);
 
-                DistanceMatrix startingAddressToGarage = googleMapService.calculateDistanceDurationWithAddress(garage, startingAddress, TravelMode.DRIVING);
+                DistanceDuration startingAddressToGarage = googleMapService.getDistanceDuration(startingLocation, garage.getLocation(), TravelMode.DRIVING);
                 recommendation.setStartingAddressToGarage(startingAddressToGarage);
 
-                DistanceMatrix garageToDestinationBuilding = googleMapService.calculateDistanceDurationWithAddress(garage, destinationBuilding.getAddress(),TravelMode.WALKING);
-                        //getDistanceDuration(garage, destinationBuilding.getAddress(), TravelMode.WALKING);
-
+                DistanceDuration garageToDestinationBuilding = googleMapService.getDistanceDuration(garage.getLocation(), destinationBuilding.getLocation(), TravelMode.WALKING);
                 recommendation.setGarageToDestinationBuilding(garageToDestinationBuilding);
 
                 // Set Total Distance
@@ -148,9 +134,9 @@ public class AnalyticsController {
                 recommendation.setTotalDurationValue(recommendation.getStartingAddressToGarageDurationValue() + recommendation.getGarageToDestinationBuildingDurationValue());
 
                 recommendations.add(recommendation);
-                //recommendationRepository.save(recommendation);
             }
         }
+
 
         // Default sort by closest Garage to Destination Building
         recommendations.sort(Comparator.comparing(Recommendation::getGarageToDestinationBuildingDistanceValue));
@@ -163,9 +149,8 @@ public class AnalyticsController {
             permitTypes = new ArrayList<> (permitTypeRepository.findByKeys(permitTypeKeySet));
         }
 
+
         model.addAttribute("startingAddress", startingAddress);
-        model.addAttribute("startingLatitude", startingLatitude);
-        model.addAttribute("startingLongitude", startingLongitude);
         model.addAttribute("permitTypes", permitTypes);
         model.addAttribute("destinationBuilding", destinationBuilding);
         model.addAttribute("recommendations", recommendations);
