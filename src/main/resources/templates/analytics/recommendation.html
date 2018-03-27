@@ -93,8 +93,9 @@
                 </thead>
                 <tbody>
                     <tr th:each="recommendation : ${recommendations}">
-                        <td style="text-align: left;"><a th:href="@{/garage/details} + '/' + ${recommendation.garage.garageKey}" th:text="${recommendation.garage.name}"></a>
-                            <a th:href="@{/maps/navigate} + '/' + ${recommendation.recommendationKey}" class="btn btn-primary btn-sm align-right">Navigate</a>
+                        <td style="text-align: left;">
+                            <a th:href="@{/maps/navigate} + '?latitude=' + ${startingLatitude} + '&amp;longitude=' + ${startingLongitude} + '&amp;destination=' + ${recommendation.garage.garageKey}" class="btn btn-primary btn-sm align-right">Navigate</a>
+                            <a th:href="@{/garage/details} + '/' + ${recommendation.garage.garageKey}" th:text="${recommendation.garage.name}"></a>
                         </td>
                         <td th:text="${recommendation.availabilityCount}"></td>
                         <td th:text="${recommendation.startingAddressToGarageDistanceText}"></td>
@@ -122,9 +123,9 @@
 <script th:inline="javascript">
 $('.navigate-button').on('click', function()
 {
-    $('#navigate-id').val($(this).data("startingAddress"));
+    $('#navigate-id').val($(this).data('startingAddress'));
+
 });
 </script>
-
 </body>
 </html>

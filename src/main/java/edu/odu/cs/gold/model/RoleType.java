@@ -16,9 +16,7 @@ public class RoleType implements Serializable {
     private String roleKey;
     private String name;
 
-    public RoleType() {
-        this.roleKey = UUID.randomUUID().toString();
-    }
+    public RoleType() { }
 
     public RoleType(String name) {
         this.name = name;

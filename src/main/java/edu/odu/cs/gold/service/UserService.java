@@ -6,6 +6,10 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import edu.odu.cs.gold.model.User;
@@ -27,8 +31,8 @@ public class UserService {
         return userRepository.findByConfirmationToken(confirmationToken);
     }
 
-    public boolean userExists(String email) {
-        Predicate predicate = Predicates.equal("email", email);
+    public boolean userExists(String userName) {
+        Predicate predicate = Predicates.equal("userName", userName);
         List<User> userList = userRepository.findByPredicate(predicate);
         if (userList.isEmpty()) {
             return false;

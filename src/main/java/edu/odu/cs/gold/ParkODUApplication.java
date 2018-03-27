@@ -5,7 +5,12 @@ import com.hazelcast.query.Predicates;
 import edu.odu.cs.gold.model.*;
 import edu.odu.cs.gold.repository.*;
 import edu.odu.cs.gold.service.*;
+import edu.odu.cs.gold.model.Location;
 
+import edu.odu.cs.gold.service.GoogleMapService;
+import edu.odu.cs.gold.service.PermitTypeService;
+import edu.odu.cs.gold.service.SpaceTypeService;
+import edu.odu.cs.gold.service.UserService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -14,6 +19,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.access.method.P;
+
+
 
 import com.google.maps.model.*;
 
@@ -64,6 +72,12 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private PermitTypeService permitTypeService;
+
+    @Autowired
+    private SpaceTypeService spaceTypeService;
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
@@ -83,9 +97,9 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         roleTypeRepository.loadAll();
 
         // Remove all null stored users at startup
-        //String isEmpty = "";
-        //Predicate predicatetemp = Predicates.equal("userKey",isEmpty);
-        //userRepository.deleteByPredicate(predicatetemp);
+        String isEmpty = "";
+        Predicate predicatetemp = Predicates.equal("userKey",isEmpty);
+        userRepository.deleteByPredicate(predicatetemp);
 
         System.out.println("# of Garages loaded from Mongo: " + garageRepository.findAll().size());
         System.out.println("# of Floors loaded from Mongo: " + floorRepository.findAll().size());
@@ -97,6 +111,8 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         System.out.println("# of SpaceTypes loaded from Mongo: " + spaceTypeRepository.findAll().size());
         System.out.println("# of Users loaded from Mongo: " + userRepository.findAll().size());
         System.out.println("# of Roles loaded from Mongo: " + roleTypeRepository.findAll().size());
+
+
 
 
         if (false) {

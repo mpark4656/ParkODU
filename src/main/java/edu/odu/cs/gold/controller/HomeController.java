@@ -23,6 +23,8 @@ public class HomeController {
 
     @RequestMapping("/login")
     public String login(Model model) {
+
+
         return "home/login";
     }
 

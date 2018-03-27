@@ -50,14 +50,17 @@
 
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <h1 class="text-center" style="text-transform: uppercase;">Edit User</h1>
+            <h1 class="text-center" style="text-transform: uppercase;">Create User</h1>
             <hr/>
         </div>
     </div>
 
+    <!-- Alerts -->
+    <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
+
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
-            <form class="form-horizontal" id="edit-user-form" role="form" th:action="@{/settings/accounts/edit}" method="post" th:object="${user}">
+            <form class="form-horizontal" id="create-user-form" role="form" th:action="@{/settings/accounts/create}" method="post" th:object="${user}">
                 <input type="hidden" id="id" th:value="${user.userKey}" th:field="${user.userKey}"/>
                 <div class="form-group">
                     <label for="userFirstName" class="col-md-4 control-label">First Name</label>
@@ -66,7 +69,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="userlastName" class="col-md-4 control-label">Last Name</label>
+                    <label for="userLastName" class="col-md-4 control-label">Last Name</label>
                     <div class="col-md-4">
                         <input type="text" class="form-control col-md-4" id="userLastName" th:field="${user.lastName}"></input>
                     </div>
@@ -74,25 +77,33 @@
                 <div class="form-group">
                     <label for="userEmail" class="col-md-4 control-label">Email</label>
                     <div class="col-md-4">
-                        <input type="email" class="form-control" id="userEmail" th:fielde="${user.email}"/>
+                        <input type="email" class="form-control col-md-4" id="userEmail" th:field="${user.email}"/>
+                    </div>
+                </div>
+                <div class="form-group" th:attr="data-key=${user.roleType}">
+                    <label class="col-md-4 control-label">Role</label>
+                    <div class="col-md-4">
+                        <select type="text" class="form-control" th:field="${user.roleType}">
+                            <option th:each="roleType : ${roleTypes}"
+                                    th:text="${roleType.name}"
+                                    th:value="${roleType.name}"
+                                    th:selected="(${user.roleType eq roleType.name})">
+                            </option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="userRole" class="col-md-4 control-label">Role</label>
+                    <label class="col-md-4 control-label">Enabled</label>
                     <div class="col-md-4">
-                        <input type="text" class="form-control " id="userRole" th:field="${user.role}"></input>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="userEnabled" class="col-md-4 control-label">Enabled</label>
-                    <div class="col-md-4">
-                        <input type="text" class="form-control" id="userEnabled" th:field="${user.enabled}"></input>
+                        <select type="text" class="form-control" th:field="${user.enabled}">
+                            <option value="true">true</option><option value="false">false</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="userPassword" class="col-md-4 control-label">Password</label>
                     <div class="col-md-4">
-                        <input type="password" class="form-control" id="userPassword"  th:field="${user.password}"/>
+                        <input type="password" class="form-control col-md-4" id="userPassword" th:value="${user.password}"/>
                     </div>
                 </div>
                 <div class="col-md-8 col-md-offset-4">
@@ -103,9 +114,6 @@
             </form>
         </div>
     </div>
-
-    <br/>
-
     <!-- Footer -->
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
@@ -117,7 +125,7 @@
             <form class="form-horizontal" role="form" th:action="@{/settings/accounts/delete}" method="post">
                 <div class="modal-header modal-header-danger">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Delete User</h4>
+                    <h4 class="modal-title">Delete Garage</h4>
                 </div>
                 <div class="modal-body">
                     <p class="text-center">Are you sure you want to delete the User?</p>
@@ -138,7 +146,7 @@
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 
 <script th:inline="javascript">
-$('.delete-user-button').on('click', function()
+$('.delete-garage-button').on('click', function()
 {
     $('#delete-user-id').val($(this).data("id"));
 });

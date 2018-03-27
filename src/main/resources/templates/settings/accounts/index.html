@@ -52,30 +52,40 @@
         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
             <h1 class="text-center" style="text-transform: uppercase;">Account Management</h1>
             <hr/>
-            <p class="text-left">
+        </div>
+    </div>
+
+    <!-- Alerts -->
+    <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+            <p class="text-right">
                 <a th:href="@{/settings/accounts/create}" class="btn btn-success btn-sm" title="Create User">Create</a>
             </p>
             <table class="table table-bordered table-centered">
                 <thead>
                 <tr>
-                    <th width="20%">First Name</th>
-                    <th width="20%">Last Name</th>
+                    <th width="15%">First Name</th>
+                    <th width="15%">Last Name</th>
                     <th width="20%">Email</th>
+                    <th width="15%">Username</th>
                     <th width="10%">Role</th>
                     <th width="10%">Enabled</th>
                     <th width="20%">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="users : ${user}">
-                    <td th:text="${users.firstName}"></td>
-                    <td th:text="${users.lastName}"></td>
-                    <td th:text="${users.email}"></td>
-                    <td th:text="${users.role}"></td>
-                    <td th:text="${users.enabled}"></td>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.firstName}"></td>
+                    <td th:text="${user.lastName}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.userName}"></td>
+                    <td th:text="${user.roleType}"></td>
+                    <td th:text="${user.enabled}"></td>
                     <td>
-                        <a th:href="@{/settings/accounts/edit} + '/' + ${users.userKey}" class="btn btn-primary btn-sm">Edit</a>
-                        <button class="btn btn-danger btn-sm delete-user-button" title="Delete User" th:attr="data-id=${users.userKey}" data-toggle="modal" data-target="#delete-user-modal">Delete</button>
+                        <a th:href="@{/settings/accounts/edit} + '/' + ${user.userKey}" class="btn btn-primary btn-sm">Edit</a>
+                        <button class="btn btn-danger btn-sm delete-user-button" title="Delete User" th:attr="data-id=${user.userKey}" data-toggle="modal" data-target="#delete-user-modal">Delete</button>
                     </td>
                 </tr>
                 </tbody>
