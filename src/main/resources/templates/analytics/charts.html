@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
+
+<div class="container-fluid main-container">
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">Select a Garage and Date.</div>
+            <div class="panel-body">
+                <select class="form-control garageDropdown" id="garage"> <!-- th:field="*{garageKey}" -->
+                    <!--   <option th:each="garage : ${garages}"
+                            th:text="${garage.name}"
+                            th:value="${garage.garageKey}"
+                            th:selected="(${garage.garageKey eq garage.garageKey})"
+                            >
+                    </option> -->
+                </select>
+                <input id="date" clas="date" type="date" name="date"> <!-- th:value="...date" -->
+                <button id="create" type="button" class="btn">Create</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container"> <!-- th:each floor : ${floors} -->
+        <canvas id="floorStatisticChart"></canvas>
+    </div>
+</div>
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<!-- Chart.js Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: chart-js-scripts" /> /*/-->
+
+<script>
+$(document).ready(function(){
+    $(".date").change(function(){
+
+        var date = $(this).val();
+
+        $.post("methodGoesHere", {  })
+                .done(function(data) {
+                });
+    });
+});
+
+$(document).ready(function(){
+    $(".garageDropdown").change(function(){
+
+        var garage = $(this).val();
+
+        $.post("methodGoesHere", {  })
+                .done(function(data) {
+                });
+    });
+});
+
+
+/*<![CDATA[*/
+$(#create).click(function() {
+    // FloorStatistics Chart
+    var ctx = document.getElementById("floorStatisticChart");
+
+    var dataString = /*[[${dataString}]]*/;
+    var data = dataString.split(',');
+
+    var labelString = /*[[${labelString}]]*/;
+    var labels = labelString.split(',');
+
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Occupancy Rate (%)',
+                data: data,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+});
+/*]]>*/
+</script>
+
+</body>
+</html>
