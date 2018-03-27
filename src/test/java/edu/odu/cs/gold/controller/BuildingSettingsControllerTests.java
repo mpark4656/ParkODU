@@ -7,10 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
@@ -282,7 +280,76 @@ public class BuildingSettingsControllerTests {
                 redirectAttributes
         );
 
+        assertEquals(
+                "The Building " + buildingOne.getName() + " was successfully updated.",
+                redirectAttributes.get("successMessage")
+        );
         assertTrue(redirectAttributes.containsKey("successMessage"));
+        assertEquals("redirect:/settings/building/index", returnURL);
+    }
 
+    @Test
+    public void testEdit_Post_Duplicate() {
+        ExtendedModelMap model = new ExtendedModelMap();
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+
+        when(buildingRepository.countByPredicate(any(Predicate.class))).thenReturn(1);
+
+        String returnURL = buildingSettingsController.edit(
+                buildingOne,
+                model,
+                redirectAttributes
+        );
+
+        assertEquals(
+                "A Building with the name " + buildingOne.getName() + " already exists.",
+                model.get("dangerMessage")
+        );
+        assertTrue(model.containsKey("dangerMessage"));
+        assertTrue(model.containsKey("building"));
+        assertEquals(buildingOne, model.get("building"));
+        assertEquals("settings/building/edit", returnURL);
+    }
+
+    @Test
+    public void testDelete_Successful() {
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+
+        String returnURL = buildingSettingsController.delete(
+                buildingOne.getBuildingKey(),
+                redirectAttributes
+        );
+
+        assertEquals(
+                "redirect:/settings/building/index",
+                returnURL
+        );
+
+        assertTrue(redirectAttributes.containsKey("successMessage"));
+        assertEquals(
+                "The Building " + buildingOne.getName() + " was successfully deleted.",
+                redirectAttributes.get("successMessage")
+        );
+    }
+
+    @Test
+    public void testDelete_Unsuccessful() {
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
+
+        String returnURL = buildingSettingsController.delete(
+                null,
+                redirectAttributes
+        );
+
+        assertEquals(
+                "redirect:/settings/building/index",
+                returnURL
+        );
+
+        assertTrue(redirectAttributes.containsKey("dangerMessage"));
+        assertEquals(
+                "An error occurred when attempting to delete a Building.",
+                redirectAttributes.get("dangerMessage")
+        );
     }
 }

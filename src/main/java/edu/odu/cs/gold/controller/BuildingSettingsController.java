@@ -181,15 +181,21 @@ public class BuildingSettingsController {
         }
         // Alerts
         if (isSuccessful) {
-            redirectAttributes.addAttribute("successMessage", "The Building " + building.getName() + " was successfully updated.");
+            redirectAttributes.addAttribute(
+                    "successMessage",
+                    "The Building " + building.getName() + " was successfully updated.");
         }
         else if (isDuplicate) {
-            model.addAttribute("dangerMessage", "A Building with the name " + building.getName() + " already exists.");
+            model.addAttribute(
+                    "dangerMessage",
+                    "A Building with the name " + building.getName() + " already exists.");
             model.addAttribute("building", building);
             return "settings/building/edit";
         }
         else {
-            redirectAttributes.addAttribute("dangerMessage", "An error occurred when attempting to update a Building.");
+            redirectAttributes.addAttribute(
+                    "dangerMessage",
+                    "An error occurred when attempting to update a Building.");
         }
         return "redirect:/settings/building/index";
     }
@@ -217,10 +223,16 @@ public class BuildingSettingsController {
         }
         // Alerts
         if (isSuccessful) {
-            redirectAttributes.addAttribute("successMessage", "The Building " + building.getName() + " was successfully deleted.");
+            redirectAttributes.addAttribute(
+                    "successMessage",
+                    "The Building " + building.getName() + " was successfully deleted."
+            );
         }
         else {
-            redirectAttributes.addAttribute("dangerMessage", "An error occurred when attempting to delete a Building.");
+            redirectAttributes.addAttribute(
+                    "dangerMessage",
+                    "An error occurred when attempting to delete a Building."
+            );
         }
         return "redirect:/settings/building/index";
     }
