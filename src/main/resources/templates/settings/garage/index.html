@@ -7,18 +7,57 @@
 </head>
 <body>
 
-<!-- Navigation Bar -->
-<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid navbar-container">
+        <div class="col-md-3">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- Main Logo -->
+                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="navbar" class="navbar-collapse collapse navbar-center">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/garage}">Garages</a></li>
+                    <li><a th:href="@{/analytics/locate}">Search</a></li>
+                    <!-- Settings Link -->
+                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
+                </ul>
+                <!--
+                <form class="navbar-form navbar-right">
+                    <input type="text" class="form-control" placeholder="Search..."/>
+                </form>
+                -->
+            </div>
+        </div>
+        <div class="col-md-3">
+            <!-- Social Media Links -->
+            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
+        </div>
+    </div>
+</nav>
 
 <div class="container-fluid main-container">
+
+    <!-- Welcome User -->
+    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
+
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
             <h1 class="text-center" style="text-transform: uppercase;">Garage Settings</h1>
             <hr/>
         </div>
     </div>
+
     <!-- Alerts -->
     <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
+
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
             <p class="text-right">
@@ -28,19 +67,15 @@
                 <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Last Updated</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="garage : ${garages}">
                     <td th:text="${garage.name}"></td>
-                    <td th:text="${garage.lastUpdated}"></td>
                     <td>
                         <a th:href="@{/settings/garage/edit} + '/' + ${garage.garageKey}" class="btn btn-primary btn-sm">Edit</a>
-                        <button class="btn btn-danger btn-sm delete-garage-button" title="Delete Garage"
-                                th:attr="data-id=${garage.garageKey},data-name=${garage.name}" data-toggle="modal"
-                                data-target="#delete-garage-modal">Delete</button>
+                        <button class="btn btn-danger btn-sm delete-garage-button" title="Delete Garage" th:attr="data-id=${garage.garageKey},data-name=${garage.name}" data-toggle="modal" data-target="#delete-garage-modal">Delete</button>
                     </td>
                 </tr>
                 </tbody>

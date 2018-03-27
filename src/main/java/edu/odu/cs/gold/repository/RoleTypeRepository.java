@@ -25,9 +25,9 @@ public class RoleTypeRepository {
         return entity.getRoleKey();
     }
 
-    public List<RoleType> findAll() {
+    public Collection<RoleType> findAll() {
         IMap map = hazelcastInstance.getMap(collectionName);
-        return new ArrayList<>(map.values());
+        return map.values();
     }
 
     public RoleType findByKey(String key) {

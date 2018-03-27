@@ -1,64 +1,68 @@
 package edu.odu.cs.gold.model;
 
-import com.hazelcast.query.Predicate;
-import com.hazelcast.query.Predicates;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.data.annotation.Transient;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
+@Entity
+@Table(name = "user")
 public class User implements Serializable{
 
     private String userKey;
     private String email;
-    private String username;
+    private String userName;
     private String password;
     private String firstName;
     private String lastName;
-    private String roleType;
-    private String roleTypeKey;
+    private String role;
     private boolean enabled;
     private String confirmationToken;
-    private Set<String> permissions;
 
-    public User() { }
-
-    public User(String email,
-                String username,
-                String password,
-                String firstName,
-                String lastName,
-                String roleType,
-                String roleTypeKey,
-                boolean enabled,
-                String confirmationToken) {
-        this.email = email;
-        this.username = username;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.roleTypeKey = roleTypeKey;
-        this.roleType = roleType;
-        this.enabled = enabled;
-        this.confirmationToken = confirmationToken;
-    }
-
-    public void generateUserKey() {
+    public User() {
         this.userKey = UUID.randomUUID().toString();
     }
 
-    public void generateConfirmationToken() { this.confirmationToken = UUID.randomUUID().toString(); }
-
-    public void setConfirmationToken(String confirmationToken) {
+    public User(String email,
+                String userName,
+                String password,
+                String firstName,
+                String lastName,
+                String role,
+                boolean enabled,
+                String confirmationToken) {
+        this.email = email;
+        this.userName = userName;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role;
+        this.enabled = enabled;
         this.confirmationToken = confirmationToken;
     }
 
     public String getConfirmationToken() {
         return confirmationToken;
+    }
+
+    public void generateUserKey() {
+        this.userKey = UUID.randomUUID().toString();
+    }
+    public void generateConfirmationToken() {
+        this.confirmationToken = UUID.randomUUID().toString();
+    }
+
+    public void setConfirmationToken(String confirmationToken) {
+        this.confirmationToken = confirmationToken;
     }
 
     public String getUserKey() {
@@ -101,60 +105,41 @@ public class User implements Serializable{
         this.email = email;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public boolean isEnabled() {
+    public boolean getEnabled() {
         return enabled;
     }
 
-    public String getRoleType() { return roleType; }
+    public String getRole() {
+        return role;
+    }
 
-    public void setRole(String roleType) { this.roleType = roleType; }
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public void setEnabled(boolean value) {
         this.enabled = value;
-    }
-
-    public Set<String> getPermissions() {
-        if (permissions == null) {
-            permissions = new HashSet<>();
-        }
-        return permissions;
-    }
-
-    public void setPermissions(Set<String> permissions) {
-        this.permissions = permissions;
-    }
-
-    public Set<GrantedAuthority> getAuthorities() {
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        for (String permission : permissions) {
-            GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(permission);
-            authorities.add(grantedAuthority);
-        }
-        return authorities;
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "userKey='" + userKey + '\'' +
-                ", email='" + email + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
+                ",confirmationToken='" + confirmationToken + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", roleType='" + roleType + '\'' +
-                ", roleTypeKey='" + roleTypeKey + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + "********" + '\'' +
+                ", role='" + role + '\'' +
                 ", enabled=" + enabled +
-                ", confirmationToken='" + confirmationToken + '\'' +
-                ", permissions=" + permissions +
                 '}';
     }
 }

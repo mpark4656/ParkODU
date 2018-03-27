@@ -4,50 +4,78 @@
 <head>
     <!-- Head -->
     <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
-
 </head>
 <body>
 
-<!-- Navigation Bar -->
-<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid navbar-container">
+        <div class="col-md-3">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- Main Logo -->
+                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="navbar" class="navbar-collapse collapse navbar-center">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/garage}">Garages</a></li>
+                    <li><a th:href="@{/analytics/locate}">Search</a></li>
+                    <!-- Settings Link -->
+                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
+                </ul>
+                <!--
+                <form class="navbar-form navbar-right">
+                    <input type="text" class="form-control" placeholder="Search..."/>
+                </form>
+                -->
+            </div>
+        </div>
+        <div class="col-md-3">
+            <!-- Social Media Links -->
+            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
+        </div>
+    </div>
+</nav>
 
 <div class="container-fluid main-container">
+
+    <!-- Welcome User -->
+    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
+
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
             <h1 class="text-center" style="text-transform: uppercase;">Account Management</h1>
             <hr/>
-        </div>
-    </div>
-    <!-- Alerts -->
-    <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <p class="text-right">
+            <p class="text-left">
                 <a th:href="@{/settings/accounts/create}" class="btn btn-success btn-sm" title="Create User">Create</a>
             </p>
             <table class="table table-bordered table-centered">
                 <thead>
                 <tr>
-                    <th width="15%">First Name</th>
-                    <th width="15%">Last Name</th>
+                    <th width="20%">First Name</th>
+                    <th width="20%">Last Name</th>
                     <th width="20%">Email</th>
-                    <th width="15%">Username</th>
                     <th width="10%">Role</th>
                     <th width="10%">Enabled</th>
                     <th width="20%">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="user : ${users}">
-                    <td th:text="${user.firstName}"></td>
-                    <td th:text="${user.lastName}"></td>
-                    <td th:text="${user.email}"></td>
-                    <td th:text="${user.username}"></td>
-                    <td th:text="${user.roleType}"></td>
-                    <td th:text="${user.enabled}"></td>
+                <tr th:each="users : ${user}">
+                    <td th:text="${users.firstName}"></td>
+                    <td th:text="${users.lastName}"></td>
+                    <td th:text="${users.email}"></td>
+                    <td th:text="${users.role}"></td>
+                    <td th:text="${users.enabled}"></td>
                     <td>
-                        <a th:href="@{/settings/accounts/edit} + '/' + ${user.userKey}" class="btn btn-primary btn-sm">Edit</a>
-                        <button class="btn btn-danger btn-sm delete-user-button" title="Delete User" th:attr="data-id=${user.userKey}" data-toggle="modal" data-target="#delete-user-modal">Delete</button>
+                        <a th:href="@{/settings/accounts/edit} + '/' + ${users.userKey}" class="btn btn-primary btn-sm">Edit</a>
+                        <button class="btn btn-danger btn-sm delete-user-button" title="Delete User" th:attr="data-id=${users.userKey}" data-toggle="modal" data-target="#delete-user-modal">Delete</button>
                     </td>
                 </tr>
                 </tbody>

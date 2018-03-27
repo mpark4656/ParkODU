@@ -21,13 +21,49 @@
 
 <body>
 
-<!-- Navigation Bar -->
-<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid navbar-container">
+        <div class="col-md-3">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- Main Logo -->
+                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="navbar" class="navbar-collapse collapse navbar-center">
+                <ul class="nav navbar-nav">
+                    <!--<li><a th:href="@{/garage}">Garages</a></li>
+                    <li><a th:href="@{/analytics/locate}">Search</a></li>-->
+                    <!-- Settings Link -->
+                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
+                </ul>
+                <!--
+                <form class="navbar-form navbar-right">
+                    <input type="text" class="form-control" placeholder="Search..."/>
+                </form>
+                -->
+            </div>
+        </div>
+        <div class="col-md-3">
+            <!-- Social Media Links -->
+            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
+        </div>
+    </div>
+</nav>
 
 <div class="middle-box text-center loginscreen animated fadeInDown">
     <div>
-        <!-- Alerts -->
-        <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
+        <br/>
+        <br/>
+        <br/>
+        <div if="${successMessage}" class="alert alert-success" role="alert" text="${successMessage}"></div>
+        <div if="${errorMessage}" class="alert alert-danger" role="alert" text="${errorMessage}"></div>
         <a href="@{/login}" class="btn btn-primary" title="Back">Login</a>
     </div>
 </div>
