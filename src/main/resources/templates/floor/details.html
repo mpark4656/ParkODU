@@ -10,49 +10,43 @@
 <!-- Navigation Bar -->
 <!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
 
+
 <div class="container-fluid main-container">
-
-    <!-- Welcome User -->
-    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
-
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <h1 class="text-center" style="text-transform: uppercase;" th:text="'Level ' + ${floor.number} + ' - ' + ${floor.description}"></h1>
-            <h4 class="text-center" style="text-transform: uppercase;" th:text="${garage.name}"></h4>
-            <hr/>
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <h1 class="text-center" style="text-transform: uppercase;" th:text="'Level ' + ${floor.number} + ' - ' + ${floor.description}"></h1>
+                    <h4 class="text-center" style="text-transform: uppercase;" th:text="${garage.name}"></h4>
+                    <hr/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-5">
+                    <dl class="dl-horizontal">
+                        <dt>Available Spaces</dt>
+                        <dd th:text="${floor.availableSpaces}"></dd>
+                        <dt>Total Spaces</dt>
+                        <dd th:text="${floor.totalSpaces}"></dd>
+                        <dt>Occupancy Rate</dt>
+                        <dd th:text="${floor.capacity} + '%'"></dd>
+                        <dt>Current Time</dt>
+                        <dd th:text="${currentTime}"></dd>
+                    </dl>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-7">
+                    <canvas id="floorStatisticChart" width="525" height="150"></canvas>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <canvas id="floorPlan" width="800" height="425" style="border:1px solid #d3d3d3; padding: 5px;">
+                        Your browser does not support the HTML5 canvas tag.
+                    </canvas>
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-xs-4 col-sm-4 col-md-4 col-md-offset-1">
-            <dl class="dl-horizontal">
-                <dt>Available Spaces</dt>
-                <dd th:text="${floor.availableSpaces}"></dd>
-                <dt>Total Spaces</dt>
-                <dd th:text="${floor.totalSpaces}"></dd>
-                <dt>Occupancy Rate</dt>
-                <dd th:text="${floor.capacity} + '%'"></dd>
-                <dt>Current Time</dt>
-                <dd th:text="${currentTime}"></dd>
-            </dl>
-        </div>
-        <div class="col-xs-8 col-sm-8 col-md-6">
-            <canvas id="floorStatisticChart" width="525" height="150"></canvas>
-        </div>
-    </div>
-
-    <br/>
-
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <canvas id="floorPlan" width="800" height="425" style="border:1px solid #d3d3d3; padding: 5px;">
-                Your browser does not support the HTML5 canvas tag.
-            </canvas>
-        </div>
-    </div>
-
-    <br/>
-
     <!-- Footer -->
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
@@ -397,10 +391,7 @@
 
     ctx.stroke();
 
-
-
-
-        // FloorStatistics Chart
+    // FloorStatistics Chart
     var ctx2 = document.getElementById("floorStatisticChart");
 
     var dataString = /*[[${dataString}]]*/;
@@ -435,17 +426,6 @@
             }
         }
     });
-
-
-
-
-
-
-
-
-
-
-
 };
 /*]]>*/
 </script>

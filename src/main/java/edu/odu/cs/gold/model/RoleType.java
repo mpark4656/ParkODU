@@ -2,6 +2,15 @@ package edu.odu.cs.gold.model;
 
 import java.io.Serializable;
 import java.util.UUID;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Role;
+
+import org.springframework.security.core.GrantedAuthority;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.lang.*;
+
 
 /*
  *
@@ -11,10 +20,11 @@ import java.util.UUID;
  *
  */
 
-public class RoleType implements Serializable {
+public class RoleType implements Serializable{
 
     private String roleKey;
     private String name;
+
 
     public RoleType() { }
 
@@ -37,6 +47,8 @@ public class RoleType implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
+
 
     @Override
     public String toString() {

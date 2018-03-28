@@ -10,22 +10,14 @@
 <!-- Navigation Bar -->
 <!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
 
+<!-- Main Content -->
 <div class="container-fluid main-container">
-
-    <!-- Welcome User -->
-    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
-
-    <!-- Alerts -->
-    <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <h1 class="text-center" style="text-transform: uppercase;">Create Space Type</h1>
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
+            <h1 class="text-center main-header">Create Space Type</h1>
             <hr/>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+            <!-- Alerts -->
+            <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
             <form class="form-horizontal" id="create-space-type-form" role="form" th:action="@{/settings/space_type/create}" method="post">
                 <div class="form-group">
                     <label for="space-type-name" class="col-md-4 control-label">Space Name</label>
@@ -55,21 +47,13 @@
             </form>
         </div>
     </div>
-
-    <br/>
-
     <!-- Footer -->
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
-
-
+<!-- End Main Content -->
 
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
-
-<script>
-
-</script>
 
 </body>
 </html>

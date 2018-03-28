@@ -43,21 +43,16 @@ public class MapsController {
 
     @GetMapping("/navigate")
     public String navigate(Model model,
-                             @RequestParam("latitude") Double latitude,
-                             @RequestParam("longitude") Double longitude,
-                             @RequestParam("destination") String destinationGarageKey) {
+                           @RequestParam("latitude") Double latitude,
+                           @RequestParam("longitude") Double longitude,
+                           @RequestParam("destination") String destinationGarageKey) {
 
         Garage garage = garageRepository.findByKey(destinationGarageKey);
         Location startingLocation = new Location(latitude,longitude);
-        //GoogleMapService mapService = new GoogleMapService();
-        //String directions = mapService.buildDirectionsWithLatLng(startingLocation,garage.getLocation());
 
         model.addAttribute("startingLocation", startingLocation);
         model.addAttribute("destination", garage.getLocation());
         model.addAttribute("travelMode", TravelMode.DRIVING.toString());
-        //model.addAttribute("directions", directions);
-
-        //System.out.println(directions);
 
         return "maps/navigate/index";
     }

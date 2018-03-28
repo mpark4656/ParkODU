@@ -1,7 +1,8 @@
 package edu.odu.cs.gold.configuration;
 
-import edu.odu.cs.gold.repository.UserRepository;
+import edu.odu.cs.gold.security.AuthenticatedUserDetailsService;
 import edu.odu.cs.gold.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -10,8 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.session.ConcurrentSessionControlAuthenticationStrategy;
@@ -19,18 +20,16 @@ import org.springframework.security.web.authentication.session.RegisterSessionAu
 import org.springframework.security.web.session.ConcurrentSessionFilter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private UserService userService;
+
     @Bean
     public UserDetailsService userDetailsService() {
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        //manager.createUser(User.withUsername("admin").password("awesome8").roles("admin").build());
-        //manager.createUser(User.withUsername("user").password("awesome8").roles("user").build());
-        return manager;
+        return new AuthenticatedUserDetailsService(userService);
     }
 
     @Bean
@@ -45,8 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/**").permitAll();
-/*
+        //http.authorizeRequests().antMatchers("/**").permitAll();
         http.authorizeRequests()
                 .antMatchers("/",
                         "/index",
@@ -59,17 +57,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/floor/**",
                         "/garage/**",
                         "/user/register/**",
-                        "/user/confirm/**")
+                        "/user/confirm/**",
+                        "/maps/**",
+                        "/rest/floor/**",
+                        "/rest/floor/floors/**",
+                        "/rest/garage/**",
+                        "/rest/garage/garages/**",
+                        "/rest/floor/setCapacity/**",
+                        "/rest/parking_space/set_availability/**",
+                        "/rest/parking_space/parking_spaces/**"
+                        )
                 .permitAll()
                 .antMatchers("/settings/**")
-                .hasRole("admin")
+                .hasAuthority("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
-                .usernameParameter("email")
+                .usernameParameter("username")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/", true)
                 .and()
@@ -77,8 +84,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
                 .and()
-                .httpBasic();
-*/
+                .httpBasic()
+                .and()
+                .sessionManagement()
+                .maximumSessions(10)
+                .expiredUrl("/expired")
+                .sessionRegistry(sessionRegistry());
         http.csrf().disable(); // Required for Spring Security to work
     }
 

@@ -202,7 +202,7 @@ public class FloorRestController {
             if(capacity < 0.0) {
                 capacity = (float)0.0;
             }
-            
+
             // Find out how many spaces need to be occupied on this floor for capacity to be at the specified
             // percentage
             int requiredOccupiedSpaces = Math.round(floor.getTotalSpaces() * capacity / 100);

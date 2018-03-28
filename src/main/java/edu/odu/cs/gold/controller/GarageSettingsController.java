@@ -6,6 +6,7 @@ import edu.odu.cs.gold.model.Garage;
 import edu.odu.cs.gold.repository.FloorRepository;
 import edu.odu.cs.gold.repository.GarageRepository;
 import edu.odu.cs.gold.repository.ParkingSpaceRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -168,11 +169,6 @@ public class GarageSettingsController {
                 existingGarage.setDescription(garage.getDescription());
                 existingGarage.setHeightDescription(garage.getHeightDescription());
                 existingGarage.setAddress(garage.getAddress());
-                existingGarage.setAddressOne(garage.getAddressOne());
-                existingGarage.setAddressTwo(garage.getAddressTwo());
-                existingGarage.setCity(garage.getCity());
-                existingGarage.setState(garage.getState());
-                existingGarage.setZipCode(garage.getZipCode());
                 garageRepository.save(existingGarage);
                 isSuccessful = true;
             }

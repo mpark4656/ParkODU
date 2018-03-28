@@ -112,7 +112,32 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         System.out.println("# of Users loaded from Mongo: " + userRepository.findAll().size());
         System.out.println("# of Roles loaded from Mongo: " + roleTypeRepository.findAll().size());
 
+        /*
+        User user = new User();
+        user.setUserKey(UUID.randomUUID().toString());
+        user.setConfirmationToken(UUID.randomUUID().toString());
+        user.setFirstName("Usman");
+        user.setLastName("Sermello");
+        user.setUsername("user");
+        user.setEmail("user@odu.edu");
+        user.setPassword("awesome8");
+        user.getPermissions().add("USER");
+        user.setEnabled(true);
+        userRepository.save(user);
 
+        User admin = new User();
+        admin.setUserKey(UUID.randomUUID().toString());
+        admin.setConfirmationToken(UUID.randomUUID().toString());
+        admin.setFirstName("Adriana");
+        admin.setLastName("Minunoz");
+        admin.setUsername("admin");
+        admin.setEmail("admin@odu.edu");
+        admin.setPassword("awesome8");
+        admin.getPermissions().add("USER");
+        admin.getPermissions().add("ADMIN");
+        admin.setEnabled(true);
+        userRepository.save(admin);
+        */
 
 
         if (false) {
