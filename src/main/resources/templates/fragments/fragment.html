@@ -62,7 +62,8 @@
 			<ul class="nav navbar-nav navbar-right">
 				<li sec:authorize="isAuthenticated()" class="welcome-message">Welcome <span sec:authentication="name"></span>!</li>
 				<li sec:authorize="isAnonymous()">
-					<button type="button"  data-toggle="modal" data-target="#myModal">Events</button>
+					<button type="button" class="far fa-bell btn-lg" data-toggle="modal" data-target="#myModal"></button>
+
 				</li>
 
 				<li sec:authorize="isAnonymous()"><a th:href="@{/login}">Login</a></li>
@@ -146,6 +147,11 @@
 <!-- Toast Script -->
 <div th:fragment="toastr-script">
 	<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+</div>
+
+<!-- Bell Script-->
+<div th:fragment="bell-script">
+	<script src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
 </div>
 </body>
 </html>
