@@ -15,23 +15,20 @@
         <div class="panel panel-default">
             <div class="panel-heading">Select a Garage and Date.</div>
             <div class="panel-body">
-                <select class="form-control garageDropdown" id="garage"> <!-- th:field="*{garageKey}" -->
-                    <!--   <option th:each="garage : ${garages}"
+                <select class="form-control garageDropdown" id="garage" th:field="*{garageKey}">
+                    <option th:each="garage : ${garages}"
                             th:text="${garage.name}"
                             th:value="${garage.garageKey}"
                             th:selected="(${garage.garageKey eq garage.garageKey})"
                             >
-                    </option> -->
+                    </option>
                 </select>
-                <input id="date" clas="date" type="date" name="date"> <!-- th:value="...date" -->
+                <input id="date" class="date" type="date" name="date" th:value="chart.date">
                 <button id="create" type="button" class="btn">Create</button>
             </div>
         </div>
     </div>
 
-    <div class="container"> <!-- th:each floor : ${floors} -->
-        <canvas id="floorStatisticChart"></canvas>
-    </div>
 </div>
 
 <!-- Scripts -->
@@ -39,6 +36,8 @@
 
 <!-- Chart.js Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: chart-js-scripts" /> /*/-->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script>
 $(document).ready(function(){
@@ -62,45 +61,34 @@ $(document).ready(function(){
                 });
     });
 });
+
+
+
+
 </script>
 
 <script th:inline="javascript">
 /*<![CDATA[*/
-$(#create).click(function() {
-    // FloorStatistics Chart
-    var ctx = document.getElementById("floorStatisticChart");
+$(document).ready(function(){
+    $(".create").onclick(function(){
 
-    var dataString = /*[[${dataString}]]*/;
-    var data = dataString.split(',');
-
-    var labelString = /*[[${labelString}]]*/;
-    var labels = labelString.split(',');
-
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Occupancy Rate (%)',
-                data: data,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
-            }
-        }
+        var floors = /*[[${floors}]]*/;
+        var x;
+        var i = 1;
+        for( x in floors){
+            var div = document.createElement('div');
+            document.body.appendChild(div);
+            //maybe modify style here
+            div.id = 'chart' + i;
+            $.post("charts.html",
+            {
+                garage: /*[[${garage}]]*/
+                date: /*[[${date}]]*/
+            },
+            function(result){
+                $("chart" + i).html(result);
+            });
+        };
     });
 });
 /*]]>*/
