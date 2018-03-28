@@ -20,17 +20,11 @@ import java.util.*;
 public class AccountsController {
 
     private UserRepository userRepository;
-    private UserService userService;
-    private EmailService emailService;
     private RoleTypeRepository roleTypeRepository;
 
     public AccountsController(UserRepository userRepository,
-                              UserService userService,
-                              EmailService emailService,
                               RoleTypeRepository roleTypeRepository) {
         this.userRepository = userRepository;
-        this.userService = userService;
-        this.emailService = emailService;
         this.roleTypeRepository = roleTypeRepository;
     }
 
