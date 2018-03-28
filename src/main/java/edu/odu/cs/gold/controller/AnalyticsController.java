@@ -24,7 +24,6 @@ public class AnalyticsController {
     private GoogleMapService googleMapService;
     private PermitTypeRepository permitTypeRepository;
     private SpaceTypeRepository spaceTypeRepository;
-    private RecommendationRepository recommendationRepository;
 
     public AnalyticsController(GarageRepository garageRepository,
                                BuildingRepository buildingRepository,
@@ -32,8 +31,7 @@ public class AnalyticsController {
                                TravelDistanceDurationRepository travelDistanceDurationRepository,
                                GoogleMapService googleMapService,
                                PermitTypeRepository permitTypeRepository,
-                               SpaceTypeRepository spaceTypeRepository,
-                               RecommendationRepository recommendationRepository) {
+                               SpaceTypeRepository spaceTypeRepository) {
         this.garageRepository = garageRepository;
         this.buildingRepository = buildingRepository;
         this.parkingSpaceRepository = parkingSpaceRepository;
@@ -41,7 +39,6 @@ public class AnalyticsController {
         this.googleMapService = googleMapService;
         this.permitTypeRepository = permitTypeRepository;
         this.spaceTypeRepository = spaceTypeRepository;
-        this.recommendationRepository = recommendationRepository;
     }
 
     @GetMapping({"","/","/index"})
