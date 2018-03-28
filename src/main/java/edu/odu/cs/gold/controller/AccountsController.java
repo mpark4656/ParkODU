@@ -231,7 +231,7 @@ public class AccountsController {
 
     @PostMapping("/set_enabled")
     @ResponseBody
-    public String setAvailability(@RequestParam("userEnabled") boolean userEnabled,
+    public String setEnabled(@RequestParam("userEnabled") boolean userEnabled,
                                   @RequestParam("userKey") String userKey) {
         User user = userRepository.findByKey(userKey);
         user.setEnabled(userEnabled);

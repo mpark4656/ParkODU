@@ -9,7 +9,6 @@ import edu.odu.cs.gold.repository.PermitTypeRepository;
 import edu.odu.cs.gold.repository.SpaceTypeRepository;
 import edu.odu.cs.gold.repository.UserRepository;
 import edu.odu.cs.gold.security.AuthenticatedUser;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
