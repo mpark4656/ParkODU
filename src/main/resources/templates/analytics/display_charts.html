@@ -69,25 +69,32 @@ $(document).ready(function(){
 
 <script th:inline="javascript">
 /*<![CDATA[*/
+
+//Loop through floors and create a div for each floor and add
+//an appropriate chart via post request to chart.html.
+
 $(document).ready(function(){
     $(".create").onclick(function(){
 
         var floors = /*[[${floors}]]*/;
         var x;
-        var i = 1;
-        for( x in floors){
+        var i = 0;
+        for(x in floors){
             var div = document.createElement('div');
             document.body.appendChild(div);
             //maybe modify style here
             div.id = 'chart' + i;
-            $.post("charts.html",
+            var floor = floors[i];
+            $.post("chart.html",
             {
                 garage: /*[[${garage}]]*/
+                floor: floor
                 date: /*[[${date}]]*/
             },
             function(result){
                 $("chart" + i).html(result);
             });
+            i = i + 1;
         };
     });
 });
