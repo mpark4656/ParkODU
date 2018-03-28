@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" 
-xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <!-- Head -->
 <head th:fragment="head">
@@ -14,207 +14,138 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 	<title>ParkODU</title>
 
-	<!-- Bootstrap core CSS -->
+	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
 	<!-- Font Awesome -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
-	<!-- Delightful Indulgence Custom Stylesheet -->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/fontawesome-free-5.0.8/web-fonts-with-css/css/fontawesome-all.min.css}"/>
+	<!-- ParkODU Custom Stylesheet -->
 	<link rel="stylesheet" type="text/css" th:href="@{/css/parkodu.css}"/>
 
 </head>
 <body>
-	<!-- Navigation Bar -->
-	<nav th:fragment="navigation-bar" class="navbar navbar-default navbar-fixed-top">
-		<div class="container-fluid navbar-container">
-            <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#myNavbar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" th:href="@{/}" style="padding:0">
-                        <img th:src="@{/img} + '/' + 'odupark_logo_02.png'" alt="Park ODU Logo"
-                             style="height: 100%;"/>
-                    </a>
-            </div>
-            <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a th:href="@{/garage}">Garages</a>
-                    </li>
-                    <li>
-                        <a th:href="@{/analytics/locate}">Search</a>
-                    </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            Configurations (Admin Only)
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a th:href="@{/settings/garage}">Garages</a>
-                            </li>
-                            <li>
-                                <a th:href="@{/settings/floor}">Floors</a>
-                            </li>
-                            <li>
-                                <a th:href="@{/settings/parking_space}">Parking Spaces</a>
-                            </li>
-							<li>
-								<a th:href="@{/settings/building}">Buildings</a>
-							</li>
-                            <li>
-                                <a th:href="@{/settings/permit_type}">Permit Types</a>
-                            </li>
-                            <li>
-                                <a th:href="@{/settings/space_type}">Space Types</a>
-                            </li>
-                            <li>
-                                <a th:href="@{/settings/accounts}">Accounts</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-					<li sec:authorize="isAnonymous()">
-						<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Events</button>
-					</li>
-                    <li sec:authorize="isAnonymous()">
-                        <a th:href="@{/login}">Login</a>
-                    </li>
-                    <li sec:authorize="isAnonymous()">
-                        <a th:href="@{/user/register}">Create</a>
-                    </li>
-                    <li>
-                        <a href="#">Settings</a>
-                    </li>
-                    <li>
-                        <div class="social-media-links-container">
-                            <a target="_blank" href="#" class="fa fa-facebook facebook-icon"></a>
-                            <a target="_blank" href="#" class="fa fa-instagram instagram-icon"></a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+<!-- Navigation Bar -->
+<nav th:fragment="navigation-bar" class="navbar navbar-default navbar-fixed-top">
+	<div class="container navbar-container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" th:href="@{/}"><img th:src="@{/img/odupark_logo_02.png}" alt="ParkODU Logo" title="ParkODU Logo" height="50"/></a>
 		</div>
-	</nav>
+		<div id="navbar" class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
 
+				<li><a th:href="@{/garage}">Garages</a></li>
+				<li><a th:href="@{/analytics/locate}">Search</a></li>
+				<li sec:authorize="hasAuthority('ADMIN')" class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li class="dropdown-header">Configurations</li>
+						<li><a th:href="@{/settings/building}">Buildings</a></li>
+						<li><a th:href="@{/settings/floor}">Floors</a></li>
+						<li><a th:href="@{/settings/garage}">Garages</a></li>
+						<li><a th:href="@{/settings/parking_space}">Parking Spaces</a></li>
+						<li><a th:href="@{/settings/permit_type}">Permit Types</a></li>
+						<li><a th:href="@{/settings/space_type}">Space Types</a></li>
+						<li role="separator" class="divider"></li>
+						<li class="dropdown-header">Account Management</li>
+						<li><a th:href="@{/settings/accounts}">Accounts</a></li>
+						<li role="separator" class="divider"></li>
+						<li class="dropdown-header">Notification System</li>
+						<li><a href="">Events</a></li>
+					</ul>
+				</li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li sec:authorize="isAuthenticated()" class="welcome-message">Welcome <span sec:authentication="name"></span>!</li>
+				<li sec:authorize="isAnonymous()">
+					<button type="button"  data-toggle="modal" data-target="#myModal">Events</button>
+				</li>
 
-	<!-- Main Logo -->
-	<div th:fragment="main-logo">
-		<a class="navbar-brand" th:href="@{/}">
-			<img th:src="@{/img} + '/' + 'odupark_logo_02.png'" alt="Park ODU Logo"
-				 style="border: 1px solid black; width: 30%; top: 0; left: 0; position: absolute"/>
-		</a>
-	</div>
-	<!--
-	<a class="navbar-brand" th:href="@{/}"><img src="./img/delightful_indulgence_logo.png" alt="Delightful Indulgence Logo"/></a>
-	-->
-
-	<!-- Settings Link -->
-	<div th:fragment="settings-link">
-		<li sec:authorize="hasRole('ADMIN')"><a th:href="@{/settings}">Settings</a></li>
-		<!--
-		<li><a th:href="@{/settings}">Settings</a></li>
-		-->
-	</div>
-
-	<!-- Settings Link (Active) -->
-	<div th:fragment="settings-link-active">
-		<li sec:authorize="hasRole('ADMIN')" class="active"><a th:href="@{/settings}">Settings</a></li>
-		<!--
-		<li class="active"><a th:href="@{/settings}">Settings</a></li>
-		-->
-	</div>
-
-	<!-- Login -->
-	<div th:fragment="user-login">
-		<li sec:authorize="isAnonymous()"><a th:href="@{/login}">Login</a></li>
-		<!--
-		<li><a th:href="@{/login}">Login</a></li>
-		-->
-	</div>
-
-	<!-- Create User -->
-	<div th:fragment="new-user">
-		<li sec:authorize="isAnonymous()"><a th:href="@{/user/register}">Create</a></li>
-		<!--
-		<li><a th:href="@{/newuser}">New User</a></li>
-		-->
-	</div>
-
-	<!-- Social Media Links -->
-	<div th:fragment="social-media-links">
-		<div class="social-media-links-container">
-			<a target="_blank" href="#" class="fa fa-facebook facebook-icon"></a>
-			<a target="_blank" href="#" class="fa fa-instagram instagram-icon"></a>
+				<li sec:authorize="isAnonymous()"><a th:href="@{/login}">Login</a></li>
+				<li sec:authorize="isAnonymous()"><a th:href="@{/user/register}">Register</a></li>
+				<li sec:authorize="isAuthenticated()" class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cog fa-lg"></i></a>
+					<ul class="dropdown-menu">
+						<li><a th:href="@{/user_preference/index}">Preferences</a></li>
+						<li role="separator" class="divider"></li>
+						<li>
+							<form th:action="@{/logout}" method="POST">
+								<a href="#" onclick="this.parentNode.submit()">Log Out</a>
+							</form>
+						</li>
+					</ul>
+				</li>
+			</ul>
 		</div>
 	</div>
+</nav>
 
-	<!-- Welcome User -->
-	<div th:fragment="welcome-user">
-		<div sec:authorize="isAuthenticated()" class="text-right">
-			<form th:action="@{/logout}" method="POST">
-				<p class="submenu-text" style="display: inline;">Welcome <span sec:authentication="name"></span></p>
-				<span class="submenu-text">|</span>
-				<input type="submit" class="logout-button small submenu-text" style="display: inline; margin-left: 5px;" value="Logout"/>
-			</form>
-		</div>
-	</div>
-
-	<!-- Alerts -->
-	<div th:fragment="alerts" th:if="${successMessage ne null or infoMessage ne null or warningMessage ne null or dangerMessage ne null}" class="row">
-		<div th:if="${successMessage ne null}" class="col-md-10 col-md-offset-1">
+<!-- Alerts -->
+<div th:fragment="alerts" th:if="${successMessage ne null or infoMessage ne null or warningMessage ne null or dangerMessage ne null}" class="row">
+	<div class="row">
+		<div th:if="${successMessage ne null}" class="col-md-12">
 			<div class="alert alert-success alert-dismissible text-center" role="alert">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<span th:utext="${successMessage}"></span>
 			</div>
 		</div>
-		<div th:if="${infoMessage ne null}" class="col-md-10 col-md-offset-1">
+		<div th:if="${infoMessage ne null}" class="col-md-12">
 			<div class="alert alert-info alert-dismissible text-center" role="alert">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<span th:utext="${infoMessage}"></span>
 			</div>
 		</div>
-		<div th:if="${warningMessage ne null}" class="col-md-10 col-md-offset-1">
+		<div th:if="${warningMessage ne null}" class="col-md-12">
 			<div class="alert alert-warning alert-dismissible text-center" role="alert">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<span th:utext="${warningMessage}"></span>
 			</div>
 		</div>
-		<div th:if="${dangerMessage ne null}" class="col-md-10 col-md-offset-1">
+		<div th:if="${dangerMessage ne null}" class="col-md-12">
 			<div class="alert alert-danger alert-dismissible text-center" role="alert">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<b>Error:</b>&nbsp;<span th:utext="${dangerMessage}"></span>
 			</div>
 		</div>
 	</div>
+</div>
 
-	<!-- Footer -->
-	<div th:fragment="footer">
-		<footer class="footer">
-			<p>&copy; 2018 ParkODU</p>
-		</footer>
-	</div>
+<!-- Footer -->
+<div th:fragment="footer">
+	<footer class="footer">
+		<p>&copy; 2018 ParkODU</p>
+	</footer>
+</div>
 
-	<!-- Scripts -->
-	<div th:fragment="scripts">
-		<script th:src="@{/js/jquery-3.2.1.min.js}"></script>
-		<script th:src="@{/js/popper.min.js}"></script>
-		<script th:src="@{/js/bootstrap.min.js}"></script>
-	</div>
+<!-- Scripts -->
+<div th:fragment="scripts">
+	<script th:src="@{/js/jquery-3.2.1.min.js}"></script>
+	<script th:src="@{/js/popper.min.js}"></script>
+	<script th:src="@{/js/bootstrap.min.js}"></script>
+</div>
 
-	<!-- Google Maps API Scripts -->
-	<div th:fragment="google-maps-scripts">
-		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCK-F1dqhEye7aaQdd9dd69-oMMokv2pVA&amp;libraries=places&amp;callback=initAutocomplete" async="async" defer="defer"></script>
-	</div>
+<!-- Google Maps API Scripts -->
+<div th:fragment="google-maps-scripts">
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCK-F1dqhEye7aaQdd9dd69-oMMokv2pVA&amp;libraries=places&amp;callback=initAutocomplete" async="async" defer="defer"></script>
+</div>
 
-	<!-- Chart.js Scripts -->
-	<div th:fragment="chart-js-scripts">
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>
-	</div>
+<!-- Chart.js Scripts -->
+<div th:fragment="chart-js-scripts">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>
+</div>
 
+<!-- Bootstrap Validator Scripts -->
+<div th:fragment="bootstrap-validator">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+</div>
+
+<!-- Toast Script -->
+<div th:fragment="toastr-script">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+</div>
 </body>
 </html>
