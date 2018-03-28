@@ -104,6 +104,6 @@ public class RegisterControllerTests {
 
         assertTrue(model.containsKey("dangerMessage"));
         assertEquals("Oops! Confirmation link not valid!", model.get("dangerMessage"));
-        assertEquals("home/login", returnURL);
+        assertEquals("redirect:home/login", returnURL);
     }
 }
