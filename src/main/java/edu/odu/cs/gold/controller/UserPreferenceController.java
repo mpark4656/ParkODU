@@ -8,6 +8,7 @@ import edu.odu.cs.gold.model.User;
 import edu.odu.cs.gold.repository.PermitTypeRepository;
 import edu.odu.cs.gold.repository.SpaceTypeRepository;
 import edu.odu.cs.gold.repository.UserRepository;
+import edu.odu.cs.gold.security.AuthenticatedUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -41,10 +41,10 @@ public class UserPreferenceController {
 
     @GetMapping({"", "/", "/index"})
     public String index(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
+        AuthenticatedUser authenticatedUser =
+                (AuthenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        Predicate predicate = Predicates.equal("username", username);
+        Predicate predicate = Predicates.equal("username", authenticatedUser.getUsername());
         List<User> users = userRepository.findByPredicate(predicate);
 
         if(users.size() != 1) {
