@@ -10,19 +10,17 @@ import edu.odu.cs.gold.repository.UserRepository;
 import edu.odu.cs.gold.security.AuthenticatedUser;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.ExtendedModelMap;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
@@ -153,4 +151,57 @@ public class UserPreferenceControllerTests {
         assertEquals(userOne, model.get("user"));
     }
 
+    @Test
+    public void testIndex_UserNotFound() {
+        ExtendedModelMap model = new ExtendedModelMap();
+        List<User> users = new ArrayList<>();
+        when(userRepository.findByPredicate(any(Predicate.class))).thenReturn(users);
+
+        Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder securityContextHolder = mock(SecurityContextHolder.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        securityContextHolder.setContext(securityContext);
+
+        Collection<? extends GrantedAuthority> authorities = new ArrayList<>();
+
+        AuthenticatedUser authenticatedUser =
+                new AuthenticatedUser(USER_ONE_NAME, "FAKEPASS", authorities);
+
+        when(authentication.getPrincipal()).thenReturn(authenticatedUser);
+
+        String returnURL = userPreferenceController.index(model);
+
+        assertEquals("home/index", returnURL);
+        assertFalse(model.containsKey("user"));
+    }
+
+    @Test
+    public void testEdit_NonNullTypes() {
+        List<String> permitTypes = new ArrayList<> ();
+        List<String> spaceTypes = new ArrayList<> ();
+
+        permitTypes.add(PERMIT_ONE_KEY);
+        permitTypes.add(PERMIT_TWO_KEY);
+        spaceTypes.add(SPACE_ONE_KEY);
+        spaceTypes.add(SPACE_TWO_KEY);
+
+        String returnURL = userPreferenceController.edit(
+                USER_ONE_KEY,
+                permitTypes,
+                spaceTypes
+        );
+        assertEquals("redirect:/", returnURL);
+    }
+
+    @Test
+    public void testEdit_NullTypes() {
+
+        String returnURL = userPreferenceController.edit(
+                USER_ONE_KEY,
+                null,
+                null
+        );
+        assertEquals("redirect:/", returnURL);
+    }
 }
