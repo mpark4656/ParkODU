@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class BuildingTest {
+public class BuildingTests {
 
     private static String BUILDING_KEY = "a00000000000000002";
     private static String BUILDING_NAME = "BuildingName";
