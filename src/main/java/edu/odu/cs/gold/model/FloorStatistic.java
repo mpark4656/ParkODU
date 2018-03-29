@@ -2,6 +2,7 @@ package edu.odu.cs.gold.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 public class FloorStatistic implements Serializable {
 
@@ -9,6 +10,10 @@ public class FloorStatistic implements Serializable {
     private String floorKey;
     private Double capacity;
     private Date timestamp;
+
+    public FloorStatistic() {
+        floorStatisticKey = UUID.randomUUID().toString();
+    }
 
     public String getFloorStatisticKey() {
         return floorStatisticKey;
