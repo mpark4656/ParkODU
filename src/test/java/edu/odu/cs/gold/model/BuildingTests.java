@@ -142,8 +142,8 @@ public class BuildingTests {
                 " buildingKey='" + BUILDING_KEY + '\'' +
                 ", name='" + BUILDING_NAME + '\'' +
                 ", description='" + BUILDING_DESCRIPTION + '\'' +
-                ", latitude=" + BUILDING_LATTITUDE + '\'' +
-                ", longitude=" + BUILDING_LONGTITUDE + '\'' +
+                ", latitude=" + BUILDING_LATTITUDE +
+                ", longitude=" + BUILDING_LONGTITUDE +
                 ", address='" + BUILDING_ADDRESS + '\'' +
                 " }";
 

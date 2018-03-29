@@ -105,11 +105,11 @@ public class Floor implements Serializable {
                 " floorKey='" + floorKey + '\'' +
                 ", garageKey='" + garageKey + '\'' +
                 ", number='" + number + '\'' +
-                ", availableSpaces='" + availableSpaces + '\'' +
-                ", totalSpaces='" + totalSpaces + '\'' +
+                ", availableSpaces=" + availableSpaces +
+                ", totalSpaces=" + totalSpaces +
                 ", description='" + description + '\'' +
-                ", capacity='" + capacity + '\'' +
-                ", lastUpdated='" + lastUpdated + '\'' +
+                ", capacity=" + capacity +
+                ", lastUpdated=" + lastUpdated +
                 " }";
     }
 }

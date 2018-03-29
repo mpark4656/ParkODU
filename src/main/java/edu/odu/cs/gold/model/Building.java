@@ -73,8 +73,8 @@ public class Building implements Serializable {
                 " buildingKey='" + buildingKey + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", latitude=" + latitude + '\'' +
-                ", longitude=" + longitude + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
                 ", address='" + address + '\'' +
                 " }";
     }

@@ -50,10 +50,10 @@ public class FloorStatistic implements Serializable {
     @Override
     public String toString() {
         return "FloorStatistic{" +
-                "floorStatisticKey='" + floorStatisticKey + '\'' +
+                " floorStatisticKey='" + floorStatisticKey + '\'' +
                 ", floorKey='" + floorKey + '\'' +
                 ", capacity=" + capacity +
                 ", timestamp=" + timestamp +
-                '}';
+                " }";
     }
 }

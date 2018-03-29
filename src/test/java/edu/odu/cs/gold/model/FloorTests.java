@@ -165,11 +165,11 @@ public class FloorTests {
                 " floorKey='" + FLOOR_KEY + '\'' +
                 ", garageKey='" + GARAGE_KEY + '\'' +
                 ", number='" + FLOOR_NUMBER + '\'' +
-                ", availableSpaces='" + AVAILABLE_SPACES +'\'' +
-                ", totalSpaces='" + TOTAL_SPACES + '\'' +
+                ", availableSpaces=" + AVAILABLE_SPACES +
+                ", totalSpaces=" + TOTAL_SPACES +
                 ", description='" + FLOOR_DESCRIPTION + '\'' +
-                ", capacity='" + FLOOR_CAPACITY + '\'' +
-                ", lastUpdated='" + UPDATED_DATE + '\'' +
+                ", capacity=" + FLOOR_CAPACITY +
+                ", lastUpdated=" + UPDATED_DATE +
                 " }";
 
         floor.setFloorKey(FLOOR_KEY);
