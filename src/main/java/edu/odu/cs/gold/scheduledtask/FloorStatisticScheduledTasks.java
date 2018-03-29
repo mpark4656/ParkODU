@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 @Component
-public class ScheduledTasks {
+public class FloorStatisticScheduledTasks {
 
     private FloorRepository floorRepository;
     private FloorStatisticRepository floorStatisticRepository;
 
-    public ScheduledTasks(FloorRepository floorRepository,
-                          FloorStatisticRepository floorStatisticRepository) {
+    public FloorStatisticScheduledTasks(FloorRepository floorRepository,
+                                        FloorStatisticRepository floorStatisticRepository) {
 
         this.floorRepository = floorRepository;
         this.floorStatisticRepository = floorStatisticRepository;
