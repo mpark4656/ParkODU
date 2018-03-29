@@ -6,9 +6,18 @@
     <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
 </head>
 <body>
+
+<!--
 <div class="container">
     <canvas id="floorStatisticChart"></canvas>
 </div>
+-->
+
+<div id="myChart">
+    TextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextText
+    TextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextText
+</div>
+
 
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
@@ -17,6 +26,10 @@
 <!--/*/ <th:block th:include="fragments/fragment :: chart-js-scripts" /> /*/-->
 
 <script th:inline="javascript">
+
+
+
+/*
 /*<![CDATA[*/
 $(#create).click(function() {
     // FloorStatistics Chart
@@ -56,6 +69,7 @@ $(#create).click(function() {
     });
 });
 /*]]>*/
+*/
 </script>
 </body>
 </html>

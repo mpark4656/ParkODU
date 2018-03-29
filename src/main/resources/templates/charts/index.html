@@ -10,21 +10,21 @@
 <!-- Navigation Bar -->
 <!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
 
-<div class="container-fluid main-container">
+<div class="container-fluid main-container" id="main">
     <div class="container">
         <div class="panel panel-default">
             <div class="panel-heading">Select a Garage and Date.</div>
             <div class="panel-body">
-                <select class="form-control garageDropdown" id="garage" th:field="*{garageKey}">
-                    <option th:each="garage : ${garages}"
+                <select class="form-control garageDropdown" id="garage" > <!--th:field="*{garageKey}"-->
+                    <!-- <option th:each="garage : ${garages}"
                             th:text="${garage.name}"
                             th:value="${garage.garageKey}"
                             th:selected="(${garage.garageKey eq garage.garageKey})"
                             >
-                    </option>
+                    </option> -->
                 </select>
-                <input id="date" class="date" type="date" name="date" th:value="chart.date">
-                <button id="create" type="button" class="btn">Create</button>
+                <input id="date" class="date" type="date" name="date" >Date</input> <!-- th:value="chart.date" -->
+                <button  id="create" type="button" class="btn">Create</button>
             </div>
         </div>
     </div>
@@ -40,6 +40,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script>
+/*
 $(document).ready(function(){
     $(".date").change(function(){
 
@@ -62,38 +63,44 @@ $(document).ready(function(){
     });
 });
 
+*/
+</script>
 
-
-
+<script>
+/*<![CDATA[*/
+$(document).ready(function(){
+    $(".btn").click(function(){
+        var i;
+        for(i = 0; i < 5 ; i++){
+            var div = document.createElement('div');
+            document.getElementById("main").appendChild(div);
+            div.id = "chart" + i;
+            $("#chart" + i).load("http://localhost:8083/charts/chart");
+        }
+    });
+});
+/*]]>*/
 </script>
 
 <script th:inline="javascript">
 /*<![CDATA[*/
 
 //Loop through floors and create a div for each floor and add
-//an appropriate chart via post request to chart.html.
+//an appropriate chart via load from chart.html.
 
 $(document).ready(function(){
-    $(".create").onclick(function(){
+    $(".btn").click(function(){
 
         var floors = /*[[${floors}]]*/;
         var x;
         var i = 0;
         for(x in floors){
             var div = document.createElement('div');
-            document.body.appendChild(div);
+            document.getElementById("main").appendChild(div);
             //maybe modify style here
-            div.id = 'chart' + i;
+            div.id = "chart" + i;
             var floor = floors[i];
-            $.post("chart.html",
-            {
-                garage: /*[[${garage}]]*/
-                floor: floor
-                date: /*[[${date}]]*/
-            },
-            function(result){
-                $("chart" + i).html(result);
-            });
+            $("#chart" + i).load("http://localhost:8083/charts/chart"); //$(selector).load(URL,data,callback);
             i = i + 1;
         };
     });

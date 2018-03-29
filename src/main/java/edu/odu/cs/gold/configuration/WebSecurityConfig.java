@@ -56,6 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/analytics/**",
                         "/floor/**",
                         "/garage/**",
+                        "/charts/**",
                         "/user/register/**",
                         "/user/confirm/**",
                         "/maps/**")
