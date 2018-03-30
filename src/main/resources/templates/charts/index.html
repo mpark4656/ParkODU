@@ -74,23 +74,24 @@ $(document).ready(function(){
 
 <script>
 /*<![CDATA[*/
+
 $(document).ready(function(){
     $(".btn").click(function(){
-        var i;
+    let i =0;
         for(i = 0; i < 2 ; i++){
-            (function (i) {
-            var div = document.createElement('div');
-            div.className = "parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2";
-            document.getElementById("main").appendChild(div);
-            div.id = "chart" + i;
-            $("#chart" + i).load("charts/chart.html");
-            })(i);
+                var div = document.createElement('div');
+                div.className = "parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2";
+                document.getElementById("main").appendChild(div);
+                div.id = "chart" + i;
+                $("#chart" + i).load("charts/chart.html");
         }
     });
 });
 /*]]>*/
+
 </script>
 
+<!--
 <script th:inline="javascript">
 /*<![CDATA[*/
 
@@ -113,6 +114,7 @@ $(document).ready(function(){
 });
 /*]]>*/
 </script>
+-->
 
 </body>
 </html>
