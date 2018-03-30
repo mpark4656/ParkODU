@@ -7,7 +7,7 @@ import java.util.Date;
 
 import static org.junit.Assert.*;
 
-public class FloorStatisticTest {
+public class FloorStatisticTests {
 
     private static String FLOOR_STATISTIC_KEY = "s208568123207430712730127";
     private static String FLOOR_KEY = "f120893742089142102892";
