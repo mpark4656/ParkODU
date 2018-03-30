@@ -7,17 +7,9 @@
 </head>
 <body>
 
-<!--
-<div class="container">
-    <canvas id="floorStatisticChart"></canvas>
-</div>
--->
-
 <div id="myChart">
-    TextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextText
-    TextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextText
+        <canvas id="floorStatisticChart" width="525" height="150"></canvas>
 </div>
-
 
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
@@ -27,26 +19,25 @@
 
 <script th:inline="javascript">
 
-
-
-/*
 /*<![CDATA[*/
-$(#create).click(function() {
+$(document).ready(function() {
     // FloorStatistics Chart
     var ctx = document.getElementById("floorStatisticChart");
 
-    var dataString = /*[[${dataString}]]*/;
-    var data = dataString.split(',');
+    var data = [0,5,10,15,20,25,30];
+    //var dataString = /*[[${dataString}]]*/;
+    //var data = dataString.split(',');
 
-    var labelString = /*[[${labelString}]]*/;
-    var labels = labelString.split(',');
+    var labels = ["12am","1pm","2pm","3pm","4pm","5pm","6pm"];
+    //var labelString = /*[[${labelString}]]*/;
+    //var labels = labelString.split(',');
 
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: labels,
             datasets: [{
-                label: 'Occupancy Rate (%)',
+                label: "Occupancy Rate (%)",
                 data: data,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
@@ -69,7 +60,9 @@ $(#create).click(function() {
     });
 });
 /*]]>*/
-*/
 </script>
+
+
+
 </body>
 </html>
