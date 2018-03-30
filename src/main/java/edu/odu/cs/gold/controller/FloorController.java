@@ -10,6 +10,7 @@ import edu.odu.cs.gold.repository.FloorRepository;
 import edu.odu.cs.gold.repository.FloorStatisticRepository;
 import edu.odu.cs.gold.repository.GarageRepository;
 import edu.odu.cs.gold.repository.ParkingSpaceRepository;
+import edu.odu.cs.gold.service.FloorStatisticService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,16 +26,16 @@ public class FloorController {
     private GarageRepository garageRepository;
     private FloorRepository floorRepository;
     private ParkingSpaceRepository parkingSpaceRepository;
-    private FloorStatisticRepository floorStatisticRepository;
+    private FloorStatisticService floorStatisticService;
 
     public FloorController(GarageRepository garageRepository,
                            FloorRepository floorRepository,
                            ParkingSpaceRepository parkingSpaceRepository,
-                           FloorStatisticRepository floorStatisticRepository) {
+                           FloorStatisticService floorStatisticService) {
         this.garageRepository = garageRepository;
         this.floorRepository = floorRepository;
         this.parkingSpaceRepository = parkingSpaceRepository;
-        this.floorStatisticRepository = floorStatisticRepository;
+        this.floorStatisticService = floorStatisticService;
     }
 
     @GetMapping("/details/{floorKey}")
@@ -72,8 +73,11 @@ public class FloorController {
         /** Average Capacity by Hour Chart **/
 
         // Retrieve FloorStatistics
+        /*
         Predicate floorStatisticsPredicate = Predicates.equal("floorKey", floorKey);
         List<FloorStatistic> floorStatistics = floorStatisticRepository.findByPredicate(floorStatisticsPredicate);
+        */
+        List<FloorStatistic> floorStatistics = floorStatisticService.findAverageFloorCapacityByHour(floorKey);
 
         // Sort Floors by Number
         floorStatistics.sort(Comparator.comparing(FloorStatistic::getTimestamp));

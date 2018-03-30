@@ -80,6 +80,9 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
     @Autowired
     private SpaceTypeService spaceTypeService;
 
+    @Autowired
+    private FloorStatisticService floorStatisticService;
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
