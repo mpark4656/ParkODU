@@ -40,7 +40,6 @@ public class UserMethodSecurityExpressionRoot extends SecurityExpressionRoot imp
 	@Override
 	public void setFilterObject(Object filterObject) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -52,7 +51,6 @@ public class UserMethodSecurityExpressionRoot extends SecurityExpressionRoot imp
 	@Override
 	public void setReturnObject(Object returnObject) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override

@@ -20,17 +20,11 @@ import java.util.*;
 public class AccountsController {
 
     private UserRepository userRepository;
-    private UserService userService;
-    private EmailService emailService;
     private RoleTypeRepository roleTypeRepository;
 
     public AccountsController(UserRepository userRepository,
-                              UserService userService,
-                              EmailService emailService,
                               RoleTypeRepository roleTypeRepository) {
         this.userRepository = userRepository;
-        this.userService = userService;
-        this.emailService = emailService;
         this.roleTypeRepository = roleTypeRepository;
     }
 
@@ -237,7 +231,7 @@ public class AccountsController {
 
     @PostMapping("/set_enabled")
     @ResponseBody
-    public String setAvailability(@RequestParam("userEnabled") boolean userEnabled,
+    public String setEnabled(@RequestParam("userEnabled") boolean userEnabled,
                                   @RequestParam("userKey") String userKey) {
         User user = userRepository.findByKey(userKey);
         user.setEnabled(userEnabled);

@@ -19,6 +19,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.access.method.P;
 
 
@@ -28,6 +29,7 @@ import com.google.maps.model.*;
 import java.util.*;
 
 @SpringBootApplication
+@EnableScheduling
 public class ParkODUApplication implements ApplicationContextAware, ApplicationListener<ContextRefreshedEvent> {
 
     private ApplicationContext applicationContext;
@@ -77,6 +79,9 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
 
     @Autowired
     private SpaceTypeService spaceTypeService;
+
+    @Autowired
+    private FloorStatisticService floorStatisticService;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

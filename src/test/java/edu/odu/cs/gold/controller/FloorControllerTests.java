@@ -9,6 +9,7 @@ import edu.odu.cs.gold.repository.FloorRepository;
 import edu.odu.cs.gold.repository.FloorStatisticRepository;
 import edu.odu.cs.gold.repository.GarageRepository;
 import edu.odu.cs.gold.repository.ParkingSpaceRepository;
+import edu.odu.cs.gold.service.FloorStatisticService;
 import edu.odu.cs.gold.service.GarageService;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,6 +45,7 @@ public class FloorControllerTests {
     private FloorRepository floorRepository;
     private ParkingSpaceRepository parkingSpaceRepository;
     private FloorStatisticRepository floorStatisticRepository;
+    private FloorStatisticService floorStatisticService;
 
     private Garage garageOne;
     private Floor floorOne;
@@ -96,17 +98,21 @@ public class FloorControllerTests {
         parkingSpaceRepository = mock(ParkingSpaceRepository.class);
         when(parkingSpaceRepository.findByPredicate(any(Predicate.class))).thenReturn(parkingSpaces);
 
-        List<FloorStatistic> floorStatistics = new ArrayList<>();
+        ArrayList<FloorStatistic> floorStatistics = new ArrayList<>();
         floorStatistics.add(floorStatisticOne);
         floorStatistics.add(floorStatisticTwo);
         floorStatisticRepository = mock(FloorStatisticRepository.class);
         when(floorStatisticRepository.findByPredicate(any(Predicate.class))).thenReturn(floorStatistics);
 
+        floorStatisticService = new FloorStatisticService(floorStatisticRepository);
+        floorStatisticService = mock(FloorStatisticService.class);
+        when(floorStatisticService.findAverageFloorCapacityByHour(anyString())).thenReturn(floorStatistics);
+
         floorController = new FloorController(
                 garageRepository,
                 floorRepository,
                 parkingSpaceRepository,
-                floorStatisticRepository);
+                floorStatisticService);
     }
 
     @Test

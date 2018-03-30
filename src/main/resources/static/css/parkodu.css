@@ -168,9 +168,53 @@ hr {
 }
 
 .parkodu-container {
-    background-color: white;margin-top: 75px;padding-bottom: 30px;padding-left: 40px;padding-right: 40px; border-radius: 10px;
+    background-color: white;
+    margin-top: 75px;
+    padding-bottom: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+    border-radius: 10px;
 }
 
 .table-centered th, .table-centered td {
     text-align: center;
+}
+
+.welcome-message {
+    padding: 15px; background: none; color: rgba(0, 48, 87, 1);
+}
+
+/* Mobile */
+@media screen and (max-width: 600px) {
+    .main-container {
+        padding-top: 0;
+    }
+    .nav > li {
+        padding-left: 15px;
+        font-size: 14px !important;
+    }
+    body {
+        font-size: 12px;
+    }
+    h1 {
+        font-size: 28px;
+    }
+    .mobile-hidden {
+        display: none !important;
+    }
+    .navbar-container {
+        border-bottom: none;
+    }
+    .navbar-header {
+        border-bottom: 1px solid #999;
+    }
+    .navbar-collapse {
+        border-bottom: 1px solid #999;
+    }
+    .carousel-caption {
+        display: none;
+    }
+    .welcome-message {
+        padding-left: 30px !important;
+    }
 }

@@ -52,17 +52,20 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 							<li role="separator" class="divider"></li>
 							<li class="dropdown-header">Account Management</li>
 							<li><a th:href="@{/settings/accounts}">Accounts</a></li>
+							<li role="separator" class="divider"></li>
+							<li class="dropdown-header">Notification System</li>
+							<li><a href="">Events</a></li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li sec:authorize="isAuthenticated()" style="padding: 15px; background: none; color: rgba(0, 48, 87, 1);">Welcome <span sec:authentication="name"></span>!</li>
+					<li sec:authorize="isAuthenticated()" class="welcome-message">Welcome <span sec:authentication="name"></span>!</li>
 					<li sec:authorize="isAnonymous()"><a th:href="@{/login}">Login</a></li>
 					<li sec:authorize="isAnonymous()"><a th:href="@{/user/register}">Register</a></li>
 					<li sec:authorize="isAuthenticated()" class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cog fa-lg"></i></a>
 						<ul class="dropdown-menu">
-							<li><a href="#">Preferences</a></li>
+							<li><a th:href="@{/user_preference/index}">Preferences</a></li>
 							<li role="separator" class="divider"></li>
 							<li>
 								<form th:action="@{/logout}" method="POST">

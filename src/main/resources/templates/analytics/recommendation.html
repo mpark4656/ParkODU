@@ -37,17 +37,17 @@
                 <tr>
                     <th rowspan="2" width="36%">Garage</th>
                     <th rowspan="2" width="8%">Available Spaces</th>
-                    <th colspan="2" width="16%">Starting Address to Garage (Driving)</th>
-                    <th colspan="2" width="16%">Garage to Destination Building (Walking)</th>
-                    <th rowspan="2" width="8%">Total Distance</th>
-                    <th rowspan="2" width="8%">Total Travel Time</th>
+                    <th class="mobile-hidden" colspan="2" width="16%">Starting Address to Garage (Driving)</th>
+                    <th class="mobile-hidden" colspan="2" width="16%">Garage to Destination Building (Walking)</th>
+                    <th class="mobile-hidden" rowspan="2" width="8%">Total Distance</th>
+                    <th class="mobile-hidden" rowspan="2" width="8%">Total Travel Time</th>
                     <th rowspan="2" width="8%">Arrival Time</th>
                 </tr>
                 <tr>
-                    <th width="8%">Distance</th>
-                    <th width="8%">Travel Time</th>
-                    <th width="8%">Distance</th>
-                    <th width="8%">Travel Time</th>
+                    <th class="mobile-hidden" width="8%">Distance</th>
+                    <th class="mobile-hidden" width="8%">Travel Time</th>
+                    <th class="mobile-hidden" width="8%">Distance</th>
+                    <th class="mobile-hidden" width="8%">Travel Time</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -57,12 +57,12 @@
                         <a th:href="@{/garage/details} + '/' + ${recommendation.garage.garageKey}" th:text="${recommendation.garage.name}"></a>
                     </td>
                     <td th:text="${recommendation.availabilityCount}"></td>
-                    <td th:text="${recommendation.startingAddressToGarageDistanceText}"></td>
-                    <td th:text="${recommendation.startingAddressToGarageDurationText}"></td>
-                    <td th:text="${recommendation.garageToDestinationBuildingDistanceText}"></td>
-                    <td th:text="${recommendation.garageToDestinationBuildingDurationText}"></td>
-                    <td th:text="${recommendation.totalDistanceText}"></td>
-                    <td th:text="${recommendation.totalDurationText}"></td>
+                    <td class="mobile-hidden" th:text="${recommendation.startingAddressToGarageDistanceText}"></td>
+                    <td class="mobile-hidden" th:text="${recommendation.startingAddressToGarageDurationText}"></td>
+                    <td class="mobile-hidden" th:text="${recommendation.garageToDestinationBuildingDistanceText}"></td>
+                    <td class="mobile-hidden" th:text="${recommendation.garageToDestinationBuildingDurationText}"></td>
+                    <td class="mobile-hidden" th:text="${recommendation.totalDistanceText}"></td>
+                    <td class="mobile-hidden" th:text="${recommendation.totalDurationText}"></td>
                     <td th:text="${#dates.format(recommendation.getArrivalTime(), 'hh:mm a')}"></td>
                 </tr>
                 </tbody>

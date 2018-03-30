@@ -101,7 +101,7 @@ public class RegisterController {
             registrationEmail.setTo(user.getEmail());
             registrationEmail.setSubject("Registration Confirmation");
             registrationEmail.setText("You have been registered with the username:\n\n" + user.getUsername() + "\n\nTo confirm your e-mail address, please click the link below:\n"
-                    + appUrl + "/user/confirm?token=" + user.getConfirmationToken());
+                    + "https://411golds18.cs.odu.edu/user/confirm?token=" + user.getConfirmationToken());
             registrationEmail.setFrom("noreply@ParkODU.cs.odu.edu");
             emailService.sendEmail(registrationEmail);
             model.addAttribute("successMessage", "A confirmation e-mail has been sent to " + user.getEmail());
@@ -133,12 +133,12 @@ public class RegisterController {
                 userList.get(0).setEnabled(true);
                 userService.saveUser(userList.get(0));
                 model.addAttribute("successMessage", "Confirmation link valid!");
-                redirectAttributes.addAttribute("attr","successMessage");
+                redirectAttributes.addAttribute("successMessage","Confirmation link valid!");
             }
         } else {
             System.out.println("");
         }
-        return "user/login";
+        return "redirect:user/login";
     }
 
     /**
@@ -154,13 +154,15 @@ public class RegisterController {
 
         if(param == "confirmationLinkSuccess") {
             model.addAttribute("successMessage","Confirmation link verified!");
+
         }
         if(param == "confirmationLinkError") {
             model.addAttribute("dangerMessage", "Oops! Confirmation link not valid!");
+
         }
         else {
             // DO NOTHING
         }
-        return "home/login";
+        return "redirect:home/login";
     }
 }

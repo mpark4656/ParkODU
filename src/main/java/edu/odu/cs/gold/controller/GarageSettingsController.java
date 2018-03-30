@@ -77,7 +77,6 @@ public class GarageSettingsController {
     @GetMapping("/create")
     public String create(Model model) {
         Garage garage = new Garage();
-        garage.generateGarageKey();
         model.addAttribute("garage", garage);
         return "settings/garage/create";
     }
