@@ -124,21 +124,16 @@ public class GarageRestController {
             if (garage.getHeightDescription() != null) {
                 existingGarage.setHeightDescription(garage.getHeightDescription());
             }
-            if (garage.getAddressOne() != null) {
-                existingGarage.setAddressOne(garage.getAddressOne());
+            if (garage.getAddress() != null) {
+                existingGarage.setAddress(garage.getAddress());
             }
-            if (garage.getAddressTwo() != null) {
-                existingGarage.setAddressTwo(garage.getAddressTwo());
+            if (garage.getLatitude() != null) {
+                existingGarage.setLatitude(garage.getLatitude());
             }
-            if (garage.getCity() != null) {
-                existingGarage.setCity(garage.getCity());
+            if (garage.getLongitude() != null) {
+                existingGarage.setLongitude(garage.getLongitude());
             }
-            if (garage.getState() != null) {
-                existingGarage.setState(garage.getState());
-            }
-            if (garage.getZipCode() != null) {
-                existingGarage.setZipCode(garage.getZipCode());
-            }
+
             existingGarage.setLastUpdated(new Date());
 
             garageRepository.save(existingGarage);

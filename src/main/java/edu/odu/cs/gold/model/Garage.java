@@ -11,11 +11,6 @@ public class Garage implements Serializable {
     private String description;
     private String heightDescription;
     private String address;
-    private String addressOne;
-    private String addressTwo;
-    private String city;
-    private String state;
-    private String zipCode;
     private Integer availableSpaces;
     private Integer totalSpaces;
     private Double capacity;
@@ -23,17 +18,13 @@ public class Garage implements Serializable {
     private Double longitude;
     private Date lastUpdated;
 
-    public Garage() {}
+    public Garage() { this.garageKey = UUID.randomUUID().toString(); }
 
     public Garage(String name, Double latitude, Double longitude) {
         this.garageKey = UUID.randomUUID().toString();
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
-    }
-
-    public void generateGarageKey() {
-        this.garageKey = UUID.randomUUID().toString();
     }
 
     public String getGarageKey() {
@@ -74,46 +65,6 @@ public class Garage implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public String getAddressOne() {
-        return addressOne;
-    }
-
-    public void setAddressOne(String addressOne) {
-        this.addressOne = addressOne;
-    }
-
-    public String getAddressTwo() {
-        return addressTwo;
-    }
-
-    public void setAddressTwo(String addressTwo) {
-        this.addressTwo = addressTwo;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
     }
 
     public Integer getAvailableSpaces() {
@@ -187,11 +138,6 @@ public class Garage implements Serializable {
                 ", description='" + description + '\'' +
                 ", heightDescription='" + heightDescription + '\'' +
                 ", address='" + address + '\'' +
-                ", addressOne='" + addressOne + '\'' +
-                ", addressTwo='" + addressTwo + '\'' +
-                ", city='" + city + '\'' +
-                ", state='" + state + '\'' +
-                ", zipCode='" + zipCode + '\'' +
                 ", availableSpaces=" + availableSpaces +
                 ", totalSpaces=" + totalSpaces +
                 ", capacity=" + capacity +
