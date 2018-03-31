@@ -76,20 +76,31 @@ public class FloorStatisticService {
         Predicate predicate = Predicates.equal("floorKey", floorKey);
         ArrayList<FloorStatistic> floorStatistics = new ArrayList<>(floorStatisticRepository.findByPredicate(predicate));
 
-        for(FloorStatistic floorStatistic : floorStatistics) {
-            Calendar floorStatisticCalendar = GregorianCalendar.getInstance();
-            floorStatisticCalendar.setTime(floorStatistic.getTimestamp());
+        System.err.println("The floorKey I received is " + floorKey);
+        System.err.println("The date I received is " + date.toString());
+        System.err.println("The number of floorstatistics I found with the predicate is " + floorStatistics.size());
 
-            Calendar givenDateCalendar = GregorianCalendar.getInstance();
-            givenDateCalendar.setTime(date);
+        for(int hour = 0; hour < 24; hour++) {
+            for(FloorStatistic floorStatistic : floorStatistics) {
+                Calendar floorStatisticCalendar = GregorianCalendar.getInstance();
+                floorStatisticCalendar.setTime(floorStatistic.getTimestamp());
 
-            for(int hour = 0; hour < 24; hour++) {
+                Calendar givenDateCalendar = GregorianCalendar.getInstance();
+                givenDateCalendar.setTime(date);
+
                 if(floorStatisticCalendar.get(Calendar.YEAR) == givenDateCalendar.get(Calendar.YEAR) &&
                         floorStatisticCalendar.get(Calendar.MONTH) == givenDateCalendar.get(Calendar.MONTH) &&
                         floorStatisticCalendar.get(Calendar.DAY_OF_MONTH) == givenDateCalendar.get(Calendar.DAY_OF_MONTH) &&
-                        floorStatisticCalendar.get(Calendar.HOUR_OF_DAY) == givenDateCalendar.get(Calendar.HOUR_OF_DAY) &&
+                        floorStatisticCalendar.get(Calendar.HOUR_OF_DAY) == hour &&
                         floorStatisticCalendar.get(Calendar.MINUTE) == 0) {
 
+                    System.err.println("Iteration");
+                    System.err.println("Year: " + floorStatisticCalendar.get(Calendar.YEAR));
+                    System.err.println("Month: " + floorStatisticCalendar.get(Calendar.MONTH));
+                    System.err.println("Day: " + floorStatisticCalendar.get(Calendar.DAY_OF_MONTH));
+                    System.err.println();
+
+                    //System.err.println(floorStatistic);
                     floorStatisticsResult.add(floorStatistic);
                 }
             }

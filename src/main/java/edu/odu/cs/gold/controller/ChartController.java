@@ -64,6 +64,17 @@ public class ChartController {
         // Sort Floors by Number
         floorStatistics.sort(Comparator.comparing(FloorStatistic::getTimestamp));
 
+
+        System.err.println(garageKey);
+        System.err.println(floorNumber);
+        System.err.println(date.toString());
+
+        for(FloorStatistic floorStatistic : floorStatistics)
+        {
+            System.err.println(floorStatistic.getCapacity() + ' ' + floorStatistic.getTimestamp().toString());
+        }
+
+
         // Build Chart Data
         StringBuilder dataString = new StringBuilder();
         StringBuilder labelString = new StringBuilder();
@@ -86,6 +97,9 @@ public class ChartController {
                 labelString.append((calendar.get(Calendar.HOUR_OF_DAY) - 12) + "pm,");
             }
         }
+
+        //System.err.println(dataString.toString());
+        //System.err.println(labelString.toString());
 
         model.addAttribute("dataString", dataString.toString());
         model.addAttribute("labelString", labelString.toString());

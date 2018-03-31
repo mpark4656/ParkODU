@@ -25,9 +25,11 @@ $(document).ready(function() {
     var ctx = document.getElementById("floorStatisticChart");
 
     var dataString = /*[[${dataString}]]*/;
+    //alert(dataString);
     var data = dataString.split(',');
 
     var labelString = /*[[${labelString}]]*/;
+    //alert(labelString);
     var labels = labelString.split(',');
 
     var myChart = new Chart(ctx, {

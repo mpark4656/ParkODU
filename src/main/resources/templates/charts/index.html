@@ -17,13 +17,13 @@
             <hr/>
             <div class="text-center" style="padding: 10px">
                 <label for="garage" class="control-label">Garage</label>
-               <!-- <select id="garage" style="width:100%" th:attr="data-key=${garage.garageKey}">
+                <select id="garage" style="width:100%">
                     <option th:each="garage : ${garages}"
                             th:text="${garage.name}"
                             th:value="${garage.garageKey}"
                             >
                     </option>
-                </select> -->
+                </select>
             </div>
             <div class="text-center" style="padding:10px">
                 <label for="floorNumber" class="control-label">Floor Number</label>
@@ -48,21 +48,14 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-<script>
-$(document).ready(function(){
-    $("#date").change(function(){
-        var date = document.getElementById("date").value;
-        alert(date);
-    });
-});
-
+<!--<script>
 $(document).ready(function(){
     $("#floorNumber").change(function(){
         var date = document.getElementById("floorNumber").value;
         alert(date);
     });
 });
-</script>
+</script> -->
 <script>
 /*<![CDATA[*/
 
@@ -74,9 +67,9 @@ $(document).ready(function(){
         var garageKey = document.getElementById("garage").value;
         var floorNumber = document.getElementById("floorNumber").value;
         var date = document.getElementById("date").value;
-        div.id = "chart" + garageKey + floorNumber;
-        var urlString = "charts/chart.html/" + garageKey + '/' + floorNumber + '/' + date;
-        $("#chart" + garageKey + floorNumber).load(urlString);
+        div.id = "chart"
+        var urlString = "charts/chart/" + garageKey + '/' + floorNumber + '/' + date;
+        $("#chart").load(urlString, function(data) { $("#chart").append(data); } );
     });
 });
 
