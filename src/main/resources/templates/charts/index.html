@@ -38,6 +38,8 @@
 
         </div>
     </div>
+
+    <div id="chart" class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2"></div>
 </div>
 
 <!-- Scripts -->
@@ -61,15 +63,15 @@ $(document).ready(function(){
 
 $(document).ready(function(){
     $(".btn").click(function(){
-        var div = document.createElement('div');
-        div.className = "parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2";
-        document.getElementById("main").appendChild(div);
+        //var div = document.createElement('div');
+        //div.className = "parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2";
+        //document.getElementById("main").appendChild(div);
         var garageKey = document.getElementById("garage").value;
         var floorNumber = document.getElementById("floorNumber").value;
         var date = document.getElementById("date").value;
-        div.id = "chart" + garageKey + floorNumber
+        //div.id = "chart" + garageKey + floorNumber
         var urlString = "charts/chart/" + garageKey + '/' + floorNumber + '/' + date;
-        $("#chart" + garageKey + floorNumber).load(urlString);
+        $("#chart").load(urlString);
     });
 });
 

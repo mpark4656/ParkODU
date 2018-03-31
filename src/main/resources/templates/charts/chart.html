@@ -25,6 +25,8 @@ $(document).ready(function() {
     // FloorStatistics Chart
     var ctx = document.getElementById("floorStatisticChart");
 
+    var title = "Floor " + /*[[${floorNumber}]]*/;
+
     var dataString = /*[[${dataString}]]*/;
     //alert(dataString);
     var data = dataString.split(',');
@@ -57,6 +59,10 @@ $(document).ready(function() {
                         beginAtZero:true
                     }
                 }]
+            },
+            title: {
+                display: true,
+                text: title
             }
         }
     });
