@@ -14,6 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -42,6 +45,48 @@ public class ChartController {
         return "charts/index";
     }
 
+    @GetMapping("/chart")
+    public String chart(@RequestParam("id") String garageKey,
+                        @RequestParam("floorNumber") String floorNumber,
+                        @RequestParam("date") String dateString,
+                        @RequestParam("chartId") String chartId,
+                        Model model) {
+
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+            model.addAttribute("garageKey", garageKey);
+            model.addAttribute("floorNumber", floorNumber);
+            model.addAttribute("date", date);
+            model.addAttribute("chartId", chartId); // do not change
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "charts/chart";
+    }
+
+    /*
+    @GetMapping("/chart/{garageKey}/{floorNumber}/{date}/{chartId}")
+    public String chart(@PathVariable("garageKey") String garageKey,
+                        @PathVariable("floorNumber") String floorNumber,
+                        @PathVariable("date") @DateTimeFormat(pattern = "MM-dd-yyyy") Date date,
+                        @PathVariable("chartId") String chartId,
+                        Model model) {
+        System.out.println(garageKey);
+        System.out.println(floorNumber);
+        System.out.println(date);
+        System.out.println(chartId);
+        model.addAttribute("garageKey", garageKey);
+        model.addAttribute("floorNumber", floorNumber);
+        model.addAttribute("date", date);
+        model.addAttribute("chartId", chartId);
+        return "charts/chart";
+    }
+    */
+
+    /*
     @GetMapping("/chart/{garageKey}/{floorNumber}/{date}")
     public String chart(@PathVariable("garageKey") String garageKey,
                         @PathVariable("floorNumber") String floorNumber,
@@ -93,5 +138,6 @@ public class ChartController {
         model.addAttribute("labelString", labelString.toString());
         return "charts/chart";
     }
+    */
 }
 
