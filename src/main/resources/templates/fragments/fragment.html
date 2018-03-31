@@ -99,16 +99,11 @@
 
 			<ul class="nav navbar-nav navbar-right">
 				<li sec:authorize="isAuthenticated()" class="welcome-message">Welcome <span sec:authentication="name"></span>!</li>
-				<li sec:authorize="isAnonymous()">
-
-					<button type="button" class="far fa-bell btn-lg" data-toggle="modal" data-target="#myModal"></button>
-
-
-
-				</li>
-
 				<li sec:authorize="isAnonymous()"><a th:href="@{/login}">Login</a></li>
 				<li sec:authorize="isAnonymous()"><a th:href="@{/user/register}">Register</a></li>
+				<li>
+					<button type="button" class="far fa-bell btn-lg" data-toggle="modal" data-target="#myModal"></button>
+				</li>
 				<li sec:authorize="isAuthenticated()" class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cog fa-lg"></i></a>
 					<ul class="dropdown-menu">
