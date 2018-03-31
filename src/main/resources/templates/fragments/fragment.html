@@ -21,10 +21,36 @@
 	<!-- ParkODU Custom Stylesheet -->
 	<link rel="stylesheet" type="text/css" th:href="@{/css/parkodu.css}"/>
 
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+
 </head>
 <body>
+
 <!-- Navigation Bar -->
 <nav th:fragment="navigation-bar" class="navbar navbar-default navbar-fixed-top">
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Event Notification</h4>
+                </div>
+                <div class="modal-body">
+                    <p>List of Events .....</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 	<div class="container navbar-container">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -59,10 +85,14 @@
 					</ul>
 				</li>
 			</ul>
+
 			<ul class="nav navbar-nav navbar-right">
 				<li sec:authorize="isAuthenticated()" class="welcome-message">Welcome <span sec:authentication="name"></span>!</li>
 				<li sec:authorize="isAnonymous()">
+
 					<button type="button" class="far fa-bell btn-lg" data-toggle="modal" data-target="#myModal"></button>
+
+
 
 				</li>
 
@@ -153,5 +183,7 @@
 <div th:fragment="bell-script">
 	<script src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
 </div>
+
+
 </body>
 </html>
