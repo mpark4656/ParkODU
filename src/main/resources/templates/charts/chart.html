@@ -25,7 +25,9 @@ $(document).ready(function() {
     // FloorStatistics Chart
     var ctx = document.getElementById("floorStatisticChart");
 
-    var title = "Floor " + /*[[${floorNumber}]]*/;
+    var floorNumber = /*[[${floorNumber}]]*/;
+    var garageName = /*[[${garage.name}]]*/
+    var title = garageName + ": Floor " + floorNumber;
 
     var dataString = /*[[${dataString}]]*/;
     //alert(dataString);
