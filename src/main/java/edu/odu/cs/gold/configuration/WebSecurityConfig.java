@@ -60,6 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/user/register/**",
                         "/user/confirm/**",
                         "/maps/**",
+                        "/events/**",
                         "/rest/floor/**",
                         "/rest/floor/floors/**",
                         "/rest/garage/**",

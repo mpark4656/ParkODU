@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
+
+<!-- Main Content -->
+<div class="container-fluid main-container">
+    <div class="row">
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
+            <h1 class="text-center main-header">Create Event</h1>
+            <hr/>
+            <!-- Alerts -->
+            <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
+            <form class="form-horizontal"
+                  id="create-event-form"
+                  role="form"
+                  th:action="@{/settings/events/create}"
+                  method="post"
+                  th:object="${event}">
+                <input type="hidden" id="event-id" th:value="${event.eventKey}" th:field="${event.eventKey}"/>
+                <div class="form-group">
+                    <label for="name" class="col-md-4 control-label">name</label>
+                    <div class="col-md-8">
+                        <input type="text"
+                               class="form-control"
+                               id="name"
+                               placeholder="Enter the name of the event."
+                               required="required"
+                               th:field="${event.eventName}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="message" class="col-md-4 control-label">Message</label>
+                    <div class="col-md-8">
+                        <textarea rows="4"
+                                  cols="50"
+                                  class="form-control"
+                                  id="message"
+                                  placeholder="Message that will be dislayed for an event."
+                                  required="required" th:field="${event.message}"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="effectedLocations" class="col-md-4 control-label">Locations Effected</label>
+                    <div class="col-md-8">
+                        <input type="number"
+                               class="form-control"
+                               id="effectedLocations"
+                               placeholder="The locations that will be effected by this event."
+                               min="0"
+                               required="required"
+                               th:field="${event.locationsEffected}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="becomesEffective" class="col-md-4 control-label">Becomes Effective</label>
+                    <div class="col-md-8">
+                        <input type="number"
+                               class="form-control"
+                               id="becomesEffective"
+                               placeholder="When the event will become effective."
+                               min="0"
+                               required="required"
+                               th:field="${event.scheduledDateTime}"/>
+                    </div>
+                </div>
+                <div class="col-md-8 col-md-offset-4">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-primary">Reset</button>
+                    <a th:href="@{'/settings/events/index'" class="btn btn-primary" title="Back">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Footer -->
+    <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
+</div>
+<!-- End Main Content -->
+
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+</body>
+</html>
