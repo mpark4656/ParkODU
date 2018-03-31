@@ -141,6 +141,11 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     }
 
     @Bean
+    public EventRepository eventRepository() {
+        return new EventRepository(hazelcastInstance(), COLLECTION_EVENT);
+    }
+
+    @Bean
     public MongoMapStore garageMapStore() {
         return new MongoMapStore(mongoTemplate, COLLECTION_GARAGE, Garage.class);
     }
@@ -193,6 +198,10 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     @Bean
     public MongoMapStore recommendationMapStore() {
         return new MongoMapStore(mongoTemplate, COLLECTION_RECOMMENDATION, Recommendation.class);
+    }
+
+    @Bean MongoMapStore eventMapStore() {
+        return new MongoMapStore(mongoTemplate, COLLECTION_EVENT, Event.class);
     }
 
     @Bean
@@ -410,5 +419,4 @@ public class ParkODUConfiguration implements ApplicationContextAware {
 
         return mapConfig;
     }
-
 }

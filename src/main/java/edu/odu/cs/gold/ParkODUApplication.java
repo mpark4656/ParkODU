@@ -69,6 +69,9 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
     private RoleTypeRepository roleTypeRepository;
 
     @Autowired
+    private EventRepository eventRepository;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -100,6 +103,7 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         spaceTypeRepository.loadAll();
         userRepository.loadAll();
         roleTypeRepository.loadAll();
+        eventRepository.loadAll();
 
         // Remove all null stored users at startup
         String isEmpty = "";
@@ -116,6 +120,7 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         System.out.println("# of SpaceTypes loaded from Mongo: " + spaceTypeRepository.findAll().size());
         System.out.println("# of Users loaded from Mongo: " + userRepository.findAll().size());
         System.out.println("# of Roles loaded from Mongo: " + roleTypeRepository.findAll().size());
+        System.out.println("# of Events loaded from Mongo: " + eventRepository.findAll().size());
         /*
         User user = new User();
         user.setUserKey(UUID.randomUUID().toString());
