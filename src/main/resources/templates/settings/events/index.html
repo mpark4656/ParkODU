@@ -39,7 +39,7 @@
                     <td th:text="${event.eventDateTime}"></td>
                     <td th:text="${event.eventTags}"></td>
                     <td th:text="${event.locationsEffected}"></td>
-                    <td th:text="${event.scheduleDateTime}"></td>
+                    <td th:text="${event.scheduledDateTime}"></td>
                     <td>
                         <a th:href="@{/settings/events/edit} + '/' + ${event.eventKey}" class="btn btn-primary btn-sm">Edit</a>
                         <button class="btn btn-danger btn-sm delete-event-button" title="Delete Event"
@@ -60,7 +60,7 @@
 <div class="modal fade" id="delete-event-modal" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" role="form" th:action="@{/settings/event/delete}" method="post">
+            <form class="form-horizontal" role="form" th:action="@{/settings/events/delete}" method="post">
                 <div class="modal-header modal-header-danger">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Delete Event</h4>

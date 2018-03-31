@@ -11,21 +11,24 @@ public class Event implements Serializable{
     private String eventKey;
     private String eventName;
     private String eventMessage;
-    private DateTime eventDateTime;
-    private DateTime scheduledDateTime;
+    private String eventDateTime;
+    private String scheduledDateTime;
     private Set<String> eventTags;
     private Set<String> locationsEffected;
 
-    public Event() { this.eventKey = UUID.randomUUID().toString(); }
+    public Event() {
+        this.eventKey = UUID.randomUUID().toString();
+        this.eventDateTime = DateTime.now().toString();
+    }
 
     public Event(String eventKey,
                  String eventName,
                  String eventMessage,
-                 DateTime scheduledDateTime) {
+                 String scheduledDateTime) {
         this.eventKey = UUID.randomUUID().toString();
         this.eventName = eventName;
         this.eventMessage = eventMessage;
-        this.eventDateTime = DateTime.now();
+        this.eventDateTime = DateTime.now().toString();
         this.scheduledDateTime = scheduledDateTime;
     }
 
@@ -53,19 +56,19 @@ public class Event implements Serializable{
         this.eventMessage = eventMessage;
     }
 
-    public DateTime getEventDateTime() {
+    public String getEventDateTime() {
         return eventDateTime;
     }
 
-    public void setEventDateTime(DateTime eventDateTime) {
+    public void setEventDateTime(String eventDateTime) {
         this.eventDateTime = eventDateTime;
     }
 
-    public DateTime getScheduledDateTime() {
+    public String getScheduledDateTime() {
         return scheduledDateTime;
     }
 
-    public void setScheduledDateTime(DateTime scheduledDateTime) {
+    public void setScheduledDateTime(String scheduledDateTime) {
         this.scheduledDateTime = scheduledDateTime;
     }
 

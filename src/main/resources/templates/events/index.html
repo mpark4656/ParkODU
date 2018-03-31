@@ -28,8 +28,8 @@
                 </thead>
                 <tbody>
                 <tr th:each="event : ${events}">
-                    <td th:text="${event.Name}"></td>
-                    <td th:text="${event.Message}"></td>
+                    <td th:text="${event.eventName}"></td>
+                    <td th:text="${event.eventMessage}"></td>
                     <td th:text="${event.locationsEffected}"></td>
                     <td th:text="${event.eventTags}"></td>
                 </tr>

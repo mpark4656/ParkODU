@@ -200,7 +200,8 @@ public class ParkODUConfiguration implements ApplicationContextAware {
         return new MongoMapStore(mongoTemplate, COLLECTION_RECOMMENDATION, Recommendation.class);
     }
 
-    @Bean MongoMapStore eventMapStore() {
+    @Bean
+    public MongoMapStore eventMapStore() {
         return new MongoMapStore(mongoTemplate, COLLECTION_EVENT, Event.class);
     }
 
@@ -405,17 +406,14 @@ public class ParkODUConfiguration implements ApplicationContextAware {
 
         // MapStore
         MapStoreConfig mapStoreConfig = new MapStoreConfig();
-        mapStoreConfig.setImplementation(recommendationMapStore());
+        mapStoreConfig.setImplementation(eventMapStore());
         mapStoreConfig.setEnabled(true);
         mapStoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.EAGER);
         mapConfig.setMapStoreConfig(mapStoreConfig);
 
         // Indexed Attributes
         mapConfig.addMapIndexConfig(new MapIndexConfig("eventKey", false));
-        mapConfig.addMapIndexConfig(new MapIndexConfig("eventDateTime", false));
-        mapConfig.addMapIndexConfig(new MapIndexConfig("eventTags", false));
-        mapConfig.addMapIndexConfig(new MapIndexConfig("eventScheduledDateTime", false));
-        mapConfig.addMapIndexConfig(new MapIndexConfig("locationsEffected", false));
+        mapConfig.addMapIndexConfig(new MapIndexConfig("eventName", false));
 
         return mapConfig;
     }

@@ -26,7 +26,7 @@
                   th:object="${event}">
                 <input type="hidden" id="event-id" th:value="${event.eventKey}" th:field="${event.eventKey}"/>
                 <div class="form-group">
-                    <label for="name" class="col-md-4 control-label">name</label>
+                    <label for="name" class="col-md-4 control-label">Name</label>
                     <div class="col-md-8">
                         <input type="text"
                                class="form-control"
@@ -44,13 +44,13 @@
                                   class="form-control"
                                   id="message"
                                   placeholder="Message that will be dislayed for an event."
-                                  required="required" th:field="${event.message}"></textarea>
+                                  required="required" th:field="${event.eventMessage}"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="effectedLocations" class="col-md-4 control-label">Locations Effected</label>
                     <div class="col-md-8">
-                        <input type="number"
+                        <input type="text"
                                class="form-control"
                                id="effectedLocations"
                                placeholder="The locations that will be effected by this event."
@@ -58,11 +58,17 @@
                                required="required"
                                th:field="${event.locationsEffected}"/>
                     </div>
+                        <label class="col-md-4 control-label"></label>
+                        <div class="col-md-8">
+                            <select name="locationId" id="locationId" class="form-control">
+                                <option th:each="location : ${locations}" th:value="${location}" th:text="${location}"></option>
+                            </select>
+                        </div>
                 </div>
                 <div class="form-group">
                     <label for="becomesEffective" class="col-md-4 control-label">Becomes Effective</label>
                     <div class="col-md-8">
-                        <input type="number"
+                        <input type="datetime-local"
                                class="form-control"
                                id="becomesEffective"
                                placeholder="When the event will become effective."
@@ -74,7 +80,7 @@
                 <div class="col-md-8 col-md-offset-4">
                     <button type="submit" class="btn btn-primary">Submit</button>
                     <button type="reset" class="btn btn-primary">Reset</button>
-                    <a th:href="@{'/settings/events/index'" class="btn btn-primary" title="Back">Back</a>
+                    <a th:href="@{/settings/events/index}" class="btn btn-primary" title="Back">Back</a>
                 </div>
             </form>
         </div>

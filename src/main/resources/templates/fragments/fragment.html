@@ -42,7 +42,17 @@
                     <h4 class="modal-title">Event Notification</h4>
                 </div>
                 <div class="modal-body">
-                    <p>List of Events .....</p>
+					<table class="table table-centered table-header-centered">
+						<thead>
+							<tr></tr>
+							<tr></tr>
+						</thead>
+						<tbody>
+						<tr th:each="event : ${events}">
+							<td th:text="${event.eventMessage}"></td>
+						</tr>
+						</tbody>
+					</table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -81,7 +91,7 @@
 						<li><a th:href="@{/settings/accounts}">Accounts</a></li>
 						<li role="separator" class="divider"></li>
 						<li class="dropdown-header">Notification System</li>
-						<li><a href="">Events</a></li>
+						<li><a th:href="@{/settings/events}">Events</a></li>
 					</ul>
 				</li>
 			</ul>
@@ -184,6 +194,16 @@
 	<script src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
 </div>
 
+<!--Event Script-->
+<div th:fragment="event-script">
+	<script th:inline="javascript">
+	/*<![CDATA[*/
+		var events = /*[[${events}]]*/;
+		var nofifications = document.getElementById('#myModal');
+
+	/*]]>*/
+	</script>
+</div>
 
 </body>
 </html>
