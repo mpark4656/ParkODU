@@ -69,4 +69,33 @@ public class FloorStatisticService {
 
         return floorStatisticResult;
     }
+
+    public ArrayList<FloorStatistic> findFloorCapacityByDate(String floorKey, Date date) {
+        ArrayList<FloorStatistic> floorStatisticsResult = new ArrayList<>();
+
+        Predicate predicate = Predicates.equal("floorKey", floorKey);
+        ArrayList<FloorStatistic> floorStatistics = new ArrayList<>(floorStatisticRepository.findByPredicate(predicate));
+
+        for(FloorStatistic floorStatistic : floorStatistics) {
+            Calendar floorStatisticCalendar = GregorianCalendar.getInstance();
+            floorStatisticCalendar.setTime(floorStatistic.getTimestamp());
+
+            Calendar givenDateCalendar = GregorianCalendar.getInstance();
+            givenDateCalendar.setTime(date);
+
+            for(int hour = 0; hour < 24; hour++) {
+                if(floorStatisticCalendar.get(Calendar.YEAR) == givenDateCalendar.get(Calendar.YEAR) &&
+                        floorStatisticCalendar.get(Calendar.MONTH) == givenDateCalendar.get(Calendar.MONTH) &&
+                        floorStatisticCalendar.get(Calendar.DAY_OF_MONTH) == givenDateCalendar.get(Calendar.DAY_OF_MONTH) &&
+                        floorStatisticCalendar.get(Calendar.HOUR_OF_DAY) == givenDateCalendar.get(Calendar.HOUR_OF_DAY) &&
+                        floorStatisticCalendar.get(Calendar.MINUTE) == 0) {
+
+                    floorStatisticsResult.add(floorStatistic);
+                }
+            }
+        }
+
+        return floorStatisticsResult;
+    }
+
 }

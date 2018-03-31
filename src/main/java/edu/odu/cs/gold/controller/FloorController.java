@@ -7,7 +7,6 @@ import edu.odu.cs.gold.model.FloorStatistic;
 import edu.odu.cs.gold.model.Garage;
 import edu.odu.cs.gold.model.ParkingSpace;
 import edu.odu.cs.gold.repository.FloorRepository;
-import edu.odu.cs.gold.repository.FloorStatisticRepository;
 import edu.odu.cs.gold.repository.GarageRepository;
 import edu.odu.cs.gold.repository.ParkingSpaceRepository;
 import edu.odu.cs.gold.service.FloorStatisticService;
