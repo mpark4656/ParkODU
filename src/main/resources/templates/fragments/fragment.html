@@ -70,10 +70,10 @@
 				<li sec:authorize="isAuthenticated()" class="welcome-message">Welcome <span sec:authentication="name"></span>!</li>
 				<li sec:authorize="isAnonymous()"><a th:href="@{/login}">Login</a></li>
 				<li sec:authorize="isAnonymous()"><a th:href="@{/user/register}">Register</a></li>
-				<li>
+				<li th:if="${events != null}">
 					<div class="btn-group dropdown dropdown-notifications sw-open">
-						<button class="btn btn-lg dropdown-toggle" data-toggle="dropdown">
-							<i data-count="1" class="glyphicon glyphicon-bell notification-icon"></i>
+						<button id="event-notification-button" class="btn btn-lg dropdown-toggle" data-toggle="dropdown">
+							<i id="event-notification-count" data-count="1" class="glyphicon glyphicon-bell notification-icon"></i>
 							<span class="caret"></span>
 						</button>
 
@@ -82,17 +82,17 @@
 								<div class="dropdown-toolbar-actions">
 									<a href="#"><i class="glyphicon glyphicon-search"></i> View All</a>
 								</div>
-								<h3 class="dropdown-toolbar-title">Recent Notifications  (1)</h3>
+								<h3 class="dropdown-toolbar-title">Notifications</h3>
 							</div><!-- /dropdown-toolbar -->
 
 							<ul class="dropdown-menu notifications">
-								<li class="notification">
+								<li class="notification" th:each="event : ${events}">
 									<div class="media">
 										<div class="media-body">
-											<strong class="notification-title"><a href="#">This notification dropdown</a> is <a href="#">currently static.</a></strong>
-
+											<strong class="notification-title"><a href="#" th:text="${event.eventName}"></a></strong>
+											<p class="notification-desc" th:text="${event.eventMessage}"></p>
 											<div class="notification-meta">
-												<small class="timestamp">1. 9. 2015, 08:00</small>
+												<small class="timestamp" th:text="${event.eventDateTime}"></small>
 											</div>
 										</div>
 									</div>
@@ -186,9 +186,14 @@
 <div th:fragment="event-script">
 	<script th:inline="javascript">
 	/*<![CDATA[*/
-		var events = /*[[${events}]]*/;
-		var nofifications = document.getElementById('#myModal');
+		$(document).ready(function() {
+			var events = /*[[${events}]]*/;
+			$('#event-notification-count').attr('data-count', events.length);
 
+			$('#event-notification-button').click(function() {
+				$('#event-notification-count').attr('data-count', '0');
+			});
+		});
 	/*]]>*/
 	</script>
 </div>

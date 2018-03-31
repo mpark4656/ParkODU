@@ -4,17 +4,10 @@ import edu.odu.cs.gold.model.Event;
 import edu.odu.cs.gold.model.Garage;
 import edu.odu.cs.gold.repository.EventRepository;
 import edu.odu.cs.gold.repository.GarageRepository;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -37,6 +30,21 @@ public class HomeController {
 
         List<Event> events = new ArrayList<>(eventRepository.findAll());
         if(events != null) {
+            //------------- THIS IS A TEST! REMOVE AFTER TESTING --------------
+            Event event1 = new Event();
+            event1.setEventDateTime("3-28-2018 4:30PM");
+            event1.setEventName("This is a test event!");
+            event1.setEventMessage("This is a test event message!");
+
+            Event event2 = new Event();
+            event2.setEventDateTime("3-28-2018 5:00PM");
+            event2.setEventName("This is a test event2!");
+            event2.setEventMessage("This is a test event message2!");
+
+            events.add(event1);
+            events.add(event2);
+            //------------------------------------------------------------------
+
             //events.sort(Comparator.comparing(Event::getEventDateTime));
             model.addAttribute("events",events);
         }
