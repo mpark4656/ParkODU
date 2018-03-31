@@ -101,6 +101,8 @@ public class ChartController {
         //System.err.println(dataString.toString());
         //System.err.println(labelString.toString());
 
+        Garage garage = garageRepository.findByKey(garageKey);
+        model.addAttribute("garage", garage);
         model.addAttribute("dataString", dataString.toString());
         model.addAttribute("labelString", labelString.toString());
         return "charts/chart";
