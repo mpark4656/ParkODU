@@ -2,77 +2,33 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-    <!-- Head -->
-    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
 </head>
 <body>
+<div th:id="'chart-' + ${chartId}" class="col-xs-12 col-sm-12 col-md-6">
+    <div class="parkodu-container" style="padding-top: 5px;">
+        <h2>Chart Title Placeholder</h2>
+        <hr/>
 
+        <p>GarageKey: <span th:text="${garageKey}"></span></p>
+        <p>FloorNumber: <span th:text="${floorNumber}"></span></p>
+        <p>Date: <span th:text="${date}"></span></p>
 
-<div id="myChart">
-        <canvas id="floorStatisticChart" width="525" height="150"></canvas>
+        <!-- PUT CHART HERE -->
+        <div style="width: 200px; height: 200px; background-color: blue; color: white;">
+            <p class="text-center">Chart Placeholder</p>
+        </div>
+
+        <button th:attr="data-id=${chartId}" class="btn btn-danger btn-sm delete-button">Delete</button>
+    </div>
 </div>
-
-<!-- Scripts -->
-<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+</body>
 
 <!-- Chart.js Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: chart-js-scripts" /> /*/-->
 
 <script th:inline="javascript">
-
 /*<![CDATA[*/
-$(document).ready(function() {
-    // FloorStatistics Chart
-    var ctx = document.getElementById("floorStatisticChart");
-
-    var floorNumber = /*[[${floorNumber}]]*/;
-    var garageName = /*[[${garage.name}]]*/
-    var title = garageName + ": Floor " + floorNumber;
-
-    var dataString = /*[[${dataString}]]*/;
-    //alert(dataString);
-    var data = dataString.split(',');
-
-    var labelString = /*[[${labelString}]]*/;
-    //alert(labelString);
-    var labels = labelString.split(',');
-
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: "Occupancy Rate (%)",
-                data: data,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            spanGaps: true,
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
-            },
-            title: {
-                display: true,
-                text: title
-            }
-        }
-    });
-});
 /*]]>*/
 </script>
 
-
-
-</body>
 </html>
