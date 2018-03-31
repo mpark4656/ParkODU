@@ -89,6 +89,7 @@ public class FloorStatisticService {
             System.err.println("Year: " + floorStatisticCalendar.get(Calendar.YEAR));
             System.err.println("Month: " + floorStatisticCalendar.get(Calendar.MONTH));
             System.err.println("Day: " + floorStatisticCalendar.get(Calendar.DAY_OF_MONTH));
+            System.err.println("Hour: " + floorStatisticCalendar.get(Calendar.HOUR_OF_DAY));
             System.err.println();
         }
 
@@ -110,6 +111,7 @@ public class FloorStatisticService {
                     System.err.println("Year: " + floorStatisticCalendar.get(Calendar.YEAR));
                     System.err.println("Month: " + floorStatisticCalendar.get(Calendar.MONTH));
                     System.err.println("Day: " + floorStatisticCalendar.get(Calendar.DAY_OF_MONTH));
+                    System.err.println("Hour: " + floorStatisticCalendar.get(Calendar.HOUR_OF_DAY));
                     System.err.println();
 
                     //System.err.println(floorStatistic);
