@@ -67,9 +67,9 @@ $(document).ready(function(){
         var garageKey = document.getElementById("garage").value;
         var floorNumber = document.getElementById("floorNumber").value;
         var date = document.getElementById("date").value;
-        div.id = "chart"
+        div.id = "chart" + garageKey + floorNumber
         var urlString = "charts/chart/" + garageKey + '/' + floorNumber + '/' + date;
-        $("#chart").load(urlString, function(data) { $("#chart").append(data); } );
+        $("#chart" + garageKey + floorNumber).load(urlString);
     });
 });
 
