@@ -81,7 +81,7 @@ public class ChartController {
         for (FloorStatistic floorStatistic : floorStatistics) {
             dataString.append(floorStatistic.getCapacity() + ",");
 
-            Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
+            Calendar calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC")); // creates a new calendar instance
             calendar.setTime(floorStatistic.getTimestamp());   // assigns calendar to given date
 
             if (calendar.get(Calendar.HOUR_OF_DAY) == 0) {
@@ -101,6 +101,8 @@ public class ChartController {
         //System.err.println(dataString.toString());
         //System.err.println(labelString.toString());
 
+        Garage garage = garageRepository.findByKey(garageKey);
+        model.addAttribute("garage", garage);
         model.addAttribute("dataString", dataString.toString());
         model.addAttribute("labelString", labelString.toString());
         return "charts/chart";
