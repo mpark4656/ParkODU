@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+</head>
+<body>
+
+<div id="myChart">
+        <canvas id="floorStatisticChart" width="525" height="150"></canvas>
+</div>
+
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<!-- Chart.js Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: chart-js-scripts" /> /*/-->
+
+<script th:inline="javascript">
+
+/*<![CDATA[*/
+$(document).ready(function() {
+    // FloorStatistics Chart
+    var ctx = document.getElementById("floorStatisticChart");
+
+    var data = [0,5,10,15,20,25,30];
+    //var dataString = /*[[${dataString}]]*/;
+    //var data = dataString.split(',');
+
+    var labels = ["12am","1pm","2pm","3pm","4pm","5pm","6pm"];
+    //var labelString = /*[[${labelString}]]*/;
+    //var labels = labelString.split(',');
+
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Occupancy Rate (%)",
+                data: data,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+});
+/*]]>*/
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
+
+<div class="container-fluid main-container" id="main">
+    <div class="row">
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-4 col-md-offset-4">
+            <h1 class="text-center main-header">Select a Garage and Date</h1>
+            <hr/>
+            <div class="text-center" style="padding: 10px">
+                <label for="garage" class="control-label">Garage</label>
+                <select id="garage" style="width:100%"> <!--th:field="*{garageKey}"-->
+                    <!-- <option th:each="garage : ${garages}"
+                            th:text="${garage.name}"
+                            th:value="${garage.garageKey}"
+                            th:selected="(${garage.garageKey eq garage.garageKey})"
+                            >
+                    </option> -->
+                </select>
+            </div>
+            <div class="text-center" style="padding: 10px">
+                <label for="date" class="control-label">Date</label>
+                <input id="date"  type="date" name="date" style="width:100%"></input> <!-- th:value="chart.date" -->
+            </div>
+
+            <button  id="create" type="button" class="btn btn-primary" style="width:100%">Create</button>
+
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<!-- Chart.js Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: chart-js-scripts" /> /*/-->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script>
+/*
+$(document).ready(function(){
+    $("#date").change(function(){
+
+        var date = $(this).val();
+
+        $.post("methodGoesHere", {  })
+                .done(function(data) {
+                });
+    });
+});
+
+$(document).ready(function(){
+    $("#garage").change(function(){
+
+        var garage = $(this).val();
+
+        $.post("methodGoesHere", {  })
+                .done(function(data) {
+                });
+    });
+});
+
+*/
+</script>
+
+<script>
+/*<![CDATA[*/
+$(document).ready(function(){
+    $(".btn").click(function(){
+        var i;
+        for(i = 0; i < 2 ; i++){
+            //$("#chart" + i).load("charts/chart.html",
+            (function(i){
+                var div = document.createElement('div');
+                div.className = "parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2";
+                document.getElementById("main").appendChild(div);
+                div.id = "chart" + i;
+                //$("#chart" + i).load("charts/chart.html");
+                $.ajax({
+                    url: 'charts/chart.html',
+                    method: 'GET',
+                    context: document.body,
+                    dataType: 'html',
+                    processData: false,
+                    success: function(response) {
+                        //test element
+                        //$test = $(response).filter('#myChart');
+                        $newchart = $(response).filter('canvas#floorStatisticChart');
+                        //console.log($newchart);
+                        $('#chart'+i).append($newchart);
+                    }
+                });
+            })(i);
+        }
+    });
+});
+/*]]>*/
+</script>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+$(document).ready(function(){
+    $("").click(function(){
+
+        var floors = /*[[${floors}]]*/;
+        var x;
+        var i = 0;
+        for(x in floors){
+            var div = document.createElement('div');
+            document.getElementById("main").appendChild(div);
+            //maybe modify style here
+            div.id = "chart" + i;
+            var floor = floors[i];
+            $("#chart" + i).load("http://localhost:8083/charts/chart"); //$(selector).load(URL,data,callback);
+            i = i + 1;
+        };
+    });
+});
+/*]]>*/
+</script>
+
+</body>
+</html>
