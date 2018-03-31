@@ -42,7 +42,7 @@ public class FloorStatisticService {
         }
 
         for(FloorStatistic floorStatistic : floorStatistics) {
-            Calendar calendar = GregorianCalendar.getInstance();
+            Calendar calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
             calendar.setTime(floorStatistic.getTimestamp());
 
             for(int hour = 0; hour < 24; hour++) {
@@ -57,7 +57,7 @@ public class FloorStatisticService {
         for(int hour = 0; hour < totalCapacities.length; hour++) {
             FloorStatistic floorStatistic = new FloorStatistic();
 
-            Calendar cal = GregorianCalendar.getInstance();
+            Calendar cal = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
             cal.set(Calendar.HOUR_OF_DAY, hour);
             Date date = cal.getTime();
 
@@ -80,12 +80,24 @@ public class FloorStatisticService {
         System.err.println("The date I received is " + date.toString());
         System.err.println("The number of floorstatistics I found with the predicate is " + floorStatistics.size());
 
+        for(FloorStatistic floorStatistic : floorStatistics) {
+            Calendar floorStatisticCalendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
+            floorStatisticCalendar.setTime(floorStatistic.getTimestamp());
+            System.err.println("Outer Iteration");
+            System.err.println("floorStatisticKey: " + floorStatistic.getFloorStatisticKey());
+            System.err.println("floorKey: " + floorStatistic.getFloorKey());
+            System.err.println("Year: " + floorStatisticCalendar.get(Calendar.YEAR));
+            System.err.println("Month: " + floorStatisticCalendar.get(Calendar.MONTH));
+            System.err.println("Day: " + floorStatisticCalendar.get(Calendar.DAY_OF_MONTH));
+            System.err.println();
+        }
+
         for(int hour = 0; hour < 24; hour++) {
             for(FloorStatistic floorStatistic : floorStatistics) {
-                Calendar floorStatisticCalendar = GregorianCalendar.getInstance();
+                Calendar floorStatisticCalendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
                 floorStatisticCalendar.setTime(floorStatistic.getTimestamp());
 
-                Calendar givenDateCalendar = GregorianCalendar.getInstance();
+                Calendar givenDateCalendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
                 givenDateCalendar.setTime(date);
 
                 if(floorStatisticCalendar.get(Calendar.YEAR) == givenDateCalendar.get(Calendar.YEAR) &&
@@ -94,7 +106,7 @@ public class FloorStatisticService {
                         floorStatisticCalendar.get(Calendar.HOUR_OF_DAY) == hour &&
                         floorStatisticCalendar.get(Calendar.MINUTE) == 0) {
 
-                    System.err.println("Iteration");
+                    System.err.println("Inner Iteration");
                     System.err.println("Year: " + floorStatisticCalendar.get(Calendar.YEAR));
                     System.err.println("Month: " + floorStatisticCalendar.get(Calendar.MONTH));
                     System.err.println("Day: " + floorStatisticCalendar.get(Calendar.DAY_OF_MONTH));
