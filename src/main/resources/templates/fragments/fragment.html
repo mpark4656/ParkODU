@@ -20,6 +20,8 @@
 	<link rel="stylesheet" type="text/css" th:href="@{/css/fontawesome-free-5.0.8/web-fonts-with-css/css/fontawesome-all.min.css}"/>
 	<!-- ParkODU Custom Stylesheet -->
 	<link rel="stylesheet" type="text/css" th:href="@{/css/parkodu.css}"/>
+	<!-- Bootstrap Notification CSS -->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-notification.css}"/>
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -30,37 +32,6 @@
 
 <!-- Navigation Bar -->
 <nav th:fragment="navigation-bar" class="navbar navbar-default navbar-fixed-top">
-
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" role="dialog">
-        <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Event Notification</h4>
-                </div>
-                <div class="modal-body">
-					<table class="table table-centered table-header-centered">
-						<thead>
-							<tr></tr>
-							<tr></tr>
-						</thead>
-						<tbody>
-						<tr th:each="event : ${events}">
-							<td th:text="${event.eventMessage}"></td>
-						</tr>
-						</tbody>
-					</table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
 	<div class="container navbar-container">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -102,7 +73,35 @@
 				<li sec:authorize="isAnonymous()"><a th:href="@{/login}">Login</a></li>
 				<li sec:authorize="isAnonymous()"><a th:href="@{/user/register}">Register</a></li>
 				<li>
-					<button type="button" class="far fa-bell btn-lg" data-toggle="modal" data-target="#myModal"></button>
+					<div class="btn-group dropdown dropdown-notifications sw-open">
+						<button class="btn btn-lg dropdown-toggle" data-toggle="dropdown">
+							<i data-count="1" class="glyphicon glyphicon-bell notification-icon"></i>
+							<span class="caret"></span>
+						</button>
+
+						<div class="dropdown-container dropdown-position-bottomright">
+							<div class="dropdown-toolbar">
+								<div class="dropdown-toolbar-actions">
+									<a href="#"><i class="glyphicon glyphicon-search"></i> View All</a>
+								</div>
+								<h3 class="dropdown-toolbar-title">Recent Notifications  (1)</h3>
+							</div><!-- /dropdown-toolbar -->
+
+							<ul class="dropdown-menu notifications">
+								<li class="notification">
+									<div class="media">
+										<div class="media-body">
+											<strong class="notification-title"><a href="#">This notification dropdown</a> is <a href="#">currently static.</a></strong>
+
+											<div class="notification-meta">
+												<small class="timestamp">1. 9. 2015, 08:00</small>
+											</div>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
 				</li>
 				<li sec:authorize="isAuthenticated()" class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cog fa-lg"></i></a>
@@ -183,11 +182,6 @@
 <!-- Toast Script -->
 <div th:fragment="toastr-script">
 	<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-</div>
-
-<!-- Bell Script-->
-<div th:fragment="bell-script">
-	<script src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
 </div>
 
 <!--Event Script-->
