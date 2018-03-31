@@ -87,7 +87,7 @@ public class FloorController {
         for (FloorStatistic floorStatistic : floorStatistics) {
             dataString.append(floorStatistic.getCapacity() + ",");
 
-            Calendar calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC")); // creates a new calendar instance
+            Calendar calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("America/New_York")); // creates a new calendar instance
             calendar.setTime(floorStatistic.getTimestamp());   // assigns calendar to given date
 
             if (calendar.get(Calendar.HOUR_OF_DAY) == 0) {

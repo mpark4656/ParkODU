@@ -42,7 +42,7 @@ public class FloorStatisticService {
         }
 
         for(FloorStatistic floorStatistic : floorStatistics) {
-            Calendar calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
+            Calendar calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("America/New_York"));
             calendar.setTime(floorStatistic.getTimestamp());
 
             for(int hour = 0; hour < 24; hour++) {
@@ -57,7 +57,7 @@ public class FloorStatisticService {
         for(int hour = 0; hour < totalCapacities.length; hour++) {
             FloorStatistic floorStatistic = new FloorStatistic();
 
-            Calendar cal = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
+            Calendar cal = GregorianCalendar.getInstance(TimeZone.getTimeZone("America/New_York"));
             cal.set(Calendar.HOUR_OF_DAY, hour);
             Date date = cal.getTime();
 
@@ -78,10 +78,10 @@ public class FloorStatisticService {
 
         for(int hour = 0; hour < 24; hour++) {
             for(FloorStatistic floorStatistic : floorStatistics) {
-                Calendar floorStatisticCalendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
+                Calendar floorStatisticCalendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("America/New_York"));
                 floorStatisticCalendar.setTime(floorStatistic.getTimestamp());
 
-                Calendar givenDateCalendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
+                Calendar givenDateCalendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("America/New_York"));
                 givenDateCalendar.setTime(date);
 
                 if(floorStatisticCalendar.get(Calendar.YEAR) == givenDateCalendar.get(Calendar.YEAR) &&
