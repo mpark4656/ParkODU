@@ -93,7 +93,7 @@ public class RegisterController {
             // Generate random 36-character string token for confirmation link
             user.generateConfirmationToken();
             user.generateUserKey();
-            user.setRole("user");
+            user.setRoleType("user");
             user.getPermissions().add("USER");
             userService.saveUser(user);
             String appUrl = request.getScheme() + "://" + request.getServerName();
@@ -126,7 +126,7 @@ public class RegisterController {
         List<User> userList = userRepository.findByPredicate(predicate);
         System.out.println("Confirmation Token: " + token);
         if (userList != null && !userList.isEmpty()) {
-            if(userList.get(0).isEnabled() == true) {
+            if(userList.get(0).getEnabled() == true) {
                 model.addAttribute("dangerMessage", "Oops! Confirmation link not valid!");
                 redirectAttributes.addAttribute("attr","confirmationLinkError");
             } else {

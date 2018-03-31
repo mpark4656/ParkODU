@@ -154,8 +154,8 @@ public class AccountsController {
                 existingUser.setFirstName(user.getFirstName());
                 existingUser.setLastName(user.getLastName());
                 existingUser.setEmail(user.getEmail());
-                existingUser.setRole(user.getRoleType());
-                existingUser.setEnabled(user.isEnabled());
+                existingUser.setRoleType(user.getRoleType());
+                existingUser.setEnabled(user.getEnabled());
                 if (isAdmin != null && isAdmin == true) {
                     existingUser.getPermissions().add("ADMIN");
                 }
