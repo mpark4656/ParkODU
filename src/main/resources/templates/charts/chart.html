@@ -24,13 +24,13 @@ $(document).ready(function() {
     // FloorStatistics Chart
     var ctx = document.getElementById("floorStatisticChart");
 
-    var data = [0,5,10,15,20,25,30];
-    //var dataString = /*[[${dataString}]]*/;
-    //var data = dataString.split(',');
+    var dataString = /*[[${dataString}]]*/;
+    //alert(dataString);
+    var data = dataString.split(',');
 
-    var labels = ["12am","1pm","2pm","3pm","4pm","5pm","6pm"];
-    //var labelString = /*[[${labelString}]]*/;
-    //var labels = labelString.split(',');
+    var labelString = /*[[${labelString}]]*/;
+    //alert(labelString);
+    var labels = labelString.split(',');
 
     var myChart = new Chart(ctx, {
         type: 'line',
@@ -49,6 +49,7 @@ $(document).ready(function() {
             }]
         },
         options: {
+            spanGaps: true,
             scales: {
                 yAxes: [{
                     ticks: {

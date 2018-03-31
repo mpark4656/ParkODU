@@ -17,18 +17,21 @@
             <hr/>
             <div class="text-center" style="padding: 10px">
                 <label for="garage" class="control-label">Garage</label>
-                <select id="garage" style="width:100%"> <!--th:field="*{garageKey}"-->
-                    <!-- <option th:each="garage : ${garages}"
+                <select id="garage" style="width:100%">
+                    <option th:each="garage : ${garages}"
                             th:text="${garage.name}"
                             th:value="${garage.garageKey}"
-                            th:selected="(${garage.garageKey eq garage.garageKey})"
                             >
-                    </option> -->
+                    </option>
                 </select>
+            </div>
+            <div class="text-center" style="padding:10px">
+                <label for="floorNumber" class="control-label">Floor Number</label>
+                <input id="floorNumber" type="text" name="floorNumber" style="width:100%"></input>
             </div>
             <div class="text-center" style="padding: 10px">
                 <label for="date" class="control-label">Date</label>
-                <input id="date"  type="date" name="date" style="width:100%"></input> <!-- th:value="chart.date" -->
+                <input id="date"  type="date" name="date" style="width:100%"></input>
             </div>
 
             <button  id="create" type="button" class="btn btn-primary" style="width:100%">Create</button>
@@ -45,76 +48,34 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-<script>
-/*
+<!--<script>
 $(document).ready(function(){
-    $("#date").change(function(){
-
-        var date = $(this).val();
-
-        $.post("methodGoesHere", {  })
-                .done(function(data) {
-                });
+    $("#floorNumber").change(function(){
+        var date = document.getElementById("floorNumber").value;
+        alert(date);
     });
 });
-
-$(document).ready(function(){
-    $("#garage").change(function(){
-
-        var garage = $(this).val();
-
-        $.post("methodGoesHere", {  })
-                .done(function(data) {
-                });
-    });
-});
-
-*/
-</script>
-
+</script> -->
 <script>
 /*<![CDATA[*/
 
 $(document).ready(function(){
     $(".btn").click(function(){
-    let i =0;
-        for(i = 0; i < 2 ; i++){
-                var div = document.createElement('div');
-                div.className = "parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2";
-                document.getElementById("main").appendChild(div);
-                div.id = "chart" + i;
-                $("#chart" + i).load("charts/chart.html");
-        }
+        var div = document.createElement('div');
+        div.className = "parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2";
+        document.getElementById("main").appendChild(div);
+        var garageKey = document.getElementById("garage").value;
+        var floorNumber = document.getElementById("floorNumber").value;
+        var date = document.getElementById("date").value;
+        div.id = "chart"
+        var urlString = "charts/chart/" + garageKey + '/' + floorNumber + '/' + date;
+        $("#chart").load(urlString, function(data) { $("#chart").append(data); } );
     });
 });
+
 /*]]>*/
 
 </script>
-
-<!--
-<script th:inline="javascript">
-/*<![CDATA[*/
-
-$(document).ready(function(){
-    $("").click(function(){
-
-        var floors = /*[[${floors}]]*/;
-        var x;
-        var i = 0;
-        for(x in floors){
-            var div = document.createElement('div');
-            document.getElementById("main").appendChild(div);
-            //maybe modify style here
-            div.id = "chart" + i;
-            var floor = floors[i];
-            $("#chart" + i).load("http://localhost:8083/charts/chart"); //$(selector).load(URL,data,callback);
-            i = i + 1;
-        };
-    });
-});
-/*]]>*/
-</script>
--->
 
 </body>
 </html>
