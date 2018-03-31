@@ -30,21 +30,6 @@ public class HomeController {
 
         List<Event> events = new ArrayList<>(eventRepository.findAll());
         if(events != null) {
-            //------------- THIS IS A TEST! REMOVE AFTER TESTING --------------
-            Event event1 = new Event();
-            event1.setEventDateTime("3-28-2018 4:30PM");
-            event1.setEventName("This is a test event!");
-            event1.setEventMessage("This is a test event message!");
-
-            Event event2 = new Event();
-            event2.setEventDateTime("3-28-2018 5:00PM");
-            event2.setEventName("This is a test event2!");
-            event2.setEventMessage("This is a test event message2!");
-
-            events.add(event1);
-            events.add(event2);
-            //------------------------------------------------------------------
-
             //events.sort(Comparator.comparing(Event::getEventDateTime));
             model.addAttribute("events",events);
         }
