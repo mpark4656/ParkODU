@@ -100,4 +100,10 @@ public class AccountsRestController {
         }
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/get/{userKey}")
+    public User get(@PathVariable String userKey) {
+        User user = userRepository.findByKey(userKey);
+        return user;
+    }
 }

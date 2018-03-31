@@ -116,7 +116,6 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         System.out.println("# of SpaceTypes loaded from Mongo: " + spaceTypeRepository.findAll().size());
         System.out.println("# of Users loaded from Mongo: " + userRepository.findAll().size());
         System.out.println("# of Roles loaded from Mongo: " + roleTypeRepository.findAll().size());
-
         /*
         User user = new User();
         user.setUserKey(UUID.randomUUID().toString());
