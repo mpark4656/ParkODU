@@ -4,7 +4,7 @@ import org.joda.time.DateTime;
 
 import java.io.Serializable;
 import java.util.UUID;
-import java.util.Set;
+import java.util.List;
 
 public class Event implements Serializable{
 
@@ -13,8 +13,8 @@ public class Event implements Serializable{
     private String eventMessage;
     private String eventDateTime;
     private String scheduledDateTime;
-    private Set<String> eventTags;
-    private Set<String> locationsEffected;
+    private List<String> eventTags;
+    private List<String> locationsEffected;
 
     public Event() {
         this.eventKey = UUID.randomUUID().toString();
@@ -72,19 +72,23 @@ public class Event implements Serializable{
         this.scheduledDateTime = scheduledDateTime;
     }
 
-    public Set<String> getEventTags() {
+    public List<String> getEventTags() {
         return eventTags;
     }
 
     public void setEventTags() {
+        // TODO
+        //for (String tag : eventTags) {
+        //    this.eventTags.add(tag);
+        //}
         this.eventTags = eventTags;
     }
 
-    public Set<String> getLocationsEffected() {
+    public List<String> getLocationsEffected() {
         return locationsEffected;
     }
 
-    public void setLocationsEffected(Set<String> locationsEffected) {
+    public void setLocationsEffected(List<String> locationsEffected) {
         this.locationsEffected = locationsEffected;
     }
 

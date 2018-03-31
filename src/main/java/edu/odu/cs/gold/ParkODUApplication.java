@@ -122,13 +122,6 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         System.out.println("# of Roles loaded from Mongo: " + roleTypeRepository.findAll().size());
         System.out.println("# of Events loaded from Mongo: " + eventRepository.findAll().size());
 
-        List<Event> events = eventRepository.findAll();
-
-        for(Event newevent : events) {
-            userRepository.delete(newevent.getEventKey());
-        }
-
-        System.out.println("# of Events loaded from Mongo: " + eventRepository.findAll().size());
         /*
         User user = new User();
         user.setUserKey(UUID.randomUUID().toString());
