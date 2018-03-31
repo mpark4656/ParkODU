@@ -7,6 +7,7 @@
 </head>
 <body>
 
+
 <div id="myChart">
         <canvas id="floorStatisticChart" width="525" height="150"></canvas>
 </div>
@@ -23,6 +24,10 @@
 $(document).ready(function() {
     // FloorStatistics Chart
     var ctx = document.getElementById("floorStatisticChart");
+
+    var floorNumber = /*[[${floorNumber}]]*/;
+    var garageName = /*[[${garage.name}]]*/
+    var title = garageName + ": Floor " + floorNumber;
 
     var dataString = /*[[${dataString}]]*/;
     //alert(dataString);
@@ -56,6 +61,10 @@ $(document).ready(function() {
                         beginAtZero:true
                     }
                 }]
+            },
+            title: {
+                display: true,
+                text: title
             }
         }
     });
