@@ -42,7 +42,7 @@ public class FloorStatisticService {
         }
 
         for(FloorStatistic floorStatistic : floorStatistics) {
-            Calendar calendar = GregorianCalendar.getInstance();
+            Calendar calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
             calendar.setTime(floorStatistic.getTimestamp());
 
             for(int hour = 0; hour < 24; hour++) {
@@ -57,7 +57,7 @@ public class FloorStatisticService {
         for(int hour = 0; hour < totalCapacities.length; hour++) {
             FloorStatistic floorStatistic = new FloorStatistic();
 
-            Calendar cal = GregorianCalendar.getInstance();
+            Calendar cal = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
             cal.set(Calendar.HOUR_OF_DAY, hour);
             Date date = cal.getTime();
 
@@ -69,4 +69,33 @@ public class FloorStatisticService {
 
         return floorStatisticResult;
     }
+
+    public ArrayList<FloorStatistic> findFloorCapacityByDate(String floorKey, Date date) {
+        ArrayList<FloorStatistic> floorStatisticsResult = new ArrayList<>();
+
+        Predicate predicate = Predicates.equal("floorKey", floorKey);
+        ArrayList<FloorStatistic> floorStatistics = new ArrayList<>(floorStatisticRepository.findByPredicate(predicate));
+
+        for(int hour = 0; hour < 24; hour++) {
+            for(FloorStatistic floorStatistic : floorStatistics) {
+                Calendar floorStatisticCalendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
+                floorStatisticCalendar.setTime(floorStatistic.getTimestamp());
+
+                Calendar givenDateCalendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
+                givenDateCalendar.setTime(date);
+
+                if(floorStatisticCalendar.get(Calendar.YEAR) == givenDateCalendar.get(Calendar.YEAR) &&
+                        floorStatisticCalendar.get(Calendar.MONTH) == givenDateCalendar.get(Calendar.MONTH) &&
+                        floorStatisticCalendar.get(Calendar.DAY_OF_MONTH) == givenDateCalendar.get(Calendar.DAY_OF_MONTH) &&
+                        floorStatisticCalendar.get(Calendar.HOUR_OF_DAY) == hour &&
+                        floorStatisticCalendar.get(Calendar.MINUTE) == 0) {
+
+                    floorStatisticsResult.add(floorStatistic);
+                }
+            }
+        }
+
+        return floorStatisticsResult;
+    }
+
 }

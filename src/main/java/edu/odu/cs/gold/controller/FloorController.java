@@ -7,7 +7,6 @@ import edu.odu.cs.gold.model.FloorStatistic;
 import edu.odu.cs.gold.model.Garage;
 import edu.odu.cs.gold.model.ParkingSpace;
 import edu.odu.cs.gold.repository.FloorRepository;
-import edu.odu.cs.gold.repository.FloorStatisticRepository;
 import edu.odu.cs.gold.repository.GarageRepository;
 import edu.odu.cs.gold.repository.ParkingSpaceRepository;
 import edu.odu.cs.gold.service.FloorStatisticService;
@@ -88,7 +87,7 @@ public class FloorController {
         for (FloorStatistic floorStatistic : floorStatistics) {
             dataString.append(floorStatistic.getCapacity() + ",");
 
-            Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
+            Calendar calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC")); // creates a new calendar instance
             calendar.setTime(floorStatistic.getTimestamp());   // assigns calendar to given date
 
             if (calendar.get(Calendar.HOUR_OF_DAY) == 0) {

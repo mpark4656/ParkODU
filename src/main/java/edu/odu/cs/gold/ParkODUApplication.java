@@ -128,6 +128,7 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
             userRepository.delete(newevent.getEventKey());
         }
 
+        System.out.println("# of Events loaded from Mongo: " + eventRepository.findAll().size());
         /*
         User user = new User();
         user.setUserKey(UUID.randomUUID().toString());
