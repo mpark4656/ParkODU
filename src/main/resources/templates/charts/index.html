@@ -50,7 +50,6 @@
         </div>
     </div>
 </div>
-
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 
@@ -70,7 +69,7 @@ $('#create-button').click(function() {
     var date = $('#date').val();
 	var chartId = $('#chartId').val();
 
-	//alert('chartId: ' + chartId + ', garageKey: ' + garageKey + ', floorNumber: ' + floorNumber + ', date: ' + date);
+	alert('chartId: ' + chartId + ', garageKey: ' + garageKey + ', floorNumber: ' + floorNumber + ', date: ' + date);
 
     $.ajax({
         type: "GET",
@@ -93,6 +92,7 @@ $('#create-button').click(function() {
         }
     });
 });
+
 /*]]>*/
 </script>
 

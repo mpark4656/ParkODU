@@ -6,17 +6,15 @@
 <body>
 <div th:id="'chart-' + ${chartId}" class="col-xs-12 col-sm-12 col-md-6">
     <div class="parkodu-container" style="padding-top: 5px;">
-        <h2>Chart Title Placeholder</h2>
+        <h2>FLOOR OCCUPANCY CHART</h2>
         <hr/>
 
-        <p>GarageKey: <span th:text="${garageKey}"></span></p>
+        <p>GarageKey: <span th:text="${garage.name}"></span></p>
         <p>FloorNumber: <span th:text="${floorNumber}"></span></p>
         <p>Date: <span th:text="${date}"></span></p>
 
         <!-- PUT CHART HERE -->
-        <div style="width: 200px; height: 200px; background-color: blue; color: white;">
-            <p class="text-center">Chart Placeholder</p>
-        </div>
+        <canvas id="floorStatisticChart" width="800" height="300"></canvas>
 
         <button th:attr="data-id=${chartId}" class="btn btn-danger btn-sm delete-button">Delete</button>
     </div>
@@ -28,6 +26,54 @@
 
 <script th:inline="javascript">
 /*<![CDATA[*/
+//$(document).ready(function() {
+    // FloorStatistics Chart
+    var ctx = document.getElementById("floorStatisticChart");
+
+    var floorNumber = /*[[${floorNumber}]]*/;
+    var garageName = /*[[${garage.name}]]*/
+    var title = garageName + ": Floor " + floorNumber;
+
+    var dataString = /*[[${dataString}]]*/;
+    //alert(dataString);
+    var data = dataString.split(',');
+
+    var labelString = /*[[${labelString}]]*/;
+    //alert(labelString);
+    var labels = labelString.split(',');
+
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Occupancy Rate (%)",
+                data: data,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            spanGaps: true,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            },
+            title: {
+                display: true,
+                text: title
+            }
+        }
+    });
+//});
 /*]]>*/
 </script>
 

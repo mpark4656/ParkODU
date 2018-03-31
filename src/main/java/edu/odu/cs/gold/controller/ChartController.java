@@ -55,10 +55,55 @@ public class ChartController {
         Date date = null;
         try {
             date = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
-            model.addAttribute("garageKey", garageKey);
+
+            Predicate predicate = Predicates.and(
+                    Predicates.equal("number", floorNumber),
+                    Predicates.equal("garageKey", garageKey)
+            );
+
+            List<Floor> floors= floorRepository.findByPredicate(predicate);
+            String floorKey = floors.get(0).getFloorKey();
+
+
+            ArrayList<FloorStatistic> floorStatistics
+                    = floorStatisticService.findFloorCapacityByDate(floorKey, date);
+
+            // Sort Floors by Number
+            floorStatistics.sort(Comparator.comparing(FloorStatistic::getTimestamp));
+
+            // Build Chart Data
+            StringBuilder dataString = new StringBuilder();
+            StringBuilder labelString = new StringBuilder();
+            for (FloorStatistic floorStatistic : floorStatistics) {
+                dataString.append(floorStatistic.getCapacity() + ",");
+
+                Calendar calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("America/New_York")); // creates a new calendar instance
+                calendar.setTime(floorStatistic.getTimestamp());   // assigns calendar to given date
+
+                if (calendar.get(Calendar.HOUR_OF_DAY) == 0) {
+                    labelString.append("12am,");
+                }
+                else if (calendar.get(Calendar.HOUR_OF_DAY) == 12) {
+                    labelString.append("12pm,");
+                }
+                else if (calendar.get(Calendar.HOUR_OF_DAY) < 12) {
+                    labelString.append(calendar.get(Calendar.HOUR_OF_DAY) + "am,");
+                }
+                else {
+                    labelString.append((calendar.get(Calendar.HOUR_OF_DAY) - 12) + "pm,");
+                }
+            }
+
+            Garage garage = garageRepository.findByKey(garageKey);
+
+            model.addAttribute("garage", garage);
+            model.addAttribute("dataString", dataString.toString());
+            model.addAttribute("labelString", labelString.toString());
             model.addAttribute("floorNumber", floorNumber);
             model.addAttribute("date", date);
             model.addAttribute("chartId", chartId); // do not change
+
+            return "charts/chart";
         }
         catch (Exception e) {
             e.printStackTrace();
