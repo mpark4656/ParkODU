@@ -35,15 +35,18 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="effected" class="col-md-4 control-label">Locations Effected</label>
+                    <label class="col-md-4 control-label">Locations Effected</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" id="effected" placeholder="Locations that will be effected by this event." th:field="${event.locationsEffected}"/>
-                    </div>
-                    <label class="col-md-4 control-label"></label>
-                    <div class="col-md-8">
-                        <select name="locationId" id="locationId" class="form-control">
-                            <option th:each="location : ${locations}" th:value="${location}" th:text="${location}"></option>
-                        </select>
+                        <select class="selectized" autocomplete="off" tabindex="" multiple="multiple" id="location-select" style="width: 94px; opacity: 1; position: relative; left: 0px;" placeholder="Select a location..."></select>
+                        <div class="col-md-8 selectize-control multi demo-default">
+                            <div class="selectize-input items has-options has-items not-full" th:field="${event.locationsEffected}">
+                                <div class="selectize-dropdown multi demo-default" style="display: none; width: 364px; top: 36px; left: 0px; visibility: visible;">
+                                    <div class="selectize-dropdown-content">
+                                        <div class="option" data-selectable="" th:each="location : ${locations}" th:data-value="${location}" th:data-text="${location}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -74,5 +77,13 @@
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 
+<!-- Selectize Script -->
+<!--/*/ <th:block th:include="fragments/fragment :: selectize-script" /> /*/-->
+
+<script>
+$('#location-select').selectize({
+    maxItems: 10
+});
+</script>
 </body>
 </html>
