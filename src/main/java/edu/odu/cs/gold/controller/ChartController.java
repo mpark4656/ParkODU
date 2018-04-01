@@ -134,7 +134,7 @@ public class ChartController {
             sb.append("        }, ");
             sb.append("        title: { ");
             sb.append("            display: true, ");
-            sb.append("                    text: title ");
+            sb.append("                    text: title" + chartId + " ");
             sb.append("        } ");
             sb.append("    } ");
             sb.append("    }); ");
