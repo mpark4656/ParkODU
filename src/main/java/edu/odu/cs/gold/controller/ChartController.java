@@ -95,7 +95,54 @@ public class ChartController {
             }
 
             Garage garage = garageRepository.findByKey(garageKey);
+            StringBuilder sb = new StringBuilder();
 
+            sb.append("alert('STARTED'); ");
+            sb.append("var ctx" + chartId + " = document.getElementById('floorStatisticChart" + chartId + "'); ");
+            sb.append("var floorNumber" + chartId + " = '" + floorNumber + "'; ");
+            sb.append("var garageName" + chartId + " = '" + garage.getName() + "'; ");
+            sb.append("var title" + chartId + " = garageName" + chartId + " + ': Floor ' + floorNumber" + chartId + "; ");
+            sb.append("var dataString" + chartId + " = '" + dataString + "'; ");
+            sb.append("var data" + chartId + " = dataString" + chartId + ".split(','); ");
+            sb.append("var labelString" + chartId + " = '" + labelString + "'; ");
+            sb.append("var labels" + chartId + " = labelString" + chartId + ".split(','); ");
+            sb.append("alert('ENDED'); ");
+            sb.append("    var myChart" + chartId + " = new Chart(ctx" + chartId + ", { ");
+            sb.append("            type: 'line', ");
+            sb.append("    data: { ");
+            sb.append("        labels: labels" + chartId + ", ");
+            sb.append("                datasets: [{ ");
+            sb.append("            label: 'Occupancy Rate (%)', ");
+            sb.append("                    data: data" + chartId + ", ");
+            sb.append("                    backgroundColor: [ ");
+            sb.append("            'rgba(255, 99, 132, 0.2)', ");
+            sb.append("                ], ");
+            sb.append("            borderColor: [ ");
+            sb.append("            'rgba(255,99,132,1)', ");
+            sb.append("                ], ");
+            sb.append("            borderWidth: 1 ");
+            sb.append("        }] ");
+            sb.append("    }, ");
+            sb.append("    options: { ");
+            sb.append("        spanGaps: true, ");
+            sb.append("                scales: { ");
+            sb.append("            yAxes: [{ ");
+            sb.append("                ticks: { ");
+            sb.append("                    beginAtZero:true ");
+            sb.append("                } ");
+            sb.append("            }] ");
+            sb.append("        }, ");
+            sb.append("        title: { ");
+            sb.append("            display: true, ");
+            sb.append("                    text: title ");
+            sb.append("        } ");
+            sb.append("    } ");
+            sb.append("    }); ");
+
+
+            System.err.println(sb.toString());
+
+            model.addAttribute("jsCode", sb.toString());
             model.addAttribute("garage", garage);
             model.addAttribute("dataString", dataString.toString());
             model.addAttribute("labelString", labelString.toString());
@@ -111,6 +158,7 @@ public class ChartController {
 
         return "charts/chart";
     }
+
 
     /*
     @GetMapping("/chart/{garageKey}/{floorNumber}/{date}/{chartId}")
