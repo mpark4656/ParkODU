@@ -8,14 +8,11 @@ import edu.odu.cs.gold.model.Garage;
 import edu.odu.cs.gold.repository.FloorRepository;
 import edu.odu.cs.gold.repository.GarageRepository;
 import edu.odu.cs.gold.service.FloorStatisticService;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -97,7 +94,6 @@ public class ChartController {
             Garage garage = garageRepository.findByKey(garageKey);
             StringBuilder sb = new StringBuilder();
 
-            sb.append("alert('STARTED'); ");
             sb.append("var ctx" + chartId + " = document.getElementById('floorStatisticChart" + chartId + "'); ");
             sb.append("var floorNumber" + chartId + " = '" + floorNumber + "'; ");
             sb.append("var garageName" + chartId + " = '" + garage.getName() + "'; ");
@@ -106,7 +102,6 @@ public class ChartController {
             sb.append("var data" + chartId + " = dataString" + chartId + ".split(','); ");
             sb.append("var labelString" + chartId + " = '" + labelString + "'; ");
             sb.append("var labels" + chartId + " = labelString" + chartId + ".split(','); ");
-            sb.append("alert('ENDED'); ");
             sb.append("    var myChart" + chartId + " = new Chart(ctx" + chartId + ", { ");
             sb.append("            type: 'line', ");
             sb.append("    data: { ");
@@ -134,13 +129,10 @@ public class ChartController {
             sb.append("        }, ");
             sb.append("        title: { ");
             sb.append("            display: true, ");
-            sb.append("                    text: title ");
+            sb.append("                    text: title" + chartId + " ");
             sb.append("        } ");
             sb.append("    } ");
             sb.append("    }); ");
-
-
-            System.err.println(sb.toString());
 
             model.addAttribute("jsCode", sb.toString());
             model.addAttribute("garage", garage);
