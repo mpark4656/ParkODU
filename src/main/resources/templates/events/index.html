@@ -21,7 +21,7 @@
                 <tr>
                     <th width="40%">Name</th>
                     <th width="30%">Message</th>
-                    <th width="30%">Effected Locations</th>
+                    <th width="30%">Affected Locations</th>
                     <th width="30%">Event Tags</th>
                 </tr>
                 </thead>
@@ -29,7 +29,7 @@
                 <tr th:each="event : ${events}">
                     <td th:text="${event.eventName}"></td>
                     <td th:text="${event.eventMessage}"></td>
-                    <td th:text="${event.locationsEffected}"></td>
+                    <td th:text="${event.locationsAffected}"></td>
                     <td th:text="${event.eventTags}"></td>
                 </tr>
                 </tbody>

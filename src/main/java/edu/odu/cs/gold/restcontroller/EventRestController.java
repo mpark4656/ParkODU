@@ -29,7 +29,7 @@ public class EventRestController {
             event.setEventName(event.getEventName());
             event.setEventMessage(event.getEventMessage());
             event.setScheduledDateTime(event.getScheduledDateTime());
-            event.setEventTags();
+            event.setEventTags(event.getEventTags());
             eventRepository.save(event);
             System.out.println("Saved event: " + event);
             return ResponseEntity.ok().build();
@@ -51,17 +51,15 @@ public class EventRestController {
             if (event.getEventDateTime() != null) {
                 existingEvent.setEventDateTime(DateTime.now().toString());
             }
-            if (event.getLocationsEffected() != null) {
-                existingEvent.setLocationsEffected(event.getLocationsEffected());
+            if (event.getLocationsAffected() != null) {
+                existingEvent.setLocationsAffected(event.getLocationsAffected());
             }
             if (event.getScheduledDateTime() != null) {
                 existingEvent.setScheduledDateTime(event.getScheduledDateTime());
             }
             if(event.getEventTags() != null) {
-                // TODO
-                existingEvent.setEventTags();
+                existingEvent.setEventTags(event.getEventTags());
             }
-
 
             eventRepository.save(existingEvent);
             System.out.println("Updated Event: " + existingEvent);

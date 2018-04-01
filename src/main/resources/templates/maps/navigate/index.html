@@ -63,10 +63,10 @@ var map;
 window.onload = function () {
 
     // testing purposes
-    var destLat = /*[[${startingLocation.latitude}]]*/;
-    var destLon = /*[[${startingLocation.longitude}]]*/;
-    var destLat1 = /*[[${destination.latitude}]]*/;
-    var destLon1 = /*[[${destination.longitude}]]*/;
+    var startLat = /*[[${startingLocation.latitude}]]*/;
+    var startLon = /*[[${startingLocation.longitude}]]*/;
+    var destLat = /*[[${destination.latitude}]]*/;
+    var destLon = /*[[${destination.longitude}]]*/;
 
     var markerArray = [];
     var div = document.getElementById('map');
@@ -78,10 +78,10 @@ window.onload = function () {
         ((navigator.platform.indexOf("iPhone") != -1) ||
         (navigator.platform.indexOf("iPod") != -1) ||
         (navigator.platform.indexOf("iPad") != -1))
-        window.open('maps://maps.google.com/maps?daddr=' + destLat1 + ',' + destLon1 + '&amp;sll='+destLat+','+destLon);
+        window.open('maps://maps.google.com/maps?daddr=' + destLat + ',' + destLon + '&amp;sll='+startLat + ',' + startLon);
 
     else /* else use Google */
-        window.open('https://maps.google.com/maps?daddr=' + destLat1 + ',' + destLon1 + '&amp;sll='+destLat+','+destLon);
+        window.open('https://maps.google.com/maps?daddr=' + destLat + ',' + destLon + '&amp;sll='+startLat + ',' + startLon);
     }
 
 

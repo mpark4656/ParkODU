@@ -14,7 +14,7 @@ public class Event implements Serializable{
     private String eventDateTime;
     private String scheduledDateTime;
     private List<String> eventTags;
-    private List<String> locationsEffected;
+    private List<String> locationsAffected;
 
     public Event() {
         this.eventKey = UUID.randomUUID().toString();
@@ -24,12 +24,16 @@ public class Event implements Serializable{
     public Event(String eventKey,
                  String eventName,
                  String eventMessage,
-                 String scheduledDateTime) {
+                 String scheduledDateTime,
+                 List<String> locationsAffected,
+                 List<String> eventTags) {
         this.eventKey = UUID.randomUUID().toString();
         this.eventName = eventName;
         this.eventMessage = eventMessage;
         this.eventDateTime = DateTime.now().toString();
         this.scheduledDateTime = scheduledDateTime;
+        this.locationsAffected = locationsAffected;
+        this.eventTags = eventTags;
     }
 
     public String getEventKey() {
@@ -76,20 +80,16 @@ public class Event implements Serializable{
         return eventTags;
     }
 
-    public void setEventTags() {
-        // TODO
-        //for (String tag : eventTags) {
-        //    this.eventTags.add(tag);
-        //}
+    public void setEventTags(List<String> eventTags) {
         this.eventTags = eventTags;
     }
 
-    public List<String> getLocationsEffected() {
-        return locationsEffected;
+    public List<String> getLocationsAffected() {
+        return locationsAffected;
     }
 
-    public void setLocationsEffected(List<String> locationsEffected) {
-        this.locationsEffected = locationsEffected;
+    public void setLocationsAffected(List<String> locationsAffected) {
+        this.locationsAffected = locationsAffected;
     }
 
     @Override
@@ -101,7 +101,7 @@ public class Event implements Serializable{
                 ", eventDateTime=" + eventDateTime + '\'' +
                 ", scheduledDateTime=" + scheduledDateTime + '\'' +
                 ", eventTags='" + eventTags + '\'' +
-                ", locationsEffected=" + locationsEffected +
+                ", locationsAffected=" + locationsAffected +
                 " }";
     }
 }
