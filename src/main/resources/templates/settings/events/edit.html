@@ -35,13 +35,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="effected" class="col-md-4 control-label">Locations Effected</label>
+                    <label class="col-md-4 control-label">Locations Affected</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" id="effected" placeholder="Locations that will be effected by this event." th:field="${event.locationsEffected}"/>
-                    </div>
-                    <label class="col-md-4 control-label"></label>
-                    <div class="col-md-8">
-                        <select name="locationId" id="locationId" class="form-control">
+                        <select id="location-select" class=" selectized" placeholder="Location..." th:field="${event.locationsEffected}">
                             <option th:each="location : ${locations}" th:value="${location}" th:text="${location}"></option>
                         </select>
                     </div>
@@ -74,5 +70,22 @@
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 
+<!-- Selectize Script -->
+<!--/*/ <th:block th:include="fragments/fragment :: selectize-script" /> /*/-->
+
+<script>
+$('#location-select').selectize({
+    maxItems: 10,
+    plugins: ['remove_button'],
+    delimiter: ',',
+    persist: false,
+    create: function(input) {
+        return {
+            value: input,
+            text: input
+        }
+    }
+});
+</script>
 </body>
 </html>
