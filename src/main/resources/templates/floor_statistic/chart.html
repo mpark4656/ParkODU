@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+</head>
+<body>
+
+<div id="myChart">
+    <div th:each="floor : ${floors}">
+        <button
+                th:text="'Button ' + ${floor.number}"
+                th:attr="data-id=${floor.number},data-valueone='uno',data-valuetwo='dos'"
+                class="chart-canvas">Button One</button>
+        <div th:id="'results-' + ${floor.number}"></div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<!-- Chart.js Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: chart-js-scripts" /> /*/-->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script th:inline="javascript">
+
+/*<![CDATA[*/
+
+
+
+    // FloorStatistics Chart
+    // var ctx = document.getElementById("floorStatisticChart");
+
+    //var data = [0,5,10,15,20,25,30];
+    //var dataString = /*[[${dataString}]]*/;
+    //var data = dataString.split(',');
+
+    //var labels = ["12am","1pm","2pm","3pm","4pm","5pm","6pm"];
+    //var labelString = /*[[${labelString}]]*/;
+    //var labels = labelString.split(',');
+
+$('.chart-canvas').click(function() {
+    var id = $(this).data('id');
+    var valueOne = $(this).data('valueone');
+    var valueTwo = $(this).data('valuetwo');
+    var resultsId = '#results-' + id;
+    alert(id + ',' + valueOne + ',' + valueTwo + ',' + resultsId);
+    $.ajax({
+        type: "GET",
+        url: 'http://localhost:8083/floor_statistic/floor_chart',
+        data: {
+            id: id,
+            valueOne: valueOne,
+            valueTwo: valueTwo
+        },
+        success: function(data) {
+            $(resultsId).html(data);
+        }
+    });
+});
+
+/*]]>*/
+</script>
+
+
+</body>
+</html>
