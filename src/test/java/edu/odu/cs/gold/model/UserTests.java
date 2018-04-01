@@ -204,7 +204,7 @@ public class UserTests {
     }
 
     @Test
-    public void testIsEnabled() {
+    public void testGetEnabled() {
         user.setEnabled(USER_ENABLED);
         assertEquals(USER_ENABLED, user.getEnabled());
     }
@@ -222,7 +222,7 @@ public class UserTests {
     }
 
     @Test
-    public void testSetRole() {
+    public void testSetRoleType() {
         user.setRoleType(USER_ROLE_TYPE);
         assertEquals(USER_ROLE_TYPE, user.getRoleType());
     }
