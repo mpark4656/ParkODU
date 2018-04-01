@@ -28,7 +28,7 @@
                     <th>Message</th>
                     <th>Created</th>
                     <th>Tags</th>
-                    <th>Effected Locations</th>
+                    <th>Affected Locations</th>
                     <th>Scheduled For</th>
                 </tr>
                 </thead>
@@ -38,7 +38,7 @@
                     <td th:text="${event.eventMessage}"></td>
                     <td th:text="${event.eventDateTime}"></td>
                     <td th:text="${event.eventTags}"></td>
-                    <td th:text="${event.locationsEffected}"></td>
+                    <td th:text="${event.locationsAffected}"></td>
                     <td th:text="${event.scheduledDateTime}"></td>
                     <td>
                         <a th:href="@{/settings/events/edit} + '/' + ${event.eventKey}" class="btn btn-primary btn-sm">Edit</a>

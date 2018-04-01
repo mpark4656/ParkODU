@@ -37,7 +37,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label">Locations Affected</label>
                     <div class="col-md-8">
-                        <select id="location-select" class=" selectized" placeholder="Location..." th:field="${event.locationsEffected}">
+                        <select id="location-select" class="form-control" type="text" placeholder="Enter Affected Locations..." th:field="${event.locationsAffected}">
                             <option th:each="location : ${locations}" th:value="${location}" th:text="${location}"></option>
                         </select>
                     </div>
@@ -78,7 +78,19 @@ $('#location-select').selectize({
     maxItems: 10,
     plugins: ['remove_button'],
     delimiter: ',',
-    persist: false,
+    persist: true,
+    create: function(input) {
+        return {
+            value: input,
+            text: input
+        }
+    }
+});
+
+$('#tags').selectize({
+    plugins: ['remove_button'],
+    delimiter: ',',
+    persist: true,
     create: function(input) {
         return {
             value: input,
