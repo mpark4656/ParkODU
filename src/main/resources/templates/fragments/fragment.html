@@ -23,9 +23,12 @@
 	<!-- Bootstrap Notification CSS -->
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-notification.css}"/>
 	<!-- Jquery Selectize -->
-	<!--
-	//<link rel="stylesheet" type="text/css" href="@{/css/selectize.css}" />
-    -->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/selectize.bootstrap2.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/selectize.bootstrap3.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/selectize.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/selectize.default.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/selectize.legacy.css}" />
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 </head>
@@ -163,9 +166,7 @@
 	<script th:src="@{/js/jquery-3.2.1.min.js}"></script>
 	<script th:src="@{/js/popper.min.js}"></script>
 	<script th:src="@{/js/bootstrap.min.js}"></script>
-	<!--
 	<script th:src="@{/js/standalone/selectize.js}"></script>
-	-->
 </div>
 
 <!-- Google Maps API Scripts -->
@@ -186,11 +187,6 @@
 <!-- Toast Script -->
 <div th:fragment="toastr-script">
 	<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-</div>
-
-<!-- Selectize Script -->
-<div th:fragment="selectize-script">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/standalone/selectize.js"></script>
 </div>
 
 <!--Event Script-->

@@ -35,18 +35,11 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 control-label">Locations Effected</label>
+                    <label class="col-md-4 control-label">Locations Affected</label>
                     <div class="col-md-8">
-                        <select class="selectized" autocomplete="off" tabindex="" multiple="multiple" id="location-select" style="width: 94px; opacity: 1; position: relative; left: 0px;" placeholder="Select a location..."></select>
-                        <div class="col-md-8 selectize-control multi demo-default">
-                            <div class="selectize-input items has-options has-items not-full" th:field="${event.locationsEffected}">
-                                <div class="selectize-dropdown multi demo-default" style="display: none; width: 364px; top: 36px; left: 0px; visibility: visible;">
-                                    <div class="selectize-dropdown-content">
-                                        <div class="option" data-selectable="" th:each="location : ${locations}" th:data-value="${location}" th:data-text="${location}"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <select id="location-select" class=" selectized" placeholder="Location..." th:field="${event.locationsEffected}">
+                            <option th:each="location : ${locations}" th:value="${location}" th:text="${location}"></option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
@@ -82,7 +75,16 @@
 
 <script>
 $('#location-select').selectize({
-    maxItems: 10
+    maxItems: 10,
+    plugins: ['remove_button'],
+    delimiter: ',',
+    persist: false,
+    create: function(input) {
+        return {
+            value: input,
+            text: input
+        }
+    }
 });
 </script>
 </body>

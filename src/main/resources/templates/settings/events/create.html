@@ -48,22 +48,12 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="effectedLocations" class="col-md-4 control-label">Locations Effected</label>
+                    <label class="col-md-4 control-label">Locations Affected</label>
                     <div class="col-md-8">
-                        <input type="text"
-                               class="form-control"
-                               id="effectedLocations"
-                               placeholder="The locations that will be effected by this event."
-                               min="0"
-                               required="required"
-                               th:field="${event.locationsEffected}"/>
+                        <select id="location-select" class="demo-default selectized" placeholder="Location..." th:field="${event.locationsEffected}">
+                            <option th:each="location : ${locations}" th:value="${location}" th:text="${location}"></option>
+                        </select>
                     </div>
-                        <label class="col-md-4 control-label"></label>
-                        <div class="col-md-8">
-                            <select name="locationId" id="locationId" class="form-control">
-                                <option th:each="location : ${locations}" th:value="${location}" th:text="${location}"></option>
-                            </select>
-                        </div>
                 </div>
                 <div class="form-group">
                     <label for="becomesEffective" class="col-md-4 control-label">Becomes Effective</label>
@@ -92,6 +82,21 @@
 
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<script>
+$('#location-select').selectize({
+    maxItems: 10,
+    plugins: ['remove_button'],
+    delimiter: ',',
+    persist: false,
+    create: function(input) {
+        return {
+            value: input,
+            text: input
+        }
+    }
+});
+</script>
 
 </body>
 </html>
