@@ -4,7 +4,9 @@ import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
 import edu.odu.cs.gold.model.*;
 import edu.odu.cs.gold.repository.*;
+import edu.odu.cs.gold.security.AuthenticatedUser;
 import edu.odu.cs.gold.service.GoogleMapService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +26,7 @@ public class AnalyticsController {
     private GoogleMapService googleMapService;
     private PermitTypeRepository permitTypeRepository;
     private SpaceTypeRepository spaceTypeRepository;
+    private UserRepository userRepository;
 
     public AnalyticsController(GarageRepository garageRepository,
                                BuildingRepository buildingRepository,
@@ -31,7 +34,8 @@ public class AnalyticsController {
                                TravelDistanceDurationRepository travelDistanceDurationRepository,
                                GoogleMapService googleMapService,
                                PermitTypeRepository permitTypeRepository,
-                               SpaceTypeRepository spaceTypeRepository) {
+                               SpaceTypeRepository spaceTypeRepository,
+                               UserRepository userRepository) {
         this.garageRepository = garageRepository;
         this.buildingRepository = buildingRepository;
         this.parkingSpaceRepository = parkingSpaceRepository;
@@ -39,6 +43,7 @@ public class AnalyticsController {
         this.googleMapService = googleMapService;
         this.permitTypeRepository = permitTypeRepository;
         this.spaceTypeRepository = spaceTypeRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping({"","/","/index"})
@@ -56,7 +61,27 @@ public class AnalyticsController {
 
         List<PermitType> permitTypes = new ArrayList<>(permitTypeRepository.findAll());
         List<SpaceType> spaceTypes = new ArrayList<>(spaceTypeRepository.findAll());
+        permitTypes.sort(Comparator.comparing(PermitType::getName));
+        spaceTypes.sort(Comparator.comparing(SpaceType::getName));
 
+        HashSet<String> preferredPermitTypes = new HashSet<> ();
+        HashSet<String> preferredSpaceTypes = new HashSet<> ();
+
+        try {
+            AuthenticatedUser authenticatedUser =
+                    (AuthenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String userKey = authenticatedUser.getUser().getUserKey();
+            User user = userRepository.findByKey(userKey);
+
+            preferredPermitTypes = (HashSet<String>)user.getPreferredPermitTypes();
+            preferredSpaceTypes = (HashSet<String>)user.getPreferredSpaceTypes();
+
+        } catch(Exception e) {
+            // User is not logged on.
+        }
+
+        model.addAttribute("preferredPermitTypes", preferredPermitTypes);
+        model.addAttribute("preferredSpaceTypes", preferredSpaceTypes);
         model.addAttribute("buildings", buildings);
         model.addAttribute("spaceTypes", spaceTypes);
         model.addAttribute("permitTypes", permitTypes);

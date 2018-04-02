@@ -72,6 +72,8 @@ public class AccountsController {
         boolean isUsernameDuplicate = false;
         boolean isEmailDuplicate = false;
         try {
+            user.setUsername(user.getUsername().toLowerCase());
+
             Predicate predicate = Predicates.or(
                     Predicates.equal("userKey", user.getUserKey()),
                     Predicates.equal("username", user.getUsername())
