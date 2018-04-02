@@ -49,7 +49,7 @@ public class MapsControllerTests {
 
     @Before
     public void setup() {
-
+        mapsController = new MapsController(garageRepository);
 
         garageOne = new Garage();
         garageOne.setGarageKey(GARAGE_ONE_KEY);

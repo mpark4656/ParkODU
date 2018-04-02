@@ -14,12 +14,12 @@ public class AuthenticatedUser extends User implements Serializable {
 	private edu.odu.cs.gold.model.User user;
 	private Set<String> permissions;
 	private List<SessionInformation> sessionInformations;
-	
+
 	public AuthenticatedUser(String username, String password, Collection<? extends GrantedAuthority> authorities) {
 		super(username, password, authorities);
 		this.sessionInformations = new ArrayList<>();
 	}
-	
+
 	public AuthenticatedUser(String username, 
 			String password, 
 			boolean enabled, 
@@ -30,11 +30,7 @@ public class AuthenticatedUser extends User implements Serializable {
 			Collection<? extends GrantedAuthority> authorities) {
 		super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
 		this.user = user;
-		this.permissions = new HashSet<>();
-		for (GrantedAuthority authority : authorities) {
-			this.permissions.add(authority.toString());
-		}
-		this.sessionInformations = new ArrayList<>();
+		this.permissions = user.getPermissions();
 	}
 		
 	public edu.odu.cs.gold.model.User getUser() {
@@ -50,10 +46,7 @@ public class AuthenticatedUser extends User implements Serializable {
 	}
 
 	public boolean containsPermission(String permission) {
-		if (permissions.contains(permission)) {
-			return true;
-		}
-		return false;
+		return permissions.contains(permission);
 	}
 
 	public List<SessionInformation> getSessionInformations() {
@@ -62,7 +55,5 @@ public class AuthenticatedUser extends User implements Serializable {
 
 	public void setSessionInformations(List<SessionInformation> sessionInformations) {
 		this.sessionInformations = sessionInformations;
-	}	
-
-
+	}
 }

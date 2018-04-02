@@ -9,18 +9,13 @@
 
 <!-- Navigation Bar -->
 <!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
-
 <div class="container-fluid main-container">
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <h1 class="text-center" style="text-transform: uppercase;">Create Garage</h1>
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
+            <h1 class="text-center main-header">Create Garage</h1>
             <hr/>
-        </div>
-    </div>
-    <!-- Alerts -->
-    <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+            <!-- Alerts -->
+            <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
             <form class="form-horizontal" id="create-garage-form" role="form" th:action="@{/settings/garage/create}" method="post" th:object="${garage}">
                 <input type="hidden" id="id" th:value="${garage.garageKey}" th:field="${garage.garageKey}"/>
 
@@ -42,7 +37,7 @@
                 <div class="form-group">
                     <label for="heightDescription" class="col-md-4 control-label">Height Description</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" id="heightDescription" th:field="${garage.heightDescription}"/>
+                        <input type="text" class="form-control" id="heightDescription" placeholder="For example, 7ft clearance." th:field="${garage.heightDescription}"/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -61,39 +56,6 @@
                     <label for="longitude" class="col-md-4 control-label">Longitude</label>
                     <div class="col-md-8">
                         <input type="text" class="form-control" id="longitude" th:field="${garage.longitude}" readonly="readonly"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="addressOne" class="col-md-4 control-label">Address One</label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" id="addressOne" th:field="${garage.addressOne}"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="addressTwo" class="col-md-4 control-label">Address Two</label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" id="addressTwo" th:field="${garage.addressTwo}"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="city" class="col-md-4 control-label">City</label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" id="city" th:field="${garage.city}"
-                               placeholder="City"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="state" class="col-md-4 control-label">State</label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" id="state" th:field="${garage.state}" pattern="^[A-Z]{2}$"
-                               placeholder="Two uppercase letters abbreviating the State name" title="Two uppercase letters abbreviating the State name"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="zipCode" class="col-md-4 control-label">Zip Code</label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" id="zipCode" th:field="${garage.zipCode}" pattern="^\d{5}$"
-                               placeholder="Five digits" title="Five digits"/>
                     </div>
                 </div>
                 <div class="col-md-8 col-md-offset-4">

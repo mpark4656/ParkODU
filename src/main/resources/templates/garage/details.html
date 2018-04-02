@@ -4,68 +4,64 @@
 <head>
     <!-- Head -->
     <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+    <meta http-equiv="refresh" content="5"/>
 </head>
 <body>
 
 <!-- Navigation Bar -->
 <!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
 
+<!-- Main Content -->
 <div class="container-fluid main-container">
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <h1 class="text-center" style="text-transform: uppercase;" th:text="${garage.name}"></h1>
-            <hr/>
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-4">
+                    <img class="garage-image" th:src="@{/img} + '/' + ${garage.garageKey} + '.jpg'" th:alt="${garage.name}" style="border: 1px solid black; width: 100%; margin-top: 20px; margin-bottom: 20px;"/>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-8">
+                    <h1 class="text-center main-header" th:text="${garage.name}"></h1>
+                    <hr/>
+                    <dl class="dl-horizontal">
+                        <dt>Total Available Spaces</dt>
+                        <dd th:text="${garage.availableSpaces}"></dd>
+                        <dt>Total Spaces</dt>
+                        <dd th:text="${garage.totalSpaces}"></dd>
+                        <dt>Occupancy Rate</dt>
+                        <dd th:text="${garage.capacity} + '%'"></dd>
+                        <dt>Description</dt>
+                        <dd th:text="${garage.description}"></dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <table class="table table-bordered table-centered">
+                        <thead>
+                        <tr>
+                            <th class="col-md-3">Floor</th>
+                            <th class="col-md-3">Description</th>
+                            <th class="col-md-3">Available Spaces</th>
+                            <th class="col-md-3">Capacity</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="floor : ${floors}">
+                            <td><a th:href="@{'/floor/details'} + '/' + ${floor.floorKey}" th:text="'Level ' + ${floor.number}"></a></td>
+                            <td th:text="${floor.description}"></td>
+                            <td th:text="${floor.availableSpaces}"></td>
+                            <td th:text="${floor.capacity} + '%'"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-xs-8 col-sm-8 col-md-6 col-md-offset-1">
-            <dl class="dl-horizontal">
-                <dt>Total Available Spaces</dt>
-                <dd th:text="${garage.availableSpaces}"></dd>
-                <dt>Total Spaces</dt>
-                <dd th:text="${garage.totalSpaces}"></dd>
-                <dt>Occupancy Rate</dt>
-                <dd th:text="${garage.capacity} + '%'"></dd>
-                <dt>Description</dt>
-                <dd th:text="${garage.description}"></dd>
-            </dl>
-        </div>
-        <div class="col-xs-4 col-sm-4 col-md-4">
-            <img class="garage-image" th:src="@{/img} + '/' + ${garage.garageKey} + '.jpg'" th:alt="${garage.name}" style="border: 1px solid black; width: 100%;"/>
-        </div>
-    </div>
-
-    <br/>
-
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <table class="table table-bordered table-centered">
-                <thead>
-                    <tr>
-                        <th class="col-md-3">Floor</th>
-                        <th class="col-md-3">Description</th>
-                        <th class="col-md-3">Available Spaces</th>
-                        <th class="col-md-3">Capacity</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="floor : ${floors}">
-                        <td><a th:href="@{'/floor/details'} + '/' + ${floor.floorKey}" th:text="'Level ' + ${floor.number}"></a></td>
-                        <td th:text="${floor.description}"></td>
-                        <td th:text="${floor.availableSpaces}"></td>
-                        <td th:text="${floor.capacity} + '%'"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <br/>
-
     <!-- Footer -->
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
+<!-- End Main Content -->
 
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->

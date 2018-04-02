@@ -77,9 +77,9 @@ public class AccountsRestController {
                 existingUser.setPassword(user.getPassword());
             }
             if (user.getRoleType() != null) {
-                existingUser.setRole(user.getRoleType());
+                existingUser.setRoleType(user.getRoleType());
             }
-            existingUser.setEnabled(user.isEnabled());
+            existingUser.setEnabled(user.getEnabled());
 
             userRepository.save(existingUser);
             System.out.println("Updated User: " + existingUser);
@@ -99,5 +99,11 @@ public class AccountsRestController {
             }
         }
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/get/{userKey}")
+    public User get(@PathVariable String userKey) {
+        User user = userRepository.findByKey(userKey);
+        return user;
     }
 }

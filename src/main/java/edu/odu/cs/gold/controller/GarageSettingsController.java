@@ -77,7 +77,6 @@ public class GarageSettingsController {
     @GetMapping("/create")
     public String create(Model model) {
         Garage garage = new Garage();
-        garage.generateGarageKey();
         model.addAttribute("garage", garage);
         return "settings/garage/create";
     }
@@ -169,11 +168,6 @@ public class GarageSettingsController {
                 existingGarage.setDescription(garage.getDescription());
                 existingGarage.setHeightDescription(garage.getHeightDescription());
                 existingGarage.setAddress(garage.getAddress());
-                existingGarage.setAddressOne(garage.getAddressOne());
-                existingGarage.setAddressTwo(garage.getAddressTwo());
-                existingGarage.setCity(garage.getCity());
-                existingGarage.setState(garage.getState());
-                existingGarage.setZipCode(garage.getZipCode());
                 garageRepository.save(existingGarage);
                 isSuccessful = true;
             }

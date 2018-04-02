@@ -1,0 +1,207 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: FloorStatisticController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">edu.odu.cs.gold.controller</a> ]
+</div>
+
+<h1>Coverage Summary for Class: FloorStatisticController (edu.odu.cs.gold.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FloorStatisticController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    94.3%
+  </span>
+  <span class="absValue">
+    (50/ 53)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package edu.odu.cs.gold.controller;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.hazelcast.query.Predicate;
+<i>4</i>&nbsp;import com.hazelcast.query.Predicates;
+<i>5</i>&nbsp;import edu.odu.cs.gold.model.Floor;
+<i>6</i>&nbsp;import edu.odu.cs.gold.model.FloorStatistic;
+<i>7</i>&nbsp;import edu.odu.cs.gold.model.Garage;
+<i>8</i>&nbsp;import edu.odu.cs.gold.model.ParkingSpace;
+<i>9</i>&nbsp;import edu.odu.cs.gold.repository.FloorRepository;
+<i>10</i>&nbsp;import edu.odu.cs.gold.repository.FloorStatisticRepository;
+<i>11</i>&nbsp;import edu.odu.cs.gold.repository.GarageRepository;
+<i>12</i>&nbsp;import edu.odu.cs.gold.repository.ParkingSpaceRepository;
+<i>13</i>&nbsp;import edu.odu.cs.gold.service.GarageService;
+<i>14</i>&nbsp;import org.springframework.stereotype.Controller;
+<i>15</i>&nbsp;import org.springframework.ui.Model;
+<i>16</i>&nbsp;import org.springframework.web.bind.annotation.GetMapping;
+<i>17</i>&nbsp;import org.springframework.web.bind.annotation.PathVariable;
+<i>18</i>&nbsp;import org.springframework.web.bind.annotation.RequestMapping;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.*;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;@Controller
+<i>23</i>&nbsp;@RequestMapping(&quot;/floorstatistics&quot;)
+<i>24</i>&nbsp;public class FloorStatisticController {
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    private GarageRepository garageRepository;
+<i>27</i>&nbsp;    private FloorRepository floorRepository;
+<i>28</i>&nbsp;    private ParkingSpaceRepository parkingSpaceRepository;
+<i>29</i>&nbsp;    private FloorStatisticRepository floorStatisticRepository;
+<i>30</i>&nbsp;    private GarageService garageService;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    public FloorStatisticController(GarageRepository garageRepository,
+<i>33</i>&nbsp;                                    FloorRepository floorRepository,
+<i>34</i>&nbsp;                                    ParkingSpaceRepository parkingSpaceRepository,
+<i>35</i>&nbsp;                                    FloorStatisticRepository floorStatisticRepository,
+<b class="fc"><i>36</i>&nbsp;                                    GarageService garageService) {</b>
+<b class="fc"><i>37</i>&nbsp;        this.garageRepository = garageRepository;</b>
+<b class="fc"><i>38</i>&nbsp;        this.floorRepository = floorRepository;</b>
+<b class="fc"><i>39</i>&nbsp;        this.parkingSpaceRepository = parkingSpaceRepository;</b>
+<b class="fc"><i>40</i>&nbsp;        this.floorStatisticRepository = floorStatisticRepository;</b>
+<b class="fc"><i>41</i>&nbsp;        this.garageService = garageService;</b>
+<b class="fc"><i>42</i>&nbsp;    }</b>
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    @GetMapping({&quot;&quot;,&quot;/&quot;,&quot;/index&quot;})
+<i>45</i>&nbsp;    public String index(Model model) {
+<b class="fc"><i>46</i>&nbsp;        List&lt;Garage&gt; garages = new ArrayList&lt;&gt;(garageRepository.findAll());</b>
+<b class="fc"><i>47</i>&nbsp;        model.addAttribute(&quot;garage&quot;, garages);</b>
+<b class="fc"><i>48</i>&nbsp;        return &quot;garage/index&quot;;</b>
+<i>49</i>&nbsp;    }
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    @GetMapping(&quot;/details/{floorKey}&quot;)
+<i>52</i>&nbsp;    public String details(@PathVariable String floorKey, Model model) {
+<i>53</i>&nbsp;
+<b class="fc"><i>54</i>&nbsp;        Floor floor = floorRepository.findByKey(floorKey);</b>
+<b class="fc"><i>55</i>&nbsp;        Garage garage = garageRepository.findByKey(floor.getGarageKey());</b>
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;        // Retrieve FloorStatistics
+<b class="fc"><i>58</i>&nbsp;        Predicate predicate = Predicates.equal(&quot;floorKey&quot;, floorKey);</b>
+<b class="fc"><i>59</i>&nbsp;        List&lt;FloorStatistic&gt; floorStatistics = floorStatisticRepository.findByPredicate(predicate);</b>
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;        // Sort Floors by Number
+<b class="fc"><i>62</i>&nbsp;        floorStatistics.sort(Comparator.comparing(FloorStatistic::getTimestamp));</b>
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;        // Build Chart Data
+<b class="fc"><i>65</i>&nbsp;        StringBuilder dataString = new StringBuilder();</b>
+<b class="fc"><i>66</i>&nbsp;        StringBuilder labelString = new StringBuilder();</b>
+<b class="fc"><i>67</i>&nbsp;        for (FloorStatistic floorStatistic : floorStatistics) {</b>
+<b class="fc"><i>68</i>&nbsp;            dataString.append(floorStatistic.getCapacity() + &quot;,&quot;);</b>
+<i>69</i>&nbsp;
+<b class="fc"><i>70</i>&nbsp;            Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance</b>
+<b class="fc"><i>71</i>&nbsp;            calendar.setTime(floorStatistic.getTimestamp());   // assigns calendar to given date</b>
+<i>72</i>&nbsp;
+<b class="fc"><i>73</i>&nbsp;            if (calendar.get(Calendar.HOUR_OF_DAY) == 0) {</b>
+<b class="nc"><i>74</i>&nbsp;                labelString.append(&quot;12am,&quot;);</b>
+<i>75</i>&nbsp;            }
+<b class="fc"><i>76</i>&nbsp;            else if (calendar.get(Calendar.HOUR_OF_DAY) == 12) {</b>
+<b class="nc"><i>77</i>&nbsp;                labelString.append(&quot;12pm,&quot;);</b>
+<i>78</i>&nbsp;            }
+<b class="fc"><i>79</i>&nbsp;            else if (calendar.get(Calendar.HOUR_OF_DAY) &lt; 12) {</b>
+<b class="nc"><i>80</i>&nbsp;                labelString.append(calendar.get(Calendar.HOUR_OF_DAY) + &quot;am,&quot;);</b>
+<i>81</i>&nbsp;            }
+<i>82</i>&nbsp;            else {
+<b class="fc"><i>83</i>&nbsp;                labelString.append((calendar.get(Calendar.HOUR_OF_DAY) - 12) + &quot;pm,&quot;);</b>
+<i>84</i>&nbsp;            }
+<b class="fc"><i>85</i>&nbsp;        }</b>
+<i>86</i>&nbsp;
+<b class="fc"><i>87</i>&nbsp;        model.addAttribute(&quot;garage&quot;, garage);</b>
+<b class="fc"><i>88</i>&nbsp;        model.addAttribute(&quot;floor&quot;, floor);</b>
+<b class="fc"><i>89</i>&nbsp;        model.addAttribute(&quot;floorStatistics&quot;, floorStatistics);</b>
+<b class="fc"><i>90</i>&nbsp;        model.addAttribute(&quot;dataString&quot;, dataString.toString());</b>
+<b class="fc"><i>91</i>&nbsp;        model.addAttribute(&quot;labelString&quot;, labelString.toString());</b>
+<i>92</i>&nbsp;
+<b class="fc"><i>93</i>&nbsp;        return &quot;floorstatistic/details&quot;;</b>
+<i>94</i>&nbsp;    }
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;    @GetMapping(&quot;/details/{garageKey}/floor/{floorKey}&quot;)
+<i>97</i>&nbsp;    public String floorDetails(@PathVariable String garageKey, @PathVariable String floorKey, Model model) {
+<b class="fc"><i>98</i>&nbsp;        Floor floor = floorRepository.findByKey(floorKey);</b>
+<b class="fc"><i>99</i>&nbsp;        Garage garage = garageRepository.findByKey(floor.getGarageKey());</b>
+<i>100</i>&nbsp;        // Retrieve ParkingSpaces
+<b class="fc"><i>101</i>&nbsp;        Predicate predicate = Predicates.and(</b>
+<b class="fc"><i>102</i>&nbsp;                Predicates.equal(&quot;garageKey&quot;, garageKey),</b>
+<b class="fc"><i>103</i>&nbsp;                Predicates.equal(&quot;floor&quot;, floor.getNumber())</b>
+<i>104</i>&nbsp;        );
+<b class="fc"><i>105</i>&nbsp;        List&lt;ParkingSpace&gt; parkingSpaces = parkingSpaceRepository.findByPredicate(predicate);</b>
+<b class="fc"><i>106</i>&nbsp;        System.err.println(parkingSpaces.size());</b>
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;        // Sort ParkingSpaces by Number
+<b class="fc"><i>109</i>&nbsp;        parkingSpaces.sort(Comparator.comparing(ParkingSpace::getNumber));</b>
+<i>110</i>&nbsp;
+<b class="fc"><i>111</i>&nbsp;        StringBuilder availableParkingSpaces = new StringBuilder();</b>
+<b class="fc"><i>112</i>&nbsp;        for (ParkingSpace parkingSpace : parkingSpaces) {</b>
+<b class="fc"><i>113</i>&nbsp;            if (parkingSpace.isAvailable()) {</b>
+<b class="fc"><i>114</i>&nbsp;                availableParkingSpaces.append(parkingSpace.getNumber() + &quot;,&quot;);</b>
+<i>115</i>&nbsp;            }
+<b class="fc"><i>116</i>&nbsp;        }</b>
+<i>117</i>&nbsp;
+<b class="fc"><i>118</i>&nbsp;        model.addAttribute(&quot;garage&quot;, garage);</b>
+<b class="fc"><i>119</i>&nbsp;        model.addAttribute(&quot;floor&quot;, floor);</b>
+<b class="fc"><i>120</i>&nbsp;        model.addAttribute(&quot;parkingSpaces&quot;, parkingSpaces);</b>
+<b class="fc"><i>121</i>&nbsp;        model.addAttribute(&quot;availableParkingSpaces&quot;, availableParkingSpaces.toString());</b>
+<b class="fc"><i>122</i>&nbsp;        return &quot;floor/details&quot;;</b>
+<i>123</i>&nbsp;    }
+<i>124</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2018-03-24 16:39</div>
+</div>
+</body>
+</html>

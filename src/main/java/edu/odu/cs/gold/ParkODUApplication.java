@@ -19,6 +19,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.access.method.P;
 
 
@@ -28,6 +29,7 @@ import com.google.maps.model.*;
 import java.util.*;
 
 @SpringBootApplication
+@EnableScheduling
 public class ParkODUApplication implements ApplicationContextAware, ApplicationListener<ContextRefreshedEvent> {
 
     private ApplicationContext applicationContext;
@@ -67,6 +69,9 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
     private RoleTypeRepository roleTypeRepository;
 
     @Autowired
+    private EventRepository eventRepository;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -77,6 +82,9 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
 
     @Autowired
     private SpaceTypeService spaceTypeService;
+
+    @Autowired
+    private FloorStatisticService floorStatisticService;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -95,6 +103,7 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         spaceTypeRepository.loadAll();
         userRepository.loadAll();
         roleTypeRepository.loadAll();
+        eventRepository.loadAll();
 
         // Remove all null stored users at startup
         String isEmpty = "";
@@ -111,6 +120,7 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         System.out.println("# of SpaceTypes loaded from Mongo: " + spaceTypeRepository.findAll().size());
         System.out.println("# of Users loaded from Mongo: " + userRepository.findAll().size());
         System.out.println("# of Roles loaded from Mongo: " + roleTypeRepository.findAll().size());
+        System.out.println("# of Events loaded from Mongo: " + eventRepository.findAll().size());
 
         /*
         User user = new User();
