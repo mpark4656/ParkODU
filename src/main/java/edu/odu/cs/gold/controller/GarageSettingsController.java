@@ -4,15 +4,13 @@ import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
 import edu.odu.cs.gold.model.Garage;
 import edu.odu.cs.gold.repository.FloorRepository;
-import edu.odu.cs.gold.repository.FloorStatisticRepository;
 import edu.odu.cs.gold.repository.GarageRepository;
 import edu.odu.cs.gold.repository.ParkingSpaceRepository;
-import edu.odu.cs.gold.service.GarageService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -31,28 +29,23 @@ public class GarageSettingsController {
     private GarageRepository garageRepository;
     private FloorRepository floorRepository;
     private ParkingSpaceRepository parkingSpaceRepository;
-    private FloorStatisticRepository floorStatisticRepository;
-    private GarageService garageService;
 
     public GarageSettingsController(GarageRepository garageRepository,
                             FloorRepository floorRepository,
-                            ParkingSpaceRepository parkingSpaceRepository,
-                            FloorStatisticRepository floorStatisticRepository,
-                            GarageService garageService) {
+                            ParkingSpaceRepository parkingSpaceRepository) {
         this.garageRepository = garageRepository;
         this.floorRepository = floorRepository;
         this.parkingSpaceRepository = parkingSpaceRepository;
-        this.floorStatisticRepository = floorStatisticRepository;
-        this.garageService = garageService;
     }
 
     /**
      * This method returns "settings/garage/index" with a collection of all garage objects
      * added to the model.
      *
-     * Usage in settings/garage/index.html to access the collection of all garages
-     * ${garages}
-     *
+     * @param successMessage String
+     * @param infoMessage String
+     * @param warningMessage String
+     * @param dangerMessage String
      * @param model Model
      * @return String "settings/garage/index"
      */
@@ -76,6 +69,11 @@ public class GarageSettingsController {
         return "settings/garage/index";
     }
 
+    /**
+     * Method to return the settings/garage/create.html template page
+     * @param model Model
+     * @return String "settings/garage/create"
+     */
     @GetMapping("/create")
     public String create(Model model) {
         Garage garage = new Garage();
@@ -84,6 +82,13 @@ public class GarageSettingsController {
         return "settings/garage/create";
     }
 
+    /**
+     * Method to create a new garage
+     * @param garage Garage
+     * @param model Model
+     * @param redirectAttributes RedirectAttributes
+     * @return
+     */
     @PostMapping("/create")
     public String create(Garage garage,
                          Model model,
@@ -122,6 +127,12 @@ public class GarageSettingsController {
         return "redirect:/settings/garage/index";
     }
 
+    /**
+     * Method to return the settings/garage/edit template
+     * @param garageKey String
+     * @param model Model
+     * @return String "settings/garage/edit"
+     */
     @GetMapping("/edit/{garageKey}")
     public String edit(@PathVariable("garageKey") String garageKey,
                        Model model) {
@@ -130,19 +141,27 @@ public class GarageSettingsController {
         return "settings/garage/edit";
     }
 
+    /**
+     * Method that modifies the attributes of currently existing garage
+     * @param garage Garage
+     * @param model Model
+     * @param redirectAttributes RedirectAttributes
+     * @return String redirection to previous page
+     */
     @PostMapping("/edit")
     public String edit(Garage garage,
                        Model model,
                        RedirectAttributes redirectAttributes) {
         boolean isSuccessful = false;
         boolean isDuplicate = false;
+
         try {
             Predicate predicate = Predicates.and(
-                    Predicates.equal("garageKey", garage.getGarageKey()),
+                    Predicates.notEqual("garageKey", garage.getGarageKey()),
                     Predicates.equal("name", garage.getName())
             );
-            int existingCount = garageRepository.countByPredicate(predicate);
-            if (existingCount == 1) {
+            int duplicateCount = garageRepository.countByPredicate(predicate);
+            if (duplicateCount == 0) {
                 Garage existingGarage = garageRepository.findByKey(garage.getGarageKey());
                 existingGarage.setLatitude(garage.getLatitude());
                 existingGarage.setLongitude(garage.getLongitude());
@@ -180,6 +199,12 @@ public class GarageSettingsController {
         return "redirect:/settings/garage/index";
     }
 
+    /**
+     * Method that deletes an existing garage and all of the floor and parking spaces inside it
+     * @param garageKey String
+     * @param redirectAttributes RedirectAttributes
+     * @return String "redirect:/settings/garage/index"
+     */
     @PostMapping("/delete")
     public String delete(@RequestParam("garageKey") String garageKey,
                          RedirectAttributes redirectAttributes) {
@@ -187,8 +212,13 @@ public class GarageSettingsController {
         Garage garage = null;
         try {
             garage = garageRepository.findByKey(garageKey);
-            garageRepository.delete(garageKey);
-            isSuccessful = true;
+            if (garage != null) {
+                Predicate predicate = Predicates.equal("garageKey", garageKey);
+                parkingSpaceRepository.deleteByPredicate(predicate);
+                floorRepository.deleteByPredicate(predicate);
+                garageRepository.delete(garageKey);
+                isSuccessful = true;
+            }
         }
         catch (Exception e) {
             e.printStackTrace();

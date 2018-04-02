@@ -23,9 +23,9 @@ public class RecommendationRepository {
         return entity.getRecommendationKey();
     }
 
-    public Collection<Recommendation> findAll() {
+    public List<Recommendation> findAll() {
         IMap map = hazelcastInstance.getMap(collectionName);
-        return map.values();
+        return new ArrayList<>(map.values());
     }
 
     public Recommendation findByKey(String key) {

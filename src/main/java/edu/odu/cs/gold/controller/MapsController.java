@@ -1,6 +1,8 @@
 package edu.odu.cs.gold.controller;
 
 import com.google.gson.JsonArray;
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
@@ -29,27 +31,30 @@ import java.util.List;
 public class MapsController {
 
     private GarageRepository garageRepository;
-    private BuildingRepository buildingRepository;
-    private RecommendationRepository recommendationRepository;
 
-    public MapsController(GarageRepository garageRepository,
-                          BuildingRepository buildingRepository,
-                          RecommendationRepository recommendationRepository) {
-
+    public MapsController(GarageRepository garageRepository) {
         this.garageRepository = garageRepository;
-        this.buildingRepository = buildingRepository;
-        this.recommendationRepository = recommendationRepository;
     }
 
-    @GetMapping("/navigate/{recommendationKey}")
-    public String directions(Model model, @PathVariable("recommendationKey") String recommendationKey) {
-
-        Predicate predicate = Predicates.equal("recommendationKey", recommendationKey);
-        Recommendation recommendation = recommendationRepository.findByKey(recommendationKey);
-        Garage garage = garageRepository.findByKey(recommendation.getGarage().getGarageKey());
-        GoogleMapService mapService = new GoogleMapService();
-        mapService.buildDirections(recommendation.getStartingAddress(),garage.getLocation(),TravelMode.DRIVING);
-
-        return "maps/navigate";
+    @GetMapping({"","/","/index"})
+    public String index(Model model) {
+        return "navigate/index";
     }
+
+    @GetMapping("/navigate")
+    public String navigate(Model model,
+                           @RequestParam("latitude") Double latitude,
+                           @RequestParam("longitude") Double longitude,
+                           @RequestParam("destination") String destinationGarageKey) {
+
+        Garage garage = garageRepository.findByKey(destinationGarageKey);
+        Location startingLocation = new Location(latitude,longitude);
+
+        model.addAttribute("startingLocation", startingLocation);
+        model.addAttribute("destination", garage.getLocation());
+        model.addAttribute("travelMode", TravelMode.DRIVING.toString());
+
+        return "maps/navigate/index";
+    }
+
 }

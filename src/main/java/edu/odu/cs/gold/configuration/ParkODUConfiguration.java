@@ -36,6 +36,8 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     public static final String COLLECTION_ROLE_TYPE = "RoleType";
     public static final String COLLECTION_RECOMMENDATION = "Recommendation";
 
+    public static final String COLLECTION_USER_PERMISSION = "UserPermission";
+
     @Autowired
     public Environment environment;
 
@@ -386,5 +388,4 @@ public class ParkODUConfiguration implements ApplicationContextAware {
 
         return mapConfig;
     }
-
 }

@@ -3,7 +3,7 @@ package edu.odu.cs.gold.repository;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.query.Predicate;
-import edu.odu.cs.gold.model.RoleType;
+import edu.odu.cs.gold.model.EventNotification;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,48 +11,52 @@ import java.util.List;
 import java.util.Set;
 
 
-public class RoleTypeRepository {
-
+public class EventNotificationRepository {
     private HazelcastInstance hazelcastInstance;
     private String collectionName;
 
-    public RoleTypeRepository(HazelcastInstance hazelcastInstance, String collectionName) {
+    public EventNotificationRepository(HazelcastInstance hazelcastInstance, String collectionName) {
         this.hazelcastInstance = hazelcastInstance;
         this.collectionName = collectionName;
     }
 
-    public String getId(RoleType entity) {
-        return entity.getRoleKey();
+    public String getId(EventNotification entity) {
+        return entity.getEventKey();
     }
 
-    public List<RoleType> findAll() {
+    public Collection<EventNotification> findAll() {
         IMap map = hazelcastInstance.getMap(collectionName);
-        return new ArrayList<>(map.values());
+        return map.values();
     }
 
-    public RoleType findByKey(String key) {
+    public EventNotification findByKey(String key) {
         IMap map = hazelcastInstance.getMap(collectionName);
-        return (RoleType)map.get(key);
+        return (EventNotification) map.get(key);
     }
 
-    public List<RoleType> findByKeys(Set<String> keys) {
+    public List<EventNotification> findByKeys(Set<String> keys) {
         IMap map = hazelcastInstance.getMap(collectionName);
         return new ArrayList<>(map.getAll(keys).values());
     }
 
-    public List<RoleType> findByPredicate(Predicate predicate) {
+    public List<EventNotification> findByPredicate(Predicate predicate) {
         IMap map = hazelcastInstance.getMap(collectionName);
         return new ArrayList<>(map.values(predicate));
     }
 
-    public void save(RoleType entity) {
+    public int countByPredicate(Predicate predicate) {
+        IMap map = hazelcastInstance.getMap(collectionName);
+        return map.values(predicate).size();
+    }
+
+    public void save(EventNotification entity) {
         IMap map = hazelcastInstance.getMap(collectionName);
         map.set(getId(entity), entity);
     }
 
-    public void save(Collection<RoleType> entities) {
+    public void save(Collection<EventNotification> entities) {
         IMap map = hazelcastInstance.getMap(collectionName);
-        for (RoleType entity : entities) {
+        for (EventNotification entity : entities) {
             map.set(getId(entity), entity);
         }
     }
@@ -62,15 +66,10 @@ public class RoleTypeRepository {
         map.delete(key);
     }
 
-    public int countByPredicate(Predicate predicate) {
-        IMap map = hazelcastInstance.getMap(collectionName);
-        return map.values(predicate).size();
-    }
-
     public int deleteByPredicate(Predicate predicate) {
         IMap map = hazelcastInstance.getMap(collectionName);
-        List<RoleType> entities = this.findByPredicate(predicate);
-        for (RoleType entity : entities) {
+        List<EventNotification> entities = this.findByPredicate(predicate);
+        for (EventNotification entity : entities) {
             map.delete(getId(entity));
         }
         return entities.size();

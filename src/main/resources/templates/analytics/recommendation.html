@@ -7,47 +7,10 @@
 </head>
 <body>
 
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid navbar-container">
-        <div class="col-md-3">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <!-- Main Logo -->
-                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div id="navbar" class="navbar-collapse collapse navbar-center">
-                <ul class="nav navbar-nav">
-                    <li><a th:href="@{/garage}">Garages</a></li>
-                    <li><a th:href="@{/analytics/locate}">Search</a></li>
-                    <!-- Settings Link -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
-                </ul>
-                <!--
-                <form class="navbar-form navbar-right">
-                    <input type="text" class="form-control" placeholder="Search..."/>
-                </form>
-                -->
-            </div>
-        </div>
-        <div class="col-md-3">
-            <!-- Social Media Links -->
-            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
-        </div>
-    </div>
-</nav>
+<!-- Navigation Bar -->
+<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
 
 <div class="container-fluid main-container">
-
-    <!-- Welcome User -->
-    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
-
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
             <h1 class="text-center" style="text-transform: uppercase;">Search Results</h1>
@@ -93,8 +56,9 @@
                 </thead>
                 <tbody>
                     <tr th:each="recommendation : ${recommendations}">
-                        <td style="text-align: left;"><a th:href="@{/garage/details} + '/' + ${recommendation.garage.garageKey}" th:text="${recommendation.garage.name}"></a>
-                            <a th:href="@{/maps/navigate} + '/' + ${recommendation.recommendationKey}" class="btn btn-primary btn-sm align-right">Navigate</a>
+                        <td style="text-align: left;">
+                            <a th:href="@{/maps/navigate} + '?latitude=' + ${startingLatitude} + '&amp;longitude=' + ${startingLongitude} + '&amp;destination=' + ${recommendation.garage.garageKey}" class="btn btn-primary btn-sm align-right">Navigate</a>
+                            <a th:href="@{/garage/details} + '/' + ${recommendation.garage.garageKey}" th:text="${recommendation.garage.name}"></a>
                         </td>
                         <td th:text="${recommendation.availabilityCount}"></td>
                         <td th:text="${recommendation.startingAddressToGarageDistanceText}"></td>
@@ -122,9 +86,9 @@
 <script th:inline="javascript">
 $('.navigate-button').on('click', function()
 {
-    $('#navigate-id').val($(this).data("startingAddress"));
+    $('#navigate-id').val($(this).data('startingAddress'));
+
 });
 </script>
-
 </body>
 </html>
