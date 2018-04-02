@@ -48,14 +48,14 @@ public class AnalyticsControllerTests {
     private static String GARAGE_ONE_NAME = "Garage1";
     private static String GARAGE_TWO_NAME = "Garage2";
 
-    private static String PERMIT_TYPE_ONE_NAME = "PermitTypeOne";
-    private static String PERMIT_TYPE_TWO_NAME = "PermitTypeTwo";
-    private static String PERMIT_TYPE_THREE_NAME = "PermitTypeThree";
-    private static String PERMIT_TYPE_FOUR_NAME = "PermitTypeFour";
-    private static String SPACE_TYPE_ONE_NAME = "SpaceTypeOne";
-    private static String SPACE_TYPE_TWO_NAME = "SpaceTypeTwo";
-    private static String SPACE_TYPE_THREE_NAME = "SpaceTypeThree";
-    private static String SPACE_TYPE_FOUR_NAME = "SpaceTypeFour";
+    private static String PERMIT_TYPE_ONE_NAME = "Permit1";
+    private static String PERMIT_TYPE_TWO_NAME = "Permit2";
+    private static String PERMIT_TYPE_THREE_NAME = "Permit3";
+    private static String PERMIT_TYPE_FOUR_NAME = "Permit4";
+    private static String SPACE_TYPE_ONE_NAME = "Space1";
+    private static String SPACE_TYPE_TWO_NAME = "Space2";
+    private static String SPACE_TYPE_THREE_NAME = "Space3";
+    private static String SPACE_TYPE_FOUR_NAME = "Space4";
 
     private static String PARKING_SPACE_ONE_FLOOR = "1";
     private static String PARKING_SPACE_TWO_FLOOR = "1";
@@ -90,6 +90,7 @@ public class AnalyticsControllerTests {
     private PermitTypeRepository permitTypeRepository;
     private SpaceTypeRepository spaceTypeRepository;
     private BuildingRepository buildingRepository;
+    private UserRepository userRepository;
 
     private GoogleMapService googleMapService;
     private TravelDistanceDurationRepository travelDistanceDurationRepository;
@@ -246,6 +247,11 @@ public class AnalyticsControllerTests {
         doNothing().when(buildingRepository).save(any(Building.class));
         doNothing().when(buildingRepository).delete(anyString());
 
+        userRepository = mock(UserRepository.class);
+        doNothing().when(userRepository).delete(anyString());
+        doNothing().when(userRepository).save(any(User.class));
+
+
         googleMapService = new GoogleMapService();
         travelDistanceDurationRepository = mock(TravelDistanceDurationRepository.class);
 
@@ -256,7 +262,8 @@ public class AnalyticsControllerTests {
                 travelDistanceDurationRepository,
                 googleMapService,
                 permitTypeRepository,
-                spaceTypeRepository
+                spaceTypeRepository,
+                userRepository
         );
     }
 

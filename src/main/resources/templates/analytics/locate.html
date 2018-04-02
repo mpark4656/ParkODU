@@ -32,7 +32,12 @@
                     <label class="control-label col-md-4">Permit Types</label>
                     <div class="col-md-8">
                         <div th:each="permitType : ${permitTypes}">
-                            <input name="permitTypeKeys" type="checkbox" th:id="${permitType.permitTypeKey}" th:value="${permitType.permitTypeKey}" />
+                            <input
+                                    name="permitTypeKeys"
+                                    type="checkbox"
+                                    th:id="${permitType.permitTypeKey}"
+                                    th:value="${permitType.permitTypeKey}"
+                                    th:checked="${preferredPermitTypes.contains(permitType.permitTypeKey)}"/>
                             <label th:for="${permitType.permitTypeKey}" th:text="${permitType.name}"></label>
                         </div>
                     </div>
@@ -42,7 +47,11 @@
                     <label class="control-label col-md-4">Space Types</label>
                     <div class="col-md-8">
                         <div th:each="spaceType : ${spaceTypes}">
-                            <input name="spaceTypeKeys" type="checkbox" th:id="${spaceType.spaceTypeKey}" th:value="${spaceType.spaceTypeKey}" />
+                            <input
+                                    name="spaceTypeKeys" type="checkbox"
+                                    th:id="${spaceType.spaceTypeKey}"
+                                    th:value="${spaceType.spaceTypeKey}"
+                                    th:checked="${preferredSpaceTypes.contains(spaceType.spaceTypeKey)}"/>
                             <label th:for="${spaceType.spaceTypeKey}" th:text="${spaceType.name}"></label>
                         </div>
                     </div>

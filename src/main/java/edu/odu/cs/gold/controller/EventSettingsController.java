@@ -158,7 +158,8 @@ public class EventSettingsController {
                 existingEvent.setEventMessage(event.getEventMessage());
                 existingEvent.setEventDateTime(DateTime.now().toString());
                 existingEvent.setScheduledDateTime(event.getScheduledDateTime());
-                // event tags go here
+                existingEvent.setLocationsAffected(event.getLocationsAffected());
+                existingEvent.setEventTags(event.getEventTags());
                 eventRepository.save(existingEvent);
                 isSuccessful = true;
             }

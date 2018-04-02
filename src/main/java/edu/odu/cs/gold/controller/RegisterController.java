@@ -27,7 +27,6 @@ public class RegisterController {
     private UserService userService;
     private EmailService emailService;
     private UserRepository userRepository;
-    private RoleTypeRepository roleTypeRepository;
 
     /**
      * Constructor for the RegisterController class that implements user registration
@@ -43,7 +42,6 @@ public class RegisterController {
         this.userService = userService;
         this.emailService = emailService;
         this.userRepository = userRepository;
-        this.roleTypeRepository = roleTypeRepository;
     }
 
     /**
@@ -75,6 +73,7 @@ public class RegisterController {
                                           HttpServletRequest request) {
 
         // Lookup user in database by e-mail
+        user.setUsername(user.getUserKey().toLowerCase());
         boolean emailExists = userService.userExists(user.getEmail());
         boolean userExists = userService.userExists(user.getUsername());
 
