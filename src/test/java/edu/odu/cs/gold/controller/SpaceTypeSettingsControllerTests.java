@@ -24,7 +24,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class 4aeSpaceTypeSettingsControllerTests {
+public class SpaceTypeSettingsControllerTests {
 
     private static String PERMIT_TYPE_ONE_KEY = "a0000000000000000000000000000001";
     private static String PERMIT_TYPE_TWO_KEY = "a0000000000000000000000000000002";
