@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.HashSet;
 import java.util.UUID;
 import java.util.Set;
 
@@ -29,7 +30,7 @@ public class AccountsRestControllerTests {
     @Before
     public void setup() {
 
-        Set<String> permissions = null;
+        Set<String> permissions = new HashSet<>();
         permissions.add("USER");
 
         userOne = new User();
