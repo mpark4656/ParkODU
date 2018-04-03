@@ -3,6 +3,7 @@ package edu.odu.cs.gold.controller;
 import edu.odu.cs.gold.model.Event;
 import edu.odu.cs.gold.model.Garage;
 import edu.odu.cs.gold.model.User;
+import edu.odu.cs.gold.repository.EventNotificationRepository;
 import edu.odu.cs.gold.repository.EventRepository;
 import edu.odu.cs.gold.repository.GarageRepository;
 import edu.odu.cs.gold.repository.UserRepository;
@@ -48,12 +49,13 @@ public class HomeController {
                 int newEventCount = 0;
                 for(Event event : allEvents) {
                     DateTime eventUpdatedDate = DateTime.parse(event.getEventUpdatedDateTime());
+
                     DateTime userLastNotificationViewedDate
                             = DateTime.parse(user.getLastNotificationViewedDate());
-
-                    if(eventUpdatedDate.compareTo(userLastNotificationViewedDate) > 0) {
+                    if (eventUpdatedDate.compareTo(userLastNotificationViewedDate) > 0) {
                         newEventCount++;
                     }
+
                 }
                 model.addAttribute("newEventCount", newEventCount);
             } catch(Exception e) {

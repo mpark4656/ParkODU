@@ -38,6 +38,7 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     public static final String COLLECTION_RECOMMENDATION = "Recommendation";
 
     public static final String COLLECTION_USER_PERMISSION = "UserPermission";
+    public static final String COLLECTION_EVENT_NOTIFICATION = "EventNotification";
 
     @Autowired
     public Environment environment;
@@ -141,6 +142,11 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     }
 
     @Bean
+    public EventNotificationRepository eventNotificationRepository() {
+        return new EventNotificationRepository(hazelcastInstance(), COLLECTION_EVENT_NOTIFICATION);
+    }
+
+    @Bean
     public EventRepository eventRepository() {
         return new EventRepository(hazelcastInstance(), COLLECTION_EVENT);
     }
@@ -203,6 +209,10 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     @Bean
     public MongoMapStore eventMapStore() {
         return new MongoMapStore(mongoTemplate, COLLECTION_EVENT, Event.class);
+    }
+
+    @Bean MongoMapStore eventNotificationMapStore() {
+        return new MongoMapStore(mongoTemplate, COLLECTION_EVENT_NOTIFICATION,EventNotification.class);
     }
 
     @Bean
@@ -414,6 +424,25 @@ public class ParkODUConfiguration implements ApplicationContextAware {
         // Indexed Attributes
         mapConfig.addMapIndexConfig(new MapIndexConfig("eventKey", false));
         mapConfig.addMapIndexConfig(new MapIndexConfig("eventName", false));
+
+        return mapConfig;
+    }
+
+    @Bean
+    public MapConfig EventNotificationRepositoryMapConfig() {
+        MapConfig mapConfig = new MapConfig(COLLECTION_EVENT_NOTIFICATION);
+
+        // MapStore
+        MapStoreConfig mapStoreConfig = new MapStoreConfig();
+        mapStoreConfig.setImplementation(eventNotificationMapStore());
+        mapStoreConfig.setEnabled(true);
+        mapStoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.EAGER);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+
+        // Indexed Attributes
+        mapConfig.addMapIndexConfig(new MapIndexConfig("eventKey", false));
+        mapConfig.addMapIndexConfig(new MapIndexConfig("location", false));
+        mapConfig.addMapIndexConfig(new MapIndexConfig("title", false));
 
         return mapConfig;
     }

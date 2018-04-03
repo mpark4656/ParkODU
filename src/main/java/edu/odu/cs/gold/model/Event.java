@@ -116,6 +116,7 @@ public class Event implements Serializable{
                 ", eventUpdatedDateTime=" + eventUpdatedDateTime + '\'' +
                 ", eventStartDateTime=" + eventStartDateTime + '\'' +
                 ", eventEndDateTime=" + eventEndDateTime + '\'' +
+                ", eventEndDateTime=" + eventEndDateTime + '\'' +
                 ", eventTags='" + eventTags + '\'' +
                 ", locationsAffected=" + locationsAffected +
                 " }";
