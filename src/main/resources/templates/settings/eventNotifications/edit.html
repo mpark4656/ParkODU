@@ -27,14 +27,14 @@
                 <div class="form-group">
                     <label for="name" class="col-md-4 control-label">Name</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" id="name" required="required" th:field="${garage.name}"
+                        <input type="text" class="form-control" id="name" required="required" th:field="${eventNotifications.name}"
                                placeholder="Event Name"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="description" class="col-md-4 control-label">Description</label>
                     <div class="col-md-8">
-                        <textarea rows="4" cols="50" class="form-control" id="description" th:field="${garage.description}"
+                        <textarea rows="4" cols="50" class="form-control" id="description" th:field="${eventNotifications.description}"
                                   placeholder="Enter Event Notification description.">
                         </textarea>
                     </div>
@@ -44,7 +44,7 @@
                 <div class="col-md-8 col-md-offset-4">
                     <button type="submit" class="btn btn-primary">Submit</button>
                     <button type="reset" class="btn btn-primary">Reset</button>
-                    <a th:href="@{/settings/garage/index}" class="btn btn-primary" title="Back">Back</a>
+                    <a th:href="@{/settings/eventNotifications/index}" class="btn btn-primary" title="Back">Back</a>
                 </div>
             </form>
         </div>

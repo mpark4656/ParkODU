@@ -1,5 +1,10 @@
 package edu.odu.cs.gold.model;
 
+import com.google.maps.model.DistanceMatrix;
+import edu.odu.cs.gold.repository.BuildingRepository;
+import edu.odu.cs.gold.repository.GarageRepository;
+import edu.odu.cs.gold.repository.RecommendationRepository;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
@@ -15,25 +20,26 @@ public class Recommendation implements Serializable{
     private Integer totalCount;
 
     private String startingAddressToGarageDistanceText;
-    private Integer startingAddressToGarageDistanceValue;
+    private long startingAddressToGarageDistanceValue;
     private String startingAddressToGarageDurationText;
-    private Integer startingAddressToGarageDurationValue;
+    private long startingAddressToGarageDurationValue;
 
     private String garageToDestinationBuildingDistanceText;
-    private Integer garageToDestinationBuildingDistanceValue;
+    private long garageToDestinationBuildingDistanceValue;
     private String garageToDestinationBuildingDurationText;
-    private Integer garageToDestinationBuildingDurationValue;
+    private long garageToDestinationBuildingDurationValue;
 
     private String totalDistanceText;
-    private Integer totalDistanceValue;
+    private long totalDistanceValue;
     private String totalDurationText;
-    private Integer totalDurationValue;
+    private long totalDurationValue;
 
     private String recommendationKey;
 
-    private Date arrivalTime;
+    private BuildingRepository buildingRepository;
+    private GarageRepository garageRepository;
 
-    public Recommendation() { this.recommendationKey = UUID.randomUUID().toString(); }
+    private Date arrivalTime;
 
     public String getRecommendationKey() {return recommendationKey;}
 
@@ -47,6 +53,9 @@ public class Recommendation implements Serializable{
         this.startingAddress = startingAddress;
     }
 
+    public void generateRecommendationKey() {
+        this.recommendationKey = UUID.randomUUID().toString();
+    }
 
     public Garage getGarage() {
         return garage;
@@ -88,7 +97,7 @@ public class Recommendation implements Serializable{
         this.startingAddressToGarageDistanceText = startingAddressToGarageDistanceText;
     }
 
-    public Integer getStartingAddressToGarageDistanceValue() {
+    public long getStartingAddressToGarageDistanceValue() {
         return startingAddressToGarageDistanceValue;
     }
 
@@ -104,7 +113,7 @@ public class Recommendation implements Serializable{
         this.startingAddressToGarageDurationText = startingAddressToGarageDurationText;
     }
 
-    public Integer getStartingAddressToGarageDurationValue() {
+    public long getStartingAddressToGarageDurationValue() {
         return startingAddressToGarageDurationValue;
     }
 
@@ -120,7 +129,7 @@ public class Recommendation implements Serializable{
         this.garageToDestinationBuildingDistanceText = garageToDestinationBuildingDistanceText;
     }
 
-    public Integer getGarageToDestinationBuildingDistanceValue() {
+    public long getGarageToDestinationBuildingDistanceValue() {
         return garageToDestinationBuildingDistanceValue;
     }
 
@@ -136,7 +145,7 @@ public class Recommendation implements Serializable{
         this.garageToDestinationBuildingDurationText = garageToDestinationBuildingDurationText;
     }
 
-    public Integer getGarageToDestinationBuildingDurationValue() {
+    public long getGarageToDestinationBuildingDurationValue() {
         return garageToDestinationBuildingDurationValue;
     }
 
@@ -152,11 +161,11 @@ public class Recommendation implements Serializable{
         this.totalDistanceText = (totalDistanceValue * 0.000621371192) + " miles.";
     }
 
-    public Integer getTotalDistanceValue() {
+    public long getTotalDistanceValue() {
         return totalDistanceValue;
     }
 
-    public void setTotalDistanceValue(Integer totalDistanceValue) {
+    public void setTotalDistanceValue(long totalDistanceValue) {
         this.totalDistanceValue = totalDistanceValue;
     }
 
@@ -168,26 +177,26 @@ public class Recommendation implements Serializable{
         this.totalDurationText = (totalDurationValue / 60) + " minutes.";
     }
 
-    public Integer getTotalDurationValue() {
+    public long getTotalDurationValue() {
         return totalDurationValue;
     }
 
-    public void setTotalDurationValue(Integer totalDurationValue) {
+    public void setTotalDurationValue(long totalDurationValue) {
         this.totalDurationValue = totalDurationValue;
     }
 
-    public void setStartingAddressToGarage(DistanceDuration distanceDuration) {
-        this.startingAddressToGarageDistanceText = distanceDuration.rows.get(0).elements.get(0).distance.text;
-        this.startingAddressToGarageDistanceValue = Integer.parseInt(distanceDuration.rows.get(0).elements.get(0).distance.value);
-        this.startingAddressToGarageDurationText = distanceDuration.rows.get(0).elements.get(0).duration.text;
-        this.startingAddressToGarageDurationValue = Integer.parseInt(distanceDuration.rows.get(0).elements.get(0).duration.value);
+    public void setStartingAddressToGarage(DistanceMatrix distanceDuration) {
+        this.startingAddressToGarageDistanceText = distanceDuration.rows[0].elements[0].distance.humanReadable;
+        this.startingAddressToGarageDistanceValue = distanceDuration.rows[0].elements[0].distance.inMeters;
+        this.startingAddressToGarageDurationText = distanceDuration.rows[0].elements[0].duration.humanReadable;
+        this.startingAddressToGarageDurationValue = distanceDuration.rows[0].elements[0].duration.inSeconds;
     }
 
-    public void setGarageToDestinationBuilding(DistanceDuration distanceDuration) {
-        this.garageToDestinationBuildingDistanceText = distanceDuration.rows.get(0).elements.get(0).distance.text;
-        this.garageToDestinationBuildingDistanceValue = Integer.parseInt(distanceDuration.rows.get(0).elements.get(0).distance.value);
-        this.garageToDestinationBuildingDurationText = distanceDuration.rows.get(0).elements.get(0).duration.text;
-        this.garageToDestinationBuildingDurationValue = Integer.parseInt(distanceDuration.rows.get(0).elements.get(0).duration.value);
+    public void setGarageToDestinationBuilding(DistanceMatrix distanceDuration) {
+        this.garageToDestinationBuildingDistanceText = distanceDuration.rows[0].elements[0].distance.humanReadable;
+        this.garageToDestinationBuildingDistanceValue = distanceDuration.rows[0].elements[0].distance.inMeters;
+        this.garageToDestinationBuildingDurationText = distanceDuration.rows[0].elements[0].duration.humanReadable;
+        this.garageToDestinationBuildingDurationValue = distanceDuration.rows[0].elements[0].duration.inSeconds;
     }
 
     public Date getArrivalTime() {
