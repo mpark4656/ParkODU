@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+</head>
+
+
+<body>
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Event Notification</title>
+</head>
+<div class="container-fluid main-container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+            <h1 class="text-center" style="text-transform: uppercase;">Edit Event Notification</h1>
+            <hr/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+            <form class="form-horizontal" id="create-garage-form" role="form" th:action="@{/settings/eventNotifications/create}" method="post" th:object="${eventNotifications}">
+                <input type="hidden" id="id" th:value="${garage.garageKey}" th:field="${garage.garageKey}"/>
+
+                <div class="form-group">
+                    <label for="name" class="col-md-4 control-label">Name</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="name" required="required" th:field="${garage.name}"
+                               placeholder="Event Name"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description" class="col-md-4 control-label">Description</label>
+                    <div class="col-md-8">
+                        <textarea rows="4" cols="50" class="form-control" id="description" th:field="${garage.description}"
+                                  placeholder="Enter Event Notification description.">
+                        </textarea>
+                    </div>
+                </div>
+
+
+                <div class="col-md-8 col-md-offset-4">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-primary">Reset</button>
+                    <a th:href="@{/settings/garage/index}" class="btn btn-primary" title="Back">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

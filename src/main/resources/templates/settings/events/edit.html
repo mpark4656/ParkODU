@@ -37,8 +37,8 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label">Locations Affected</label>
                     <div class="col-md-8">
-                        <select id="location-select" class="form-control" type="text" placeholder="Enter Affected Locations..." th:field="${event.locationsAffected}">
-                            <option th:each="location : ${locations}" th:value="${location}" th:text="${location}"></option>
+                        <select id="location-select" class="form-control" type="text" multiple="multiple" th:field="${event.locationsAffected}" placeholder="Enter Affected Locations...">
+                            <option th:each="location : ${locations}" th:value="${location}" th:text="${location}"> </option>
                         </select>
                     </div>
                 </div>

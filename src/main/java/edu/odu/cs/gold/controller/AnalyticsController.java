@@ -137,8 +137,8 @@ public class AnalyticsController {
 
                 // Total Count
                 Predicate totalCountPredicate = Predicates.and(
-                    Predicates.equal("garageKey", garage.getGarageKey()),
-                    permitPredicate
+                        Predicates.equal("garageKey", garage.getGarageKey()),
+                        permitPredicate
                 );
                 totalCount = parkingSpaceRepository.countByPredicate(totalCountPredicate);
             }
@@ -159,7 +159,7 @@ public class AnalyticsController {
                 recommendation.setStartingAddressToGarage(startingAddressToGarage);
 
                 DistanceMatrix garageToDestinationBuilding = googleMapService.calculateDistanceDurationWithAddress(garage, destinationBuilding.getAddress(),TravelMode.WALKING);
-                        //getDistanceDuration(garage, destinationBuilding.getAddress(), TravelMode.WALKING);
+                //getDistanceDuration(garage, destinationBuilding.getAddress(), TravelMode.WALKING);
 
                 recommendation.setGarageToDestinationBuilding(garageToDestinationBuilding);
 
