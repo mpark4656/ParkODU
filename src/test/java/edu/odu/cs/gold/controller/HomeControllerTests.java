@@ -4,9 +4,11 @@ import com.hazelcast.query.Predicate;
 import edu.odu.cs.gold.model.Event;
 import edu.odu.cs.gold.model.Floor;
 import edu.odu.cs.gold.model.Garage;
+import edu.odu.cs.gold.model.User;
 import edu.odu.cs.gold.repository.EventRepository;
 import edu.odu.cs.gold.repository.FloorRepository;
 import edu.odu.cs.gold.repository.GarageRepository;
+import edu.odu.cs.gold.repository.UserRepository;
 import edu.odu.cs.gold.service.GarageService;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +36,7 @@ public class HomeControllerTests {
 
     private GarageRepository garageRepository;
     private EventRepository eventRepository;
+    private UserRepository userRepository;
 
     private Garage garageOne;
     private Garage garageTwo;
@@ -60,7 +63,15 @@ public class HomeControllerTests {
         doNothing().when(eventRepository).save(any(Event.class));
         doNothing().when(eventRepository).delete(anyString());
 
-        homeController = new HomeController(garageRepository, eventRepository);
+        userRepository = mock(UserRepository.class);
+        doNothing().when(userRepository).delete(anyString());
+        doNothing().when(userRepository).save(any(User.class));
+
+        homeController = new HomeController(
+                garageRepository,
+                eventRepository,
+                userRepository
+        );
     }
 
     @Test

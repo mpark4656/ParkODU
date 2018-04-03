@@ -3,6 +3,7 @@ package edu.odu.cs.gold.model;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -19,6 +20,7 @@ public class User implements Serializable{
     private String roleTypeKey;
     private boolean enabled;
     private String confirmationToken;
+    private String lastNotificationViewedDate;
     private Set<String> permissions;
     private Set<String> preferredPermitTypes;
     private Set<String> preferredSpaceTypes;
@@ -123,6 +125,14 @@ public class User implements Serializable{
 
     public void setRoleTypeKey(String roleTypeKey) { this.roleTypeKey = roleTypeKey; }
 
+    public String getLastNotificationViewedDate() {
+        return this.lastNotificationViewedDate;
+    }
+
+    public void setLastNotificationViewedDate(String lastNotificationViewedDate) {
+        this.lastNotificationViewedDate = lastNotificationViewedDate;
+    }
+
     public Set<String> getPermissions() {
         if (permissions == null) {
             permissions = new HashSet<>();
@@ -178,6 +188,7 @@ public class User implements Serializable{
                 ", lastName='" + lastName + '\'' +
                 ", roleType='" + roleType + '\'' +
                 ", roleTypeKey='" + roleTypeKey + '\'' +
+                ", lastNotificationViewedDate=" + lastNotificationViewedDate +
                 ", enabled=" + enabled +
                 ", confirmationToken='" + confirmationToken + '\'' +
                 ", permissions=" + permissions +

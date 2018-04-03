@@ -23,6 +23,7 @@ public class UserTests {
     private static String USER_ROLE_TYPE_KEY = "u08087565635344353432434";
     private static boolean USER_ENABLED = true;
     private static String USER_CONFIRMATION_TOKEN = "c324233453454213656545658796";
+    private static String USER_LAST_VIEWED_DATE = "345678:2323";
     private static Set<String> USER_PERMISSIONS;
     private static Set<String> USER_PREFERRED_PERMIT_TYPES;
     private static Set<String> USER_PREFERRED_SPACE_TYPES;
@@ -297,6 +298,7 @@ public class UserTests {
                 ", lastName='" + USER_LAST_NAME + '\'' +
                 ", roleType='" + USER_ROLE_TYPE + '\'' +
                 ", roleTypeKey='" + USER_ROLE_TYPE_KEY + '\'' +
+                ", lastNotificationViewedDate=" + USER_LAST_VIEWED_DATE +
                 ", enabled=" + USER_ENABLED +
                 ", confirmationToken='" + USER_CONFIRMATION_TOKEN + '\'' +
                 ", permissions=" + USER_PERMISSIONS +
@@ -314,6 +316,7 @@ public class UserTests {
         user.setRoleTypeKey(USER_ROLE_TYPE_KEY);
         user.setEnabled(USER_ENABLED);
         user.setConfirmationToken(USER_CONFIRMATION_TOKEN);
+        user.setLastNotificationViewedDate(USER_LAST_VIEWED_DATE);
         user.setPermissions(USER_PERMISSIONS);
         user.setPreferredPermitTypes(USER_PREFERRED_PERMIT_TYPES);
         user.setPreferredSpaceTypes(USER_PREFERRED_SPACE_TYPES);

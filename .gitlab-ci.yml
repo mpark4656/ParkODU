@@ -1,0 +1,48 @@
+image: java:8-jdk
+
+stages:
+  - build
+  - test
+  - deploy
+
+before_script:
+#  - echo `pwd` # debug
+#  - echo "$CI_BUILD_NAME, $CI_BUILD_REF_NAME $CI_BUILD_STAGE" # debug
+  - export GRADLE_USER_HOME=`pwd`/.gradle
+
+cache:
+  paths:
+    - .gradle/wrapper
+    - .gradle/caches
+
+build:
+  stage: build
+  script:
+    - ./gradlew build
+  artifacts:
+    paths:
+      - build/libs/*.jar
+    expire_in: 1 week
+  only:
+    - CI
+
+test:
+  stage: test
+  script:
+    - ./gradlew test
+
+deploy:
+  stage: deploy
+  script:
+    - scp build/libs/*.jar 411golds18-mgmt.cs.odu.edu:/gitlab-runner/
+   # - ssh -t 411golds18-mgmt.cs.odu.edu
+   # - /etc/init.d/parkodu stop
+   # - rm /opt/parkodu/parkodu-1.0.0.jar
+   # - mv ~/*.jar /opt/parkodu/parkodu-1.0.0.jar
+   # - chmod u+x /opt/parkodu/parkodu-1.0.0.jar
+   # - /etc/init.d/parkdou start
+   # - exit
+   
+
+after_script:
+  - echo "after script"
