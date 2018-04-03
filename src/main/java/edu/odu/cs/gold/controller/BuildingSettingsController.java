@@ -3,9 +3,7 @@ package edu.odu.cs.gold.controller;
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
 import edu.odu.cs.gold.model.Building;
-import edu.odu.cs.gold.repository.FloorRepository;
 import edu.odu.cs.gold.repository.BuildingRepository;
-import edu.odu.cs.gold.repository.ParkingSpaceRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,15 +24,13 @@ import java.util.List;
 public class BuildingSettingsController {
 
     private BuildingRepository buildingRepository;
-    private FloorRepository floorRepository;
-    private ParkingSpaceRepository parkingSpaceRepository;
 
-    public BuildingSettingsController(BuildingRepository buildingRepository,
-                                    FloorRepository floorRepository,
-                                    ParkingSpaceRepository parkingSpaceRepository) {
+    /**
+     * Constructor
+     * @param buildingRepository BuildingRepository
+     */
+    public BuildingSettingsController(BuildingRepository buildingRepository) {
         this.buildingRepository = buildingRepository;
-        this.floorRepository = floorRepository;
-        this.parkingSpaceRepository = parkingSpaceRepository;
     }
 
     /**
@@ -85,7 +81,7 @@ public class BuildingSettingsController {
      * @param building Building
      * @param model Model
      * @param redirectAttributes RedirectAttributes
-     * @return
+     * @return String redirection to previous page
      */
     @PostMapping("/create")
     public String create(Building building,
@@ -112,15 +108,21 @@ public class BuildingSettingsController {
         }
         // Alerts
         if (isSuccessful) {
-            redirectAttributes.addAttribute("successMessage", "The Building " + building.getName() + " was successfully created.");
+            redirectAttributes.addAttribute(
+                    "successMessage",
+                    "The Building " + building.getName() + " was successfully created.");
         }
         else if (isDuplicate) {
-            model.addAttribute("dangerMessage", "A Building with the name " + building.getName() + " already exists.");
+            model.addAttribute(
+                    "dangerMessage",
+                    "A Building with the name " + building.getName() + " already exists.");
             model.addAttribute("building", building);
             return "settings/building/create";
         }
         else {
-            redirectAttributes.addAttribute("dangerMessage", "An error occurred when attempting to create a Building.");
+            redirectAttributes.addAttribute(
+                    "dangerMessage",
+                    "An error occurred when attempting to create a Building.");
         }
         return "redirect:/settings/building/index";
     }
@@ -179,15 +181,21 @@ public class BuildingSettingsController {
         }
         // Alerts
         if (isSuccessful) {
-            redirectAttributes.addAttribute("successMessage", "The Building " + building.getName() + " was successfully updated.");
+            redirectAttributes.addAttribute(
+                    "successMessage",
+                    "The Building " + building.getName() + " was successfully updated.");
         }
         else if (isDuplicate) {
-            model.addAttribute("dangerMessage", "A Building with the name " + building.getName() + " already exists.");
+            model.addAttribute(
+                    "dangerMessage",
+                    "A Building with the name " + building.getName() + " already exists.");
             model.addAttribute("building", building);
             return "settings/building/edit";
         }
         else {
-            redirectAttributes.addAttribute("dangerMessage", "An error occurred when attempting to update a Building.");
+            redirectAttributes.addAttribute(
+                    "dangerMessage",
+                    "An error occurred when attempting to update a Building.");
         }
         return "redirect:/settings/building/index";
     }
@@ -215,10 +223,16 @@ public class BuildingSettingsController {
         }
         // Alerts
         if (isSuccessful) {
-            redirectAttributes.addAttribute("successMessage", "The Building " + building.getName() + " was successfully deleted.");
+            redirectAttributes.addAttribute(
+                    "successMessage",
+                    "The Building " + building.getName() + " was successfully deleted."
+            );
         }
         else {
-            redirectAttributes.addAttribute("dangerMessage", "An error occurred when attempting to delete a Building.");
+            redirectAttributes.addAttribute(
+                    "dangerMessage",
+                    "An error occurred when attempting to delete a Building."
+            );
         }
         return "redirect:/settings/building/index";
     }

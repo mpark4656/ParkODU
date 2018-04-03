@@ -25,6 +25,7 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     public static final String COLLECTION_FLOOR = "Floor";
     public static final String COLLECTION_PARKING_SPACE = "ParkingSpace";
     public static final String COLLECTION_BUILDING = "Building";
+    public static final String COLLECTION_EVENT = "Event";
 
     public static final String COLLECTION_TRAVEL_DISTANCE_DURATION = "TravelDistanceDuration";
 
@@ -71,7 +72,7 @@ public class ParkODUConfiguration implements ApplicationContextAware {
         }
 
         // Group Configs
-        hazelcastConfig.getGroupConfig().setName(environment.getProperty("hazelcast.group.name", "dev"));
+        hazelcastConfig.getGroupConfig().setName(environment.getProperty("hazelcast.group.name", "parkodu"));
         hazelcastConfig.getGroupConfig().setPassword(environment.getProperty("hazelcast.group.password", ""));
 
         return hazelcastConfig;
@@ -140,6 +141,11 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     }
 
     @Bean
+    public EventRepository eventRepository() {
+        return new EventRepository(hazelcastInstance(), COLLECTION_EVENT);
+    }
+
+    @Bean
     public MongoMapStore garageMapStore() {
         return new MongoMapStore(mongoTemplate, COLLECTION_GARAGE, Garage.class);
     }
@@ -192,6 +198,11 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     @Bean
     public MongoMapStore recommendationMapStore() {
         return new MongoMapStore(mongoTemplate, COLLECTION_RECOMMENDATION, Recommendation.class);
+    }
+
+    @Bean
+    public MongoMapStore eventMapStore() {
+        return new MongoMapStore(mongoTemplate, COLLECTION_EVENT, Event.class);
     }
 
     @Bean
@@ -385,6 +396,24 @@ public class ParkODUConfiguration implements ApplicationContextAware {
 
         // Indexed Attributes
         mapConfig.addMapIndexConfig(new MapIndexConfig("recommendationKey", false));
+
+        return mapConfig;
+    }
+
+    @Bean
+    public MapConfig EventRepositoryMapConfig() {
+        MapConfig mapConfig = new MapConfig(COLLECTION_EVENT);
+
+        // MapStore
+        MapStoreConfig mapStoreConfig = new MapStoreConfig();
+        mapStoreConfig.setImplementation(eventMapStore());
+        mapStoreConfig.setEnabled(true);
+        mapStoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.EAGER);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+
+        // Indexed Attributes
+        mapConfig.addMapIndexConfig(new MapIndexConfig("eventKey", false));
+        mapConfig.addMapIndexConfig(new MapIndexConfig("eventName", false));
 
         return mapConfig;
     }

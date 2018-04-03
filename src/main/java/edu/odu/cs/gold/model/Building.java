@@ -70,10 +70,12 @@ public class Building implements Serializable {
     @Override
     public String toString() {
         return "Building{" +
-                "buildingKey='" + buildingKey + '\'' +
+                " buildingKey='" + buildingKey + '\'' +
                 ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
-                '}';
+                ", address='" + address + '\'' +
+                " }";
     }
 }

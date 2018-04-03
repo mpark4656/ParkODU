@@ -1,0 +1,278 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AnalyticsController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">edu.odu.cs.gold.controller</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AnalyticsController (edu.odu.cs.gold.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AnalyticsController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 92)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package edu.odu.cs.gold.controller;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.hazelcast.query.Predicate;
+<i>4</i>&nbsp;import com.hazelcast.query.Predicates;
+<i>5</i>&nbsp;import edu.odu.cs.gold.model.*;
+<i>6</i>&nbsp;import edu.odu.cs.gold.repository.*;
+<i>7</i>&nbsp;import edu.odu.cs.gold.service.GoogleMapService;
+<i>8</i>&nbsp;import org.springframework.stereotype.Controller;
+<i>9</i>&nbsp;import org.springframework.ui.Model;
+<i>10</i>&nbsp;import org.springframework.web.bind.annotation.*;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;import com.google.maps.model.*;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;import java.util.*;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;@Controller
+<i>17</i>&nbsp;@RequestMapping(&quot;/analytics&quot;)
+<i>18</i>&nbsp;public class AnalyticsController {
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    private GarageRepository garageRepository;
+<i>21</i>&nbsp;    private BuildingRepository buildingRepository;
+<i>22</i>&nbsp;    private ParkingSpaceRepository parkingSpaceRepository;
+<i>23</i>&nbsp;    private TravelDistanceDurationRepository travelDistanceDurationRepository;
+<i>24</i>&nbsp;    private GoogleMapService googleMapService;
+<i>25</i>&nbsp;    private PermitTypeRepository permitTypeRepository;
+<i>26</i>&nbsp;    private SpaceTypeRepository spaceTypeRepository;
+<i>27</i>&nbsp;    private RecommendationRepository recommendationRepository;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    public AnalyticsController(GarageRepository garageRepository,
+<i>30</i>&nbsp;                               BuildingRepository buildingRepository,
+<i>31</i>&nbsp;                               ParkingSpaceRepository parkingSpaceRepository,
+<i>32</i>&nbsp;                               TravelDistanceDurationRepository travelDistanceDurationRepository,
+<i>33</i>&nbsp;                               GoogleMapService googleMapService,
+<i>34</i>&nbsp;                               PermitTypeRepository permitTypeRepository,
+<i>35</i>&nbsp;                               SpaceTypeRepository spaceTypeRepository,
+<b class="nc"><i>36</i>&nbsp;                               RecommendationRepository recommendationRepository) {</b>
+<b class="nc"><i>37</i>&nbsp;        this.garageRepository = garageRepository;</b>
+<b class="nc"><i>38</i>&nbsp;        this.buildingRepository = buildingRepository;</b>
+<b class="nc"><i>39</i>&nbsp;        this.parkingSpaceRepository = parkingSpaceRepository;</b>
+<b class="nc"><i>40</i>&nbsp;        this.travelDistanceDurationRepository = travelDistanceDurationRepository;</b>
+<b class="nc"><i>41</i>&nbsp;        this.googleMapService = googleMapService;</b>
+<b class="nc"><i>42</i>&nbsp;        this.permitTypeRepository = permitTypeRepository;</b>
+<b class="nc"><i>43</i>&nbsp;        this.spaceTypeRepository = spaceTypeRepository;</b>
+<b class="nc"><i>44</i>&nbsp;        this.recommendationRepository = recommendationRepository;</b>
+<i>45</i>&nbsp;    }
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    @GetMapping({&quot;&quot;,&quot;/&quot;,&quot;/index&quot;})
+<i>48</i>&nbsp;    public String index(Model model) {
+<b class="nc"><i>49</i>&nbsp;        List&lt;Building&gt; buildings = new ArrayList&lt;&gt;(buildingRepository.findAll());</b>
+<b class="nc"><i>50</i>&nbsp;        buildings.sort(Comparator.comparing(Building::getName));</b>
+<b class="nc"><i>51</i>&nbsp;        model.addAttribute(&quot;buildings&quot;, buildings);</b>
+<b class="nc"><i>52</i>&nbsp;        return &quot;analytics/index&quot;;</b>
+<i>53</i>&nbsp;    }
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    @GetMapping(&quot;/locate&quot;)
+<i>56</i>&nbsp;    public String locate(Model model) {
+<b class="nc"><i>57</i>&nbsp;        List&lt;Building&gt; buildings = new ArrayList&lt;&gt;(buildingRepository.findAll());</b>
+<b class="nc"><i>58</i>&nbsp;        buildings.sort(Comparator.comparing(Building::getName));</b>
+<i>59</i>&nbsp;
+<b class="nc"><i>60</i>&nbsp;        List&lt;PermitType&gt; permitTypes = new ArrayList&lt;&gt;(permitTypeRepository.findAll());</b>
+<b class="nc"><i>61</i>&nbsp;        List&lt;SpaceType&gt; spaceTypes = new ArrayList&lt;&gt;(spaceTypeRepository.findAll());</b>
+<i>62</i>&nbsp;
+<b class="nc"><i>63</i>&nbsp;        model.addAttribute(&quot;buildings&quot;, buildings);</b>
+<b class="nc"><i>64</i>&nbsp;        model.addAttribute(&quot;spaceTypes&quot;, spaceTypes);</b>
+<b class="nc"><i>65</i>&nbsp;        model.addAttribute(&quot;permitTypes&quot;, permitTypes);</b>
+<b class="nc"><i>66</i>&nbsp;        return &quot;analytics/locate&quot;;</b>
+<i>67</i>&nbsp;    }
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;    @PostMapping(&quot;/locate&quot;)
+<i>70</i>&nbsp;    public String locate(@RequestParam(name = &quot;startingAddress&quot;, required = false) String startingAddress,
+<i>71</i>&nbsp;                         @RequestParam(name = &quot;latitude&quot;, required = false) Double startingLatitude,
+<i>72</i>&nbsp;                         @RequestParam(name = &quot;longitude&quot;, required = false) Double startingLongitude,
+<i>73</i>&nbsp;                         @RequestParam(name = &quot;permitTypeKeys&quot;, required = false) List&lt;String&gt; permitTypeKeys,
+<i>74</i>&nbsp;                         @RequestParam(name = &quot;spaceTypeKeys&quot;, required = false) List&lt;String&gt; spaceTypeKeys,
+<i>75</i>&nbsp;                         @RequestParam(name = &quot;destinationBuildingId&quot;, required = false) String destinationBuildingId,
+<i>76</i>&nbsp;                         @RequestParam(name = &quot;minSpaces&quot;, required = false) Integer minSpaces,
+<i>77</i>&nbsp;                         Model model) {
+<i>78</i>&nbsp;
+<b class="nc"><i>79</i>&nbsp;        Location startingLocation = new Location(startingLatitude, startingLongitude);</b>
+<b class="nc"><i>80</i>&nbsp;        Building destinationBuilding = buildingRepository.findByKey(destinationBuildingId);</b>
+<i>81</i>&nbsp;
+<b class="nc"><i>82</i>&nbsp;        Predicate permitPredicate = null;</b>
+<b class="nc"><i>83</i>&nbsp;        if (permitTypeKeys != null) {</b>
+<b class="nc"><i>84</i>&nbsp;            List&lt;Predicate&gt; predicates = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>85</i>&nbsp;            for (String permitTypeKey : permitTypeKeys) {</b>
+<b class="nc"><i>86</i>&nbsp;                predicates.add(Predicates.equal(&quot;permitTypeKey&quot;, permitTypeKey));</b>
+<b class="nc"><i>87</i>&nbsp;            }</b>
+<b class="nc"><i>88</i>&nbsp;            permitPredicate = Predicates.or(predicates.toArray(new Predicate[0]));</b>
+<i>89</i>&nbsp;        }
+<i>90</i>&nbsp;
+<b class="nc"><i>91</i>&nbsp;        List&lt;Recommendation&gt; recommendations = new ArrayList&lt;&gt;();</b>
+<i>92</i>&nbsp;
+<b class="nc"><i>93</i>&nbsp;        List&lt;Garage&gt; garages = new ArrayList&lt;&gt;(garageRepository.findAll());</b>
+<i>94</i>&nbsp;
+<b class="nc"><i>95</i>&nbsp;        for (Garage garage : garages) {</b>
+<i>96</i>&nbsp;
+<b class="nc"><i>97</i>&nbsp;            DistanceMatrix distanceMatrix = googleMapService.calculateDistanceDurationWithAddress(garage,startingAddress,TravelMode.DRIVING);</b>
+<i>98</i>&nbsp;
+<b class="nc"><i>99</i>&nbsp;            System.out.println(&quot;Distance: &quot;);</b>
+<b class="nc"><i>100</i>&nbsp;            System.out.println(distanceMatrix.rows[0].elements[0].distance.toString());</b>
+<b class="nc"><i>101</i>&nbsp;            System.out.println(&quot;Duration: &quot;);</b>
+<b class="nc"><i>102</i>&nbsp;            System.out.println(distanceMatrix.rows[0].elements[0].duration.humanReadable.toString());</b>
+<i>103</i>&nbsp;
+<b class="nc"><i>104</i>&nbsp;            int availabilityCount = 0;</b>
+<b class="nc"><i>105</i>&nbsp;            int totalCount = 0;</b>
+<b class="nc"><i>106</i>&nbsp;            if (permitPredicate != null) {</b>
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;                // Availability Count
+<b class="nc"><i>109</i>&nbsp;                Predicate availabilityCountPredicate = Predicates.and(</b>
+<b class="nc"><i>110</i>&nbsp;                        Predicates.equal(&quot;garageKey&quot;, garage.getGarageKey()),</b>
+<b class="nc"><i>111</i>&nbsp;                        Predicates.equal(&quot;available&quot;, true),</b>
+<i>112</i>&nbsp;                        permitPredicate
+<i>113</i>&nbsp;                );
+<b class="nc"><i>114</i>&nbsp;                availabilityCount = parkingSpaceRepository.countByPredicate(availabilityCountPredicate);</b>
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;                // Total Count
+<b class="nc"><i>117</i>&nbsp;                Predicate totalCountPredicate = Predicates.and(</b>
+<b class="nc"><i>118</i>&nbsp;                    Predicates.equal(&quot;garageKey&quot;, garage.getGarageKey()),</b>
+<i>119</i>&nbsp;                    permitPredicate
+<i>120</i>&nbsp;                );
+<b class="nc"><i>121</i>&nbsp;                totalCount = parkingSpaceRepository.countByPredicate(totalCountPredicate);</b>
+<b class="nc"><i>122</i>&nbsp;            }</b>
+<i>123</i>&nbsp;            else {
+<b class="nc"><i>124</i>&nbsp;                availabilityCount = garage.getAvailableSpaces();</b>
+<i>125</i>&nbsp;            }
+<b class="nc"><i>126</i>&nbsp;            if (minSpaces &lt;= availabilityCount) {</b>
+<b class="nc"><i>127</i>&nbsp;                Recommendation recommendation = new Recommendation();</b>
+<b class="nc"><i>128</i>&nbsp;                recommendation.generateRecommendationKey();</b>
+<b class="nc"><i>129</i>&nbsp;                recommendation.setStartingAddress(startingAddress);</b>
+<b class="nc"><i>130</i>&nbsp;                recommendation.setGarage(garage);</b>
+<b class="nc"><i>131</i>&nbsp;                recommendation.setDestinationBuilding(destinationBuilding);</b>
+<i>132</i>&nbsp;
+<b class="nc"><i>133</i>&nbsp;                recommendation.setAvailabilityCount(availabilityCount);</b>
+<b class="nc"><i>134</i>&nbsp;                recommendation.setTotalCount(totalCount);</b>
+<i>135</i>&nbsp;
+<b class="nc"><i>136</i>&nbsp;                DistanceMatrix startingAddressToGarage = googleMapService.calculateDistanceDurationWithAddress(garage, startingAddress, TravelMode.DRIVING);</b>
+<b class="nc"><i>137</i>&nbsp;                recommendation.setStartingAddressToGarage(startingAddressToGarage);</b>
+<i>138</i>&nbsp;
+<b class="nc"><i>139</i>&nbsp;                DistanceMatrix garageToDestinationBuilding = googleMapService.calculateDistanceDurationWithAddress(garage, destinationBuilding.getAddress(),TravelMode.WALKING);</b>
+<i>140</i>&nbsp;                        //getDistanceDuration(garage, destinationBuilding.getAddress(), TravelMode.WALKING);
+<i>141</i>&nbsp;
+<b class="nc"><i>142</i>&nbsp;                recommendation.setGarageToDestinationBuilding(garageToDestinationBuilding);</b>
+<i>143</i>&nbsp;
+<i>144</i>&nbsp;                // Set Total Distance
+<b class="nc"><i>145</i>&nbsp;                recommendation.setTotalDistanceValue(recommendation.getStartingAddressToGarageDistanceValue() + recommendation.getGarageToDestinationBuildingDistanceValue());</b>
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;                // Set Total Duration
+<b class="nc"><i>148</i>&nbsp;                recommendation.setTotalDurationValue(recommendation.getStartingAddressToGarageDurationValue() + recommendation.getGarageToDestinationBuildingDurationValue());</b>
+<i>149</i>&nbsp;
+<b class="nc"><i>150</i>&nbsp;                recommendations.add(recommendation);</b>
+<i>151</i>&nbsp;                //recommendationRepository.save(recommendation);
+<i>152</i>&nbsp;            }
+<b class="nc"><i>153</i>&nbsp;        }</b>
+<i>154</i>&nbsp;
+<i>155</i>&nbsp;        // Default sort by closest Garage to Destination Building
+<b class="nc"><i>156</i>&nbsp;        recommendations.sort(Comparator.comparing(Recommendation::getGarageToDestinationBuildingDistanceValue));</b>
+<i>157</i>&nbsp;
+<b class="nc"><i>158</i>&nbsp;        List&lt;PermitType&gt; permitTypes = new ArrayList&lt;&gt; ();</b>
+<i>159</i>&nbsp;
+<i>160</i>&nbsp;        // Get the Permit Type objects from the keys
+<b class="nc"><i>161</i>&nbsp;        if (permitTypeKeys != null) {</b>
+<b class="nc"><i>162</i>&nbsp;            Set&lt;String&gt; permitTypeKeySet = new HashSet&lt;String&gt; (permitTypeKeys);</b>
+<b class="nc"><i>163</i>&nbsp;            permitTypes = new ArrayList&lt;&gt; (permitTypeRepository.findByKeys(permitTypeKeySet));</b>
+<i>164</i>&nbsp;        }
+<i>165</i>&nbsp;
+<b class="nc"><i>166</i>&nbsp;        model.addAttribute(&quot;startingAddress&quot;, startingAddress);</b>
+<b class="nc"><i>167</i>&nbsp;        model.addAttribute(&quot;startingLatitude&quot;, startingLatitude);</b>
+<b class="nc"><i>168</i>&nbsp;        model.addAttribute(&quot;startingLongitude&quot;, startingLongitude);</b>
+<b class="nc"><i>169</i>&nbsp;        model.addAttribute(&quot;permitTypes&quot;, permitTypes);</b>
+<b class="nc"><i>170</i>&nbsp;        model.addAttribute(&quot;destinationBuilding&quot;, destinationBuilding);</b>
+<b class="nc"><i>171</i>&nbsp;        model.addAttribute(&quot;recommendations&quot;, recommendations);</b>
+<i>172</i>&nbsp;
+<b class="nc"><i>173</i>&nbsp;        return &quot;analytics/recommendation&quot;;</b>
+<i>174</i>&nbsp;    }
+<i>175</i>&nbsp;
+<i>176</i>&nbsp;    @GetMapping({&quot;/building/{buildingKey}&quot;})
+<i>177</i>&nbsp;    public String building(@PathVariable String buildingKey, Model model) {
+<b class="nc"><i>178</i>&nbsp;        Building building = buildingRepository.findByKey(buildingKey);</b>
+<b class="nc"><i>179</i>&nbsp;        Map&lt;String, Garage&gt; garageMap = garageRepository.findAllMap();</b>
+<i>180</i>&nbsp;
+<b class="nc"><i>181</i>&nbsp;        Predicate predicate = Predicates.equal(&quot;buildingKey&quot;, buildingKey);</b>
+<b class="nc"><i>182</i>&nbsp;        List&lt;TravelDistanceDuration&gt; travelDistanceDurations = travelDistanceDurationRepository.findByPredicate(predicate);</b>
+<b class="nc"><i>183</i>&nbsp;        travelDistanceDurations.sort(Comparator.comparing(TravelDistanceDuration::getDurationValue));</b>
+<b class="nc"><i>184</i>&nbsp;        for (TravelDistanceDuration travelDistanceDuration : travelDistanceDurations) {</b>
+<b class="nc"><i>185</i>&nbsp;            travelDistanceDuration.setGarageName(garageMap.get(travelDistanceDuration.getGarageKey()).getName());</b>
+<b class="nc"><i>186</i>&nbsp;            travelDistanceDuration.setAvailableSpaces(garageMap.get(travelDistanceDuration.getGarageKey()).getAvailableSpaces());</b>
+<b class="nc"><i>187</i>&nbsp;            travelDistanceDuration.setTotalSpaces(garageMap.get(travelDistanceDuration.getGarageKey()).getTotalSpaces());</b>
+<b class="nc"><i>188</i>&nbsp;            travelDistanceDuration.setCapacity(garageMap.get(travelDistanceDuration.getGarageKey()).getCapacity());</b>
+<b class="nc"><i>189</i>&nbsp;        }</b>
+<i>190</i>&nbsp;
+<b class="nc"><i>191</i>&nbsp;        model.addAttribute(&quot;building&quot;, building);</b>
+<b class="nc"><i>192</i>&nbsp;        model.addAttribute(&quot;travelDistanceDurations&quot;, travelDistanceDurations);</b>
+<b class="nc"><i>193</i>&nbsp;        return &quot;analytics/building&quot;;</b>
+<i>194</i>&nbsp;    }
+<i>195</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2018-03-24 16:39</div>
+</div>
+</body>
+</html>

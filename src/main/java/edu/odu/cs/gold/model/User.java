@@ -1,13 +1,9 @@
 package edu.odu.cs.gold.model;
 
-import com.hazelcast.query.Predicate;
-import com.hazelcast.query.Predicates;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -24,6 +20,8 @@ public class User implements Serializable{
     private boolean enabled;
     private String confirmationToken;
     private Set<String> permissions;
+    private Set<String> preferredPermitTypes;
+    private Set<String> preferredSpaceTypes;
 
     public User() { }
 
@@ -109,17 +107,21 @@ public class User implements Serializable{
         this.username = username;
     }
 
-    public boolean isEnabled() {
+    public boolean getEnabled() {
         return enabled;
     }
-
-    public String getRoleType() { return roleType; }
-
-    public void setRole(String roleType) { this.roleType = roleType; }
 
     public void setEnabled(boolean value) {
         this.enabled = value;
     }
+
+    public String getRoleType() { return roleType; }
+
+    public void setRoleType(String roleType) { this.roleType = roleType; }
+
+    public String getRoleTypeKey() { return roleTypeKey; }
+
+    public void setRoleTypeKey(String roleTypeKey) { this.roleTypeKey = roleTypeKey; }
 
     public Set<String> getPermissions() {
         if (permissions == null) {
@@ -130,6 +132,30 @@ public class User implements Serializable{
 
     public void setPermissions(Set<String> permissions) {
         this.permissions = permissions;
+    }
+
+    public Set<String> getPreferredPermitTypes() {
+        if(preferredPermitTypes == null) {
+            preferredPermitTypes = new HashSet<>();
+        }
+
+        return preferredPermitTypes;
+    }
+
+    public void setPreferredPermitTypes(Set<String> preferredPermitTypes) {
+        this.preferredPermitTypes = preferredPermitTypes;
+    }
+
+    public Set<String> getPreferredSpaceTypes() {
+        if(preferredSpaceTypes == null) {
+            preferredSpaceTypes = new HashSet<>();
+        }
+
+        return preferredSpaceTypes;
+    }
+
+    public void setPreferredSpaceTypes(Set<String> preferredSpaceTypes) {
+        this.preferredSpaceTypes = preferredSpaceTypes;
     }
 
     public Set<GrantedAuthority> getAuthorities() {
@@ -143,7 +169,7 @@ public class User implements Serializable{
 
     @Override
     public String toString() {
-        return "User{" +
+        return "User{ " +
                 "userKey='" + userKey + '\'' +
                 ", email='" + email + '\'' +
                 ", username='" + username + '\'' +
@@ -155,6 +181,8 @@ public class User implements Serializable{
                 ", enabled=" + enabled +
                 ", confirmationToken='" + confirmationToken + '\'' +
                 ", permissions=" + permissions +
-                '}';
+                ", preferredPermitTypes=" + preferredPermitTypes +
+                ", preferredSpaceTypes=" + preferredSpaceTypes +
+                " }";
     }
 }
