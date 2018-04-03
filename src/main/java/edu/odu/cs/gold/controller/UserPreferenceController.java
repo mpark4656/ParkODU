@@ -40,26 +40,30 @@ public class UserPreferenceController {
 
     @GetMapping({"", "/", "/index"})
     public String index(Model model) {
-        AuthenticatedUser authenticatedUser =
-                (AuthenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        try {
+            AuthenticatedUser authenticatedUser =
+                    (AuthenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        Predicate predicate = Predicates.equal("username", authenticatedUser.getUsername());
-        List<User> users = userRepository.findByPredicate(predicate);
+            Predicate predicate = Predicates.equal("username", authenticatedUser.getUsername());
+            List<User> users = userRepository.findByPredicate(predicate);
 
-        if(users.size() != 1) {
-            // Error
-            return "home/index";
-        } else {
-            User user = users.get(0);
-            List<PermitType> permitTypes = new ArrayList<>(permitTypeRepository.findAll());
-            List<SpaceType> spaceTypes = new ArrayList<> (spaceTypeRepository.findAll());
+            if(users.size() != 1) {
+                // Error
+                return "home/index";
+            } else {
+                User user = users.get(0);
+                List<PermitType> permitTypes = new ArrayList<>(permitTypeRepository.findAll());
+                List<SpaceType> spaceTypes = new ArrayList<> (spaceTypeRepository.findAll());
 
-            permitTypes.sort(Comparator.comparing(PermitType::getName));
-            spaceTypes.sort(Comparator.comparing(SpaceType::getName));
+                permitTypes.sort(Comparator.comparing(PermitType::getName));
+                spaceTypes.sort(Comparator.comparing(SpaceType::getName));
 
-            model.addAttribute("user", user);
-            model.addAttribute("permitTypes", permitTypes);
-            model.addAttribute("spaceTypes", spaceTypes);
+                model.addAttribute("user", user);
+                model.addAttribute("permitTypes", permitTypes);
+                model.addAttribute("spaceTypes", spaceTypes);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
         }
 
         return "user_preference/index";
