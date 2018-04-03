@@ -34,7 +34,13 @@ test:
 deploy:
   stage: deploy
   script:
-    - ./deploy
+    - scp build/libs/*.jar 411golds18-mgmt.cs.odu.edu:/gitlab-runner/
+    - ssh 411golds18-mgmt.cs.odu.edu
+    #- sudo cp *.jar /opt/parkodu/
+    #- cd /opt/parkodu/
+    #- sudo rm parkodu-1.0.0.jar
+    #- sudo service parkodu stop
+    #- sudo service parkodu start
 
 after_script:
   - echo "End CI"
