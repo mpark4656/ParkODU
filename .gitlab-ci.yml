@@ -35,7 +35,7 @@ deploy:
   stage: deploy
   script:
     - scp build/libs/*.jar 411golds18-mgmt.cs.odu.edu:/gitlab-runner/
-    - ssh 411golds18-mgmt.cs.odu.edu
+    - ssh -t 411golds18-mgmt.cs.odu.edu
     - echo 'awesome8' | sudo -S service parkodu stop
     - rm /opt/parkodu/parkodu-1.0.0.jar
     - mv ~/*.jar /opt/parkodu/parkodu-1.0.0.jar
