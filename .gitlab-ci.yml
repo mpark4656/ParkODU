@@ -36,10 +36,10 @@ deploy:
   script:
     - scp build/libs/*.jar 411golds18-mgmt.cs.odu.edu:/gitlab-runner/
     
-    - ssh -t 411golds18-mgmt.cs.odu.edu 'sudo service parkodu stop'
-    - ssh -t 411golds18-mgmt.cs.odu.edu 'rm /opt/parkodu-1.0.0.jar'
-    - ssh -t 411golds18-mgmt.cs.odu.edu 'mv ~/*.jar /opt/parkodu-1.0.0.jar'
-    - ssh -t 411golds18-mgmt.cs.odu.edu 'sudo service parkodu start'
+    - ssh -T 411golds18-mgmt.cs.odu.edu 'sudo service parkodu stop'
+    - ssh -T 411golds18-mgmt.cs.odu.edu 'rm /opt/parkodu-1.0.0.jar'
+    - ssh -T 411golds18-mgmt.cs.odu.edu 'mv ~/*.jar /opt/parkodu-1.0.0.jar'
+    - ssh -T 411golds18-mgmt.cs.odu.edu 'sudo service parkodu start'
    
 
 after_script:
