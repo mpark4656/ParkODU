@@ -103,6 +103,10 @@ public class Event implements Serializable{
         this.locationsAffected = locationsAffected;
     }
 
+    public DateTime getEventStartTimeDateTime() {
+        return DateTime.parse(eventStartDateTime);
+    }
+
     @Override
     public String toString() {
         return "Event{" +

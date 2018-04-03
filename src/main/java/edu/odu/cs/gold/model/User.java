@@ -20,7 +20,7 @@ public class User implements Serializable{
     private String roleTypeKey;
     private boolean enabled;
     private String confirmationToken;
-    private Date lastNotificationViewedDate;
+    private String lastNotificationViewedDate;
     private Set<String> permissions;
     private Set<String> preferredPermitTypes;
     private Set<String> preferredSpaceTypes;
@@ -125,11 +125,11 @@ public class User implements Serializable{
 
     public void setRoleTypeKey(String roleTypeKey) { this.roleTypeKey = roleTypeKey; }
 
-    public Date getLastNotificationViewedDate() {
+    public String getLastNotificationViewedDate() {
         return this.lastNotificationViewedDate;
     }
 
-    public void setLastNotificationViewedDate(Date lastNotificationViewedDate) {
+    public void setLastNotificationViewedDate(String lastNotificationViewedDate) {
         this.lastNotificationViewedDate = lastNotificationViewedDate;
     }
 

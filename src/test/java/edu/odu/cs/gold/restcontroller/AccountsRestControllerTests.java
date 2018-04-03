@@ -2,6 +2,7 @@ package edu.odu.cs.gold.restcontroller;
 
 import edu.odu.cs.gold.model.User;
 import edu.odu.cs.gold.repository.UserRepository;
+import edu.odu.cs.gold.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,8 @@ import java.util.UUID;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -26,6 +29,8 @@ public class AccountsRestControllerTests {
     private UserRepository userRepository;
 
     private AccountsRestController accountsRestController;
+
+    private UserService userService;
 
     @Before
     public void setup() {
@@ -45,7 +50,13 @@ public class AccountsRestControllerTests {
         userRepository = mock(UserRepository.class);
         when(userRepository.findByKey(USER_ONE_KEY)).thenReturn(userOne);
 
-        accountsRestController = new AccountsRestController(userRepository);
+        userService = mock(UserService.class);
+        doNothing().when(userService).refresh(anyString());
+
+        accountsRestController = new AccountsRestController(
+                userRepository,
+                userService
+        );
     }
 
     @Test

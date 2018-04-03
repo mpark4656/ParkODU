@@ -208,11 +208,17 @@
 	<script th:inline="javascript">
 	/*<![CDATA[*/
 		$(document).ready(function() {
-			var events = /*[[${allEvents}]]*/;
-			$('#event-notification-count').attr('data-count', events.length);
+			var newEventCount = /*[[${newEventCount}]]*/;
+			var userKey = /*[[${currentUserKey}]]*/;
+
+			$('#event-notification-count').attr('data-count', newEventCount);
 
 			$('#event-notification-button').click(function() {
-				$('#event-notification-count').attr('data-count', '0');
+				$.post("/rest/accounts/update_last_notification_viewed_date",
+					{ userKey: userKey }).done(function(data) {
+                    	$('#event-notification-count').attr('data-count', '0');
+                    }
+                );
 			});
 		});
 	/*]]>*/
