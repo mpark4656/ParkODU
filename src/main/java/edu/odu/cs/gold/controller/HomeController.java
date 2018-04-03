@@ -3,7 +3,6 @@ package edu.odu.cs.gold.controller;
 import edu.odu.cs.gold.model.Event;
 import edu.odu.cs.gold.model.Garage;
 import edu.odu.cs.gold.model.User;
-import edu.odu.cs.gold.repository.EventNotificationRepository;
 import edu.odu.cs.gold.repository.EventRepository;
 import edu.odu.cs.gold.repository.GarageRepository;
 import edu.odu.cs.gold.repository.UserRepository;
