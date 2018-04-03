@@ -125,7 +125,7 @@ public class EventSettingsController {
         List<Garage> garages = new ArrayList<>(garageRepository.findAll());
         List<Building> buildings = new ArrayList<>(buildingRepository.findAll());
         List<String> locations = new ArrayList<>();
-
+        List<String> locationsAffected;
         for(Garage garage: garages) {
             locations.add(garage.getName());
         }
