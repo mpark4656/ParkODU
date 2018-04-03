@@ -24,7 +24,7 @@ public class EventController {
     @GetMapping({"","/","/index"})
     public String index(Model model) {
         List<Event> events = new ArrayList<>(eventRepository.findAll());
-        events.sort(Comparator.comparing(Event::getEventDateTime));
+        events.sort(Comparator.comparing(Event::getEventUpdatedDateTime));
         model.addAttribute("events", events);
         return "events/index";
     }

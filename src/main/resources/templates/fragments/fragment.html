@@ -76,7 +76,7 @@
 				<li sec:authorize="isAuthenticated()" class="welcome-message">Welcome <span sec:authentication="name"></span>!</li>
 				<li sec:authorize="isAnonymous()"><a th:href="@{/login}">Login</a></li>
 				<li sec:authorize="isAnonymous()"><a th:href="@{/user/register}">Register</a></li>
-				<li th:if="${events != null}">
+				<li th:if="${allEvents != null}">
 					<div class="btn-group dropdown dropdown-notifications sw-open">
 						<button id="event-notification-button" class="btn btn-lg dropdown-toggle" data-toggle="dropdown">
 							<i id="event-notification-count" data-count="1" class="glyphicon glyphicon-bell notification-icon"></i>
@@ -90,15 +90,29 @@
 								</div>
 								<h3 class="dropdown-toolbar-title">Notifications</h3>
 							</div><!-- /dropdown-toolbar -->
-
+							<ul class="dropdown-menu notifications" th:if="${allEvents.isEmpty()}">
+								<li class="notification">
+									<div class="media">
+										<div class="media-body">
+											<strong class="notification-title">No Events Found</strong>
+										</div>
+									</div>
+								</li>
+							</ul>
 							<ul class="dropdown-menu notifications">
-								<li class="notification" th:each="event : ${events}">
+								<li class="notification" th:each="event : ${allEvents}">
 									<div class="media">
 										<div class="media-body">
 											<strong class="notification-title"><a href="#" th:text="${event.eventName}"></a></strong>
 											<p class="notification-desc" th:text="${event.eventMessage}"></p>
 											<div class="notification-meta">
-												<small class="timestamp" th:text="${event.eventDateTime}"></small>
+												<small class="timestamp" th:text="'Updated: ' + ${event.eventUpdatedDateTime}"></small>
+											</div>
+											<div class="notification-meta">
+												<small class="timestamp" th:text="'Starts At ' + ${event.eventStartDateTime}"></small>
+											</div>
+											<div class="notification-meta">
+												<small class="timestamp" th:text="'Ends At ' + ${event.eventEndDateTime}"></small>
 											</div>
 										</div>
 									</div>
@@ -194,7 +208,7 @@
 	<script th:inline="javascript">
 	/*<![CDATA[*/
 		$(document).ready(function() {
-			var events = /*[[${events}]]*/;
+			var events = /*[[${allEvents}]]*/;
 			$('#event-notification-count').attr('data-count', events.length);
 
 			$('#event-notification-button').click(function() {

@@ -56,15 +56,27 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="becomesAffective" class="col-md-4 control-label">Becomes Effective</label>
+                    <label for="event-start-time" class="col-md-4 control-label">Event Starts</label>
                     <div class="col-md-8">
                         <input type="datetime-local"
                                class="form-control"
-                               id="becomesAffective"
-                               placeholder="When the event will become Affective."
+                               id="event-start-time"
+                               placeholder="When the event will start."
                                min="0"
                                required="required"
-                               th:field="${event.scheduledDateTime}"/>
+                               th:field="${event.eventStartDateTime}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="event-end-time" class="col-md-4 control-label">Event Ends</label>
+                    <div class="col-md-8">
+                        <input type="datetime-local"
+                               class="form-control"
+                               id="event-end-time"
+                               placeholder="When the event will end."
+                               min="0"
+                               required="required"
+                               th:field="${event.eventEndDateTime}"/>
                     </div>
                 </div>
                 <div class="form-group">

@@ -28,10 +28,10 @@ public class HomeController {
     public String index(Model model,
                         @RequestParam(value = "error", required = false) String dangerMessage) {
 
-        List<Event> events = new ArrayList<>(eventRepository.findAll());
-        if(events != null) {
+        List<Event> allEvents = new ArrayList<>(eventRepository.findAll());
+        if(allEvents != null) {
             //events.sort(Comparator.comparing(Event::getEventDateTime));
-            model.addAttribute("events",events);
+            model.addAttribute("allEvents",allEvents);
         }
 
         List<Garage> garages = new ArrayList<>(garageRepository.findAll());
