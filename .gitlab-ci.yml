@@ -36,12 +36,13 @@ deploy:
   script:
     - scp build/libs/*.jar 411golds18-mgmt.cs.odu.edu:/gitlab-runner/
     - ssh 411golds18-mgmt.cs.odu.edu
-    - sudo service parkodu stop
+    - echo $GITLAB_PASSWORD | sudo -S service parkodu stop
     - rm /opt/parkodu/parkodu-1.0.0.jar
     - mv ~/*.jar /opt/parkodu/parkodu-1.0.0.jar
-    - sudo service parkodu start
+    - chmod u+x /opt/parkodu/parkodu-1.0.0.jar
+    - echo $GITLAB_PASSWORD | sudo service parkodu start
     - exit
    
 
 after_script:
-  - echo ""
+  - echo "after script"
