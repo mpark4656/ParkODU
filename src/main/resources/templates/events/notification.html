@@ -69,19 +69,20 @@
     $(document).ready(function() {
         var newEventCount = /*[[${newEventCount}]]*/;
         var userKey = /*[[${currentUserKey}]]*/;
-
         $('#event-notification-count').attr('data-count', newEventCount);
 
-        $('#event-notification-button').click(function() {
-            setTimeout(function() {
-                $.post("/rest/accounts/update_last_notification_viewed_date",
-                    { userKey: userKey }).done(function(data) {
-                        $('#event-notification-count').attr('data-count', '0');
-                        $('.new-item-highlight').css('background', 'white');
-                    }
-            );
-            },  10000);
-        });
+        if(userKey != null) {
+            $('#event-notification-button').click(function() {
+                setTimeout(function() {
+                    $.post("/rest/accounts/update_last_notification_viewed_date",
+                        { userKey: userKey }).done(function(data) {
+                            $('#event-notification-count').attr('data-count', '0');
+                            $('.new-item-highlight').css('background', 'white');
+                        }
+                    );
+                }, 10000);
+            });
+        }
     });
 /*]]>*/
 </script>
