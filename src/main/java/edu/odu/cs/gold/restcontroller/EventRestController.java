@@ -25,10 +25,11 @@ public class EventRestController {
     public ResponseEntity<?> add(@RequestBody Event event) {
         if (event.getEventKey() != null)  {
             event.setEventKey(UUID.randomUUID().toString());
-            event.setEventDateTime(DateTime.now().toString());
+            event.setEventUpdatedDateTime(DateTime.now().toString());
             event.setEventName(event.getEventName());
             event.setEventMessage(event.getEventMessage());
-            event.setScheduledDateTime(event.getScheduledDateTime());
+            event.setEventStartDateTime(event.getEventStartDateTime());
+            event.setEventEndDateTime(event.getEventEndDateTime());
             event.setEventTags(event.getEventTags());
             eventRepository.save(event);
             System.out.println("Saved event: " + event);
@@ -48,15 +49,20 @@ public class EventRestController {
             if (event.getEventMessage() != null) {
                 existingEvent.setEventMessage(event.getEventMessage());
             }
-            if (event.getEventDateTime() != null) {
-                existingEvent.setEventDateTime(DateTime.now().toString());
+            if (event.getEventUpdatedDateTime() != null) {
+                existingEvent.setEventUpdatedDateTime(DateTime.now().toString());
             }
             if (event.getLocationsAffected() != null) {
                 existingEvent.setLocationsAffected(event.getLocationsAffected());
             }
-            if (event.getScheduledDateTime() != null) {
-                existingEvent.setScheduledDateTime(event.getScheduledDateTime());
+            if (event.getEventStartDateTime() != null) {
+                existingEvent.setEventStartDateTime(event.getEventStartDateTime());
             }
+
+            if (event.getEventEndDateTime() != null) {
+                existingEvent.setEventEndDateTime(event.getEventEndDateTime());
+            }
+
             if(event.getEventTags() != null) {
                 existingEvent.setEventTags(event.getEventTags());
             }

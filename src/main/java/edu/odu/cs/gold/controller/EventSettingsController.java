@@ -41,7 +41,7 @@ public class EventSettingsController {
                         Model model) {
 
         List<Event> events = new ArrayList<>(eventRepository.findAll());
-        if(events != null) {
+        if(events != null && !events.isEmpty()) {
             events.sort(Comparator.comparing(Event::getEventName));
             model.addAttribute("events", events);
         }
@@ -125,7 +125,7 @@ public class EventSettingsController {
         List<Garage> garages = new ArrayList<>(garageRepository.findAll());
         List<Building> buildings = new ArrayList<>(buildingRepository.findAll());
         List<String> locations = new ArrayList<>();
-
+        List<String> locationsAffected;
         for(Garage garage: garages) {
             locations.add(garage.getName());
         }
@@ -154,10 +154,12 @@ public class EventSettingsController {
             int duplicateCount = eventRepository.countByPredicate(predicate);
             if (duplicateCount == 0) {
                 Event existingEvent = eventRepository.findByKey(event.getEventKey());
+                existingEvent.setEventUpdatedDateTime(DateTime.now().toString());
                 existingEvent.setEventName(event.getEventName());
                 existingEvent.setEventMessage(event.getEventMessage());
-                existingEvent.setEventDateTime(DateTime.now().toString());
-                existingEvent.setScheduledDateTime(event.getScheduledDateTime());
+                existingEvent.setEventUpdatedDateTime(DateTime.now().toString());
+                existingEvent.setEventStartDateTime(event.getEventStartDateTime());
+                existingEvent.setEventEndDateTime(event.getEventEndDateTime());
                 existingEvent.setLocationsAffected(event.getLocationsAffected());
                 existingEvent.setEventTags(event.getEventTags());
                 eventRepository.save(existingEvent);
