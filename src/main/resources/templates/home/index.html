@@ -109,6 +109,60 @@
 
 <script th:inline="javascript">
 /*<![CDATA[*/
+
+$.ajax({
+    type: "GET",
+    url: 'events/notification',
+    success: function(data) {
+        var notificationListItem = $('<div>', {
+            id: 'notification-list-item',
+            'class': ''
+        });
+        $(notificationListItem).append(data);
+        $('#notification-container').append(notificationListItem);
+    }
+});
+
+
+
+
+$('#results').on('click', '.delete-button', function() {
+    var chartId = $(this).data('id');
+    $('#chart-' + chartId).remove();
+});
+$('#create-button').click(function() {
+
+    var garageKey = $('#garageKey').val();
+    var floorNumber = $('#floorNumber').val();
+    var date = $('#date').val();
+	var chartId = $('#chartId').val();
+
+	//alert('chartId: ' + chartId + ', garageKey: ' + garageKey + ', floorNumber: ' + floorNumber + ', date: ' + date);
+
+    $.ajax({
+        type: "GET",
+        url: 'charts/chart',
+        data: {
+            id: garageKey,
+            floorNumber: floorNumber,
+            date: date,
+            chartId: chartId
+        },
+        success: function(data) {
+			var newChartId = 'chart-' + chartId + '-container';
+			var newChart = $('<div>', {
+				id: newChartId,
+				'class': ''
+			});
+			$(newChart).append(data);
+			$('#results').append(newChart);
+			$('#chartId').val(parseInt(chartId) + 1);
+        }
+    });
+});
+
+
+
 var currentAvailabilityDataString = /*[[${currentAvailabilityDataString}]]*/;
 var currentAvailabilityData = currentAvailabilityDataString.split(',');
 new Chart(document.getElementById("current-availability-chart"),
