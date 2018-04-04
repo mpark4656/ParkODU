@@ -36,34 +36,6 @@ public class HomeController {
     public String index(Model model,
                         @RequestParam(value = "error", required = false) String dangerMessage) {
 
-        List<Event> allEvents = new ArrayList<>(eventRepository.findAll());
-        if(allEvents != null) {
-            try {
-                AuthenticatedUser authenticatedUser =
-                        (AuthenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-                String userKey = authenticatedUser.getUser().getUserKey();
-                User user = userRepository.findByKey(userKey);
-                model.addAttribute("currentUserKey", user.getUserKey());
-
-                int newEventCount = 0;
-                for(Event event : allEvents) {
-                    DateTime eventUpdatedDate = DateTime.parse(event.getEventUpdatedDateTime());
-
-                    DateTime userLastNotificationViewedDate
-                            = DateTime.parse(user.getLastNotificationViewedDate());
-                    if (eventUpdatedDate.compareTo(userLastNotificationViewedDate) > 0) {
-                        newEventCount++;
-                    }
-
-                }
-                model.addAttribute("newEventCount", newEventCount);
-            } catch(Exception e) {
-                 model.addAttribute("newEventCount", allEvents.size());
-            }
-            allEvents.sort(Comparator.comparing(Event::getEventStartTimeDateTime));
-            model.addAttribute("allEvents", allEvents);
-        }
-
         List<Garage> garages = new ArrayList<>(garageRepository.findAll());
         garages.sort(Comparator.comparing(Garage::getName));
         StringBuilder currentAvailabilityDataString = new StringBuilder();

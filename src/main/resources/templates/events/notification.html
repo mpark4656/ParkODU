@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+</head>
+<body>
+    <div id="notification-list-item" th:if="${allEvents != null}">
+        <div class="btn-group dropdown dropdown-notifications sw-open">
+            <button id="event-notification-button" class="btn btn-lg dropdown-toggle" data-toggle="dropdown">
+                <i id="event-notification-count" data-count="0" class="glyphicon glyphicon-bell notification-icon"></i>
+                <span class="caret"></span>
+            </button>
+
+            <div class="dropdown-container dropdown-position-bottomright">
+                <div class="dropdown-toolbar">
+                    <div class="dropdown-toolbar-actions">
+                        <a th:href="@{/events/index}"><i class="glyphicon glyphicon-search"></i> View All</a>
+                    </div>
+                    <h3 class="dropdown-toolbar-title">Notifications</h3>
+                </div><!-- /dropdown-toolbar -->
+                <ul class="dropdown-menu notifications" th:if="${allEvents.isEmpty()}">
+                    <li class="notification">
+                        <div class="media">
+                            <div class="media-body">
+                                <strong class="notification-title">No Events Found</strong>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="dropdown-menu notifications">
+                    <li class="notification" th:each="event : ${allEvents}">
+                        <div class="media">
+                            <div class="media-body">
+                                <strong class="notification-title"><a href="#" th:text="${event.eventName}"></a></strong>
+                                <p class="notification-desc" th:text="${event.eventMessage}"></p>
+                                <div class="notification-meta">
+                                    <small class="timestamp" th:text="'Updated: ' + ${event.eventUpdatedDateTime}"></small>
+                                </div>
+                                <div class="notification-meta">
+                                    <small class="timestamp" th:text="'Starts At ' + ${event.eventStartDateTime}"></small>
+                                </div>
+                                <div class="notification-meta">
+                                    <small class="timestamp" th:text="'Ends At ' + ${event.eventEndDateTime}"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+<!-- Chart.js Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: chart-js-scripts" /> /*/-->
+<script th:inline="javascript">
+/*<![CDATA[*/
+    $(document).ready(function() {
+        var newEventCount = /*[[${newEventCount}]]*/;
+        var userKey = /*[[${currentUserKey}]]*/;
+
+        $('#event-notification-count').attr('data-count', newEventCount);
+
+        $('#event-notification-button').click(function() {
+            $.post("/rest/accounts/update_last_notification_viewed_date",
+                { userKey: userKey }).done(function(data) {
+                    $('#event-notification-count').attr('data-count', '0');
+                }
+            );
+        });
+    });
+/*]]>*/
+</script>
+
+</html>
