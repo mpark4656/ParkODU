@@ -35,10 +35,10 @@ deploy:
   stage: deploy
   script:
     - scp build/libs/*.jar 411golds18-mgmt.cs.odu.edu:/gitlab-runner/
-    - ssh -t 411golds18-mgmt.cs.odu.edu su -c "sudo service parkodu stop"
-    - ssh -t 411golds18-mgmt.cs.odu.edu -c "mv ~/*.jar /opt/parkodu/parkodu-1.0.0.jar"
-    - ssh -t 411golds18-mgmt.cs.odu.edu -c "chmod u+x /opt/parkodu/parkodu-1.0.0.jar"
-    - ssh -t 411golds18-mgmt.cs.odu.edu su -c "sudo service parkdou start"
+    - ssh -t -t gitlab-runner@411golds18-mgmt.cs.odu.edu -c "sudo service parkodu stop"
+    - ssh -t -t gitlab-runner@411golds18-mgmt.cs.odu.edu -c "mv ~/*.jar /opt/parkodu/parkodu-1.0.0.jar"
+    - ssh -t -t gitlab-runner@411golds18-mgmt.cs.odu.edu -c "chmod u+x /opt/parkodu/parkodu-1.0.0.jar"
+    - ssh -t -t gitlab-runner@411golds18-mgmt.cs.odu.edu -c "sudo service parkdou start"
    
 
 after_script:
