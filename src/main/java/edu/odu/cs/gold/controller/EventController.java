@@ -46,6 +46,8 @@ public class EventController {
                         (AuthenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
                 String userKey = authenticatedUser.getUser().getUserKey();
                 User user = userRepository.findByKey(userKey);
+                ArrayList<Event> newEvents = new ArrayList<> ();
+
                 model.addAttribute("currentUserKey", user.getUserKey());
 
                 int newEventCount = 0;
@@ -56,9 +58,11 @@ public class EventController {
                             = DateTime.parse(user.getLastNotificationViewedDate());
                     if (eventUpdatedDate.compareTo(userLastNotificationViewedDate) > 0) {
                         newEventCount++;
+                        newEvents.add(event);
                     }
 
                 }
+                model.addAttribute("newEvents", newEvents);
                 model.addAttribute("newEventCount", newEventCount);
             } catch(Exception e) {
                 model.addAttribute("newEventCount", allEvents.size());
