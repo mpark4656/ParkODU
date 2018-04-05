@@ -30,5 +30,26 @@
     <!-- Footer -->
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
+<!-- End Main Content -->
+
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+	$.ajax({
+		type: "GET",
+		url: '../../events/notification',
+		success: function(data) {
+		    var notificationListItem = $('<div>', {
+		        id: 'notification-list-item',
+		        'class': ''
+		    });
+		    $(notificationListItem).append(data);
+		    $('#notification-container').append(notificationListItem);
+		}
+	});
+/*]]>*/
+</script>
 </body>
 </html>
