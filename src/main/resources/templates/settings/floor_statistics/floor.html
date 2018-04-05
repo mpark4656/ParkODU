@@ -1,10 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+
 </head>
 <body>
-$END$
+
+<!-- Navigation Bar -->
+<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
+
+<!-- Main Content -->
+<div class="container-fluid main-container">
+    <div class="row">
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
+            <h1 class="text-center main-header" th:text="${garage.name}"></h1>
+            <hr/>
+            <!-- Alerts -->
+            <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
+
+            <table id="garageFloorsTable" class="table table-bordered">
+             <thead>
+                 <tr>
+                     <th>Floor</th>
+                     <th>Description</th>
+                     <th>Capacity</th>
+                     <th>Timestamp</th>
+                 </tr>
+             </thead>
+    <tbody>
+    <tr th:each="floorStatistic : ${floorStatistics}">
+        <td th:text="${floor.number}"></td>
+        <td th:text="${floor.description}"></td>
+        <td th:text="${floorStatistic.capacity}"></td>
+        <td th:text="${floorStatistic.timestamp}"></td>
+    </tr>
+    </tbody>
+        </table>
+        </div>
+    </div>
+    <!-- Footer -->
+    <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
+</div>
 </body>
 </html>

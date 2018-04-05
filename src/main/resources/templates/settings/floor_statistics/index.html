@@ -1,10 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
 </head>
 <body>
-$END$
+<!-- Navigation Bar -->
+<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
+
+<!-- Main Content -->
+<div class="container-fluid main-container">
+    <div class="row">
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1">
+            <h1 class="text-center main-header">Floor Statistics Table</h1>
+            <hr/>
+            <!-- Alerts -->
+            <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
+            <th:block th:each="garage : ${garages}">
+                <h4 th:text="${garage.name}"></h4>
+                <ul>
+                    <li th:each="floor : ${floors}" th:if="${floor.garageKey == garage.garageKey}">
+                        <a th:href="@{/settings/floor_statistics/floor} + '/' + ${floor.floorKey}" th:text="'Level ' + ${floor.number} + ' - ' + ${floor.description}"></a>
+                    </li>
+                </ul>
+            </th:block>
+        </div>
+    </div>
+    <!-- Footer -->
+    <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
+</div>
 </body>
 </html>
