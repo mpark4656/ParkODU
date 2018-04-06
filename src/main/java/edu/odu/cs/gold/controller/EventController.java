@@ -12,9 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/events")
@@ -39,38 +37,40 @@ public class EventController {
 
     @GetMapping("/notification")
     public String notify(Model model) {
-        List<Event> allEvents = new ArrayList<>(eventRepository.findAll());
-        if(allEvents != null) {
-            try {
-                AuthenticatedUser authenticatedUser =
-                        (AuthenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        try {
+            List<Event> events = new ArrayList<>(eventRepository.findAll());
+            events.sort(Comparator.comparing(Event::getEventStartTimeDateTime));
+            model.addAttribute("events", events);
+
+            User user = null;
+            if (SecurityContextHolder.getContext().getAuthentication() != null
+                    && SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null
+                    && !SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+                AuthenticatedUser authenticatedUser = (AuthenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
                 String userKey = authenticatedUser.getUser().getUserKey();
-                User user = userRepository.findByKey(userKey);
-                ArrayList<Event> newEvents = new ArrayList<> ();
-
-                model.addAttribute("currentUserKey", user.getUserKey());
-
-                int newEventCount = 0;
-                for(Event event : allEvents) {
-                    DateTime eventUpdatedDate = DateTime.parse(event.getEventUpdatedDateTime());
-
-                    DateTime userLastNotificationViewedDate
-                            = DateTime.parse(user.getLastNotificationViewedDate());
-                    if (eventUpdatedDate.compareTo(userLastNotificationViewedDate) > 0) {
-                        newEventCount++;
-                        newEvents.add(event);
-                    }
-
-                }
-                model.addAttribute("newEvents", newEvents);
-                model.addAttribute("newEventCount", newEventCount);
-            } catch(Exception e) {
-                model.addAttribute("newEventCount", allEvents.size());
+                user = userRepository.findByKey(userKey);
+                model.addAttribute("userKey", user.getUserKey());
             }
-            allEvents.sort(Comparator.comparing(Event::getEventStartTimeDateTime));
-            model.addAttribute("allEvents", allEvents);
-        }
 
+            Set<String> newEventKeys = new HashSet<>();
+            for (Event event : events) {
+                if (user != null && user.getLastNotificationViewedDate() != null) {
+                    DateTime eventUpdatedDate = DateTime.parse(event.getEventUpdatedDateTime());
+                    DateTime userLastViewedDate = DateTime.parse(user.getLastNotificationViewedDate());
+                    if (eventUpdatedDate.toDate().getTime() > userLastViewedDate.toDate().getTime()) {
+                        newEventKeys.add(event.getEventKey());
+                    }
+                }
+                else {
+                    newEventKeys.add(event.getEventKey());
+                }
+            }
+            model.addAttribute("newEventKeys", newEventKeys);
+            model.addAttribute("newEventCount", newEventKeys.size());
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
         return "events/notification";
     }
 }
