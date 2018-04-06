@@ -24,7 +24,14 @@
                 <div class="form-group">
                     <label for="startingAddress" class="control-label col-md-4">Starting Location</label>
                     <div class="col-md-8">
-                        <input type="text" name="startingAddress" id="startingAddress" placeholder="Enter your starting address" onFocus="getLocationByGPS()" class="form-control" />
+                        <input type="text"
+                               name="startingAddress"
+                               id="startingAddress"
+                               placeholder="Enter your starting address"
+                               onFocus="getLocationByGPS()"
+                               class="form-control"
+                               th:value="${preferredStartingAddress}"
+                        />
                     </div>
                 </div>
 
@@ -32,7 +39,12 @@
                     <label class="control-label col-md-4">Permit Types</label>
                     <div class="col-md-8">
                         <div th:each="permitType : ${permitTypes}">
-                            <input name="permitTypeKeys" type="checkbox" th:id="${permitType.permitTypeKey}" th:value="${permitType.permitTypeKey}" />
+                            <input
+                                    name="permitTypeKeys"
+                                    type="checkbox"
+                                    th:id="${permitType.permitTypeKey}"
+                                    th:value="${permitType.permitTypeKey}"
+                                    th:checked="${preferredPermitTypes.contains(permitType.permitTypeKey)}"/>
                             <label th:for="${permitType.permitTypeKey}" th:text="${permitType.name}"></label>
                         </div>
                     </div>
@@ -42,7 +54,11 @@
                     <label class="control-label col-md-4">Space Types</label>
                     <div class="col-md-8">
                         <div th:each="spaceType : ${spaceTypes}">
-                            <input name="spaceTypeKeys" type="checkbox" th:id="${spaceType.spaceTypeKey}" th:value="${spaceType.spaceTypeKey}" />
+                            <input
+                                    name="spaceTypeKeys" type="checkbox"
+                                    th:id="${spaceType.spaceTypeKey}"
+                                    th:value="${spaceType.spaceTypeKey}"
+                                    th:checked="${preferredSpaceTypes.contains(spaceType.spaceTypeKey)}"/>
                             <label th:for="${spaceType.spaceTypeKey}" th:text="${spaceType.name}"></label>
                         </div>
                     </div>
@@ -59,7 +75,10 @@
                     <label for="destinationBuildingId" class="control-label col-md-4">Destination Building</label>
                     <div class="col-md-8">
                         <select name="destinationBuildingId" id="destinationBuildingId" class="form-control">
-                            <option th:each="building : ${buildings}" th:value="${building.buildingKey}" th:text="${building.name}"></option>
+                            <option th:each="building : ${buildings}"
+                                    th:value="${building.buildingKey}"
+                                    th:text="${building.name}"
+                                    th:selected="${preferredDestinationBuilding eq building.buildingKey}"></option>
                         </select>
                     </div>
                 </div>
@@ -113,6 +132,22 @@ function getLocationByGPS() {
 }
 </script>
 
+<script th:inline="javascript">
+/*<![CDATA[*/
+	$.ajax({
+		type: "GET",
+		url: '../events/notification',
+		success: function(data) {
+		    var notificationListItem = $('<div>', {
+		        id: 'notification-list-item',
+		        'class': ''
+		    });
+		    $(notificationListItem).append(data);
+		    $('#notification-container').append(notificationListItem);
+		}
+	});
+/*]]>*/
+</script>
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 

@@ -1,18 +1,18 @@
 package edu.odu.cs.gold.controller;
 
+import edu.odu.cs.gold.model.Event;
 import edu.odu.cs.gold.model.Garage;
+import edu.odu.cs.gold.model.User;
+import edu.odu.cs.gold.repository.EventRepository;
 import edu.odu.cs.gold.repository.GarageRepository;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import edu.odu.cs.gold.repository.UserRepository;
+import edu.odu.cs.gold.security.AuthenticatedUser;
+import org.joda.time.DateTime;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -21,14 +21,21 @@ import java.util.List;
 public class HomeController {
 
     private GarageRepository garageRepository;
+    private EventRepository eventRepository;
+    private UserRepository userRepository;
 
-    public HomeController(GarageRepository garageRepository) {
+    public HomeController(GarageRepository garageRepository,
+                          EventRepository eventRepository,
+                          UserRepository userRepository) {
         this.garageRepository = garageRepository;
+        this.eventRepository = eventRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping({"","/","/index"})
     public String index(Model model,
                         @RequestParam(value = "error", required = false) String dangerMessage) {
+
         List<Garage> garages = new ArrayList<>(garageRepository.findAll());
         garages.sort(Comparator.comparing(Garage::getName));
         StringBuilder currentAvailabilityDataString = new StringBuilder();
@@ -36,6 +43,7 @@ public class HomeController {
             currentAvailabilityDataString.append(garage.getAvailableSpaces() + ",");
         }
         model.addAttribute("currentAvailabilityDataString", currentAvailabilityDataString.toString());
+
         // Alerts
         if (dangerMessage != null) {
             model.addAttribute("dangerMessage", dangerMessage);

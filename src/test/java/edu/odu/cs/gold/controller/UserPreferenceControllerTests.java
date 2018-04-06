@@ -1,9 +1,11 @@
 package edu.odu.cs.gold.controller;
 
 import com.hazelcast.query.Predicate;
+import edu.odu.cs.gold.model.Building;
 import edu.odu.cs.gold.model.PermitType;
 import edu.odu.cs.gold.model.SpaceType;
 import edu.odu.cs.gold.model.User;
+import edu.odu.cs.gold.repository.BuildingRepository;
 import edu.odu.cs.gold.repository.PermitTypeRepository;
 import edu.odu.cs.gold.repository.SpaceTypeRepository;
 import edu.odu.cs.gold.repository.UserRepository;
@@ -15,6 +17,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.ExtendedModelMap;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -54,6 +58,7 @@ public class UserPreferenceControllerTests {
     private UserRepository userRepository;
     private PermitTypeRepository permitTypeRepository;
     private SpaceTypeRepository spaceTypeRepository;
+    private BuildingRepository buildingRepository;
 
     private UserPreferenceController userPreferenceController;
 
@@ -98,6 +103,7 @@ public class UserPreferenceControllerTests {
         userRepository = mock(UserRepository.class);
         permitTypeRepository = mock(PermitTypeRepository.class);
         spaceTypeRepository = mock(SpaceTypeRepository.class);
+        buildingRepository = mock(BuildingRepository.class);
 
         when(userRepository.findAll()).thenReturn(users);
         when(userRepository.findByKey(USER_ONE_KEY)).thenReturn(userOne);
@@ -117,10 +123,14 @@ public class UserPreferenceControllerTests {
         doNothing().when(spaceTypeRepository).save(any(SpaceType.class));
         doNothing().when(spaceTypeRepository).delete(anyString());
 
+        doNothing().when(buildingRepository).save(any(Building.class));
+        doNothing().when(buildingRepository).delete(anyString());
+
         userPreferenceController = new UserPreferenceController(
                 userRepository,
                 permitTypeRepository,
-                spaceTypeRepository
+                spaceTypeRepository,
+                buildingRepository
         );
     }
 
@@ -144,7 +154,7 @@ public class UserPreferenceControllerTests {
 
         when(authentication.getPrincipal()).thenReturn(authenticatedUser);
 
-        String returnURL = userPreferenceController.index(model);
+        String returnURL = userPreferenceController.index(null, null, null, null, model);
 
         assertEquals("user_preference/index", returnURL);
         assertTrue(model.containsKey("user"));
@@ -170,7 +180,7 @@ public class UserPreferenceControllerTests {
 
         when(authentication.getPrincipal()).thenReturn(authenticatedUser);
 
-        String returnURL = userPreferenceController.index(model);
+        String returnURL = userPreferenceController.index(null, null, null, null, model);
 
         assertEquals("home/index", returnURL);
         assertFalse(model.containsKey("user"));
@@ -180,6 +190,7 @@ public class UserPreferenceControllerTests {
     public void testEdit_NonNullTypes() {
         List<String> permitTypes = new ArrayList<> ();
         List<String> spaceTypes = new ArrayList<> ();
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
 
         permitTypes.add(PERMIT_ONE_KEY);
         permitTypes.add(PERMIT_TWO_KEY);
@@ -187,21 +198,19 @@ public class UserPreferenceControllerTests {
         spaceTypes.add(SPACE_TWO_KEY);
 
         String returnURL = userPreferenceController.edit(
-                USER_ONE_KEY,
-                permitTypes,
-                spaceTypes
+                userOne,
+                redirectAttributes
         );
-        assertEquals("redirect:/", returnURL);
+        assertEquals("redirect:/user_preference/index", returnURL);
     }
 
     @Test
     public void testEdit_NullTypes() {
-
+        RedirectAttributesModelMap redirectAttributes = new RedirectAttributesModelMap();
         String returnURL = userPreferenceController.edit(
-                USER_ONE_KEY,
-                null,
-                null
+                userOne,
+                redirectAttributes
         );
-        assertEquals("redirect:/", returnURL);
+        assertEquals("redirect:/user_preference/index", returnURL);
     }
 }

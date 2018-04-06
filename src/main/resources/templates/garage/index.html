@@ -4,7 +4,6 @@
 <head>
     <!-- Head -->
     <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
-    <meta http-equiv="refresh" content="5"/>
 </head>
 <body>
 
@@ -19,18 +18,18 @@
             <hr/>
             <table class="table table-bordered table-centered">
                 <thead>
-                    <tr>
-                        <th width="40%">Garage</th>
-                        <th width="30%">Available Spaces</th>
-                        <th width="30%">Occupancy Rate</th>
-                    </tr>
+                <tr>
+                    <th width="40%">Garage</th>
+                    <th width="30%">Available Spaces</th>
+                    <th width="30%">Occupancy Rate</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="garage : ${garages}">
-                        <td style="text-align: left;"><a th:href="@{/garage/details} + '/' + ${garage.garageKey}" title="Garage Details" th:text="${garage.name}">Details</a></td>
-                        <td th:text="${garage.availableSpaces}">Available Spaces</td>
-                        <td th:text="${garage.capacity} + '%'"></td>
-                    </tr>
+                <tr th:each="garage : ${garages}">
+                    <td style="text-align: left;"><a th:href="@{/garage/details} + '/' + ${garage.garageKey}" title="Garage Details" th:text="${garage.name}">Details</a></td>
+                    <td th:text="${garage.availableSpaces}">Available Spaces</td>
+                    <td th:text="${garage.capacity} + '%'"></td>
+                </tr>
                 </tbody>
             </table>
         </div>
@@ -42,6 +41,23 @@
 
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+	$.ajax({
+		type: "GET",
+		url: '../events/notification',
+		success: function(data) {
+		    var notificationListItem = $('<div>', {
+		        id: 'notification-list-item',
+		        'class': ''
+		    });
+		    $(notificationListItem).append(data);
+		    $('#notification-container').append(notificationListItem);
+		}
+	});
+/*]]>*/
+</script>
 
 </body>
 </html>

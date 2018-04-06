@@ -24,7 +24,7 @@ public class Floor implements Serializable {
         this.availableSpaces = availableSpaces;
         this.totalSpaces = totalSpaces;
         this.description = description;
-        this.capacity = (availableSpaces / totalSpaces) * 100.00;
+        this.capacity = ((double)availableSpaces / totalSpaces) * 100.00;
         this.lastUpdated = new Date();
     }
 
@@ -102,7 +102,7 @@ public class Floor implements Serializable {
     @Override
     public String toString() {
         return "Floor{" +
-                "floorKey='" + floorKey + '\'' +
+                " floorKey='" + floorKey + '\'' +
                 ", garageKey='" + garageKey + '\'' +
                 ", number='" + number + '\'' +
                 ", availableSpaces=" + availableSpaces +
@@ -110,6 +110,6 @@ public class Floor implements Serializable {
                 ", description='" + description + '\'' +
                 ", capacity=" + capacity +
                 ", lastUpdated=" + lastUpdated +
-                '}';
+                " }";
     }
 }
