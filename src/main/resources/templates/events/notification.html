@@ -6,15 +6,15 @@
 <body>
 
 <a href="#" id="event-notification-button" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-    <span id="notification-mobile-text">Notifications</span>
     <i th:if="${newEventCount eq 0}" class="glyphicon glyphicon-bell event-notification-count"></i>
     <i th:if="${newEventCount gt 0}" th:attr="data-count=${newEventCount}" class="glyphicon glyphicon-bell notification-icon event-notification-count"></i>
+    <span id="notification-mobile-text">Notifications</span>
     <span class="caret"></span>
 </a>
 <ul id="notifications-container" class="dropdown-menu">
     <li id="notifications-header" class="dropdown-header" style="padding-left: 20px;"><span id="notification-desktop-text">Notifications</span>&nbsp;<a id="notifications-view-all-link" th:href="@{/events/index}"><i class="glyphicon glyphicon-search"></i> View All</a></li>
-    <li th:if="${events.isEmpty()}" class="notification-item">
-        <div style="padding-left: 20px; padding-right: 20px; padding-top: 5px; padding-bottom: 5px; border-top: 1px solid #eee;">
+    <li th:if="${events.isEmpty()}" class="notification-item" style="border-top: 1px solid #eee;">
+        <div style="padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px;">
             <b class="notification-title">No Events Found</b>
         </div>
     </li>

@@ -52,11 +52,11 @@
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
 
-				<li><a th:href="@{/garage}">Garages</a></li>
-				<li><a th:href="@{/analytics/locate}">Search</a></li>
-				<li><a th:href="@{/charts}">Charts</a></li>
+				<li><a th:href="@{/garage}"><i class="fas fa-car fa-md mobile-nav-icon"></i>Garages</a></li>
+				<li><a th:href="@{/analytics/locate}"><i class="fas fa-search fa-md mobile-nav-icon"></i>Search</a></li>
+				<li><a th:href="@{/charts}"><i class="fas fa-chart-line fa-md mobile-nav-icon"></i>Charts</a></li>
 				<li sec:authorize="hasAuthority('ADMIN')" class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-sliders-h fa-md mobile-nav-icon"></i>Admin <span class="caret"></span></a>
 					<ul id="admin-submenu" class="dropdown-menu">
 						<li class="dropdown-header">Configurations</li>
 						<li><a th:href="@{/settings/building}">Buildings</a></li>
@@ -82,8 +82,8 @@
 				<li id="notification-container" class="dropdown"></li>
 				<li sec:authorize="isAuthenticated()" class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-						<span id="configuration-mobile-text">Configurations</span>
 						<i class="fas fa-cog fa-md"></i>
+						<span id="configuration-mobile-text">Configurations</span>
 						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu">
@@ -133,7 +133,8 @@
 <!-- Footer -->
 <div th:fragment="footer">
 	<footer class="footer">
-		<p>&copy; 2018 ParkODU</p>
+		<p id="parkodu-footer-left">&copy; 2018 ParkODU</p>
+		<p id="parkodu-footer-right">Powered by <i class="fab fa-pied-piper-pp fa-lg"></i></p>
 	</footer>
 </div>
 

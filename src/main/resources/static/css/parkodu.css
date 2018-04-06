@@ -243,12 +243,17 @@ hr {
     }
     #notification-mobile-text {
         display: inline !important;
+        padding-left: 2px;
     }
     #configuration-mobile-text {
         display: inline !important;
+        padding-left: 2px;
     }
     #notification-desktop-text {
         display: none !important;
+    }
+    .mobile-nav-icon {
+        display: inline !important;
     }
 }
 
@@ -291,4 +296,17 @@ hr {
 
 .new-item-highlight {
     border-left: 10px solid lightblue !important;
+}
+
+.mobile-nav-icon {
+    padding-right: 5px;
+    display: none;
+}
+
+#parkodu-footer-left {
+    float: left; display: inline-block; padding-left: 5px;
+}
+
+#parkodu-footer-right {
+    float: right; display: inline-block; padding-right: 5px;
 }
