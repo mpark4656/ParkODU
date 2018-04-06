@@ -93,14 +93,9 @@ $('.delete-floor-button').on('click', function()
 /*<![CDATA[*/
 	$.ajax({
 		type: "GET",
-		url: '../../../events/notification',
+		url: '../../events/notification',
 		success: function(data) {
-		    var notificationListItem = $('<div>', {
-		        id: 'notification-list-item',
-		        'class': ''
-		    });
-		    $(notificationListItem).append(data);
-		    $('#notification-container').append(notificationListItem);
+		    $('#notification-container').append(data);
 		}
 	});
 /*]]>*/

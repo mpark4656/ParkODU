@@ -1,3 +1,7 @@
+html, body {
+    height: 100%;
+}
+
 .dropdown-menu .sub-menu {
   left: 100%;
   position: absolute;
@@ -7,11 +11,11 @@
 }
 
 .dropdown-menu li:hover .sub-menu {
-  visibility: visible;
+  //visibility: visible;
 }
 
 .dropdown:hover .dropdown-menu {
-  display: block;
+  //display: block;
 }
 
 .nav-tabs .dropdown-menu,
@@ -68,8 +72,8 @@ body {
 }
 
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover, .navbar-nav li:hover, .dropdown-header:hover {
-	color: rgba(0, 48, 87, 1);
-	background-color: #F5F5F5;
+	//color: rgba(0, 48, 87, 1);
+	//background-color: #F5F5F5;
 }
 
 .navbar-container {
@@ -185,7 +189,7 @@ hr {
 }
 
 /* Mobile */
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 768px) {
     .main-container {
         padding-top: 0;
     }
@@ -217,4 +221,74 @@ hr {
     .welcome-message {
         padding-left: 30px !important;
     }
+    #notifications-container {
+        margin-right: 15px;
+        height: 250px;
+        border-bottom: 1px solid #eee;
+    }
+    #notifications-view-all-link {
+        margin-top: -7px !important;
+    }
+    #admin-submenu {
+        overflow-y: scroll;
+        max-height: 250px;
+        margin-right: 15px;
+        border-bottom: 1px solid #eee;
+    }
+    #menu-mobile-header {
+        display: block !important;
+    }
+    .welcome-message {
+        display: none !important;
+    }
+    #notification-mobile-text {
+        display: inline !important;
+    }
+    #configuration-mobile-text {
+        display: inline !important;
+    }
+    #notification-desktop-text {
+        display: none !important;
+    }
+}
+
+#notifications-view-all-link {
+    float: right;
+    margin-top: -3px;
+}
+
+#notifications-view-all-link:hover {
+    background-color: #fff;
+}
+
+#notifications-header {
+    padding-right: 0;
+}
+
+#notifications-container {
+    overflow-y: scroll;
+    height: 350px;
+    max-height: 350px;
+    min-width: 400px;
+}
+
+.notification-item:hover, #logout-link:hover {
+    background-color: #eee;
+}
+
+.notification-text {
+    margin-bottom: 0;
+}
+
+#menu-mobile-header, #notification-mobile-text, #configuration-mobile-text {
+    display: none;
+}
+
+.notification-item-container {
+    border-left: 10px solid transparent;
+    padding-left: 15px;
+}
+
+.new-item-highlight {
+    border-left: 10px solid lightblue !important;
 }

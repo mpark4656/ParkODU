@@ -4,82 +4,119 @@
 <head>
 </head>
 <body>
-    <div id="notification-list-item" th:if="${allEvents != null}">
-        <div class="btn-group dropdown dropdown-notifications sw-open">
-            <button id="event-notification-button" class="btn btn-lg dropdown-toggle" data-toggle="dropdown">
-                <i id="event-notification-count" data-count="0" class="glyphicon glyphicon-bell notification-icon"></i>
-                <span class="caret"></span>
-            </button>
 
-            <div class="dropdown-container dropdown-position-bottomright">
-                <div class="dropdown-toolbar">
-                    <div class="dropdown-toolbar-actions">
-                        <a th:href="@{/events/index}"><i class="glyphicon glyphicon-search"></i> View All</a>
-                    </div>
-                    <h3 class="dropdown-toolbar-title">Notifications</h3>
-                </div><!-- /dropdown-toolbar -->
-                <ul class="dropdown-menu notifications" th:if="${allEvents.isEmpty()}">
-                    <li class="notification">
-                        <div class="media">
-                            <div class="media-body">
-                                <strong class="notification-title">No Events Found</strong>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-                <ul class="dropdown-menu notifications">
-                    <li class="notification" th:each="event : ${allEvents}">
-                        <div class="media">
-                            <div th:if="${newEvents != null AND newEvents.contains(event)}"
-                                class="media-left new-item-highlight"
-                                style="height: 100%; width: 5px; background: lightblue;">
-                            </div>
-                            <div class="media-left"
-                                 style="height: 100%; width: 5px;">
-                            </div>
-                            <div th:unless="${newEvents != null AND newEvents.contains(event)}"
-                                class="media-left"
-                                style="height: 100%; width: 10px;">
-                            </div>
-                            <div class="media-body">
-                                <strong class="notification-title"><a href="#" th:text="${event.eventName}"></a></strong>
-                                <p class="notification-desc" th:text="${event.eventMessage}"></p>
-                                <div class="notification-meta">
-                                    <small class="timestamp" th:text="'Updated: ' + ${event.eventUpdatedDateTime}"></small>
-                                </div>
-                                <div class="notification-meta">
-                                    <small class="timestamp" th:text="'Starts At ' + ${event.eventStartDateTime}"></small>
-                                </div>
-                                <div class="notification-meta">
-                                    <small class="timestamp" th:text="'Ends At ' + ${event.eventEndDateTime}"></small>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+<a href="#" id="event-notification-button" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+    <span id="notification-mobile-text">Notifications</span>
+    <i th:if="${newEventCount eq 0}" class="glyphicon glyphicon-bell event-notification-count"></i>
+    <i th:if="${newEventCount gt 0}" th:attr="data-count=${newEventCount}" class="glyphicon glyphicon-bell notification-icon event-notification-count"></i>
+    <span class="caret"></span>
+</a>
+<ul id="notifications-container" class="dropdown-menu">
+    <li id="notifications-header" class="dropdown-header" style="padding-left: 20px;"><span id="notification-desktop-text">Notifications</span>&nbsp;<a id="notifications-view-all-link" th:href="@{/events/index}"><i class="glyphicon glyphicon-search"></i> View All</a></li>
+    <li th:if="${events.isEmpty()}" class="notification-item">
+        <div style="padding-left: 20px; padding-right: 20px; padding-top: 5px; padding-bottom: 5px; border-top: 1px solid #eee;">
+            <b class="notification-title">No Events Found</b>
+        </div>
+    </li>
+    <li th:if="${events.isEmpty() eq false}" th:each="event : ${events}" class="notification-item" style="border-top: 1px solid #eee;">
+        <div style="padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px;">
+            <div th:if="${newEventKeys.contains(event.eventKey)}" class="notification-item-container new-item-highlight">
+                <b class="notification-title"><a href="#" th:text="${event.eventName}"></a></b>
+                <p class="notification-text" th:text="${event.eventMessage}"></p>
+                <p class="small notification-text" th:text="'Updated: ' + ${event.eventUpdatedDateTime}"></p>
+                <p class="small notification-text" th:text="'Starts At ' + ${event.eventStartDateTime}"></p>
+                <p class="small notification-text" th:text="'Ends At ' + ${event.eventEndDateTime}"></p>
+            </div>
+            <div th:if="${newEventKeys.contains(event.eventKey) eq false}" class="notification-item-container">
+                <b class="notification-title"><a href="#" th:text="${event.eventName}"></a></b>
+                <p class="notification-text" th:text="${event.eventMessage}"></p>
+                <p class="small notification-text" th:text="'Updated: ' + ${event.eventUpdatedDateTime}"></p>
+                <p class="small notification-text" th:text="'Starts At ' + ${event.eventStartDateTime}"></p>
+                <p class="small notification-text" th:text="'Ends At ' + ${event.eventEndDateTime}"></p>
             </div>
         </div>
+    </li>
+</ul>
+
+<!--
+<div id="notification-list-item" th:if="${allEvents != null}">
+    <div class="btn-group dropdown dropdown-notifications sw-open">
+        <button id="event-notification-button" class="btn btn-lg dropdown-toggle" data-toggle="dropdown">
+            <i id="event-notification-count" data-count="0" class="glyphicon glyphicon-bell notification-icon"></i>
+            <span class="caret"></span>
+        </button>
+
+        <div class="dropdown-container dropdown-position-bottomright">
+            <div class="dropdown-toolbar">
+                <div class="dropdown-toolbar-actions">
+                    <a th:href="@{/events/index}"><i class="glyphicon glyphicon-search"></i> View All</a>
+                </div>
+                <h3 class="dropdown-toolbar-title">Notifications</h3>
+            </div>
+            <ul class="dropdown-menu notifications" th:if="${allEvents.isEmpty()}">
+                <li class="notification">
+                    <div class="media">
+                        <div class="media-body">
+                            <strong class="notification-title">No Events Found</strong>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <ul class="dropdown-menu notifications">
+                <li class="notification" th:each="event : ${allEvents}">
+                    <div class="media">
+                        <div th:if="${newEvents != null AND newEvents.contains(event)}"
+                            class="media-left new-item-highlight"
+                            style="height: 100%; width: 5px; background: lightblue;">
+                        </div>
+                        <div class="media-left"
+                             style="height: 100%; width: 5px;">
+                        </div>
+                        <div th:unless="${newEvents != null AND newEvents.contains(event)}"
+                            class="media-left"
+                            style="height: 100%; width: 10px;">
+                        </div>
+                        <div class="media-body">
+                            <strong class="notification-title"><a href="#" th:text="${event.eventName}"></a></strong>
+                            <p class="notification-desc" th:text="${event.eventMessage}"></p>
+                            <div class="notification-meta">
+                                <small class="timestamp" th:text="'Updated: ' + ${event.eventUpdatedDateTime}"></small>
+                            </div>
+                            <div class="notification-meta">
+                                <small class="timestamp" th:text="'Starts At ' + ${event.eventStartDateTime}"></small>
+                            </div>
+                            <div class="notification-meta">
+                                <small class="timestamp" th:text="'Ends At ' + ${event.eventEndDateTime}"></small>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </div>
+</div>
+-->
 </body>
 
-<!-- Chart.js Scripts -->
-<!--/*/ <th:block th:include="fragments/fragment :: chart-js-scripts" /> /*/-->
 <script th:inline="javascript">
 /*<![CDATA[*/
     $(document).ready(function() {
-        var newEventCount = /*[[${newEventCount}]]*/;
-        var userKey = /*[[${currentUserKey}]]*/;
-        $('#event-notification-count').attr('data-count', newEventCount);
-
-        if(userKey != null) {
+        var userKey = /*[[${userKey}]]*/;
+        if (userKey != null) {
             $('#event-notification-button').click(function() {
                 setTimeout(function() {
-                    $.post("/rest/accounts/update_last_notification_viewed_date",
-                        { userKey: userKey }).done(function(data) {
-                            $('#event-notification-count').attr('data-count', '0');
-                            $('.new-item-highlight').css('background', 'white');
-                        }
-                    );
+                    var numNewItems = $('.new-item-highlight').length;
+                    // Only update the user's last notification viewed date if the number of new items is greater than 0
+                    if (numNewItems > 0) {
+                        $.post("/rest/accounts/update_last_notification_viewed_date",
+                            { userKey: userKey }).done(function(data) {
+                                //alert(data);
+                                $('.event-notification-count').attr('data-count', '0');
+                                $('.event-notification-count').removeClass('notification-icon');
+                                $('.new-item-highlight').removeClass('new-item-highlight');
+                            }
+                        );
+                    }
                 }, 10000);
             });
         }
