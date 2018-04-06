@@ -80,7 +80,7 @@
 				<li sec:authorize="isAuthenticated()" class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cog fa-lg"></i></a>
 					<ul class="dropdown-menu">
-						<li><a th:href="@{/user_preference/index}">Settings</a></li>
+						<li><a th:href="@{/user_preference/index}">My Account</a></li>
 						<li role="separator" class="divider"></li>
 						<li>
 							<form th:action="@{/logout}" method="POST">
