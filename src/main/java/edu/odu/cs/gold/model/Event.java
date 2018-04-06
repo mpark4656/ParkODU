@@ -1,6 +1,8 @@
 package edu.odu.cs.gold.model;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -106,6 +108,19 @@ public class Event implements Serializable{
     public DateTime getEventStartTimeDateTime() {
         return DateTime.parse(eventStartDateTime);
     }
+
+    public String getFormattedEventUpdatedDateTime() {
+        return DateTime.parse(eventUpdatedDateTime).toString(DateTimeFormat.mediumDateTime());
+    }
+
+    public String getFormattedEventStartDateTime() {
+        return DateTime.parse(eventStartDateTime).toString(DateTimeFormat.mediumDateTime());
+    }
+
+    public String getFormattedEventEndDateTime() {
+        return DateTime.parse(eventEndDateTime).toString(DateTimeFormat.mediumDateTime());
+    }
+
 
     @Override
     public String toString() {

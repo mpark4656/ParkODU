@@ -39,8 +39,12 @@
                     <td th:text="${event.eventName}"></td>
                     <td th:text="${event.eventMessage}"></td>
                     <td th:text="${event.eventUpdatedDateTime}"></td>
-                    <td th:text="${event.eventTags}"></td>
-                    <td th:text="${event.locationsAffected}"></td>
+                    <td>
+                        <p th:each="tag : ${event.eventTags}" th:text="${tag}"></p>
+                    </td>
+                    <td>
+                        <p th:each="location : ${event.locationsAffected}" th:text="${location}"></p>
+                    </td>
                     <td th:text="${event.eventStartDateTime}"></td>
                     <td th:text="${event.eventEndDateTime}"></td>
                     <td>
