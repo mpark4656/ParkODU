@@ -40,6 +40,8 @@
 <div class="row" style="padding-top: 50px;">
     <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
         <h1 class="text-center main-header">Navigate</h1>
+        <a id="TakeMeThere" target="_blank" class="btn btn-primary btn-sm align-right">Take Me There</a>
+
         <hr/>
     </div>
 </div>
@@ -61,15 +63,28 @@ var map;
 window.onload = function () {
 
     // testing purposes
-    var destLat = /*[[${startingLocation.latitude}]]*/;
-    var destLon = /*[[${startingLocation.longitude}]]*/;
-    //var destLat = /*[[${destination.latitude}]]*/;
-    //var destLon = /*[[${destination.longitude}]]*/;
+    var startLat = /*[[${startingLocation.latitude}]]*/;
+    var startLon = /*[[${startingLocation.longitude}]]*/;
+    var destLat = /*[[${destination.latitude}]]*/;
+    var destLon = /*[[${destination.longitude}]]*/;
 
     var markerArray = [];
     var div = document.getElementById('map');
 
-    var latlng = new google.maps.LatLng(parseFloat(destLat),parseFloat(destLon));
+     var latlng = new google.maps.LatLng(parseFloat(destLat),parseFloat(destLon));
+
+    document.getElementById("TakeMeThere").onclick = function mapsSelector() {
+    if /* if we're on iOS, open in Apple Maps */
+        ((navigator.platform.indexOf("iPhone") != -1) ||
+        (navigator.platform.indexOf("iPod") != -1) ||
+        (navigator.platform.indexOf("iPad") != -1))
+        window.open('maps://maps.google.com/maps?daddr=' + destLat + ',' + destLon + '&amp;sll='+startLat + ',' + startLon);
+
+    else /* else use Google */
+        window.open('https://maps.google.com/maps?daddr=' + destLat + ',' + destLon + '&amp;sll='+startLat + ',' + startLon);
+    }
+
+
     var mapOptions = {
         zoom: 15,
         center: latlng,
@@ -153,6 +168,22 @@ function attachInstructionText(stepDisplay, marker, text, map) {
         stepDisplay.open(map, marker);
     });
 }
+/*]]>*/
+</script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+	$.ajax({
+		type: "GET",
+		url: '../../events/notification',
+		success: function(data) {
+		    var notificationListItem = $('<div>', {
+		        id: 'notification-list-item',
+		        'class': ''
+		    });
+		    $(notificationListItem).append(data);
+		    $('#notification-container').append(notificationListItem);
+		}
+	});
 /*]]>*/
 </script>
 </body>

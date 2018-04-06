@@ -1,13 +1,9 @@
 package edu.odu.cs.gold.model;
 
-import com.hazelcast.query.Predicate;
-import com.hazelcast.query.Predicates;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -23,6 +19,9 @@ public class User implements Serializable{
     private String roleTypeKey;
     private boolean enabled;
     private String confirmationToken;
+    private String lastNotificationViewedDate;
+    private String preferredStartingAddress;
+    private String preferredDestinationBuilding;
     private Set<String> permissions;
     private Set<String> preferredPermitTypes;
     private Set<String> preferredSpaceTypes;
@@ -111,16 +110,44 @@ public class User implements Serializable{
         this.username = username;
     }
 
-    public boolean isEnabled() {
+    public boolean getEnabled() {
         return enabled;
+    }
+
+    public void setEnabled(boolean value) {
+        this.enabled = value;
     }
 
     public String getRoleType() { return roleType; }
 
-    public void setRole(String roleType) { this.roleType = roleType; }
+    public void setRoleType(String roleType) { this.roleType = roleType; }
 
-    public void setEnabled(boolean value) {
-        this.enabled = value;
+    public String getRoleTypeKey() { return roleTypeKey; }
+
+    public void setRoleTypeKey(String roleTypeKey) { this.roleTypeKey = roleTypeKey; }
+
+    public String getLastNotificationViewedDate() {
+        return this.lastNotificationViewedDate;
+    }
+
+    public String getPreferredStartingAddress() {
+        return this.preferredStartingAddress;
+    }
+
+    public void setPreferredStartingAddress(String preferredStartingAddress) {
+        this.preferredStartingAddress = preferredStartingAddress;
+    }
+
+    public String getPreferredDestinationBuilding() {
+        return this.preferredDestinationBuilding;
+    }
+
+    public void setPreferredDestinationBuilding(String preferredDestinationBuilding) {
+        this.preferredDestinationBuilding = preferredDestinationBuilding;
+    }
+
+    public void setLastNotificationViewedDate(String lastNotificationViewedDate) {
+        this.lastNotificationViewedDate = lastNotificationViewedDate;
     }
 
     public Set<String> getPermissions() {
@@ -169,7 +196,7 @@ public class User implements Serializable{
 
     @Override
     public String toString() {
-        return "User{" +
+        return "User{ " +
                 "userKey='" + userKey + '\'' +
                 ", email='" + email + '\'' +
                 ", username='" + username + '\'' +
@@ -178,11 +205,14 @@ public class User implements Serializable{
                 ", lastName='" + lastName + '\'' +
                 ", roleType='" + roleType + '\'' +
                 ", roleTypeKey='" + roleTypeKey + '\'' +
+                ", lastNotificationViewedDate=" + lastNotificationViewedDate +
                 ", enabled=" + enabled +
                 ", confirmationToken='" + confirmationToken + '\'' +
                 ", permissions=" + permissions +
+                ", preferredStartingAddress=" + preferredStartingAddress + '\'' +
+                ", preferredDestinationBuilding=" + preferredDestinationBuilding + '\'' +
                 ", preferredPermitTypes=" + preferredPermitTypes +
                 ", preferredSpaceTypes=" + preferredSpaceTypes +
-                '}';
+                " }";
     }
 }

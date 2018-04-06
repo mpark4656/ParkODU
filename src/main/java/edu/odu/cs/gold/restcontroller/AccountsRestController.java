@@ -7,6 +7,7 @@ import edu.odu.cs.gold.repository.UserRepository;
 import edu.odu.cs.gold.model.User;
 
 import edu.odu.cs.gold.service.UserService;
+import org.joda.time.DateTime;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,8 +42,10 @@ public class AccountsRestController {
     private UserRepository userRepository;
     private UserService userService;
 
-    public AccountsRestController(UserRepository userRepository) {
+    public AccountsRestController(UserRepository userRepository,
+                                  UserService userService) {
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @PostMapping("/add")
@@ -77,9 +80,9 @@ public class AccountsRestController {
                 existingUser.setPassword(user.getPassword());
             }
             if (user.getRoleType() != null) {
-                existingUser.setRole(user.getRoleType());
+                existingUser.setRoleType(user.getRoleType());
             }
-            existingUser.setEnabled(user.isEnabled());
+            existingUser.setEnabled(user.getEnabled());
 
             userRepository.save(existingUser);
             System.out.println("Updated User: " + existingUser);
@@ -99,5 +102,25 @@ public class AccountsRestController {
             }
         }
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/get/{userKey}")
+    public User get(@PathVariable String userKey) {
+        User user = userRepository.findByKey(userKey);
+        return user;
+    }
+
+    @PostMapping("/update_last_notification_viewed_date")
+    @ResponseBody
+    public String updateLastNotificationViewedDate(@RequestParam("userKey") String userKey) {
+        if(userKey != null && !userKey.isEmpty()) {
+            User user = userRepository.findByKey(userKey);
+            user.setLastNotificationViewedDate(DateTime.now().toString());
+            userRepository.save(user);
+
+            return "User's last notification viewed date was updated.";
+        } else {
+            return "User's key cannot be null or empty.";
+        }
     }
 }

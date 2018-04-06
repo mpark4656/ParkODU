@@ -27,7 +27,6 @@ public class RegisterController {
     private UserService userService;
     private EmailService emailService;
     private UserRepository userRepository;
-    private RoleTypeRepository roleTypeRepository;
 
     /**
      * Constructor for the RegisterController class that implements user registration
@@ -43,7 +42,6 @@ public class RegisterController {
         this.userService = userService;
         this.emailService = emailService;
         this.userRepository = userRepository;
-        this.roleTypeRepository = roleTypeRepository;
     }
 
     /**
@@ -75,6 +73,7 @@ public class RegisterController {
                                           HttpServletRequest request) {
 
         // Lookup user in database by e-mail
+        user.setUsername(user.getUserKey().toLowerCase());
         boolean emailExists = userService.userExists(user.getEmail());
         boolean userExists = userService.userExists(user.getUsername());
 
@@ -93,7 +92,7 @@ public class RegisterController {
             // Generate random 36-character string token for confirmation link
             user.generateConfirmationToken();
             user.generateUserKey();
-            user.setRole("user");
+            user.setRoleType("user");
             user.getPermissions().add("USER");
             userService.saveUser(user);
             String appUrl = request.getScheme() + "://" + request.getServerName();
@@ -126,7 +125,7 @@ public class RegisterController {
         List<User> userList = userRepository.findByPredicate(predicate);
         System.out.println("Confirmation Token: " + token);
         if (userList != null && !userList.isEmpty()) {
-            if(userList.get(0).isEnabled() == true) {
+            if(userList.get(0).getEnabled() == true) {
                 model.addAttribute("dangerMessage", "Oops! Confirmation link not valid!");
                 redirectAttributes.addAttribute("attr","confirmationLinkError");
             } else {

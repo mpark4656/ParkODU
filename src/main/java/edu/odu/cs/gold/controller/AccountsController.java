@@ -20,17 +20,11 @@ import java.util.*;
 public class AccountsController {
 
     private UserRepository userRepository;
-    private UserService userService;
-    private EmailService emailService;
     private RoleTypeRepository roleTypeRepository;
 
     public AccountsController(UserRepository userRepository,
-                              UserService userService,
-                              EmailService emailService,
                               RoleTypeRepository roleTypeRepository) {
         this.userRepository = userRepository;
-        this.userService = userService;
-        this.emailService = emailService;
         this.roleTypeRepository = roleTypeRepository;
     }
 
@@ -78,6 +72,8 @@ public class AccountsController {
         boolean isUsernameDuplicate = false;
         boolean isEmailDuplicate = false;
         try {
+            user.setUsername(user.getUsername().toLowerCase());
+
             Predicate predicate = Predicates.or(
                     Predicates.equal("userKey", user.getUserKey()),
                     Predicates.equal("username", user.getUsername())
@@ -160,8 +156,8 @@ public class AccountsController {
                 existingUser.setFirstName(user.getFirstName());
                 existingUser.setLastName(user.getLastName());
                 existingUser.setEmail(user.getEmail());
-                existingUser.setRole(user.getRoleType());
-                existingUser.setEnabled(user.isEnabled());
+                existingUser.setRoleType(user.getRoleType());
+                existingUser.setEnabled(user.getEnabled());
                 if (isAdmin != null && isAdmin == true) {
                     existingUser.getPermissions().add("ADMIN");
                 }
@@ -237,7 +233,7 @@ public class AccountsController {
 
     @PostMapping("/set_enabled")
     @ResponseBody
-    public String setAvailability(@RequestParam("userEnabled") boolean userEnabled,
+    public String setEnabled(@RequestParam("userEnabled") boolean userEnabled,
                                   @RequestParam("userKey") String userKey) {
         User user = userRepository.findByKey(userKey);
         user.setEnabled(userEnabled);

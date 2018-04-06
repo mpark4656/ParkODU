@@ -23,30 +23,30 @@
 
                 <div class="form-group input-group has-feedback" style="width: 100%;">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                    <input type="text" th:field="*{firstName}" placeholder="First Name" class="form-control" required="false" />
+                    <input type="text" th:field="*{firstName}" placeholder="First Name" class="form-control" required="required" />
                     <span class="glyphicon form-control-feedback " aria-hidden="true"></span>
                 </div>
 
                 <div class="form-group input-group has-feedback">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                    <input type="text" th:field="*{lastName}" placeholder="Last Name" class="form-control" required="false" />
+                    <input type="text" th:field="*{lastName}" placeholder="Last Name" class="form-control" required="required" />
                     <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
                 </div>
                 <div class="form-group input-group has-feedback" style="width: 100%;">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
-                    <input type="email" th:field="*{email}" placeholder="Email Address" class="form-control" required="false" />
+                    <input type="email" th:field="*{email}" placeholder="Email Address" class="form-control" required="required" />
                     <span class="glyphicon form-control-feedback " aria-hidden="true"></span>
                 </div>
 
                 <div class="form-group input-group has-feedback" style="width: 100%;">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                    <input type="text" th:field="*{username}" placeholder="Username" class="form-control" required="false" />
+                    <input type="text" th:field="*{username}" placeholder="Username" class="form-control" required="required" style="text-transform:lowercase"/>
                     <span class="glyphicon form-control-feedback " aria-hidden="true"></span>
                 </div>
 
                 <div class="form-group input-group has-feedback" style="width: 100%;">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-                    <input type="password" th:field="*{password}" placeholder="Password" class="form-control" required="false" />
+                    <input type="password" th:field="*{password}" placeholder="Password" class="form-control" required="required" />
                     <span class="glyphicon form-control-feedback " aria-hidden="true"></span>
                 </div>
 
@@ -65,5 +65,21 @@
 <!-- Bootstrap Validator Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: bootstrap-validator" /> /*/-->
 
+<script th:inline="javascript">
+/*<![CDATA[*/
+	$.ajax({
+		type: "GET",
+		url: '../events/notification',
+		success: function(data) {
+		    var notificationListItem = $('<div>', {
+		        id: 'notification-list-item',
+		        'class': ''
+		    });
+		    $(notificationListItem).append(data);
+		    $('#notification-container').append(notificationListItem);
+		}
+	});
+/*]]>*/
+</script>
 </body>
 </html>

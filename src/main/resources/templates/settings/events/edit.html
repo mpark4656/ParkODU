@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
+<!-- Main Content -->
+<div class="container-fluid main-container">
+    <div class="row">
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
+            <h1 class="text-center main-header">Edit Event</h1>
+            <hr/>
+            <!-- Alerts -->
+            <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
+            <form class="form-horizontal" id="edit-event-form" role="form" th:action="@{/settings/events/edit}" method="post" th:object="${event}">
+                <input type="hidden" id="id" th:value="${event.eventKey}" th:field="${event.eventKey}"/>
+                <div class="form-group">
+                    <label for="name" class="col-md-4 control-label">Name</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="name" required="required" th:field="${event.eventName}"
+                               placeholder="Event Name"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="message" class="col-md-4 control-label">Message</label>
+                    <div class="col-md-8">
+                        <textarea rows="4" cols="50" class="form-control" id="message" th:field="${event.eventMessage}"
+                                  placeholder="Enter a message for the event.">
+                        </textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Locations Affected</label>
+                    <div class="col-md-8">
+                        <select id="location-select" class="form-control" type="text" multiple="multiple" th:field="${event.locationsAffected}" placeholder="Enter Affected Locations...">
+                            <option th:each="location : ${locations}" th:value="${location}" th:text="${location}"> </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="event-start-time" class="col-md-4 control-label">Becomes Effective</label>
+                    <div class="col-md-8">
+                        <input type="datetime-local" class="form-control" id="event-start-time" th:field="${event.eventStartDateTime}" placeholder="Enter the time which the event will start" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="event-end-time" class="col-md-4 control-label">Becomes Effective</label>
+                    <div class="col-md-8">
+                        <input type="datetime-local" class="form-control" id="event-end-time" th:field="${event.eventEndDateTime}" placeholder="Enter the time which the event will end" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="tags" class="col-md-4 control-label">Tags</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="tags" th:field="${event.eventTags}" placeholder="Enter tags associated with the event." />
+                    </div>
+                </div>
+                <div class="col-md-8 col-md-offset-4">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-primary">Reset</button>
+                    <a th:href="@{/settings/events/index}" class="btn btn-primary" title="Back">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Footer -->
+    <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
+</div>
+<!-- End Main Content -->
+
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<!-- Selectize Script -->
+<!--/*/ <th:block th:include="fragments/fragment :: selectize-script" /> /*/-->
+
+<script>
+
+
+
+$('#location-select').selectize({
+    maxItems: 10,
+    plugins: ['remove_button'],
+    delimiter: ',',
+    persist: true,
+    create: function(input) {
+        return {
+            value: input,
+            text: input
+        }
+    }
+});
+
+$('#tags').selectize({
+    plugins: ['remove_button'],
+    delimiter: ',',
+    persist: true,
+    create: function(input) {
+        return {
+            value: input,
+            text: input
+        }
+    }
+});
+
+</script>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+	$.ajax({
+		type: "GET",
+		url: '../../../events/notification',
+		success: function(data) {
+		    var notificationListItem = $('<div>', {
+		        id: 'notification-list-item',
+		        'class': ''
+		    });
+		    $(notificationListItem).append(data);
+		    $('#notification-container').append(notificationListItem);
+		}
+	});
+/*]]>*/
+</script>
+</body>
+</html>

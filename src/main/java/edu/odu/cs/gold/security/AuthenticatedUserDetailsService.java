@@ -31,7 +31,7 @@ public class AuthenticatedUserDetailsService implements UserDetailsService, Seri
 		}
 		AuthenticatedUser authenticatedUser = new AuthenticatedUser(user.getUsername(),
 				user.getPassword(),
-				user.isEnabled(),
+				user.getEnabled(),
 				true,
 				true,
 				true,

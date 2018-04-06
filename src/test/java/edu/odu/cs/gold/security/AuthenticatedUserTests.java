@@ -35,7 +35,7 @@ public class AuthenticatedUserTests {
         user.getPermissions().add("ADMIN");
         authenticatedUser = new AuthenticatedUser(user.getUsername(),
                 user.getPassword(),
-                user.isEnabled(),
+                user.getEnabled(),
                 true,
                 true,
                 true,
