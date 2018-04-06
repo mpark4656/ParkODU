@@ -28,7 +28,6 @@
                         <input class="form-control"
                                id="first-name"
                                th:field="${user.firstName}"
-                               required="required"
                                readonly="readonly"/>
                         <span class="input-group-btn">
                             <input type="button" value="Edit" id="edit-first-name-btn" class="btn btn-success"/>
@@ -41,7 +40,6 @@
                         <input class="form-control"
                                id="last-name"
                                th:field="${user.lastName}"
-                               required="required"
                                readonly="readonly"/>
                         <span class="input-group-btn">
                             <input type="button" value="Edit" id="edit-last-name-btn" class="btn btn-success"/>
@@ -53,7 +51,6 @@
                     <div class="input-group">
                         <input class="form-control"
                                id="user-name"
-                               required="required"
                                th:field="${user.username}"
                                readonly="readonly"/>
                         <span class="input-group-btn">
@@ -68,7 +65,6 @@
                         <input type="email"
                                class="form-control"
                                id="user-email"
-                               required="required"
                                th:field="${user.email}"
                                readonly="readonly"/>
                         <span class="input-group-btn">
@@ -230,6 +226,7 @@ $('#edit-user-name-btn').on('click', function() {
     if($('#edit-user-name-btn').attr('value') == 'Edit') {
         $('#user-name').removeAttr('readonly');
         $('#edit-user-name-btn').attr('value', 'Lock');
+        alert('You will have to log out and log back on if you update your username.');
     } else {
         $('#user-name').attr('readonly', 'readonly');
         $('#edit-user-name-btn').attr('value', 'Edit');

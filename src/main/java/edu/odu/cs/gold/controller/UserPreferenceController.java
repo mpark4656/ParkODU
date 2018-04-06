@@ -111,57 +111,51 @@ public class UserPreferenceController {
         int emailPredicateCount = userRepository.countByPredicate(emailPredicate);
         int userNamePredicateCount = userRepository.countByPredicate(userNamePredicate);
         if(emailPredicateCount != 0) {
-            duplicateEmail = true;
+            redirectAttributes.addAttribute(
+                    "dangerMessage",
+                    "That e-mail address already exists."
+            );
         } else if(userNamePredicateCount != 0) {
-            duplicateUsername = true;
-        } else {
+            redirectAttributes.addAttribute(
+                    "dangerMessage",
+                    "That username already exists."
+            );
+        } else if(user.getUsername() == null || user.getUsername().isEmpty()) {
+            redirectAttributes.addAttribute(
+                    "dangerMessage",
+                    "Username must be specified."
+            );
+        } else if(user.getFirstName() == null || user.getFirstName().isEmpty()) {
+            redirectAttributes.addAttribute(
+                    "dangerMessage",
+                    "First name must be specified."
+            );
+        } else if(user.getLastName() == null || user.getLastName().isEmpty()) {
+            redirectAttributes.addAttribute(
+                    "dangerMessage",
+                    "Last name must be specified."
+            );
+        } else if(user.getEmail() == null || user.getEmail().isEmpty()) {
+            redirectAttributes.addAttribute(
+                    "dangerMessage",
+                    "E-mail address must be specified."
+            );
+        }
+        else {
             User existingUser = userRepository.findByKey(user.getUserKey());
-
+            existingUser.setUsername(user.getUsername());
             existingUser.setFirstName(user.getFirstName());
             existingUser.setLastName(user.getLastName());
-            existingUser.setUsername(user.getUsername());
             existingUser.setEmail(user.getEmail());
             existingUser.setPreferredStartingAddress(user.getPreferredStartingAddress());
             existingUser.setPreferredDestinationBuilding(user.getPreferredDestinationBuilding());
             existingUser.setPreferredPermitTypes(user.getPreferredPermitTypes());
             existingUser.setPreferredSpaceTypes(user.getPreferredSpaceTypes());
 
-            /*
-            if(preferredPermitTypes == null) {
-                existingUser.setPreferredPermitTypes(new HashSet<>());
-            } else {
-                existingUser.setPreferredPermitTypes(new HashSet<>(preferredPermitTypes));
-            }
-
-            if(preferredSpaceTypes == null) {
-                existingUser.setPreferredSpaceTypes(new HashSet<> ());
-            } else {
-                existingUser.setPreferredSpaceTypes(new HashSet<>(preferredSpaceTypes));
-            }
-            */
-
             userRepository.save(existingUser);
-            success = true;
-        }
-
-        if(success) {
             redirectAttributes.addAttribute(
                     "successMessage",
                     "Your information has been successfully updated."
-            );
-        }
-
-        if(duplicateEmail) {
-            redirectAttributes.addAttribute(
-                    "dangerMessage",
-                    "That e-mail address already exists."
-            );
-        }
-
-        if(duplicateUsername) {
-            redirectAttributes.addAttribute(
-                    "dangerMessage",
-                    "That username already exists."
             );
         }
 
