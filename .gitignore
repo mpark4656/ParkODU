@@ -1,4 +1,5 @@
-#ignore file for git
+# ignore file for git
 .gradle/
 .idea/
 *.iml
+.gitlab-ci.yml
