@@ -77,8 +77,8 @@
 
 			<ul class="nav navbar-nav navbar-right">
 				<li sec:authorize="isAuthenticated()" class="welcome-message">Welcome <span sec:authentication="name"></span>!</li>
-				<li sec:authorize="isAnonymous()"><a th:href="@{/login}">Login</a></li>
-				<li sec:authorize="isAnonymous()"><a th:href="@{/user/register}">Register</a></li>
+				<li sec:authorize="isAnonymous()"><a th:href="@{/login}"><i class="fas fa-sign-in-alt fa-md mobile-nav-icon"></i>Login</a></li>
+				<li sec:authorize="isAnonymous()"><a th:href="@{/user/register}"><i class="fas fa-user-plus fa-md mobile-nav-icon" style="padding-right: 6px;"></i>Register</a></li>
 				<li id="notification-container" class="dropdown"></li>
 				<li sec:authorize="isAuthenticated()" class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
