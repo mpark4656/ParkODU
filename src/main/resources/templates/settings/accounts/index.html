@@ -41,7 +41,8 @@
                     <td class="mobile-hidden" th:text="${user.email}"></td>
                     <td th:text="${user.username}"></td>
                     <td th:text="${user.permissions}"></td>
-                    <td th:text="${user.enabled}"></td>
+                    <td th:if="${user.enabled}" class="highlight-green">Y</td>
+                    <td th:if="${user.enabled eq false}">N</td>
                     <td>
                         <a th:href="@{/settings/accounts/edit} + '/' + ${user.userKey}" class="btn btn-primary btn-sm">Edit</a>
                         <button class="btn btn-danger btn-sm delete-user-button" title="Delete User" th:attr="data-id=${user.userKey}" data-toggle="modal" data-target="#delete-user-modal">Delete</button>

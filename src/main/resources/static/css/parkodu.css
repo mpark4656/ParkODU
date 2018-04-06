@@ -101,7 +101,8 @@ body {
 	margin-left: auto;
 	margin-right: auto;
 	//background-color: #fff;
-	background-color: #D0DDFF;
+	//background-color: #D0DDFF;
+	background-color: #111d3a;
 }
 
 .main-header {
@@ -309,4 +310,8 @@ hr {
 
 #parkodu-footer-right {
     float: right; display: inline-block; padding-right: 5px;
+}
+
+.highlight-green {
+    background-color: #6cff6c;
 }
