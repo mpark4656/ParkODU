@@ -3,7 +3,6 @@ package edu.odu.cs.gold.model;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -21,6 +20,8 @@ public class User implements Serializable{
     private boolean enabled;
     private String confirmationToken;
     private String lastNotificationViewedDate;
+    private String preferredStartingAddress;
+    private String preferredDestinationBuilding;
     private Set<String> permissions;
     private Set<String> preferredPermitTypes;
     private Set<String> preferredSpaceTypes;
@@ -129,6 +130,22 @@ public class User implements Serializable{
         return this.lastNotificationViewedDate;
     }
 
+    public String getPreferredStartingAddress() {
+        return this.preferredStartingAddress;
+    }
+
+    public void setPreferredStartingAddress(String preferredStartingAddress) {
+        this.preferredStartingAddress = preferredStartingAddress;
+    }
+
+    public String getPreferredDestinationBuilding() {
+        return this.preferredDestinationBuilding;
+    }
+
+    public void setPreferredDestinationBuilding(String preferredDestinationBuilding) {
+        this.preferredDestinationBuilding = preferredDestinationBuilding;
+    }
+
     public void setLastNotificationViewedDate(String lastNotificationViewedDate) {
         this.lastNotificationViewedDate = lastNotificationViewedDate;
     }
@@ -192,6 +209,8 @@ public class User implements Serializable{
                 ", enabled=" + enabled +
                 ", confirmationToken='" + confirmationToken + '\'' +
                 ", permissions=" + permissions +
+                ", preferredStartingAddress=" + preferredStartingAddress + '\'' +
+                ", preferredDestinationBuilding=" + preferredDestinationBuilding + '\'' +
                 ", preferredPermitTypes=" + preferredPermitTypes +
                 ", preferredSpaceTypes=" + preferredSpaceTypes +
                 " }";
