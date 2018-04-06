@@ -201,7 +201,7 @@ public class UserPreferenceControllerTests {
                 userOne,
                 redirectAttributes
         );
-        assertEquals("redirect:/", returnURL);
+        assertEquals("redirect:/user_preference/index", returnURL);
     }
 
     @Test
@@ -211,6 +211,6 @@ public class UserPreferenceControllerTests {
                 userOne,
                 redirectAttributes
         );
-        assertEquals("redirect:/", returnURL);
+        assertEquals("redirect:/user_preference/index", returnURL);
     }
 }

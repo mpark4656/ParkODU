@@ -302,6 +302,8 @@ public class UserTests {
                 ", enabled=" + USER_ENABLED +
                 ", confirmationToken='" + USER_CONFIRMATION_TOKEN + '\'' +
                 ", permissions=" + USER_PERMISSIONS +
+                ", preferredStartingAddress=" + null + '\'' +
+                ", preferredDestinationBuilding=" + null + '\'' +
                 ", preferredPermitTypes=" + USER_PREFERRED_PERMIT_TYPES +
                 ", preferredSpaceTypes=" + USER_PREFERRED_SPACE_TYPES +
                 " }";
