@@ -9,6 +9,7 @@ import edu.odu.cs.gold.repository.RoleTypeRepository;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
@@ -43,6 +44,7 @@ public class AccountsControllerTests {
 
     private RoleTypeRepository roleTypeRepository;
     private UserRepository userRepository;
+    private SessionRegistry sessionRegistry;
 
     private AccountsController accountsController;
 
@@ -88,9 +90,13 @@ public class AccountsControllerTests {
         doNothing().when(roleTypeRepository).save(any(RoleType.class));
         doNothing().when(roleTypeRepository).delete(anyString());
 
+        sessionRegistry = mock(SessionRegistry.class);
+        when(sessionRegistry.getAllPrincipals()).thenReturn(new ArrayList<>());
+
         accountsController = new AccountsController(
                 userRepository,
-                roleTypeRepository
+                roleTypeRepository,
+                sessionRegistry
         );
     }
 

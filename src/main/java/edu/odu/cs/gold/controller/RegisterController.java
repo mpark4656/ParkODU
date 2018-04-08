@@ -53,6 +53,7 @@ public class RegisterController {
 
     @GetMapping("/user/register")
     public String showRegistrationPage(Model model, User user){
+
         model.addAttribute("user", user);
         return "user/register";
     }
@@ -71,11 +72,10 @@ public class RegisterController {
                                           @Valid User user,
                                           BindingResult bindingResult,
                                           HttpServletRequest request) {
-
         // Lookup user in database by e-mail
-        user.setUsername(user.getUserKey().toLowerCase());
+        user.generateUserKey();
         boolean emailExists = userService.userExists(user.getEmail());
-        boolean userExists = userService.userExists(user.getUsername());
+        boolean userExists = userService.userExists(user.getUsername().toLowerCase());
 
         System.out.println("User exists: " + emailExists);
         if (emailExists ) {
@@ -83,7 +83,7 @@ public class RegisterController {
             bindingResult.reject("email");
         }
         if (userExists) {
-            model.addAttribute("dangerMessage", "Oops! The "+ user.getUsername() +" is not available!");
+            model.addAttribute("dangerMessage", "Oops! The "+ user.getUsername().toLowerCase() +" is not available!");
             bindingResult.reject("userName");
         }
         else {
@@ -91,7 +91,7 @@ public class RegisterController {
             user.setEnabled(false);
             // Generate random 36-character string token for confirmation link
             user.generateConfirmationToken();
-            user.generateUserKey();
+            user.setUsername(user.getUsername().toLowerCase());
             user.setRoleType("user");
             user.getPermissions().add("USER");
             userService.saveUser(user);

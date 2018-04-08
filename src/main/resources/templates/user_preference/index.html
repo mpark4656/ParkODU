@@ -13,56 +13,132 @@
 <!-- Main Content -->
 <div class="container-fluid main-container">
     <div class="row">
-        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
-            <h1 class="text-center main-header">Preferences</h1>
+        <!-- Alerts -->
+        <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
+            <h1 class="text-center main-header">Settings</h1>
             <hr/>
-            <form class="form-horizontal" th:action="@{/user_preference/edit}" method="POST">
+            <form class="form-vertical" role="form" th:action="@{/user_preference/edit}" method="post" th:object="${user}">
+                <input type="hidden" name="userKey" th:field="${user.userKey}" />
+                <h2 class="text-center main-header">Profile</h2>
+
                 <div class="form-group">
-                    <input type="hidden" name="userKey" th:value="${user.userKey}" />
+                    <label class="control-label" for="first-name">First Name</label>
+                    <div class="input-group">
+                        <input class="form-control"
+                               id="first-name"
+                               th:field="${user.firstName}"
+                               readonly="readonly"/>
+                        <span class="input-group-btn">
+                            <input type="button" value="Edit" id="edit-first-name-btn" class="btn btn-success"/>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="last-name">Last Name</label>
+                    <div class="input-group">
+                        <input class="form-control"
+                               id="last-name"
+                               th:field="${user.lastName}"
+                               readonly="readonly"/>
+                        <span class="input-group-btn">
+                            <input type="button" value="Edit" id="edit-last-name-btn" class="btn btn-success"/>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="user-name">Username</label>
+                    <div class="input-group">
+                        <input class="form-control"
+                               id="user-name"
+                               th:field="${user.username}"
+                               readonly="readonly"/>
+                        <span class="input-group-btn">
+                            <input type="button" value="Edit" id="edit-user-name-btn" class="btn btn-success"/>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="user-email">E-mail Address</label>
+                    <div class="input-group">
+                        <input type="email"
+                               class="form-control"
+                               id="user-email"
+                               th:field="${user.email}"
+                               readonly="readonly"/>
+                        <span class="input-group-btn">
+                            <input type="button" value="Edit" id="edit-user-email-btn" class="btn btn-success"/>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <input
+                            type="button"
+                            value="Reset Password"
+                            class="btn btn-warning btn-sm reset-password-button"
+                            title="Reset Password"
+                            th:attr="data-id=${user.userKey},data-firstname=${user.firstName},data-lastname=${user.lastName},data-username=${user.username}"
+                            data-toggle="modal"
+                            data-target="#reset-password-modal" />
+                </div>
+
+                <br/>
+                <h2 class="text-center main-header">Default Search Options</h2>
+
+                <div class="form-group">
+                    <label class="control-label col-md-4" for="starting-address">Starting Address</label>
+                    <input class="form-control" id="starting-address" th:field="${user.preferredStartingAddress}"/>
+                </div>
+
+                <div class="form-group">
                     <label class="control-label col-md-4">Preferred Permit Types</label>
-                    <div class="col-md-8">
+                    <div class="col-md-5 checkbox">
                         <div th:each="permitType : ${permitTypes}">
-                            <input
-                                    name="preferredPermitTypes"
-                                    type="checkbox"
-                                    th:id="${permitType.permitTypeKey}"
-                                    th:value="${permitType.permitTypeKey}"
-                                    th:checked="${user.getPreferredPermitTypes().contains(permitType.permitTypeKey)}"
-                            />
-                            <label
-                                    th:for="${permitType.permitTypeKey}"
-                                    th:text="${permitType.name}"
-                                    th:title="${permitType.description}"></label>
+                            <input th:field="${user.preferredPermitTypes}"
+                                   type="checkbox"
+                                   th:id="${permitType.permitTypeKey}"
+                                   th:value="${permitType.permitTypeKey}"
+                                   th:checked="${user.getPreferredPermitTypes().contains(permitType.permitTypeKey)}"/>
+                            <label th:for="${permitType.permitTypeKey}"
+                                   th:text="${permitType.name}"
+                                   th:title="${permitType.description}"></label>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="control-label col-md-4">Preferred Space Types</label>
-                    <div class="col-md-8">
+                    <div class="col-md-8 checkbox">
                         <div th:each="spaceType : ${spaceTypes}">
-                            <input
-                                    name="preferredSpaceTypes"
-                                    type="checkbox"
-                                    th:id="${spaceType.spaceTypeKey}"
-                                    th:value="${spaceType.spaceTypeKey}"
-                                    th:checked="${user.getPreferredSpaceTypes().contains(spaceType.spaceTypeKey)}"
-                            />
-                            <label
-                                    th:for="${spaceType.spaceTypeKey}"
-                                    th:text="${spaceType.name}"
-                                    th:title="${spaceType.description}"></label>
+                            <input th:field="${user.preferredSpaceTypes}"
+                                   type="checkbox"
+                                   th:id="${spaceType.spaceTypeKey}"
+                                   th:value="${spaceType.spaceTypeKey}"
+                                   th:checked="${user.getPreferredSpaceTypes().contains(spaceType.spaceTypeKey)}"/>
+                            <label th:for="${spaceType.spaceTypeKey}"
+                                   th:text="${spaceType.name}"
+                                   th:title="${spaceType.description}"></label>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <div class="col-md-8 col-md-offset-4">
+                    <label class="control-label col-md-4" for="destination-building">Destination Building</label>
+                    <select class="form-control" id="destination-building" th:field="${user.preferredDestinationBuilding}">
+                        <option th:each="building : ${buildings}"
+                                th:text="${building.name}"
+                                th:value="${building.buildingKey}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12" style="text-align: center;">
                         <input type="submit" value="Submit" class="btn btn-primary" />
                         <input type="reset" value="Reset" class="btn btn-primary" />
                     </div>
                 </div>
-
             </form>
         </div>
     </div>
@@ -71,15 +147,150 @@
 </div>
 <!-- End Main Content -->
 
-<script>
+<!-- Reset Password Modal -->
+<div class="modal fade" id="reset-password-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" id="reset-password-form" role="form" th:action="@{/user_preference/reset_password}" method="post">
+                <div class="modal-header modal-header-primary">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Reset Password</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center">You are requesting to reset the password for <b><span id="reset-password-name"></span></b> with username <b><span id="reset-password-username"></span></b></p>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">New Password</label>
+                        <div class="col-md-8">
+                            <input type="password" class="form-control new-password" id="reset-password-new-password" name="password" required="required"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Retype New Password</label>
+                        <div class="col-md-8">
+                            <input type="password" class="form-control new-password" id="reset-password-new-password-again" name="passwordAgain" required="required"/>
+                            <span id="password-mismatch-alert" style="color: red; display: none;">Password Mismatch</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="reset-password-user-id" name="userKey" required="required"/>
+                    <button type="submit" id="reset-password-submit-button" class="btn btn-primary" disabled="disabled">Reset Password</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- End Reset Password Modal -->
 
-</script>
 
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 
 <!-- Google Maps API Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: google-maps-scripts" /> /*/-->
+
+<script>
+var address;
+
+function initAutocomplete() {
+    address = new google.maps.places.Autocomplete((document.getElementById('starting-address')), {types: ['geocode']});
+}
+
+</script>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+$('#edit-first-name-btn').on('click', function() {
+    if($('#edit-first-name-btn').attr('value') == 'Edit') {
+        $('#first-name').removeAttr('readonly');
+        $('#edit-first-name-btn').attr('value', 'Lock');
+    } else {
+        $('#first-name').attr('readonly', 'readonly');
+        $('#edit-first-name-btn').attr('value', 'Edit');
+    }
+});
+
+$('#edit-last-name-btn').on('click', function() {
+    if($('#edit-last-name-btn').attr('value') == 'Edit') {
+        $('#last-name').removeAttr('readonly');
+        $('#edit-last-name-btn').attr('value', 'Lock');
+    } else {
+        $('#last-name').attr('readonly', 'readonly');
+        $('#edit-last-name-btn').attr('value', 'Edit');
+    }
+});
+
+$('#edit-user-name-btn').on('click', function() {
+    if($('#edit-user-name-btn').attr('value') == 'Edit') {
+        $('#user-name').removeAttr('readonly');
+        $('#edit-user-name-btn').attr('value', 'Lock');
+        alert('You will have to log out and log back on if you update your username.');
+    } else {
+        $('#user-name').attr('readonly', 'readonly');
+        $('#edit-user-name-btn').attr('value', 'Edit');
+    }
+});
+
+$('#edit-user-email-btn').on('click', function() {
+    if($('#edit-user-email-btn').attr('value') == 'Edit') {
+        $('#user-email').removeAttr('readonly');
+        $('#edit-user-email-btn').attr('value', 'Lock');
+    } else {
+        $('#user-email').attr('readonly', 'readonly');
+        $('#edit-user-email-btn').attr('value', 'Edit');
+    }
+});
+
+$('.reset-password-button').on('click', function()
+{
+    $('#reset-password-user-id').val($(this).data("id"));
+    $('#reset-password-name').text($(this).data("firstname") + ' ' + $(this).data("lastname"));
+    $('#reset-password-username').text($(this).data("username"));
+});
+$(".new-password").on("keyup paste", function(){
+    var password = $('#reset-password-new-password').val();
+    var passwordAgain = $('#reset-password-new-password-again').val();
+    if (password != "" && passwordAgain != "" && password != passwordAgain) {
+        $("#password-mismatch-alert").show();
+        $("#reset-password-submit-button").prop('disabled', true);
+    }
+    else if (password == "" || passwordAgain == "") {
+        $("#password-mismatch-alert").hide();
+        $("#reset-password-submit-button").prop('disabled', true);
+    }
+    else {
+        $("#password-mismatch-alert").hide();
+        $("#reset-password-submit-button").prop('disabled', false);
+    }
+});
+$("#reset-password-form").submit(function(event) {
+    var password = $('#reset-password-new-password').val();
+    var passwordAgain = $('#reset-password-new-password-again').val();
+    if (password != passwordAgain) {
+        $("#password-mismatch-alert").show();
+        $("#reset-password-new-password-again").focus();
+        event.preventDefault();
+    }
+    else {
+        $("#password-mismatch-alert").hide();
+    }
+});
+/*]]>*/
+</script>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+	$.ajax({
+		type: "GET",
+		url: '../events/notification',
+		success: function(data) {
+		    $('#notification-container').append(data);
+		}
+	});
+/*]]>*/
+</script>
 
 </body>
 </html>

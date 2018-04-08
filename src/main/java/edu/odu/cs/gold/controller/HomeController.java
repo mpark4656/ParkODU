@@ -2,8 +2,13 @@ package edu.odu.cs.gold.controller;
 
 import edu.odu.cs.gold.model.Event;
 import edu.odu.cs.gold.model.Garage;
+import edu.odu.cs.gold.model.User;
 import edu.odu.cs.gold.repository.EventRepository;
 import edu.odu.cs.gold.repository.GarageRepository;
+import edu.odu.cs.gold.repository.UserRepository;
+import edu.odu.cs.gold.security.AuthenticatedUser;
+import org.joda.time.DateTime;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,22 +22,19 @@ public class HomeController {
 
     private GarageRepository garageRepository;
     private EventRepository eventRepository;
+    private UserRepository userRepository;
 
     public HomeController(GarageRepository garageRepository,
-                          EventRepository eventRepository) {
+                          EventRepository eventRepository,
+                          UserRepository userRepository) {
         this.garageRepository = garageRepository;
         this.eventRepository = eventRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping({"","/","/index"})
     public String index(Model model,
                         @RequestParam(value = "error", required = false) String dangerMessage) {
-
-        List<Event> events = new ArrayList<>(eventRepository.findAll());
-        if(events != null) {
-            //events.sort(Comparator.comparing(Event::getEventDateTime));
-            model.addAttribute("events",events);
-        }
 
         List<Garage> garages = new ArrayList<>(garageRepository.findAll());
         garages.sort(Comparator.comparing(Garage::getName));

@@ -26,20 +26,27 @@
                 <tr>
                     <th>Name</th>
                     <th>Message</th>
-                    <th>Created</th>
+                    <th>Updated</th>
                     <th>Tags</th>
                     <th>Affected Locations</th>
-                    <th>Scheduled For</th>
+                    <th>Start Date/Time</th>
+                    <th>End Date/Time</th>
+                    <td>Actions</td>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="event : ${events}">
                     <td th:text="${event.eventName}"></td>
                     <td th:text="${event.eventMessage}"></td>
-                    <td th:text="${event.eventDateTime}"></td>
-                    <td th:text="${event.eventTags}"></td>
-                    <td th:text="${event.locationsAffected}"></td>
-                    <td th:text="${event.scheduledDateTime}"></td>
+                    <td th:text="${event.eventUpdatedDateTime}"></td>
+                    <td>
+                        <p th:each="tag : ${event.eventTags}" th:text="${tag}"></p>
+                    </td>
+                    <td>
+                        <p th:each="location : ${event.locationsAffected}" th:text="${location}"></p>
+                    </td>
+                    <td th:text="${event.eventStartDateTime}"></td>
+                    <td th:text="${event.eventEndDateTime}"></td>
                     <td>
                         <a th:href="@{/settings/events/edit} + '/' + ${event.eventKey}" class="btn btn-primary btn-sm">Edit</a>
                         <button class="btn btn-danger btn-sm delete-event-button" title="Delete Event"
@@ -89,6 +96,18 @@ $('.delete-event-button').on('click', function()
     $('#delete-event-name-text').text($(this).data("name"));
     $('#delete-event-id').val($(this).data("id"));
 });
+</script>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+	$.ajax({
+		type: "GET",
+		url: '../../events/notification',
+		success: function(data) {
+		    $('#notification-container').append(data);
+		}
+	});
+/*]]>*/
 </script>
 
 </body>

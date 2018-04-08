@@ -37,5 +37,17 @@
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
 <!-- End Main Content -->
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+	$.ajax({
+		type: "GET",
+		url: '../events/notification',
+		success: function(data) {
+		    $('#notification-container').append(data);
+		}
+	});
+/*]]>*/
+</script>
 </body>
 </html>

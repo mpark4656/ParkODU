@@ -66,6 +66,8 @@ public class AnalyticsController {
 
         HashSet<String> preferredPermitTypes = new HashSet<> ();
         HashSet<String> preferredSpaceTypes = new HashSet<> ();
+        String preferredStartingAddress = null;
+        String preferredDestinationBuilding = null;
 
         try {
             AuthenticatedUser authenticatedUser =
@@ -75,11 +77,15 @@ public class AnalyticsController {
 
             preferredPermitTypes = (HashSet<String>)user.getPreferredPermitTypes();
             preferredSpaceTypes = (HashSet<String>)user.getPreferredSpaceTypes();
+            preferredStartingAddress = user.getPreferredStartingAddress();
+            preferredDestinationBuilding = user.getPreferredDestinationBuilding();
 
         } catch(Exception e) {
             // User is not logged on.
         }
 
+        model.addAttribute("preferredStartingAddress", preferredStartingAddress);
+        model.addAttribute("preferredDestinationBuilding", preferredDestinationBuilding);
         model.addAttribute("preferredPermitTypes", preferredPermitTypes);
         model.addAttribute("preferredSpaceTypes", preferredSpaceTypes);
         model.addAttribute("buildings", buildings);
@@ -137,8 +143,8 @@ public class AnalyticsController {
 
                 // Total Count
                 Predicate totalCountPredicate = Predicates.and(
-                    Predicates.equal("garageKey", garage.getGarageKey()),
-                    permitPredicate
+                        Predicates.equal("garageKey", garage.getGarageKey()),
+                        permitPredicate
                 );
                 totalCount = parkingSpaceRepository.countByPredicate(totalCountPredicate);
             }
@@ -159,7 +165,7 @@ public class AnalyticsController {
                 recommendation.setStartingAddressToGarage(startingAddressToGarage);
 
                 DistanceMatrix garageToDestinationBuilding = googleMapService.calculateDistanceDurationWithAddress(garage, destinationBuilding.getAddress(),TravelMode.WALKING);
-                        //getDistanceDuration(garage, destinationBuilding.getAddress(), TravelMode.WALKING);
+                //getDistanceDuration(garage, destinationBuilding.getAddress(), TravelMode.WALKING);
 
                 recommendation.setGarageToDestinationBuilding(garageToDestinationBuilding);
 

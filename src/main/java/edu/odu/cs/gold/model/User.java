@@ -19,6 +19,9 @@ public class User implements Serializable{
     private String roleTypeKey;
     private boolean enabled;
     private String confirmationToken;
+    private String lastNotificationViewedDate;
+    private String preferredStartingAddress;
+    private String preferredDestinationBuilding;
     private Set<String> permissions;
     private Set<String> preferredPermitTypes;
     private Set<String> preferredSpaceTypes;
@@ -123,6 +126,30 @@ public class User implements Serializable{
 
     public void setRoleTypeKey(String roleTypeKey) { this.roleTypeKey = roleTypeKey; }
 
+    public String getLastNotificationViewedDate() {
+        return this.lastNotificationViewedDate;
+    }
+
+    public String getPreferredStartingAddress() {
+        return this.preferredStartingAddress;
+    }
+
+    public void setPreferredStartingAddress(String preferredStartingAddress) {
+        this.preferredStartingAddress = preferredStartingAddress;
+    }
+
+    public String getPreferredDestinationBuilding() {
+        return this.preferredDestinationBuilding;
+    }
+
+    public void setPreferredDestinationBuilding(String preferredDestinationBuilding) {
+        this.preferredDestinationBuilding = preferredDestinationBuilding;
+    }
+
+    public void setLastNotificationViewedDate(String lastNotificationViewedDate) {
+        this.lastNotificationViewedDate = lastNotificationViewedDate;
+    }
+
     public Set<String> getPermissions() {
         if (permissions == null) {
             permissions = new HashSet<>();
@@ -178,9 +205,12 @@ public class User implements Serializable{
                 ", lastName='" + lastName + '\'' +
                 ", roleType='" + roleType + '\'' +
                 ", roleTypeKey='" + roleTypeKey + '\'' +
+                ", lastNotificationViewedDate=" + lastNotificationViewedDate +
                 ", enabled=" + enabled +
                 ", confirmationToken='" + confirmationToken + '\'' +
                 ", permissions=" + permissions +
+                ", preferredStartingAddress=" + preferredStartingAddress + '\'' +
+                ", preferredDestinationBuilding=" + preferredDestinationBuilding + '\'' +
                 ", preferredPermitTypes=" + preferredPermitTypes +
                 ", preferredSpaceTypes=" + preferredSpaceTypes +
                 " }";

@@ -1,6 +1,8 @@
 package edu.odu.cs.gold.model;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -11,27 +13,30 @@ public class Event implements Serializable{
     private String eventKey;
     private String eventName;
     private String eventMessage;
-    private String eventDateTime;
-    private String scheduledDateTime;
+    private String eventUpdatedDateTime;
+    private String eventStartDateTime;
+    private String eventEndDateTime;
     private List<String> eventTags;
     private List<String> locationsAffected;
 
     public Event() {
         this.eventKey = UUID.randomUUID().toString();
-        this.eventDateTime = DateTime.now().toString();
+        this.eventUpdatedDateTime = DateTime.now().toString();
     }
 
     public Event(String eventKey,
                  String eventName,
                  String eventMessage,
-                 String scheduledDateTime,
+                 String eventStartDateTime,
+                 String eventEndDateTime,
                  List<String> locationsAffected,
                  List<String> eventTags) {
-        this.eventKey = UUID.randomUUID().toString();
+        this.eventKey = eventKey;
         this.eventName = eventName;
         this.eventMessage = eventMessage;
-        this.eventDateTime = DateTime.now().toString();
-        this.scheduledDateTime = scheduledDateTime;
+        this.eventUpdatedDateTime = DateTime.now().toString();
+        this.eventStartDateTime = eventStartDateTime;
+        this.eventEndDateTime = eventEndDateTime;
         this.locationsAffected = locationsAffected;
         this.eventTags = eventTags;
     }
@@ -60,20 +65,28 @@ public class Event implements Serializable{
         this.eventMessage = eventMessage;
     }
 
-    public String getEventDateTime() {
-        return eventDateTime;
+    public String getEventUpdatedDateTime() {
+        return eventUpdatedDateTime;
     }
 
-    public void setEventDateTime(String eventDateTime) {
-        this.eventDateTime = eventDateTime;
+    public void setEventUpdatedDateTime(String eventCreatedDateTime) {
+        this.eventUpdatedDateTime = eventCreatedDateTime;
     }
 
-    public String getScheduledDateTime() {
-        return scheduledDateTime;
+    public String getEventStartDateTime() {
+        return eventStartDateTime;
     }
 
-    public void setScheduledDateTime(String scheduledDateTime) {
-        this.scheduledDateTime = scheduledDateTime;
+    public void setEventStartDateTime(String eventStartDateTime) {
+        this.eventStartDateTime = eventStartDateTime;
+    }
+
+    public void setEventEndDateTime(String eventEndDateTime) {
+        this.eventEndDateTime = eventEndDateTime;
+    }
+
+    public String getEventEndDateTime() {
+        return eventEndDateTime;
     }
 
     public List<String> getEventTags() {
@@ -92,14 +105,33 @@ public class Event implements Serializable{
         this.locationsAffected = locationsAffected;
     }
 
+    public DateTime getEventStartTimeDateTime() {
+        return DateTime.parse(eventStartDateTime);
+    }
+
+    public String getFormattedEventUpdatedDateTime() {
+        return DateTime.parse(eventUpdatedDateTime).toString(DateTimeFormat.mediumDateTime());
+    }
+
+    public String getFormattedEventStartDateTime() {
+        return DateTime.parse(eventStartDateTime).toString(DateTimeFormat.mediumDateTime());
+    }
+
+    public String getFormattedEventEndDateTime() {
+        return DateTime.parse(eventEndDateTime).toString(DateTimeFormat.mediumDateTime());
+    }
+
+
     @Override
     public String toString() {
         return "Event{" +
                 " eventKey='" + eventKey + '\'' +
                 ", eventName='" + eventName + '\'' +
                 ", eventMessage='" + eventMessage + '\'' +
-                ", eventDateTime=" + eventDateTime + '\'' +
-                ", scheduledDateTime=" + scheduledDateTime + '\'' +
+                ", eventUpdatedDateTime=" + eventUpdatedDateTime + '\'' +
+                ", eventStartDateTime=" + eventStartDateTime + '\'' +
+                ", eventEndDateTime=" + eventEndDateTime + '\'' +
+                ", eventEndDateTime=" + eventEndDateTime + '\'' +
                 ", eventTags='" + eventTags + '\'' +
                 ", locationsAffected=" + locationsAffected +
                 " }";

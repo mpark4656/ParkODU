@@ -22,6 +22,17 @@
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 
+<script th:inline="javascript">
+/*<![CDATA[*/
+	$.ajax({
+		type: "GET",
+		url: '../events/notification',
+		success: function(data) {
+		    $('#notification-container').append(data);
+		}
+	});
+/*]]>*/
+</script>
 </body>
 
 </html>

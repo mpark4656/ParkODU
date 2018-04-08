@@ -19,18 +19,22 @@
             <table class="table table-bordered table-centered">
                 <thead>
                 <tr>
-                    <th width="40%">Name</th>
-                    <th width="30%">Message</th>
-                    <th width="30%">Affected Locations</th>
-                    <th width="30%">Event Tags</th>
+                    <th>Name</th>
+                    <th>Message</th>
+                    <th>Affected Locations</th>
+                    <th>Event Tags</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="event : ${events}">
                     <td th:text="${event.eventName}"></td>
                     <td th:text="${event.eventMessage}"></td>
-                    <td th:text="${event.locationsAffected}"></td>
-                    <td th:text="${event.eventTags}"></td>
+                    <td>
+                        <p th:each="location : ${event.locationsAffected}" th:text="${location}"></p>
+                    </td>
+                    <td>
+                        <p th:each="tag : ${event.eventTags}" th:text="${tag}"></p>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -43,6 +47,18 @@
 
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+	$.ajax({
+		type: "GET",
+		url: '../events/notification',
+		success: function(data) {
+		    $('#notification-container').append(data);
+		}
+	});
+/*]]>*/
+</script>
 
 </body>
 </html>
