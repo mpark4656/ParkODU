@@ -31,6 +31,7 @@
                     <th>Username</th>
                     <th>Permissions</th>
                     <th>Enabled</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -43,6 +44,8 @@
                     <td th:text="${user.permissions}"></td>
                     <td th:if="${user.enabled}" class="highlight-green">Y</td>
                     <td th:if="${user.enabled eq false}">N</td>
+                    <td th:if="${onlineUserKeys.contains(user.userKey)}" class="highlight-green">Online</td>
+                    <td th:if="${onlineUserKeys.contains(user.userKey) eq false}">Offline</td>
                     <td>
                         <a th:href="@{/settings/accounts/edit} + '/' + ${user.userKey}" class="btn btn-primary btn-sm">Edit</a>
                         <button class="btn btn-danger btn-sm delete-user-button" title="Delete User" th:attr="data-id=${user.userKey}" data-toggle="modal" data-target="#delete-user-modal">Delete</button>
