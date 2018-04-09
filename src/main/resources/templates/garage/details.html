@@ -19,7 +19,10 @@
                     <img class="garage-image" th:src="@{/img} + '/' + ${garage.garageKey} + '.jpg'" th:alt="${garage.name}" style="border: 1px solid black; width: 100%; margin-top: 20px; margin-bottom: 20px;"/>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-8">
-                    <h1 class="text-center main-header" th:text="${garage.name}"></h1>
+                    <div class="text-center main-header-container">
+                        <img th:src="@{/img/parkodu_logo.png}" alt="ParkODU Logo" title="ParkODU Logo" height="50"/>
+                        <h1 class="text-center main-header" th:text="${garage.name}"></h1>
+                    </div>
                     <hr/>
                     <dl class="dl-horizontal">
                         <dt>Total Available Spaces</dt>
