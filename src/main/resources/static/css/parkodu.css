@@ -105,8 +105,16 @@ body {
 	background-color: #111d3a;
 }
 
+.main-header-container {
+    margin-top: 15px;
+}
+
 .main-header {
-	text-transform: uppercase;
+    font-family: Cambria, Georgia, serif;
+	font-variant: small-caps;
+	font-weight: bold;
+	color: #111d3a;
+	margin-top: 0;
 }
 
 .footer {
