@@ -19,10 +19,11 @@
                 <h1 class="text-center main-header">Search</h1>
             </div>
             <hr/>
-            <form class="form-horizontal" th:action="@{/analytics/locate}" method="POST">
+            <form id="form" class="form-horizontal" th:action="@{/analytics/locate}" method="POST">
 
                 <input type="hidden" name="latitude" id="latitude" />
                 <input type="hidden" name="longitude" id="longitude" />
+                <input type="hidden" name="placeinfo" id="placeinfo" />
 
                 <div class="form-group">
                     <label for="startingAddress" class="control-label col-md-4">Starting Location</label>
@@ -89,7 +90,7 @@
 
                 <div class="form-group">
                     <div class="col-md-8 col-md-offset-4">
-                        <input type="submit" value="Search" class="btn btn-primary" />
+                        <input id="Submit" type="submit" value="Search" class="btn btn-primary" />
                         <input type="reset" value="Reset" class="btn btn-primary" />
                     </div>
                 </div>
@@ -147,6 +148,7 @@ function getLocationByGPS() {
 	});
 /*]]>*/
 </script>
+
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 
