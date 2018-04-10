@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+    <style>
+        .responsive {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation Bar -->
+<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
+
+<div class="container-fluid main-container">
+
+    <div class="row">
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
+            <div class="text-center main-header-container">
+                <h1 class="text-center main-header">Something Went Wrong.</h1>
+                <img th:src="@{/img/generic_error.jpg}" alt="Generic Error, Bad Parking Job" title="Generic Error" class="responsive"/>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Footer -->
+<!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
+
+</body>
+</html>
+
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<!--Event Script-->
+<!--/*/ <th:block th:include="fragments/fragment :: event-script" /> /*/-->
