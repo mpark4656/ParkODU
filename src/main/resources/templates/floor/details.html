@@ -17,8 +17,9 @@
             <div class="row">
                 <div class="text-center main-header-container">
                     <img th:src="@{/img/parkodu_logo.png}" alt="ParkODU Logo" title="ParkODU Logo" height="50"/>
-                    <h1 class="text-center" style="text-transform: uppercase;" th:text="'Level ' + ${floor.number} + ' - ' + ${floor.description}"></h1>
-                    <h4 class="text-center" style="text-transform: uppercase;" th:text="${garage.name}"></h4>
+                    <h1 class="text-center main-header" th:text="'Level ' + ${floor.number} + ' - ' + ${floor.description}"></h1>
+                    <h4 class="text-center main-header" th:text="${garage.name}"></h4>
+                    <hr/>
                 </div>
             </div>
             <div class="row">
