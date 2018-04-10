@@ -19,11 +19,10 @@
                 <h1 class="text-center main-header">Search</h1>
             </div>
             <hr/>
-            <form id="form" class="form-horizontal" th:action="@{/analytics/locate}" method="POST">
+            <form class="form-horizontal" th:action="@{/analytics/locate}" method="POST">
 
                 <input type="hidden" name="latitude" id="latitude" />
                 <input type="hidden" name="longitude" id="longitude" />
-                <input type="hidden" name="placeinfo" id="placeinfo" />
 
                 <div class="form-group">
                     <label for="startingAddress" class="control-label col-md-4">Starting Location</label>

@@ -12,11 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.google.maps.model.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.*;
 
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/analytics")
@@ -105,8 +103,6 @@ public class AnalyticsController {
                          @RequestParam(name = "spaceTypeKeys", required = false) List<String> spaceTypeKeys,
                          @RequestParam(name = "destinationBuildingId", required = false) String destinationBuildingId,
                          @RequestParam(name = "minSpaces", required = false) Integer minSpaces,
-                         RedirectAttributes redirectAttributes,
-                         HttpServletRequest request,
                          Model model) {
 
         Location startingLocation = new Location(startingLatitude, startingLongitude);
@@ -128,15 +124,6 @@ public class AnalyticsController {
         for (Garage garage : garages) {
 
             DistanceMatrix distanceMatrix = googleMapService.calculateDistanceDurationWithAddress(garage,startingAddress,TravelMode.DRIVING);
-
-            if (distanceMatrix.rows[0].elements[0].distance == null){
-                redirectAttributes.addAttribute(
-                        "dangerMessage",
-                        "Invalid Starting Address.");
-                Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
-                redirectAttributes.addAttribute(statusCode);
-                return "redirect:/error/error";
-            }
 
             System.out.println("Distance: ");
             System.out.println(distanceMatrix.rows[0].elements[0].distance.toString());
