@@ -5,14 +5,10 @@
     <!-- Head -->
     <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
 <style>
+
 #right-panel {
-    font-family: 'Roboto','sans-serif';
     line-height: 30px;
     padding-left: 10px;
-}
-
-#right-panel select, #right-panel input {
-    font-size: 15px;
 }
 
 #right-panel select {
@@ -23,15 +19,14 @@
     font-size: 12px;
 }
 #map {
-    float: left;
-    width: 63%;
     height: 96%;
     margin-bottom: 50px;
 }
 #right-panel {
-    float: right;
-    width: 34%;
+    overflow-y: scroll;
+    max-height: 96%;
 }
+
 </style>
 </head>
 <body>
@@ -50,9 +45,9 @@
 </div>
 <!-- Alerts -->
 <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
-<div id="warnings-panel"></div>
-<div id="map"></div>
-<div id="right-panel"></div>
+<div id="warnings-panel" class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1"></div>
+<div id="map" class="col-xs-12 col-sm-12 col-md-7 col-md-offset-1"></div>
+<div id="right-panel" class="col-xs-12 col-sm-12 col-md-3"></div>
 <!-- Footer -->
 <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 <!-- Scripts -->
