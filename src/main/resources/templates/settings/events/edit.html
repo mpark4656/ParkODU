@@ -46,13 +46,13 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="event-start-time" class="col-md-4 control-label">Becomes Effective</label>
+                    <label for="event-start-time" class="col-md-4 control-label">Event Starts</label>
                     <div class="col-md-8">
                         <input type="datetime-local" class="form-control" id="event-start-time" th:field="${event.eventStartDateTime}" placeholder="Enter the time which the event will start" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="event-end-time" class="col-md-4 control-label">Becomes Effective</label>
+                    <label for="event-end-time" class="col-md-4 control-label">Event Ends</label>
                     <div class="col-md-8">
                         <input type="datetime-local" class="form-control" id="event-end-time" th:field="${event.eventEndDateTime}" placeholder="Enter the time which the event will end" />
                     </div>
@@ -61,10 +61,13 @@
                     <label for="tags" class="col-md-4 control-label">Tags</label>
                     <div class="col-md-8">
                         <input type="text" class="form-control" id="tags" th:field="${event.eventTags}" placeholder="Enter tags associated with the event." />
+                        <span id="date-error" class="error">
+                            Make sure the start date is after the current time and that the start date is before the end date.
+                        </span>
                     </div>
                 </div>
                 <div class="col-md-8 col-md-offset-4">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button id="event-submit-button" type="submit" class="btn btn-primary">Submit</button>
                     <button type="reset" class="btn btn-primary">Reset</button>
                     <a th:href="@{/settings/events/index}" class="btn btn-primary" title="Back">Back</a>
                 </div>
@@ -124,5 +127,29 @@ $('#tags').selectize({
 	});
 /*]]>*/
 </script>
+
+<script>
+/*<![CDATA[*/
+$(document).ready(function() {
+    $("#event-submit-button").click(function(event){
+
+        var currentDate = new Date();
+        var startDate = new Date($("#event-start-time").val());
+        var endDate = new Date($("#event-end-time").val());
+
+        var errorElement = $("#date-error");
+
+        if (currentDate < startDate && startDate < endDate){
+            //do nothing
+        }
+        else {
+            event.preventDefault();
+            errorElement.removeClass("error").addClass("error_show");
+        }
+    });
+});
+/*]]>*/
+</script>
+
 </body>
 </html>
