@@ -58,10 +58,10 @@
 </td>
 <td class="coverageStat">
   <span class="percent">
-    91.2%
+    90.6%
   </span>
   <span class="absValue">
-    (83/ 91)
+    (77/ 85)
   </span>
 </td>
 </tr>
@@ -80,77 +80,77 @@
 <i>6</i>&nbsp;import edu.odu.cs.gold.repository.FloorRepository;
 <i>7</i>&nbsp;import edu.odu.cs.gold.repository.GarageRepository;
 <i>8</i>&nbsp;import edu.odu.cs.gold.repository.ParkingSpaceRepository;
-<i>9</i>&nbsp;import org.springframework.stereotype.Controller;
-<i>10</i>&nbsp;import org.springframework.ui.Model;
-<i>11</i>&nbsp;import org.springframework.web.bind.annotation.*;
-<i>12</i>&nbsp;import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-<i>13</i>&nbsp;import java.util.ArrayList;
-<i>14</i>&nbsp;import java.util.Comparator;
-<i>15</i>&nbsp;import java.util.List;
-<i>16</i>&nbsp;
-<i>17</i>&nbsp;/**
-<i>18</i>&nbsp; * This controller provides methods for returning html pages that allow
-<i>19</i>&nbsp; * admins to configure garage.
-<i>20</i>&nbsp; *
-<i>21</i>&nbsp; * For actual manipulation of Garage models such as update, add, and delete,
-<i>22</i>&nbsp; * see GarageRestController.java
-<i>23</i>&nbsp; */
-<i>24</i>&nbsp;@Controller
-<i>25</i>&nbsp;@RequestMapping(&quot;/settings/garage&quot;)
-<i>26</i>&nbsp;public class GarageSettingsController {
-<i>27</i>&nbsp;
-<i>28</i>&nbsp;    private GarageRepository garageRepository;
-<i>29</i>&nbsp;    private FloorRepository floorRepository;
-<i>30</i>&nbsp;    private ParkingSpaceRepository parkingSpaceRepository;
-<i>31</i>&nbsp;
-<i>32</i>&nbsp;    public GarageSettingsController(GarageRepository garageRepository,
-<i>33</i>&nbsp;                            FloorRepository floorRepository,
-<b class="fc"><i>34</i>&nbsp;                            ParkingSpaceRepository parkingSpaceRepository) {</b>
-<b class="fc"><i>35</i>&nbsp;        this.garageRepository = garageRepository;</b>
-<b class="fc"><i>36</i>&nbsp;        this.floorRepository = floorRepository;</b>
-<b class="fc"><i>37</i>&nbsp;        this.parkingSpaceRepository = parkingSpaceRepository;</b>
-<b class="fc"><i>38</i>&nbsp;    }</b>
-<i>39</i>&nbsp;
-<i>40</i>&nbsp;    /**
-<i>41</i>&nbsp;     * This method returns &quot;settings/garage/index&quot; with a collection of all garage objects
-<i>42</i>&nbsp;     * added to the model.
-<i>43</i>&nbsp;     *
-<i>44</i>&nbsp;     * @param successMessage String
-<i>45</i>&nbsp;     * @param infoMessage String
-<i>46</i>&nbsp;     * @param warningMessage String
-<i>47</i>&nbsp;     * @param dangerMessage String
-<i>48</i>&nbsp;     * @param model Model
-<i>49</i>&nbsp;     * @return String &quot;settings/garage/index&quot;
-<i>50</i>&nbsp;     */
-<i>51</i>&nbsp;    @GetMapping({&quot;&quot;,&quot;/&quot;,&quot;/index&quot;})
-<i>52</i>&nbsp;    public String index(@RequestParam(value = &quot;successMessage&quot;, required = false) String successMessage,
-<i>53</i>&nbsp;                        @RequestParam(value = &quot;infoMessage&quot;, required = false) String infoMessage,
-<i>54</i>&nbsp;                        @RequestParam(value = &quot;warningMessage&quot;, required = false) String warningMessage,
-<i>55</i>&nbsp;                        @RequestParam(value = &quot;dangerMessage&quot;, required = false) String dangerMessage,
-<i>56</i>&nbsp;                        Model model) {
-<i>57</i>&nbsp;
-<b class="fc"><i>58</i>&nbsp;        List&lt;Garage&gt; garages = new ArrayList&lt;&gt;(garageRepository.findAll());</b>
-<b class="fc"><i>59</i>&nbsp;        garages.sort(Comparator.comparing(Garage::getName));</b>
-<b class="fc"><i>60</i>&nbsp;        model.addAttribute(&quot;garages&quot;, garages);</b>
-<i>61</i>&nbsp;
-<i>62</i>&nbsp;        // Alerts
-<b class="fc"><i>63</i>&nbsp;        if (successMessage != null) { model.addAttribute(&quot;successMessage&quot;, successMessage); }</b>
-<b class="fc"><i>64</i>&nbsp;        if (infoMessage != null) { model.addAttribute(&quot;infoMessage&quot;, infoMessage); }</b>
-<b class="fc"><i>65</i>&nbsp;        if (warningMessage != null) { model.addAttribute(&quot;warningMessage&quot;, warningMessage); }</b>
-<b class="fc"><i>66</i>&nbsp;        if (dangerMessage != null) { model.addAttribute(&quot;dangerMessage&quot;, dangerMessage); }</b>
-<i>67</i>&nbsp;
-<b class="fc"><i>68</i>&nbsp;        return &quot;settings/garage/index&quot;;</b>
-<i>69</i>&nbsp;    }
-<i>70</i>&nbsp;
-<i>71</i>&nbsp;    /**
-<i>72</i>&nbsp;     * Method to return the settings/garage/create.html template page
-<i>73</i>&nbsp;     * @param model Model
-<i>74</i>&nbsp;     * @return String &quot;settings/garage/create&quot;
-<i>75</i>&nbsp;     */
-<i>76</i>&nbsp;    @GetMapping(&quot;/create&quot;)
-<i>77</i>&nbsp;    public String create(Model model) {
-<b class="fc"><i>78</i>&nbsp;        Garage garage = new Garage();</b>
-<b class="fc"><i>79</i>&nbsp;        garage.generateGarageKey();</b>
+<i>9</i>&nbsp;import org.springframework.security.access.prepost.PreAuthorize;
+<i>10</i>&nbsp;import org.springframework.stereotype.Controller;
+<i>11</i>&nbsp;import org.springframework.ui.Model;
+<i>12</i>&nbsp;import org.springframework.web.bind.annotation.*;
+<i>13</i>&nbsp;import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+<i>14</i>&nbsp;import java.util.ArrayList;
+<i>15</i>&nbsp;import java.util.Comparator;
+<i>16</i>&nbsp;import java.util.List;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;/**
+<i>19</i>&nbsp; * This controller provides methods for returning html pages that allow
+<i>20</i>&nbsp; * admins to configure garage.
+<i>21</i>&nbsp; *
+<i>22</i>&nbsp; * For actual manipulation of Garage models such as update, add, and delete,
+<i>23</i>&nbsp; * see GarageRestController.java
+<i>24</i>&nbsp; */
+<i>25</i>&nbsp;@Controller
+<i>26</i>&nbsp;@RequestMapping(&quot;/settings/garage&quot;)
+<i>27</i>&nbsp;public class GarageSettingsController {
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    private GarageRepository garageRepository;
+<i>30</i>&nbsp;    private FloorRepository floorRepository;
+<i>31</i>&nbsp;    private ParkingSpaceRepository parkingSpaceRepository;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    public GarageSettingsController(GarageRepository garageRepository,
+<i>34</i>&nbsp;                            FloorRepository floorRepository,
+<b class="fc"><i>35</i>&nbsp;                            ParkingSpaceRepository parkingSpaceRepository) {</b>
+<b class="fc"><i>36</i>&nbsp;        this.garageRepository = garageRepository;</b>
+<b class="fc"><i>37</i>&nbsp;        this.floorRepository = floorRepository;</b>
+<b class="fc"><i>38</i>&nbsp;        this.parkingSpaceRepository = parkingSpaceRepository;</b>
+<b class="fc"><i>39</i>&nbsp;    }</b>
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    /**
+<i>42</i>&nbsp;     * This method returns &quot;settings/garage/index&quot; with a collection of all garage objects
+<i>43</i>&nbsp;     * added to the model.
+<i>44</i>&nbsp;     *
+<i>45</i>&nbsp;     * @param successMessage String
+<i>46</i>&nbsp;     * @param infoMessage String
+<i>47</i>&nbsp;     * @param warningMessage String
+<i>48</i>&nbsp;     * @param dangerMessage String
+<i>49</i>&nbsp;     * @param model Model
+<i>50</i>&nbsp;     * @return String &quot;settings/garage/index&quot;
+<i>51</i>&nbsp;     */
+<i>52</i>&nbsp;    @GetMapping({&quot;&quot;,&quot;/&quot;,&quot;/index&quot;})
+<i>53</i>&nbsp;    public String index(@RequestParam(value = &quot;successMessage&quot;, required = false) String successMessage,
+<i>54</i>&nbsp;                        @RequestParam(value = &quot;infoMessage&quot;, required = false) String infoMessage,
+<i>55</i>&nbsp;                        @RequestParam(value = &quot;warningMessage&quot;, required = false) String warningMessage,
+<i>56</i>&nbsp;                        @RequestParam(value = &quot;dangerMessage&quot;, required = false) String dangerMessage,
+<i>57</i>&nbsp;                        Model model) {
+<i>58</i>&nbsp;
+<b class="fc"><i>59</i>&nbsp;        List&lt;Garage&gt; garages = new ArrayList&lt;&gt;(garageRepository.findAll());</b>
+<b class="fc"><i>60</i>&nbsp;        garages.sort(Comparator.comparing(Garage::getName));</b>
+<b class="fc"><i>61</i>&nbsp;        model.addAttribute(&quot;garages&quot;, garages);</b>
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;        // Alerts
+<b class="fc"><i>64</i>&nbsp;        if (successMessage != null) { model.addAttribute(&quot;successMessage&quot;, successMessage); }</b>
+<b class="fc"><i>65</i>&nbsp;        if (infoMessage != null) { model.addAttribute(&quot;infoMessage&quot;, infoMessage); }</b>
+<b class="fc"><i>66</i>&nbsp;        if (warningMessage != null) { model.addAttribute(&quot;warningMessage&quot;, warningMessage); }</b>
+<b class="fc"><i>67</i>&nbsp;        if (dangerMessage != null) { model.addAttribute(&quot;dangerMessage&quot;, dangerMessage); }</b>
+<i>68</i>&nbsp;
+<b class="fc"><i>69</i>&nbsp;        return &quot;settings/garage/index&quot;;</b>
+<i>70</i>&nbsp;    }
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    /**
+<i>73</i>&nbsp;     * Method to return the settings/garage/create.html template page
+<i>74</i>&nbsp;     * @param model Model
+<i>75</i>&nbsp;     * @return String &quot;settings/garage/create&quot;
+<i>76</i>&nbsp;     */
+<i>77</i>&nbsp;    @GetMapping(&quot;/create&quot;)
+<i>78</i>&nbsp;    public String create(Model model) {
+<b class="fc"><i>79</i>&nbsp;        Garage garage = new Garage();</b>
 <b class="fc"><i>80</i>&nbsp;        model.addAttribute(&quot;garage&quot;, garage);</b>
 <b class="fc"><i>81</i>&nbsp;        return &quot;settings/garage/create&quot;;</b>
 <i>82</i>&nbsp;    }
@@ -242,76 +242,71 @@
 <b class="fc"><i>168</i>&nbsp;                existingGarage.setDescription(garage.getDescription());</b>
 <b class="fc"><i>169</i>&nbsp;                existingGarage.setHeightDescription(garage.getHeightDescription());</b>
 <b class="fc"><i>170</i>&nbsp;                existingGarage.setAddress(garage.getAddress());</b>
-<b class="fc"><i>171</i>&nbsp;                existingGarage.setAddressOne(garage.getAddressOne());</b>
-<b class="fc"><i>172</i>&nbsp;                existingGarage.setAddressTwo(garage.getAddressTwo());</b>
-<b class="fc"><i>173</i>&nbsp;                existingGarage.setCity(garage.getCity());</b>
-<b class="fc"><i>174</i>&nbsp;                existingGarage.setState(garage.getState());</b>
-<b class="fc"><i>175</i>&nbsp;                existingGarage.setZipCode(garage.getZipCode());</b>
-<b class="fc"><i>176</i>&nbsp;                garageRepository.save(existingGarage);</b>
-<b class="fc"><i>177</i>&nbsp;                isSuccessful = true;</b>
-<b class="fc"><i>178</i>&nbsp;            }</b>
-<i>179</i>&nbsp;            else {
-<b class="fc"><i>180</i>&nbsp;                isDuplicate = true;</b>
-<i>181</i>&nbsp;            }
-<i>182</i>&nbsp;        }
-<b class="nc"><i>183</i>&nbsp;        catch (Exception e) {</b>
-<b class="nc"><i>184</i>&nbsp;            e.printStackTrace();</b>
-<b class="fc"><i>185</i>&nbsp;        }</b>
-<i>186</i>&nbsp;        // Alerts
-<b class="fc"><i>187</i>&nbsp;        if (isSuccessful) {</b>
-<b class="fc"><i>188</i>&nbsp;            redirectAttributes.addAttribute(&quot;successMessage&quot;, &quot;The Garage &quot; + garage.getName() + &quot; was successfully updated.&quot;);</b>
+<b class="fc"><i>171</i>&nbsp;                garageRepository.save(existingGarage);</b>
+<b class="fc"><i>172</i>&nbsp;                isSuccessful = true;</b>
+<b class="fc"><i>173</i>&nbsp;            }</b>
+<i>174</i>&nbsp;            else {
+<b class="fc"><i>175</i>&nbsp;                isDuplicate = true;</b>
+<i>176</i>&nbsp;            }
+<i>177</i>&nbsp;        }
+<b class="nc"><i>178</i>&nbsp;        catch (Exception e) {</b>
+<b class="nc"><i>179</i>&nbsp;            e.printStackTrace();</b>
+<b class="fc"><i>180</i>&nbsp;        }</b>
+<i>181</i>&nbsp;        // Alerts
+<b class="fc"><i>182</i>&nbsp;        if (isSuccessful) {</b>
+<b class="fc"><i>183</i>&nbsp;            redirectAttributes.addAttribute(&quot;successMessage&quot;, &quot;The Garage &quot; + garage.getName() + &quot; was successfully updated.&quot;);</b>
+<i>184</i>&nbsp;        }
+<b class="fc"><i>185</i>&nbsp;        else if (isDuplicate) {</b>
+<b class="fc"><i>186</i>&nbsp;            model.addAttribute(&quot;dangerMessage&quot;, &quot;A Garage with the name &quot; + garage.getName() + &quot; already exists.&quot;);</b>
+<b class="fc"><i>187</i>&nbsp;            model.addAttribute(&quot;garage&quot;, garage);</b>
+<b class="fc"><i>188</i>&nbsp;            return &quot;settings/garage/edit&quot;;</b>
 <i>189</i>&nbsp;        }
-<b class="fc"><i>190</i>&nbsp;        else if (isDuplicate) {</b>
-<b class="fc"><i>191</i>&nbsp;            model.addAttribute(&quot;dangerMessage&quot;, &quot;A Garage with the name &quot; + garage.getName() + &quot; already exists.&quot;);</b>
-<b class="fc"><i>192</i>&nbsp;            model.addAttribute(&quot;garage&quot;, garage);</b>
-<b class="fc"><i>193</i>&nbsp;            return &quot;settings/garage/edit&quot;;</b>
-<i>194</i>&nbsp;        }
-<i>195</i>&nbsp;        else {
-<b class="nc"><i>196</i>&nbsp;            redirectAttributes.addAttribute(&quot;dangerMessage&quot;, &quot;An error occurred when attempting to update a Garage.&quot;);</b>
-<i>197</i>&nbsp;        }
-<b class="fc"><i>198</i>&nbsp;        return &quot;redirect:/settings/garage/index&quot;;</b>
-<i>199</i>&nbsp;    }
-<i>200</i>&nbsp;
-<i>201</i>&nbsp;    /**
-<i>202</i>&nbsp;     * Method that deletes an existing garage and all of the floor and parking spaces inside it
-<i>203</i>&nbsp;     * @param garageKey String
-<i>204</i>&nbsp;     * @param redirectAttributes RedirectAttributes
-<i>205</i>&nbsp;     * @return String &quot;redirect:/settings/garage/index&quot;
-<i>206</i>&nbsp;     */
-<i>207</i>&nbsp;    @PostMapping(&quot;/delete&quot;)
-<i>208</i>&nbsp;    public String delete(@RequestParam(&quot;garageKey&quot;) String garageKey,
-<i>209</i>&nbsp;                         RedirectAttributes redirectAttributes) {
-<b class="fc"><i>210</i>&nbsp;        boolean isSuccessful = false;</b>
-<b class="fc"><i>211</i>&nbsp;        Garage garage = null;</b>
-<i>212</i>&nbsp;        try {
-<b class="fc"><i>213</i>&nbsp;            garage = garageRepository.findByKey(garageKey);</b>
-<b class="fc"><i>214</i>&nbsp;            if (garage != null) {</b>
-<b class="fc"><i>215</i>&nbsp;                Predicate predicate = Predicates.equal(&quot;garageKey&quot;, garageKey);</b>
-<b class="fc"><i>216</i>&nbsp;                parkingSpaceRepository.deleteByPredicate(predicate);</b>
-<b class="fc"><i>217</i>&nbsp;                floorRepository.deleteByPredicate(predicate);</b>
-<b class="fc"><i>218</i>&nbsp;                garageRepository.delete(garageKey);</b>
-<b class="fc"><i>219</i>&nbsp;                isSuccessful = true;</b>
-<i>220</i>&nbsp;            }
-<i>221</i>&nbsp;        }
-<b class="nc"><i>222</i>&nbsp;        catch (Exception e) {</b>
-<b class="nc"><i>223</i>&nbsp;            e.printStackTrace();</b>
-<b class="fc"><i>224</i>&nbsp;        }</b>
-<i>225</i>&nbsp;        // Alerts
-<b class="fc"><i>226</i>&nbsp;        if (isSuccessful) {</b>
-<b class="fc"><i>227</i>&nbsp;            redirectAttributes.addAttribute(&quot;successMessage&quot;, &quot;The Garage &quot; + garage.getName() + &quot; was successfully deleted.&quot;);</b>
-<i>228</i>&nbsp;        }
-<i>229</i>&nbsp;        else {
-<b class="fc"><i>230</i>&nbsp;            redirectAttributes.addAttribute(&quot;dangerMessage&quot;, &quot;An error occurred when attempting to delete a Garage.&quot;);</b>
-<i>231</i>&nbsp;        }
-<b class="fc"><i>232</i>&nbsp;        return &quot;redirect:/settings/garage/index&quot;;</b>
-<i>233</i>&nbsp;    }
-<i>234</i>&nbsp;}
+<i>190</i>&nbsp;        else {
+<b class="nc"><i>191</i>&nbsp;            redirectAttributes.addAttribute(&quot;dangerMessage&quot;, &quot;An error occurred when attempting to update a Garage.&quot;);</b>
+<i>192</i>&nbsp;        }
+<b class="fc"><i>193</i>&nbsp;        return &quot;redirect:/settings/garage/index&quot;;</b>
+<i>194</i>&nbsp;    }
+<i>195</i>&nbsp;
+<i>196</i>&nbsp;    /**
+<i>197</i>&nbsp;     * Method that deletes an existing garage and all of the floor and parking spaces inside it
+<i>198</i>&nbsp;     * @param garageKey String
+<i>199</i>&nbsp;     * @param redirectAttributes RedirectAttributes
+<i>200</i>&nbsp;     * @return String &quot;redirect:/settings/garage/index&quot;
+<i>201</i>&nbsp;     */
+<i>202</i>&nbsp;    @PostMapping(&quot;/delete&quot;)
+<i>203</i>&nbsp;    public String delete(@RequestParam(&quot;garageKey&quot;) String garageKey,
+<i>204</i>&nbsp;                         RedirectAttributes redirectAttributes) {
+<b class="fc"><i>205</i>&nbsp;        boolean isSuccessful = false;</b>
+<b class="fc"><i>206</i>&nbsp;        Garage garage = null;</b>
+<i>207</i>&nbsp;        try {
+<b class="fc"><i>208</i>&nbsp;            garage = garageRepository.findByKey(garageKey);</b>
+<b class="fc"><i>209</i>&nbsp;            if (garage != null) {</b>
+<b class="fc"><i>210</i>&nbsp;                Predicate predicate = Predicates.equal(&quot;garageKey&quot;, garageKey);</b>
+<b class="fc"><i>211</i>&nbsp;                parkingSpaceRepository.deleteByPredicate(predicate);</b>
+<b class="fc"><i>212</i>&nbsp;                floorRepository.deleteByPredicate(predicate);</b>
+<b class="fc"><i>213</i>&nbsp;                garageRepository.delete(garageKey);</b>
+<b class="fc"><i>214</i>&nbsp;                isSuccessful = true;</b>
+<i>215</i>&nbsp;            }
+<i>216</i>&nbsp;        }
+<b class="nc"><i>217</i>&nbsp;        catch (Exception e) {</b>
+<b class="nc"><i>218</i>&nbsp;            e.printStackTrace();</b>
+<b class="fc"><i>219</i>&nbsp;        }</b>
+<i>220</i>&nbsp;        // Alerts
+<b class="fc"><i>221</i>&nbsp;        if (isSuccessful) {</b>
+<b class="fc"><i>222</i>&nbsp;            redirectAttributes.addAttribute(&quot;successMessage&quot;, &quot;The Garage &quot; + garage.getName() + &quot; was successfully deleted.&quot;);</b>
+<i>223</i>&nbsp;        }
+<i>224</i>&nbsp;        else {
+<b class="fc"><i>225</i>&nbsp;            redirectAttributes.addAttribute(&quot;dangerMessage&quot;, &quot;An error occurred when attempting to delete a Garage.&quot;);</b>
+<i>226</i>&nbsp;        }
+<b class="fc"><i>227</i>&nbsp;        return &quot;redirect:/settings/garage/index&quot;;</b>
+<i>228</i>&nbsp;    }
+<i>229</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2018-03-24 16:39</div>
+    <div style="float:right;">generated on 2018-04-11 22:25</div>
 </div>
 </body>
 </html>
