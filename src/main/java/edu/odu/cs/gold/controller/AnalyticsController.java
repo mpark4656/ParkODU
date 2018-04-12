@@ -150,7 +150,6 @@ public class AnalyticsController {
             int totalCount = 0;
             if (permitPredicate != null && spacePredicate != null ) {
 
-                System.out.println("both null");
                 // Availability Count
                 Predicate availabilityCountPredicate = Predicates.and(
                         Predicates.equal("garageKey", garage.getGarageKey()),
@@ -167,7 +166,6 @@ public class AnalyticsController {
                 totalCount = parkingSpaceRepository.countByPredicate(totalCountPredicate);
             }
             else if (spacePredicate != null && permitPredicate == null) {
-                System.out.println("permit null");
                 // Availability Count
                 Predicate availabilityCountPredicate = Predicates.and(
                         Predicates.equal("garageKey", garage.getGarageKey()),
@@ -185,7 +183,6 @@ public class AnalyticsController {
                 totalCount = parkingSpaceRepository.countByPredicate(totalCountPredicate);
             }
             else if (permitPredicate != null && spacePredicate == null) {
-                System.out.println("space null");
                 // Availability Count
                 Predicate availabilityCountPredicate = Predicates.and(
                         Predicates.equal("garageKey", garage.getGarageKey()),
