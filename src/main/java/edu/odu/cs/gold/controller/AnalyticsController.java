@@ -27,6 +27,7 @@ public class AnalyticsController {
     private PermitTypeRepository permitTypeRepository;
     private SpaceTypeRepository spaceTypeRepository;
     private UserRepository userRepository;
+    private FloorRepository floorRepository;
 
     public AnalyticsController(GarageRepository garageRepository,
                                BuildingRepository buildingRepository,
@@ -35,7 +36,8 @@ public class AnalyticsController {
                                GoogleMapService googleMapService,
                                PermitTypeRepository permitTypeRepository,
                                SpaceTypeRepository spaceTypeRepository,
-                               UserRepository userRepository) {
+                               UserRepository userRepository,
+                               FloorRepository floorRepository) {
         this.garageRepository = garageRepository;
         this.buildingRepository = buildingRepository;
         this.parkingSpaceRepository = parkingSpaceRepository;
@@ -44,6 +46,7 @@ public class AnalyticsController {
         this.permitTypeRepository = permitTypeRepository;
         this.spaceTypeRepository = spaceTypeRepository;
         this.userRepository = userRepository;
+        this.floorRepository = floorRepository;
     }
 
     @GetMapping({"","/","/index"})
@@ -116,6 +119,15 @@ public class AnalyticsController {
             permitPredicate = Predicates.or(predicates.toArray(new Predicate[0]));
         }
 
+        Predicate spacePredicate = null;
+        if (spaceTypeKeys != null) {
+            List<Predicate> predicates = new ArrayList<>();
+            for (String spaceTypeKey : spaceTypeKeys) {
+                predicates.add(Predicates.equal("spaceTypeKey", spaceTypeKey));
+            }
+            spacePredicate = Predicates.or(predicates.toArray(new Predicate[0]));
+        }
+
         List<Recommendation> recommendations = new ArrayList<>();
 
         List<Garage> garages = new ArrayList<>(garageRepository.findAll());
@@ -131,8 +143,44 @@ public class AnalyticsController {
 
             int availabilityCount = 0;
             int totalCount = 0;
-            if (permitPredicate != null) {
+            if (permitPredicate != null && spacePredicate != null ) {
 
+                System.out.println("both null");
+                // Availability Count
+                Predicate availabilityCountPredicate = Predicates.and(
+                        Predicates.equal("garageKey", garage.getGarageKey()),
+                        Predicates.equal("available", true),
+                        permitPredicate, spacePredicate
+                );
+                availabilityCount = parkingSpaceRepository.countByPredicate(availabilityCountPredicate);
+
+                // Total Count
+                Predicate totalCountPredicate = Predicates.and(
+                        Predicates.equal("garageKey", garage.getGarageKey()),
+                        permitPredicate, spacePredicate
+                );
+                totalCount = parkingSpaceRepository.countByPredicate(totalCountPredicate);
+            }
+            if (spacePredicate != null && permitPredicate == null) {
+                System.out.println("permit null");
+                // Availability Count
+                Predicate availabilityCountPredicate = Predicates.and(
+                        Predicates.equal("garageKey", garage.getGarageKey()),
+                        Predicates.equal("available", true),
+                        spacePredicate
+                );
+                availabilityCount = parkingSpaceRepository.countByPredicate(availabilityCountPredicate);
+
+                // Total Count
+                Predicate totalCountPredicate = Predicates.and(
+                        Predicates.equal("garageKey", garage.getGarageKey()),
+                        Predicates.equal("available", garage.getGarageKey()),
+                        spacePredicate
+                );
+                totalCount = parkingSpaceRepository.countByPredicate(totalCountPredicate);
+            }
+            if (permitPredicate != null && spacePredicate == null) {
+                System.out.println("space null");
                 // Availability Count
                 Predicate availabilityCountPredicate = Predicates.and(
                         Predicates.equal("garageKey", garage.getGarageKey()),
@@ -191,10 +239,19 @@ public class AnalyticsController {
             permitTypes = new ArrayList<> (permitTypeRepository.findByKeys(permitTypeKeySet));
         }
 
+        List<SpaceType> spaceTypes = new ArrayList<> ();
+
+        // Get the Permit Type objects from the keys
+        if (spaceTypeKeys != null) {
+            Set<String> spaceTypeKeySet = new HashSet<String> (spaceTypeKeys);
+            spaceTypes = new ArrayList<> (spaceTypeRepository.findByKeys(spaceTypeKeySet));
+        }
+
         model.addAttribute("startingAddress", startingAddress);
         model.addAttribute("startingLatitude", startingLatitude);
         model.addAttribute("startingLongitude", startingLongitude);
         model.addAttribute("permitTypes", permitTypes);
+        model.addAttribute("spaceTypes",spaceTypes);
         model.addAttribute("destinationBuilding", destinationBuilding);
         model.addAttribute("recommendations", recommendations);
 

@@ -29,6 +29,13 @@
                         <br/>
                     </th:block>
                 </dd>
+                <dt>Space Types</dt>
+                <dd>
+                    <th:block th:each="spaceType : ${spaceTypes}">
+                        <span th:text="${spaceType.name}"></span>
+                        <br/>
+                    </th:block>
+                </dd>
                 <dt>Destination Building</dt>
                 <dd th:text="${destinationBuilding.name}"></dd>
             </dl>
