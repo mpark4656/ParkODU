@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping ("/settings/floor_statistics")
@@ -74,6 +72,7 @@ public class FloorStatisticSettingsController   {
         Predicate predicate = Predicates.equal("floorKey",floorKey);
 
         List<FloorStatistic> floorStatistics = (floorStatisticRepository.findByPredicate(predicate));
+        floorStatistics.sort(Comparator.comparing(FloorStatistic::getTimestamp).reversed());
         Garage garage = garageRepository.findByKey(floor.getGarageKey());
 
         model.addAttribute("floor", floor);
