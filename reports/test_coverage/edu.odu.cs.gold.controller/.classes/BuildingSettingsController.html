@@ -42,26 +42,26 @@
   <td class="name">BuildingSettingsController</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/ 1)
+    (1/ 1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/ 7)
+    (7/ 7)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    90.5%
   </span>
   <span class="absValue">
-    (0/ 80)
+    (76/ 84)
   </span>
 </td>
 </tr>
@@ -77,232 +77,246 @@
 <i>3</i>&nbsp;import com.hazelcast.query.Predicate;
 <i>4</i>&nbsp;import com.hazelcast.query.Predicates;
 <i>5</i>&nbsp;import edu.odu.cs.gold.model.Building;
-<i>6</i>&nbsp;import edu.odu.cs.gold.repository.FloorRepository;
-<i>7</i>&nbsp;import edu.odu.cs.gold.repository.BuildingRepository;
-<i>8</i>&nbsp;import edu.odu.cs.gold.repository.ParkingSpaceRepository;
-<i>9</i>&nbsp;import org.springframework.stereotype.Controller;
-<i>10</i>&nbsp;import org.springframework.ui.Model;
-<i>11</i>&nbsp;import org.springframework.web.bind.annotation.*;
-<i>12</i>&nbsp;import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-<i>13</i>&nbsp;import java.util.ArrayList;
-<i>14</i>&nbsp;import java.util.Comparator;
-<i>15</i>&nbsp;import java.util.List;
-<i>16</i>&nbsp;
-<i>17</i>&nbsp;/**
-<i>18</i>&nbsp; * This controller provides methods for returning html pages that allow
-<i>19</i>&nbsp; * admins to configure building.
-<i>20</i>&nbsp; *
-<i>21</i>&nbsp; * For actual manipulation of Building models such as update, add, and delete,
-<i>22</i>&nbsp; * see BuildingRestController.java
-<i>23</i>&nbsp; */
-<i>24</i>&nbsp;@Controller
-<i>25</i>&nbsp;@RequestMapping(&quot;/settings/building&quot;)
-<i>26</i>&nbsp;public class BuildingSettingsController {
+<i>6</i>&nbsp;import edu.odu.cs.gold.repository.BuildingRepository;
+<i>7</i>&nbsp;import org.springframework.stereotype.Controller;
+<i>8</i>&nbsp;import org.springframework.ui.Model;
+<i>9</i>&nbsp;import org.springframework.web.bind.annotation.*;
+<i>10</i>&nbsp;import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+<i>11</i>&nbsp;import java.util.ArrayList;
+<i>12</i>&nbsp;import java.util.Comparator;
+<i>13</i>&nbsp;import java.util.List;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;/**
+<i>16</i>&nbsp; * This controller provides methods for returning html pages that allow
+<i>17</i>&nbsp; * admins to configure building.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * For actual manipulation of Building models such as update, add, and delete,
+<i>20</i>&nbsp; * see BuildingRestController.java
+<i>21</i>&nbsp; */
+<i>22</i>&nbsp;@Controller
+<i>23</i>&nbsp;@RequestMapping(&quot;/settings/building&quot;)
+<i>24</i>&nbsp;public class BuildingSettingsController {
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    private BuildingRepository buildingRepository;
 <i>27</i>&nbsp;
-<i>28</i>&nbsp;    private BuildingRepository buildingRepository;
-<i>29</i>&nbsp;    private FloorRepository floorRepository;
-<i>30</i>&nbsp;    private ParkingSpaceRepository parkingSpaceRepository;
-<i>31</i>&nbsp;
-<i>32</i>&nbsp;    public BuildingSettingsController(BuildingRepository buildingRepository,
-<i>33</i>&nbsp;                                    FloorRepository floorRepository,
-<b class="nc"><i>34</i>&nbsp;                                    ParkingSpaceRepository parkingSpaceRepository) {</b>
-<b class="nc"><i>35</i>&nbsp;        this.buildingRepository = buildingRepository;</b>
-<b class="nc"><i>36</i>&nbsp;        this.floorRepository = floorRepository;</b>
-<b class="nc"><i>37</i>&nbsp;        this.parkingSpaceRepository = parkingSpaceRepository;</b>
-<i>38</i>&nbsp;    }
-<i>39</i>&nbsp;
-<i>40</i>&nbsp;    /**
-<i>41</i>&nbsp;     * This method returns &quot;settings/building/index&quot; with a collection of all building objects
-<i>42</i>&nbsp;     * added to the model.
-<i>43</i>&nbsp;     *
-<i>44</i>&nbsp;     * @param successMessage String
-<i>45</i>&nbsp;     * @param infoMessage String
-<i>46</i>&nbsp;     * @param warningMessage String
-<i>47</i>&nbsp;     * @param dangerMessage String
-<i>48</i>&nbsp;     * @param model Model
-<i>49</i>&nbsp;     * @return String &quot;settings/building/index&quot;
-<i>50</i>&nbsp;     */
-<i>51</i>&nbsp;    @GetMapping({&quot;&quot;,&quot;/&quot;,&quot;/index&quot;})
-<i>52</i>&nbsp;    public String index(@RequestParam(value = &quot;successMessage&quot;, required = false) String successMessage,
-<i>53</i>&nbsp;                        @RequestParam(value = &quot;infoMessage&quot;, required = false) String infoMessage,
-<i>54</i>&nbsp;                        @RequestParam(value = &quot;warningMessage&quot;, required = false) String warningMessage,
-<i>55</i>&nbsp;                        @RequestParam(value = &quot;dangerMessage&quot;, required = false) String dangerMessage,
-<i>56</i>&nbsp;                        Model model) {
+<i>28</i>&nbsp;    /**
+<i>29</i>&nbsp;     * Constructor
+<i>30</i>&nbsp;     * @param buildingRepository BuildingRepository
+<i>31</i>&nbsp;     */
+<b class="fc"><i>32</i>&nbsp;    public BuildingSettingsController(BuildingRepository buildingRepository) {</b>
+<b class="fc"><i>33</i>&nbsp;        this.buildingRepository = buildingRepository;</b>
+<b class="fc"><i>34</i>&nbsp;    }</b>
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    /**
+<i>37</i>&nbsp;     * This method returns &quot;settings/building/index&quot; with a collection of all building objects
+<i>38</i>&nbsp;     * added to the model.
+<i>39</i>&nbsp;     *
+<i>40</i>&nbsp;     * @param successMessage String
+<i>41</i>&nbsp;     * @param infoMessage String
+<i>42</i>&nbsp;     * @param warningMessage String
+<i>43</i>&nbsp;     * @param dangerMessage String
+<i>44</i>&nbsp;     * @param model Model
+<i>45</i>&nbsp;     * @return String &quot;settings/building/index&quot;
+<i>46</i>&nbsp;     */
+<i>47</i>&nbsp;    @GetMapping({&quot;&quot;,&quot;/&quot;,&quot;/index&quot;})
+<i>48</i>&nbsp;    public String index(@RequestParam(value = &quot;successMessage&quot;, required = false) String successMessage,
+<i>49</i>&nbsp;                        @RequestParam(value = &quot;infoMessage&quot;, required = false) String infoMessage,
+<i>50</i>&nbsp;                        @RequestParam(value = &quot;warningMessage&quot;, required = false) String warningMessage,
+<i>51</i>&nbsp;                        @RequestParam(value = &quot;dangerMessage&quot;, required = false) String dangerMessage,
+<i>52</i>&nbsp;                        Model model) {
+<i>53</i>&nbsp;
+<b class="fc"><i>54</i>&nbsp;        List&lt;Building&gt; buildings = new ArrayList&lt;&gt;(buildingRepository.findAll());</b>
+<b class="fc"><i>55</i>&nbsp;        buildings.sort(Comparator.comparing(Building::getName));</b>
+<b class="fc"><i>56</i>&nbsp;        model.addAttribute(&quot;buildings&quot;, buildings);</b>
 <i>57</i>&nbsp;
-<b class="nc"><i>58</i>&nbsp;        List&lt;Building&gt; buildings = new ArrayList&lt;&gt;(buildingRepository.findAll());</b>
-<b class="nc"><i>59</i>&nbsp;        buildings.sort(Comparator.comparing(Building::getName));</b>
-<b class="nc"><i>60</i>&nbsp;        model.addAttribute(&quot;buildings&quot;, buildings);</b>
-<i>61</i>&nbsp;
-<i>62</i>&nbsp;        // Alerts
-<b class="nc"><i>63</i>&nbsp;        if (successMessage != null) { model.addAttribute(&quot;successMessage&quot;, successMessage); }</b>
-<b class="nc"><i>64</i>&nbsp;        if (infoMessage != null) { model.addAttribute(&quot;infoMessage&quot;, infoMessage); }</b>
-<b class="nc"><i>65</i>&nbsp;        if (warningMessage != null) { model.addAttribute(&quot;warningMessage&quot;, warningMessage); }</b>
-<b class="nc"><i>66</i>&nbsp;        if (dangerMessage != null) { model.addAttribute(&quot;dangerMessage&quot;, dangerMessage); }</b>
-<i>67</i>&nbsp;
-<b class="nc"><i>68</i>&nbsp;        return &quot;settings/building/index&quot;;</b>
-<i>69</i>&nbsp;    }
-<i>70</i>&nbsp;
-<i>71</i>&nbsp;    /**
-<i>72</i>&nbsp;     * Method to return the settings/building/create.html template page
-<i>73</i>&nbsp;     * @param model Model
-<i>74</i>&nbsp;     * @return String &quot;settings/building/create&quot;
-<i>75</i>&nbsp;     */
-<i>76</i>&nbsp;    @GetMapping(&quot;/create&quot;)
-<i>77</i>&nbsp;    public String create(Model model) {
-<b class="nc"><i>78</i>&nbsp;        Building building = new Building();</b>
-<b class="nc"><i>79</i>&nbsp;        model.addAttribute(&quot;building&quot;, building);</b>
-<b class="nc"><i>80</i>&nbsp;        return &quot;settings/building/create&quot;;</b>
-<i>81</i>&nbsp;    }
-<i>82</i>&nbsp;
-<i>83</i>&nbsp;    /**
-<i>84</i>&nbsp;     * Method to create a new building
-<i>85</i>&nbsp;     * @param building Building
-<i>86</i>&nbsp;     * @param model Model
-<i>87</i>&nbsp;     * @param redirectAttributes RedirectAttributes
-<i>88</i>&nbsp;     * @return
-<i>89</i>&nbsp;     */
-<i>90</i>&nbsp;    @PostMapping(&quot;/create&quot;)
-<i>91</i>&nbsp;    public String create(Building building,
-<i>92</i>&nbsp;                         Model model,
-<i>93</i>&nbsp;                         RedirectAttributes redirectAttributes) {
-<b class="nc"><i>94</i>&nbsp;        boolean isSuccessful = false;</b>
-<b class="nc"><i>95</i>&nbsp;        boolean isDuplicate = false;</b>
-<i>96</i>&nbsp;        try {
-<b class="nc"><i>97</i>&nbsp;            Predicate predicate = Predicates.or(</b>
-<b class="nc"><i>98</i>&nbsp;                    Predicates.equal(&quot;buildingKey&quot;, building.getBuildingKey()),</b>
-<b class="nc"><i>99</i>&nbsp;                    Predicates.equal(&quot;name&quot;, building.getName())</b>
-<i>100</i>&nbsp;            );
-<b class="nc"><i>101</i>&nbsp;            int existingCount = buildingRepository.countByPredicate(predicate);</b>
-<b class="nc"><i>102</i>&nbsp;            if (existingCount == 0) {</b>
-<b class="nc"><i>103</i>&nbsp;                buildingRepository.save(building);</b>
-<b class="nc"><i>104</i>&nbsp;                isSuccessful = true;</b>
-<i>105</i>&nbsp;            }
-<i>106</i>&nbsp;            else {
-<b class="nc"><i>107</i>&nbsp;                isDuplicate = true;</b>
-<i>108</i>&nbsp;            }
-<i>109</i>&nbsp;        }
-<b class="nc"><i>110</i>&nbsp;        catch (Exception e) {</b>
-<b class="nc"><i>111</i>&nbsp;            e.printStackTrace();</b>
-<b class="nc"><i>112</i>&nbsp;        }</b>
-<i>113</i>&nbsp;        // Alerts
-<b class="nc"><i>114</i>&nbsp;        if (isSuccessful) {</b>
-<b class="nc"><i>115</i>&nbsp;            redirectAttributes.addAttribute(&quot;successMessage&quot;, &quot;The Building &quot; + building.getName() + &quot; was successfully created.&quot;);</b>
-<i>116</i>&nbsp;        }
-<b class="nc"><i>117</i>&nbsp;        else if (isDuplicate) {</b>
-<b class="nc"><i>118</i>&nbsp;            model.addAttribute(&quot;dangerMessage&quot;, &quot;A Building with the name &quot; + building.getName() + &quot; already exists.&quot;);</b>
-<b class="nc"><i>119</i>&nbsp;            model.addAttribute(&quot;building&quot;, building);</b>
-<b class="nc"><i>120</i>&nbsp;            return &quot;settings/building/create&quot;;</b>
+<i>58</i>&nbsp;        // Alerts
+<b class="fc"><i>59</i>&nbsp;        if (successMessage != null) { model.addAttribute(&quot;successMessage&quot;, successMessage); }</b>
+<b class="fc"><i>60</i>&nbsp;        if (infoMessage != null) { model.addAttribute(&quot;infoMessage&quot;, infoMessage); }</b>
+<b class="fc"><i>61</i>&nbsp;        if (warningMessage != null) { model.addAttribute(&quot;warningMessage&quot;, warningMessage); }</b>
+<b class="fc"><i>62</i>&nbsp;        if (dangerMessage != null) { model.addAttribute(&quot;dangerMessage&quot;, dangerMessage); }</b>
+<i>63</i>&nbsp;
+<b class="fc"><i>64</i>&nbsp;        return &quot;settings/building/index&quot;;</b>
+<i>65</i>&nbsp;    }
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    /**
+<i>68</i>&nbsp;     * Method to return the settings/building/create.html template page
+<i>69</i>&nbsp;     * @param model Model
+<i>70</i>&nbsp;     * @return String &quot;settings/building/create&quot;
+<i>71</i>&nbsp;     */
+<i>72</i>&nbsp;    @GetMapping(&quot;/create&quot;)
+<i>73</i>&nbsp;    public String create(Model model) {
+<b class="fc"><i>74</i>&nbsp;        Building building = new Building();</b>
+<b class="fc"><i>75</i>&nbsp;        model.addAttribute(&quot;building&quot;, building);</b>
+<b class="fc"><i>76</i>&nbsp;        return &quot;settings/building/create&quot;;</b>
+<i>77</i>&nbsp;    }
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;    /**
+<i>80</i>&nbsp;     * Method to create a new building
+<i>81</i>&nbsp;     * @param building Building
+<i>82</i>&nbsp;     * @param model Model
+<i>83</i>&nbsp;     * @param redirectAttributes RedirectAttributes
+<i>84</i>&nbsp;     * @return String redirection to previous page
+<i>85</i>&nbsp;     */
+<i>86</i>&nbsp;    @PostMapping(&quot;/create&quot;)
+<i>87</i>&nbsp;    public String create(Building building,
+<i>88</i>&nbsp;                         Model model,
+<i>89</i>&nbsp;                         RedirectAttributes redirectAttributes) {
+<b class="fc"><i>90</i>&nbsp;        boolean isSuccessful = false;</b>
+<b class="fc"><i>91</i>&nbsp;        boolean isDuplicate = false;</b>
+<i>92</i>&nbsp;        try {
+<b class="fc"><i>93</i>&nbsp;            Predicate predicate = Predicates.or(</b>
+<b class="fc"><i>94</i>&nbsp;                    Predicates.equal(&quot;buildingKey&quot;, building.getBuildingKey()),</b>
+<b class="fc"><i>95</i>&nbsp;                    Predicates.equal(&quot;name&quot;, building.getName())</b>
+<i>96</i>&nbsp;            );
+<b class="fc"><i>97</i>&nbsp;            int existingCount = buildingRepository.countByPredicate(predicate);</b>
+<b class="fc"><i>98</i>&nbsp;            if (existingCount == 0) {</b>
+<b class="fc"><i>99</i>&nbsp;                buildingRepository.save(building);</b>
+<b class="fc"><i>100</i>&nbsp;                isSuccessful = true;</b>
+<i>101</i>&nbsp;            }
+<i>102</i>&nbsp;            else {
+<b class="fc"><i>103</i>&nbsp;                isDuplicate = true;</b>
+<i>104</i>&nbsp;            }
+<i>105</i>&nbsp;        }
+<b class="nc"><i>106</i>&nbsp;        catch (Exception e) {</b>
+<b class="nc"><i>107</i>&nbsp;            e.printStackTrace();</b>
+<b class="fc"><i>108</i>&nbsp;        }</b>
+<i>109</i>&nbsp;        // Alerts
+<b class="fc"><i>110</i>&nbsp;        if (isSuccessful) {</b>
+<b class="fc"><i>111</i>&nbsp;            redirectAttributes.addAttribute(</b>
+<i>112</i>&nbsp;                    &quot;successMessage&quot;,
+<b class="fc"><i>113</i>&nbsp;                    &quot;The Building &quot; + building.getName() + &quot; was successfully created.&quot;);</b>
+<i>114</i>&nbsp;        }
+<b class="fc"><i>115</i>&nbsp;        else if (isDuplicate) {</b>
+<b class="fc"><i>116</i>&nbsp;            model.addAttribute(</b>
+<i>117</i>&nbsp;                    &quot;dangerMessage&quot;,
+<b class="fc"><i>118</i>&nbsp;                    &quot;A Building with the name &quot; + building.getName() + &quot; already exists.&quot;);</b>
+<b class="fc"><i>119</i>&nbsp;            model.addAttribute(&quot;building&quot;, building);</b>
+<b class="fc"><i>120</i>&nbsp;            return &quot;settings/building/create&quot;;</b>
 <i>121</i>&nbsp;        }
 <i>122</i>&nbsp;        else {
-<b class="nc"><i>123</i>&nbsp;            redirectAttributes.addAttribute(&quot;dangerMessage&quot;, &quot;An error occurred when attempting to create a Building.&quot;);</b>
-<i>124</i>&nbsp;        }
-<b class="nc"><i>125</i>&nbsp;        return &quot;redirect:/settings/building/index&quot;;</b>
-<i>126</i>&nbsp;    }
-<i>127</i>&nbsp;
-<i>128</i>&nbsp;    /**
-<i>129</i>&nbsp;     * Method to return the settings/building/edit template
-<i>130</i>&nbsp;     * @param buildingKey String
-<i>131</i>&nbsp;     * @param model Model
-<i>132</i>&nbsp;     * @return String &quot;settings/building/edit&quot;
-<i>133</i>&nbsp;     */
-<i>134</i>&nbsp;    @GetMapping(&quot;/edit/{buildingKey}&quot;)
-<i>135</i>&nbsp;    public String edit(@PathVariable(&quot;buildingKey&quot;) String buildingKey,
-<i>136</i>&nbsp;                       Model model) {
-<b class="nc"><i>137</i>&nbsp;        Building building = buildingRepository.findByKey(buildingKey);</b>
-<b class="nc"><i>138</i>&nbsp;        model.addAttribute(&quot;building&quot;, building);</b>
-<b class="nc"><i>139</i>&nbsp;        return &quot;settings/building/edit&quot;;</b>
-<i>140</i>&nbsp;    }
-<i>141</i>&nbsp;
-<i>142</i>&nbsp;    /**
-<i>143</i>&nbsp;     * Method that modifies the attributes of currently existing building
-<i>144</i>&nbsp;     * @param building Building
-<i>145</i>&nbsp;     * @param model Model
-<i>146</i>&nbsp;     * @param redirectAttributes RedirectAttributes
-<i>147</i>&nbsp;     * @return String redirection to previous page
-<i>148</i>&nbsp;     */
-<i>149</i>&nbsp;    @PostMapping(&quot;/edit&quot;)
-<i>150</i>&nbsp;    public String edit(Building building,
-<i>151</i>&nbsp;                       Model model,
-<i>152</i>&nbsp;                       RedirectAttributes redirectAttributes) {
-<b class="nc"><i>153</i>&nbsp;        boolean isSuccessful = false;</b>
-<b class="nc"><i>154</i>&nbsp;        boolean isDuplicate = false;</b>
-<i>155</i>&nbsp;
-<i>156</i>&nbsp;        try {
-<b class="nc"><i>157</i>&nbsp;            Predicate predicate = Predicates.and(</b>
-<b class="nc"><i>158</i>&nbsp;                    Predicates.notEqual(&quot;buildingKey&quot;, building.getBuildingKey()),</b>
-<b class="nc"><i>159</i>&nbsp;                    Predicates.equal(&quot;name&quot;, building.getName())</b>
-<i>160</i>&nbsp;            );
-<b class="nc"><i>161</i>&nbsp;            int duplicateCount = buildingRepository.countByPredicate(predicate);</b>
-<b class="nc"><i>162</i>&nbsp;            if (duplicateCount == 0) {</b>
-<b class="nc"><i>163</i>&nbsp;                Building existingBuilding = buildingRepository.findByKey(building.getBuildingKey());</b>
-<b class="nc"><i>164</i>&nbsp;                existingBuilding.setLatitude(building.getLatitude());</b>
-<b class="nc"><i>165</i>&nbsp;                existingBuilding.setLongitude(building.getLongitude());</b>
-<b class="nc"><i>166</i>&nbsp;                existingBuilding.setName(building.getName());</b>
-<b class="nc"><i>167</i>&nbsp;                existingBuilding.setDescription(building.getDescription());</b>
-<b class="nc"><i>168</i>&nbsp;                existingBuilding.setAddress(building.getAddress());</b>
-<i>169</i>&nbsp;
-<b class="nc"><i>170</i>&nbsp;                buildingRepository.save(existingBuilding);</b>
-<b class="nc"><i>171</i>&nbsp;                isSuccessful = true;</b>
-<b class="nc"><i>172</i>&nbsp;            }</b>
-<i>173</i>&nbsp;            else {
-<b class="nc"><i>174</i>&nbsp;                isDuplicate = true;</b>
-<i>175</i>&nbsp;            }
-<i>176</i>&nbsp;        }
-<b class="nc"><i>177</i>&nbsp;        catch (Exception e) {</b>
-<b class="nc"><i>178</i>&nbsp;            e.printStackTrace();</b>
-<b class="nc"><i>179</i>&nbsp;        }</b>
-<i>180</i>&nbsp;        // Alerts
-<b class="nc"><i>181</i>&nbsp;        if (isSuccessful) {</b>
-<b class="nc"><i>182</i>&nbsp;            redirectAttributes.addAttribute(&quot;successMessage&quot;, &quot;The Building &quot; + building.getName() + &quot; was successfully updated.&quot;);</b>
-<i>183</i>&nbsp;        }
-<b class="nc"><i>184</i>&nbsp;        else if (isDuplicate) {</b>
-<b class="nc"><i>185</i>&nbsp;            model.addAttribute(&quot;dangerMessage&quot;, &quot;A Building with the name &quot; + building.getName() + &quot; already exists.&quot;);</b>
-<b class="nc"><i>186</i>&nbsp;            model.addAttribute(&quot;building&quot;, building);</b>
-<b class="nc"><i>187</i>&nbsp;            return &quot;settings/building/edit&quot;;</b>
-<i>188</i>&nbsp;        }
-<i>189</i>&nbsp;        else {
-<b class="nc"><i>190</i>&nbsp;            redirectAttributes.addAttribute(&quot;dangerMessage&quot;, &quot;An error occurred when attempting to update a Building.&quot;);</b>
-<i>191</i>&nbsp;        }
-<b class="nc"><i>192</i>&nbsp;        return &quot;redirect:/settings/building/index&quot;;</b>
-<i>193</i>&nbsp;    }
-<i>194</i>&nbsp;
-<i>195</i>&nbsp;    /**
-<i>196</i>&nbsp;     * Method that deletes an existing building and all of the floor and parking spaces inside it
-<i>197</i>&nbsp;     * @param buildingKey String
-<i>198</i>&nbsp;     * @param redirectAttributes RedirectAttributes
-<i>199</i>&nbsp;     * @return String &quot;redirect:/settings/building/index&quot;
-<i>200</i>&nbsp;     */
-<i>201</i>&nbsp;    @PostMapping(&quot;/delete&quot;)
-<i>202</i>&nbsp;    public String delete(@RequestParam(&quot;buildingKey&quot;) String buildingKey,
-<i>203</i>&nbsp;                         RedirectAttributes redirectAttributes) {
-<b class="nc"><i>204</i>&nbsp;        boolean isSuccessful = false;</b>
-<b class="nc"><i>205</i>&nbsp;        Building building = null;</b>
-<i>206</i>&nbsp;        try {
-<b class="nc"><i>207</i>&nbsp;            building = buildingRepository.findByKey(buildingKey);</b>
-<b class="nc"><i>208</i>&nbsp;            if (building != null) {</b>
-<b class="nc"><i>209</i>&nbsp;                buildingRepository.delete(buildingKey);</b>
-<b class="nc"><i>210</i>&nbsp;                isSuccessful = true;</b>
-<i>211</i>&nbsp;            }
-<i>212</i>&nbsp;        }
-<b class="nc"><i>213</i>&nbsp;        catch (Exception e) {</b>
-<b class="nc"><i>214</i>&nbsp;            e.printStackTrace();</b>
-<b class="nc"><i>215</i>&nbsp;        }</b>
-<i>216</i>&nbsp;        // Alerts
-<b class="nc"><i>217</i>&nbsp;        if (isSuccessful) {</b>
-<b class="nc"><i>218</i>&nbsp;            redirectAttributes.addAttribute(&quot;successMessage&quot;, &quot;The Building &quot; + building.getName() + &quot; was successfully deleted.&quot;);</b>
-<i>219</i>&nbsp;        }
-<i>220</i>&nbsp;        else {
-<b class="nc"><i>221</i>&nbsp;            redirectAttributes.addAttribute(&quot;dangerMessage&quot;, &quot;An error occurred when attempting to delete a Building.&quot;);</b>
-<i>222</i>&nbsp;        }
-<b class="nc"><i>223</i>&nbsp;        return &quot;redirect:/settings/building/index&quot;;</b>
-<i>224</i>&nbsp;    }
-<i>225</i>&nbsp;}
+<b class="nc"><i>123</i>&nbsp;            redirectAttributes.addAttribute(</b>
+<i>124</i>&nbsp;                    &quot;dangerMessage&quot;,
+<i>125</i>&nbsp;                    &quot;An error occurred when attempting to create a Building.&quot;);
+<i>126</i>&nbsp;        }
+<b class="fc"><i>127</i>&nbsp;        return &quot;redirect:/settings/building/index&quot;;</b>
+<i>128</i>&nbsp;    }
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;    /**
+<i>131</i>&nbsp;     * Method to return the settings/building/edit template
+<i>132</i>&nbsp;     * @param buildingKey String
+<i>133</i>&nbsp;     * @param model Model
+<i>134</i>&nbsp;     * @return String &quot;settings/building/edit&quot;
+<i>135</i>&nbsp;     */
+<i>136</i>&nbsp;    @GetMapping(&quot;/edit/{buildingKey}&quot;)
+<i>137</i>&nbsp;    public String edit(@PathVariable(&quot;buildingKey&quot;) String buildingKey,
+<i>138</i>&nbsp;                       Model model) {
+<b class="fc"><i>139</i>&nbsp;        Building building = buildingRepository.findByKey(buildingKey);</b>
+<b class="fc"><i>140</i>&nbsp;        model.addAttribute(&quot;building&quot;, building);</b>
+<b class="fc"><i>141</i>&nbsp;        return &quot;settings/building/edit&quot;;</b>
+<i>142</i>&nbsp;    }
+<i>143</i>&nbsp;
+<i>144</i>&nbsp;    /**
+<i>145</i>&nbsp;     * Method that modifies the attributes of currently existing building
+<i>146</i>&nbsp;     * @param building Building
+<i>147</i>&nbsp;     * @param model Model
+<i>148</i>&nbsp;     * @param redirectAttributes RedirectAttributes
+<i>149</i>&nbsp;     * @return String redirection to previous page
+<i>150</i>&nbsp;     */
+<i>151</i>&nbsp;    @PostMapping(&quot;/edit&quot;)
+<i>152</i>&nbsp;    public String edit(Building building,
+<i>153</i>&nbsp;                       Model model,
+<i>154</i>&nbsp;                       RedirectAttributes redirectAttributes) {
+<b class="fc"><i>155</i>&nbsp;        boolean isSuccessful = false;</b>
+<b class="fc"><i>156</i>&nbsp;        boolean isDuplicate = false;</b>
+<i>157</i>&nbsp;
+<i>158</i>&nbsp;        try {
+<b class="fc"><i>159</i>&nbsp;            Predicate predicate = Predicates.and(</b>
+<b class="fc"><i>160</i>&nbsp;                    Predicates.notEqual(&quot;buildingKey&quot;, building.getBuildingKey()),</b>
+<b class="fc"><i>161</i>&nbsp;                    Predicates.equal(&quot;name&quot;, building.getName())</b>
+<i>162</i>&nbsp;            );
+<b class="fc"><i>163</i>&nbsp;            int duplicateCount = buildingRepository.countByPredicate(predicate);</b>
+<b class="fc"><i>164</i>&nbsp;            if (duplicateCount == 0) {</b>
+<b class="fc"><i>165</i>&nbsp;                Building existingBuilding = buildingRepository.findByKey(building.getBuildingKey());</b>
+<b class="fc"><i>166</i>&nbsp;                existingBuilding.setLatitude(building.getLatitude());</b>
+<b class="fc"><i>167</i>&nbsp;                existingBuilding.setLongitude(building.getLongitude());</b>
+<b class="fc"><i>168</i>&nbsp;                existingBuilding.setName(building.getName());</b>
+<b class="fc"><i>169</i>&nbsp;                existingBuilding.setDescription(building.getDescription());</b>
+<b class="fc"><i>170</i>&nbsp;                existingBuilding.setAddress(building.getAddress());</b>
+<i>171</i>&nbsp;
+<b class="fc"><i>172</i>&nbsp;                buildingRepository.save(existingBuilding);</b>
+<b class="fc"><i>173</i>&nbsp;                isSuccessful = true;</b>
+<b class="fc"><i>174</i>&nbsp;            }</b>
+<i>175</i>&nbsp;            else {
+<b class="fc"><i>176</i>&nbsp;                isDuplicate = true;</b>
+<i>177</i>&nbsp;            }
+<i>178</i>&nbsp;        }
+<b class="nc"><i>179</i>&nbsp;        catch (Exception e) {</b>
+<b class="nc"><i>180</i>&nbsp;            e.printStackTrace();</b>
+<b class="fc"><i>181</i>&nbsp;        }</b>
+<i>182</i>&nbsp;        // Alerts
+<b class="fc"><i>183</i>&nbsp;        if (isSuccessful) {</b>
+<b class="fc"><i>184</i>&nbsp;            redirectAttributes.addAttribute(</b>
+<i>185</i>&nbsp;                    &quot;successMessage&quot;,
+<b class="fc"><i>186</i>&nbsp;                    &quot;The Building &quot; + building.getName() + &quot; was successfully updated.&quot;);</b>
+<i>187</i>&nbsp;        }
+<b class="fc"><i>188</i>&nbsp;        else if (isDuplicate) {</b>
+<b class="fc"><i>189</i>&nbsp;            model.addAttribute(</b>
+<i>190</i>&nbsp;                    &quot;dangerMessage&quot;,
+<b class="fc"><i>191</i>&nbsp;                    &quot;A Building with the name &quot; + building.getName() + &quot; already exists.&quot;);</b>
+<b class="fc"><i>192</i>&nbsp;            model.addAttribute(&quot;building&quot;, building);</b>
+<b class="fc"><i>193</i>&nbsp;            return &quot;settings/building/edit&quot;;</b>
+<i>194</i>&nbsp;        }
+<i>195</i>&nbsp;        else {
+<b class="nc"><i>196</i>&nbsp;            redirectAttributes.addAttribute(</b>
+<i>197</i>&nbsp;                    &quot;dangerMessage&quot;,
+<i>198</i>&nbsp;                    &quot;An error occurred when attempting to update a Building.&quot;);
+<i>199</i>&nbsp;        }
+<b class="fc"><i>200</i>&nbsp;        return &quot;redirect:/settings/building/index&quot;;</b>
+<i>201</i>&nbsp;    }
+<i>202</i>&nbsp;
+<i>203</i>&nbsp;    /**
+<i>204</i>&nbsp;     * Method that deletes an existing building and all of the floor and parking spaces inside it
+<i>205</i>&nbsp;     * @param buildingKey String
+<i>206</i>&nbsp;     * @param redirectAttributes RedirectAttributes
+<i>207</i>&nbsp;     * @return String &quot;redirect:/settings/building/index&quot;
+<i>208</i>&nbsp;     */
+<i>209</i>&nbsp;    @PostMapping(&quot;/delete&quot;)
+<i>210</i>&nbsp;    public String delete(@RequestParam(&quot;buildingKey&quot;) String buildingKey,
+<i>211</i>&nbsp;                         RedirectAttributes redirectAttributes) {
+<b class="fc"><i>212</i>&nbsp;        boolean isSuccessful = false;</b>
+<b class="fc"><i>213</i>&nbsp;        Building building = null;</b>
+<i>214</i>&nbsp;        try {
+<b class="fc"><i>215</i>&nbsp;            building = buildingRepository.findByKey(buildingKey);</b>
+<b class="fc"><i>216</i>&nbsp;            if (building != null) {</b>
+<b class="fc"><i>217</i>&nbsp;                buildingRepository.delete(buildingKey);</b>
+<b class="fc"><i>218</i>&nbsp;                isSuccessful = true;</b>
+<i>219</i>&nbsp;            }
+<i>220</i>&nbsp;        }
+<b class="nc"><i>221</i>&nbsp;        catch (Exception e) {</b>
+<b class="nc"><i>222</i>&nbsp;            e.printStackTrace();</b>
+<b class="fc"><i>223</i>&nbsp;        }</b>
+<i>224</i>&nbsp;        // Alerts
+<b class="fc"><i>225</i>&nbsp;        if (isSuccessful) {</b>
+<b class="fc"><i>226</i>&nbsp;            redirectAttributes.addAttribute(</b>
+<i>227</i>&nbsp;                    &quot;successMessage&quot;,
+<b class="fc"><i>228</i>&nbsp;                    &quot;The Building &quot; + building.getName() + &quot; was successfully deleted.&quot;</b>
+<i>229</i>&nbsp;            );
+<i>230</i>&nbsp;        }
+<i>231</i>&nbsp;        else {
+<b class="fc"><i>232</i>&nbsp;            redirectAttributes.addAttribute(</b>
+<i>233</i>&nbsp;                    &quot;dangerMessage&quot;,
+<i>234</i>&nbsp;                    &quot;An error occurred when attempting to delete a Building.&quot;
+<i>235</i>&nbsp;            );
+<i>236</i>&nbsp;        }
+<b class="fc"><i>237</i>&nbsp;        return &quot;redirect:/settings/building/index&quot;;</b>
+<i>238</i>&nbsp;    }
+<i>239</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2018-03-24 16:39</div>
+    <div style="float:right;">generated on 2018-04-11 22:25</div>
 </div>
 </body>
 </html>

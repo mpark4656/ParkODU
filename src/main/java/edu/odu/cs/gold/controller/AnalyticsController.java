@@ -15,6 +15,7 @@ import com.google.maps.model.*;
 
 import java.util.*;
 
+
 @Controller
 @RequestMapping("/analytics")
 public class AnalyticsController {
@@ -130,14 +131,20 @@ public class AnalyticsController {
 
         List<Garage> garages = new ArrayList<>(garageRepository.findAll());
 
+        //Check for valid address
+        DistanceMatrix testDistanceMatrix = googleMapService.calculateDistanceDurationWithAddress(garages.get(0),startingAddress,TravelMode.DRIVING);
+        if (testDistanceMatrix.rows[0].elements[0].distance == null) {
+            return "error/500_search";
+        }
+
         for (Garage garage : garages) {
 
             DistanceMatrix distanceMatrix = googleMapService.calculateDistanceDurationWithAddress(garage,startingAddress,TravelMode.DRIVING);
 
-            System.out.println("Distance: ");
-            System.out.println(distanceMatrix.rows[0].elements[0].distance.toString());
-            System.out.println("Duration: ");
-            System.out.println(distanceMatrix.rows[0].elements[0].duration.humanReadable.toString());
+            //System.out.println("Distance: ");
+            //System.out.println(distanceMatrix.rows[0].elements[0].distance.toString());
+            //System.out.println("Duration: ");
+            //System.out.println(distanceMatrix.rows[0].elements[0].duration.humanReadable.toString());
 
             int availabilityCount = 0;
             int totalCount = 0;

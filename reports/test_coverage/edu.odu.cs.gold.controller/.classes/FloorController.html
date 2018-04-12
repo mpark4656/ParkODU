@@ -58,10 +58,10 @@
 </td>
 <td class="coverageStat">
   <span class="percent">
-    90.9%
+    90.7%
   </span>
   <span class="absValue">
-    (40/ 44)
+    (39/ 43)
   </span>
 </td>
 </tr>
@@ -81,9 +81,9 @@
 <i>7</i>&nbsp;import edu.odu.cs.gold.model.Garage;
 <i>8</i>&nbsp;import edu.odu.cs.gold.model.ParkingSpace;
 <i>9</i>&nbsp;import edu.odu.cs.gold.repository.FloorRepository;
-<i>10</i>&nbsp;import edu.odu.cs.gold.repository.FloorStatisticRepository;
-<i>11</i>&nbsp;import edu.odu.cs.gold.repository.GarageRepository;
-<i>12</i>&nbsp;import edu.odu.cs.gold.repository.ParkingSpaceRepository;
+<i>10</i>&nbsp;import edu.odu.cs.gold.repository.GarageRepository;
+<i>11</i>&nbsp;import edu.odu.cs.gold.repository.ParkingSpaceRepository;
+<i>12</i>&nbsp;import edu.odu.cs.gold.service.FloorStatisticService;
 <i>13</i>&nbsp;import org.springframework.stereotype.Controller;
 <i>14</i>&nbsp;import org.springframework.ui.Model;
 <i>15</i>&nbsp;import org.springframework.web.bind.annotation.GetMapping;
@@ -99,16 +99,16 @@
 <i>25</i>&nbsp;    private GarageRepository garageRepository;
 <i>26</i>&nbsp;    private FloorRepository floorRepository;
 <i>27</i>&nbsp;    private ParkingSpaceRepository parkingSpaceRepository;
-<i>28</i>&nbsp;    private FloorStatisticRepository floorStatisticRepository;
+<i>28</i>&nbsp;    private FloorStatisticService floorStatisticService;
 <i>29</i>&nbsp;
 <i>30</i>&nbsp;    public FloorController(GarageRepository garageRepository,
 <i>31</i>&nbsp;                           FloorRepository floorRepository,
 <i>32</i>&nbsp;                           ParkingSpaceRepository parkingSpaceRepository,
-<b class="fc"><i>33</i>&nbsp;                           FloorStatisticRepository floorStatisticRepository) {</b>
+<b class="fc"><i>33</i>&nbsp;                           FloorStatisticService floorStatisticService) {</b>
 <b class="fc"><i>34</i>&nbsp;        this.garageRepository = garageRepository;</b>
 <b class="fc"><i>35</i>&nbsp;        this.floorRepository = floorRepository;</b>
 <b class="fc"><i>36</i>&nbsp;        this.parkingSpaceRepository = parkingSpaceRepository;</b>
-<b class="fc"><i>37</i>&nbsp;        this.floorStatisticRepository = floorStatisticRepository;</b>
+<b class="fc"><i>37</i>&nbsp;        this.floorStatisticService = floorStatisticService;</b>
 <b class="fc"><i>38</i>&nbsp;    }</b>
 <i>39</i>&nbsp;
 <i>40</i>&nbsp;    @GetMapping(&quot;/details/{floorKey}&quot;)
@@ -146,46 +146,49 @@
 <i>72</i>&nbsp;        /** Average Capacity by Hour Chart **/
 <i>73</i>&nbsp;
 <i>74</i>&nbsp;        // Retrieve FloorStatistics
-<b class="fc"><i>75</i>&nbsp;        Predicate floorStatisticsPredicate = Predicates.equal(&quot;floorKey&quot;, floorKey);</b>
-<b class="fc"><i>76</i>&nbsp;        List&lt;FloorStatistic&gt; floorStatistics = floorStatisticRepository.findByPredicate(floorStatisticsPredicate);</b>
-<i>77</i>&nbsp;
-<i>78</i>&nbsp;        // Sort Floors by Number
-<b class="fc"><i>79</i>&nbsp;        floorStatistics.sort(Comparator.comparing(FloorStatistic::getTimestamp));</b>
+<i>75</i>&nbsp;        /*
+<i>76</i>&nbsp;        Predicate floorStatisticsPredicate = Predicates.equal(&quot;floorKey&quot;, floorKey);
+<i>77</i>&nbsp;        List&lt;FloorStatistic&gt; floorStatistics = floorStatisticRepository.findByPredicate(floorStatisticsPredicate);
+<i>78</i>&nbsp;        */
+<b class="fc"><i>79</i>&nbsp;        List&lt;FloorStatistic&gt; floorStatistics = floorStatisticService.findAverageFloorCapacityByHour(floorKey);</b>
 <i>80</i>&nbsp;
-<i>81</i>&nbsp;        // Build Chart Data
-<b class="fc"><i>82</i>&nbsp;        StringBuilder dataString = new StringBuilder();</b>
-<b class="fc"><i>83</i>&nbsp;        StringBuilder labelString = new StringBuilder();</b>
-<b class="fc"><i>84</i>&nbsp;        for (FloorStatistic floorStatistic : floorStatistics) {</b>
-<b class="fc"><i>85</i>&nbsp;            dataString.append(floorStatistic.getCapacity() + &quot;,&quot;);</b>
-<i>86</i>&nbsp;
-<b class="fc"><i>87</i>&nbsp;            Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance</b>
-<b class="fc"><i>88</i>&nbsp;            calendar.setTime(floorStatistic.getTimestamp());   // assigns calendar to given date</b>
+<i>81</i>&nbsp;        // Sort Floors by Number
+<b class="fc"><i>82</i>&nbsp;        floorStatistics.sort(Comparator.comparing(FloorStatistic::getTimestamp));</b>
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;        // Build Chart Data
+<b class="fc"><i>85</i>&nbsp;        StringBuilder dataString = new StringBuilder();</b>
+<b class="fc"><i>86</i>&nbsp;        StringBuilder labelString = new StringBuilder();</b>
+<b class="fc"><i>87</i>&nbsp;        for (FloorStatistic floorStatistic : floorStatistics) {</b>
+<b class="fc"><i>88</i>&nbsp;            dataString.append(floorStatistic.getCapacity() + &quot;,&quot;);</b>
 <i>89</i>&nbsp;
-<b class="fc"><i>90</i>&nbsp;            if (calendar.get(Calendar.HOUR_OF_DAY) == 0) {</b>
-<b class="nc"><i>91</i>&nbsp;                labelString.append(&quot;12am,&quot;);</b>
-<i>92</i>&nbsp;            }
-<b class="fc"><i>93</i>&nbsp;            else if (calendar.get(Calendar.HOUR_OF_DAY) == 12) {</b>
-<b class="nc"><i>94</i>&nbsp;                labelString.append(&quot;12pm,&quot;);</b>
+<b class="fc"><i>90</i>&nbsp;            Calendar calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone(&quot;America/New_York&quot;)); // creates a new calendar instance</b>
+<b class="fc"><i>91</i>&nbsp;            calendar.setTime(floorStatistic.getTimestamp());   // assigns calendar to given date</b>
+<i>92</i>&nbsp;
+<b class="fc"><i>93</i>&nbsp;            if (calendar.get(Calendar.HOUR_OF_DAY) == 0) {</b>
+<b class="nc"><i>94</i>&nbsp;                labelString.append(&quot;12am,&quot;);</b>
 <i>95</i>&nbsp;            }
-<b class="fc"><i>96</i>&nbsp;            else if (calendar.get(Calendar.HOUR_OF_DAY) &lt; 12) {</b>
-<b class="nc"><i>97</i>&nbsp;                labelString.append(calendar.get(Calendar.HOUR_OF_DAY) + &quot;am,&quot;);</b>
+<b class="fc"><i>96</i>&nbsp;            else if (calendar.get(Calendar.HOUR_OF_DAY) == 12) {</b>
+<b class="nc"><i>97</i>&nbsp;                labelString.append(&quot;12pm,&quot;);</b>
 <i>98</i>&nbsp;            }
-<i>99</i>&nbsp;            else {
-<b class="fc"><i>100</i>&nbsp;                labelString.append((calendar.get(Calendar.HOUR_OF_DAY) - 12) + &quot;pm,&quot;);</b>
+<b class="fc"><i>99</i>&nbsp;            else if (calendar.get(Calendar.HOUR_OF_DAY) &lt; 12) {</b>
+<b class="nc"><i>100</i>&nbsp;                labelString.append(calendar.get(Calendar.HOUR_OF_DAY) + &quot;am,&quot;);</b>
 <i>101</i>&nbsp;            }
-<b class="fc"><i>102</i>&nbsp;        }</b>
-<b class="fc"><i>103</i>&nbsp;        model.addAttribute(&quot;floorStatistics&quot;, floorStatistics);</b>
-<b class="fc"><i>104</i>&nbsp;        model.addAttribute(&quot;dataString&quot;, dataString.toString());</b>
-<b class="fc"><i>105</i>&nbsp;        model.addAttribute(&quot;labelString&quot;, labelString.toString());</b>
-<b class="fc"><i>106</i>&nbsp;        return &quot;floor/details&quot;;</b>
-<i>107</i>&nbsp;    }
-<i>108</i>&nbsp;}
+<i>102</i>&nbsp;            else {
+<b class="fc"><i>103</i>&nbsp;                labelString.append((calendar.get(Calendar.HOUR_OF_DAY) - 12) + &quot;pm,&quot;);</b>
+<i>104</i>&nbsp;            }
+<b class="fc"><i>105</i>&nbsp;        }</b>
+<b class="fc"><i>106</i>&nbsp;        model.addAttribute(&quot;floorStatistics&quot;, floorStatistics);</b>
+<b class="fc"><i>107</i>&nbsp;        model.addAttribute(&quot;dataString&quot;, dataString.toString());</b>
+<b class="fc"><i>108</i>&nbsp;        model.addAttribute(&quot;labelString&quot;, labelString.toString());</b>
+<b class="fc"><i>109</i>&nbsp;        return &quot;floor/details&quot;;</b>
+<i>110</i>&nbsp;    }
+<i>111</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2018-03-24 16:39</div>
+    <div style="float:right;">generated on 2018-04-11 22:25</div>
 </div>
 </body>
 </html>
