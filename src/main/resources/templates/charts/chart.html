@@ -5,12 +5,20 @@
 </head>
 <body>
 <div th:id="'chart-' + ${chartId}" class="col-xs-12 col-sm-12 col-md-6">
-    <div class="parkodu-container" style="padding-top: 5px;">
+    <div class="chartjs-wrapper"
+            style="
+            padding-top: 5px;
+            background-color: white;
+            margin-top: 75px;
+            padding-bottom: 10px;
+            padding-left: 10px;
+            padding-right: 10px;
+            border-radius: 10px;">
         <h3 th:text="${garage.name}"></h3>
         <h4>Floor <span th:text="${floorNumber}"></span> Occupancy Chart</h4>
         <hr/>
         <p>Date: <span th:text="${date}"></span></p>
-        <canvas th:id="'floorStatisticChart' + ${chartId}" width="800" height="300"></canvas>
+        <canvas th:id="'floorStatisticChart' + ${chartId}" class="chartjs" width="undefined" height="undefined"></canvas>
         <p class="text-right">
             <button th:attr="data-id=${chartId}" class="btn btn-danger btn-sm delete-button">Delete</button>
         </p>

@@ -4,6 +4,7 @@
 <head>
     <!-- Head -->
     <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+
 </head>
 <body>
 
@@ -11,13 +12,14 @@
 <!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
 
 
-<div class="container-fluid main-container">
+<div class="container-fluid main-container" style="background-color: #fff;">
     <div class="row">
         <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1">
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12">
-                    <h1 class="text-center" style="text-transform: uppercase;" th:text="'Level ' + ${floor.number} + ' - ' + ${floor.description}"></h1>
-                    <h4 class="text-center" style="text-transform: uppercase;" th:text="${garage.name}"></h4>
+                <div class="text-center main-header-container">
+                    <img th:src="@{/img/parkodu_logo.png}" alt="ParkODU Logo" title="ParkODU Logo" height="50"/>
+                    <h1 class="text-center main-header" th:text="'Level ' + ${floor.number} + ' - ' + ${floor.description}"></h1>
+                    <h4 class="text-center main-header" th:text="${garage.name}"></h4>
                     <hr/>
                 </div>
             </div>
@@ -35,15 +37,19 @@
                     </dl>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-7">
-                    <canvas id="floorStatisticChart" width="525" height="150"></canvas>
+                    <div class="chartjs-wrapper">
+                        <canvas id="floorStatisticChart" class="chartjs" width="undefined" height="undefined"></canvas>
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12">
-                    <canvas id="floorPlan" width="800" height="425" style="border:1px solid #d3d3d3; padding: 5px;">
-                        Your browser does not support the HTML5 canvas tag.
-                    </canvas>
-                </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 15px;">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="chartjs-wrapper">
+                <canvas id="floorPlan" width="800" height="425" style="border:1px solid #d3d3d3; padding: 5px;">
+                    Your browser does not support the HTML5 canvas tag.
+                </canvas>
             </div>
         </div>
     </div>

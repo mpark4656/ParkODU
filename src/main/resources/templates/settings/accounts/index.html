@@ -15,7 +15,10 @@
 <div class="container-fluid main-container">
     <div class="row">
         <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1">
-            <h1 class="text-center" style="text-transform: uppercase;">Account Management</h1>
+            <div class="text-center main-header-container">
+                <img th:src="@{/img/parkodu_logo.png}" alt="ParkODU Logo" title="ParkODU Logo" height="50"/>
+                <h1 class="text-center main-header">Account Management</h1>
+            </div>
             <hr/>
             <!-- Alerts -->
             <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
@@ -31,6 +34,7 @@
                     <th>Username</th>
                     <th>Permissions</th>
                     <th>Enabled</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -43,6 +47,8 @@
                     <td th:text="${user.permissions}"></td>
                     <td th:if="${user.enabled}" class="highlight-green">Y</td>
                     <td th:if="${user.enabled eq false}">N</td>
+                    <td th:if="${onlineUserKeys.contains(user.userKey)}" class="highlight-green">Online</td>
+                    <td th:if="${onlineUserKeys.contains(user.userKey) eq false}">Offline</td>
                     <td>
                         <a th:href="@{/settings/accounts/edit} + '/' + ${user.userKey}" class="btn btn-primary btn-sm">Edit</a>
                         <button class="btn btn-danger btn-sm delete-user-button" title="Delete User" th:attr="data-id=${user.userKey}" data-toggle="modal" data-target="#delete-user-modal">Delete</button>

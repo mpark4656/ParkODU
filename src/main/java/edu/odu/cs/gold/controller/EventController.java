@@ -61,9 +61,6 @@ public class EventController {
                         newEventKeys.add(event.getEventKey());
                     }
                 }
-                else {
-                    newEventKeys.add(event.getEventKey());
-                }
             }
             model.addAttribute("newEventKeys", newEventKeys);
             model.addAttribute("newEventCount", newEventKeys.size());

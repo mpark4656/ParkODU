@@ -67,7 +67,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/rest/garage/garages/**",
                         "/rest/floor/setCapacity/**",
                         "/rest/parking_space/set_availability/**",
-                        "/rest/parking_space/parking_spaces/**"
+                        "/rest/parking_space/parking_spaces/**",
+                        "/error/**"
                         )
                 .permitAll()
                 .antMatchers("/settings/**")

@@ -15,6 +15,7 @@ import com.google.maps.model.*;
 
 import java.util.*;
 
+
 @Controller
 @RequestMapping("/analytics")
 public class AnalyticsController {
@@ -119,6 +120,11 @@ public class AnalyticsController {
         List<Recommendation> recommendations = new ArrayList<>();
 
         List<Garage> garages = new ArrayList<>(garageRepository.findAll());
+
+        DistanceMatrix testDistanceMatrix = googleMapService.calculateDistanceDurationWithAddress(garages.get(0),startingAddress,TravelMode.DRIVING);
+        if (testDistanceMatrix.rows[0].elements[0].distance == null) {
+            return "error/500_search";
+        }
 
         for (Garage garage : garages) {
 

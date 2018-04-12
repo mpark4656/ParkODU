@@ -6,8 +6,11 @@ import edu.odu.cs.gold.model.RoleType;
 import edu.odu.cs.gold.model.User;
 import edu.odu.cs.gold.repository.RoleTypeRepository;
 import edu.odu.cs.gold.repository.UserRepository;
+import edu.odu.cs.gold.security.AuthenticatedUser;
 import edu.odu.cs.gold.service.EmailService;
 import edu.odu.cs.gold.service.UserService;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +24,14 @@ public class AccountsController {
 
     private UserRepository userRepository;
     private RoleTypeRepository roleTypeRepository;
+    private SessionRegistry sessionRegistry;
 
     public AccountsController(UserRepository userRepository,
-                              RoleTypeRepository roleTypeRepository) {
+                              RoleTypeRepository roleTypeRepository,
+                              SessionRegistry sessionRegistry) {
         this.userRepository = userRepository;
         this.roleTypeRepository = roleTypeRepository;
+        this.sessionRegistry = sessionRegistry;
     }
 
     @GetMapping({"", "/", "/index"})
@@ -34,6 +40,15 @@ public class AccountsController {
                         @RequestParam(value = "warningMessage", required = false) String warningMessage,
                         @RequestParam(value = "dangerMessage", required = false) String dangerMessage,
                         Model model) {
+
+        Set<String> onlineUserKeys = new HashSet<>();
+        for (Object principal : sessionRegistry.getAllPrincipals()) {
+            if (principal instanceof AuthenticatedUser) {
+                AuthenticatedUser authenticatedUser = (AuthenticatedUser) principal;
+                onlineUserKeys.add(authenticatedUser.getUser().getUserKey());
+            }
+        }
+        model.addAttribute("onlineUserKeys", onlineUserKeys);
 
         List<User> users = new ArrayList<>(userRepository.findAll());
         users.sort(Comparator.comparing(User::getFirstName));
@@ -170,6 +185,10 @@ public class AccountsController {
                     }
                 }
                 userRepository.save(existingUser);
+
+                // Terminate the User's Session if they are currently online
+                terminateSession(existingUser.getUserKey());
+
                 isSuccessful = true;
             } else {
                 isDuplicate = true;
@@ -210,6 +229,10 @@ public class AccountsController {
                 User existingUser = userRepository.findByKey(userKey);
                 existingUser.setPassword(password);
                 userRepository.save(existingUser);
+
+                // Terminate the User's Session if they are currently online
+                terminateSession(existingUser.getUserKey());
+
                 isSuccessful = true;
                 username = existingUser.getUsername();
             }
@@ -238,6 +261,10 @@ public class AccountsController {
         User user = userRepository.findByKey(userKey);
         user.setEnabled(userEnabled);
         userRepository.save(user);
+
+        // Terminate the User's Session if they are currently online
+        terminateSession(user.getUserKey());
+
         return userKey + " enabled: " + userEnabled;
     }
 
@@ -249,6 +276,10 @@ public class AccountsController {
         try {
             user = userRepository.findByKey(userKey);
             userRepository.delete(userKey);
+
+            // Terminate the User's Session if they are currently online
+            terminateSession(user.getUserKey());
+
             isSuccessful = true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -260,5 +291,19 @@ public class AccountsController {
             redirectAttributes.addAttribute("dangerMessage", "An error occurred when attempting to delete the user" + user.getEmail() + ".");
         }
         return "redirect:/settings/accounts/index";
+    }
+
+    public void terminateSession(String userKey) {
+        // Terminate the User's Session if they are currently online
+        for (Object principal : sessionRegistry.getAllPrincipals()) {
+            if (principal instanceof AuthenticatedUser) {
+                AuthenticatedUser authenticatedUser = (AuthenticatedUser) principal;
+                if (authenticatedUser.getUser().getUserKey().equals(userKey)) {
+                    for (SessionInformation information : sessionRegistry.getAllSessions(authenticatedUser, true)) {
+                        information.expireNow();
+                    }
+                }
+            }
+        }
     }
 }

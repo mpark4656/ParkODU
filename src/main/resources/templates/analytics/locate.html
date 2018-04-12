@@ -14,7 +14,10 @@
 <div class="container-fluid main-container">
     <div class="row">
         <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
-            <h1 class="text-center main-header">Search</h1>
+            <div class="text-center main-header-container">
+                <img th:src="@{/img/parkodu_logo.png}" alt="ParkODU Logo" title="ParkODU Logo" height="50"/>
+                <h1 class="text-center main-header">Search</h1>
+            </div>
             <hr/>
             <form class="form-horizontal" th:action="@{/analytics/locate}" method="POST">
 
@@ -30,6 +33,7 @@
                                placeholder="Enter your starting address"
                                onFocus="getLocationByGPS()"
                                class="form-control"
+                               required="required"
                                th:value="${preferredStartingAddress}"
                         />
                     </div>
@@ -74,7 +78,7 @@
                 <div class="form-group">
                     <label for="destinationBuildingId" class="control-label col-md-4">Destination Building</label>
                     <div class="col-md-8">
-                        <select name="destinationBuildingId" id="destinationBuildingId" class="form-control">
+                        <select name="destinationBuildingId" id="destinationBuildingId" class="form-control" required="required">
                             <option th:each="building : ${buildings}"
                                     th:value="${building.buildingKey}"
                                     th:text="${building.name}"
@@ -85,7 +89,7 @@
 
                 <div class="form-group">
                     <div class="col-md-8 col-md-offset-4">
-                        <input type="submit" value="Search" class="btn btn-primary" />
+                        <input id="Submit" type="submit" value="Search" class="btn btn-primary" />
                         <input type="reset" value="Reset" class="btn btn-primary" />
                     </div>
                 </div>
@@ -143,6 +147,7 @@ function getLocationByGPS() {
 	});
 /*]]>*/
 </script>
+
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 
