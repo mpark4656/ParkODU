@@ -130,10 +130,10 @@ public class AnalyticsController {
 
             DistanceMatrix distanceMatrix = googleMapService.calculateDistanceDurationWithAddress(garage,startingAddress,TravelMode.DRIVING);
 
-            System.out.println("Distance: ");
-            System.out.println(distanceMatrix.rows[0].elements[0].distance.toString());
-            System.out.println("Duration: ");
-            System.out.println(distanceMatrix.rows[0].elements[0].duration.humanReadable.toString());
+            //System.out.println("Distance: ");
+            //System.out.println(distanceMatrix.rows[0].elements[0].distance.toString());
+            //System.out.println("Duration: ");
+            //System.out.println(distanceMatrix.rows[0].elements[0].duration.humanReadable.toString());
 
             int availabilityCount = 0;
             int totalCount = 0;
