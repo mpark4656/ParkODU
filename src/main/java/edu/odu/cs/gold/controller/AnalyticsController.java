@@ -121,6 +121,7 @@ public class AnalyticsController {
 
         List<Garage> garages = new ArrayList<>(garageRepository.findAll());
 
+        //Check for valid address
         DistanceMatrix testDistanceMatrix = googleMapService.calculateDistanceDurationWithAddress(garages.get(0),startingAddress,TravelMode.DRIVING);
         if (testDistanceMatrix.rows[0].elements[0].distance == null) {
             return "error/500_search";
