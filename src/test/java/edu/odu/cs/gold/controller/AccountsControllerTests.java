@@ -172,6 +172,7 @@ public class AccountsControllerTests {
         String returnURL = accountsController.create(
                 userOne,
                 model,
+                true,
                 redirectAttributes
         );
 
@@ -191,6 +192,7 @@ public class AccountsControllerTests {
         String returnURL = accountsController.create(
                 userOne,
                 model,
+                true,
                 redirectAttributes
         );
 

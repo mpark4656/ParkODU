@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Permission;
 import java.util.*;
 
 @Controller
@@ -82,6 +83,7 @@ public class AccountsController {
     @PostMapping("/create")
     public String create(User user,
                          Model model,
+                         @RequestParam(value = "isAdmin", required = false) Boolean isAdmin,
                          RedirectAttributes redirectAttributes) {
         boolean isSuccessful = false;
         boolean isUsernameDuplicate = false;
@@ -103,6 +105,9 @@ public class AccountsController {
                 user.setConfirmationToken(UUID.randomUUID().toString());
                 user.generateUserKey();
                 user.getPermissions().add("USER");
+                if(isAdmin != null && isAdmin == true) {
+                    user.getPermissions().add("ADMIN");
+                }
                 userRepository.save(user);
                 isSuccessful = true;
             }
