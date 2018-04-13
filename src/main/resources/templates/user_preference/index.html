@@ -91,13 +91,13 @@
                 <h2 class="text-center main-header">Default Search Options</h2>
 
                 <div class="form-group">
-                    <label class="control-label col-md-4" for="starting-address">Starting Address</label>
+                    <label class="control-label" for="starting-address">Starting Address</label>
                     <input class="form-control" id="starting-address" th:field="${user.preferredStartingAddress}"/>
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-md-4">Preferred Permit Types</label>
-                    <div class="col-md-5 checkbox">
+                    <label class="control-label">Preferred Permit Types</label>
+                    <div class="checkbox" style="margin-left: 30px;">
                         <div th:each="permitType : ${permitTypes}">
                             <input th:field="${user.preferredPermitTypes}"
                                    type="checkbox"
@@ -112,8 +112,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-md-4">Preferred Space Types</label>
-                    <div class="col-md-8 checkbox">
+                    <label class="control-label">Preferred Space Types</label>
+                    <div class="checkbox" style="margin-left: 30px;">
                         <div th:each="spaceType : ${spaceTypes}">
                             <input th:field="${user.preferredSpaceTypes}"
                                    type="checkbox"
@@ -126,9 +126,17 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="form-group">
-                    <label class="control-label col-md-4" for="destination-building">Destination Building</label>
+                    <label class="control-label" for="min-dpaces-avail">Minimum Available Spaces</label>
+                    <input id="min-dpaces-avail"
+                           type="number"
+                           class="form-control"
+                           min="0"
+                           max="50"
+                           th:field="${user.preferredMinimumAvailableSpaces}"/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="destination-building">Destination Building</label>
                     <select class="form-control" id="destination-building" th:field="${user.preferredDestinationBuilding}">
                         <option th:each="building : ${buildings}"
                                 th:text="${building.name}"

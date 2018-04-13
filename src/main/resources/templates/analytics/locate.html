@@ -71,7 +71,13 @@
                 <div class="form-group">
                     <label for="minSpacesAvail" class="control-label col-md-4">Minimum Available Spaces</label>
                     <div class="col-md-2">
-                        <input name="minSpaces" id="minSpacesAvail" type="number" class="form-control" min="0" max="50" value="0"/>
+                        <input name="minSpaces"
+                               id="minSpacesAvail"
+                               type="number"
+                               class="form-control"
+                               min="0"
+                               max="50"
+                               th:value="${preferredMinimumAvailableSpaces}"/>
                     </div>
                 </div>
 
