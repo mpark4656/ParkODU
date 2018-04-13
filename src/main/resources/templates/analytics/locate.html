@@ -134,6 +134,7 @@ function getLocationByGPS() {
         });
     }
 }
+
 </script>
 
 <script th:inline="javascript">
@@ -146,8 +147,17 @@ function getLocationByGPS() {
 		}
 	});
 /*]]>*/
+
+
 </script>
 
+<script th:inline="javascript">
+/*<![CDATA[*/
+if (!(/*[[${preferredDestinationBuilding}]]*/)){
+    document.getElementById("destinationBuildingId").selectedIndex = -1;
+};
+/*]]>*/
+</script>
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 
