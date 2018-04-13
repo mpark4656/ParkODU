@@ -21,7 +21,7 @@
     <li th:if="${events.isEmpty() eq false}" th:each="event : ${events}" class="notification-item" style="border-top: 1px solid #eee;">
         <div style="padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px;">
             <div th:if="${newEventKeys.contains(event.eventKey)}" class="notification-item-container new-item-highlight">
-                <p class="notification-title"><a href="#" th:text="${event.eventName}"></a></p>
+                <p class="notification-title"><a th:href="@{'/events/index#event-row-' + ${event.eventKey}}" th:text="${event.eventName}"></a></p>
                 <strong class="notification-text" th:text="${event.eventMessage}"></strong>
                 <p class="small notification-text" th:text="'Affected Locations: ' + ${event.locationsAffected}"></p>
                 <p class="small notification-text" th:text="'Start: ' + ${event.getFormattedEventStartDateTime()}"></p>
@@ -29,7 +29,7 @@
                 <p class="small notification-text" th:text="'Updated: ' + ${event.getFormattedEventUpdatedDateTime()}"></p>
             </div>
             <div th:if="${newEventKeys.contains(event.eventKey) eq false}" class="notification-item-container">
-                <p class="notification-title"><a href="#" th:text="${event.eventName}"></a></p>
+                <p class="notification-title"><a th:href="@{'/events/index#event-row-' + ${event.eventKey}}" th:text="${event.eventName}"></a></p>
                 <strong class="notification-text" th:text="${event.eventMessage}"></strong>
                 <p class="small notification-text" th:text="'Affected Locations: ' + ${event.locationsAffected}"></p>
                 <p class="small notification-text" th:text="'Start: ' + ${event.getFormattedEventStartDateTime()}"></p>
