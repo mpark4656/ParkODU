@@ -84,8 +84,11 @@ public class AnalyticsController {
             preferredDestinationBuilding = user.getPreferredDestinationBuilding();
             preferredMinimumAvailableSpaces = user.getPreferredMinimumAvailableSpaces();
 
+            if(preferredMinimumAvailableSpaces == null) {
+                preferredMinimumAvailableSpaces = 0;
+            }
         } catch(Exception e) {
-            // User is not logged on.
+            e.printStackTrace();
         }
 
         model.addAttribute("preferredMinimumAvailableSpaces", preferredMinimumAvailableSpaces);
