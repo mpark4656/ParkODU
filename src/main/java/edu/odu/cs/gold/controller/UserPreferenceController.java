@@ -149,6 +149,7 @@ public class UserPreferenceController {
             existingUser.setEmail(user.getEmail());
             existingUser.setPreferredStartingAddress(user.getPreferredStartingAddress());
             existingUser.setPreferredDestinationBuilding(user.getPreferredDestinationBuilding());
+            existingUser.setPreferredMinimumAvailableSpaces(user.getPreferredMinimumAvailableSpaces());
             existingUser.setPreferredPermitTypes(user.getPreferredPermitTypes());
             existingUser.setPreferredSpaceTypes(user.getPreferredSpaceTypes());
 

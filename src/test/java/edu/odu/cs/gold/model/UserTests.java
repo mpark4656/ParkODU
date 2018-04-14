@@ -304,6 +304,7 @@ public class UserTests {
                 ", permissions=" + USER_PERMISSIONS +
                 ", preferredStartingAddress=" + null + '\'' +
                 ", preferredDestinationBuilding=" + null + '\'' +
+                ", preferredMinimumAvailableSpaces=" + 10 +
                 ", preferredPermitTypes=" + USER_PREFERRED_PERMIT_TYPES +
                 ", preferredSpaceTypes=" + USER_PREFERRED_SPACE_TYPES +
                 " }";
@@ -320,6 +321,7 @@ public class UserTests {
         user.setConfirmationToken(USER_CONFIRMATION_TOKEN);
         user.setLastNotificationViewedDate(USER_LAST_VIEWED_DATE);
         user.setPermissions(USER_PERMISSIONS);
+        user.setPreferredMinimumAvailableSpaces(10);
         user.setPreferredPermitTypes(USER_PREFERRED_PERMIT_TYPES);
         user.setPreferredSpaceTypes(USER_PREFERRED_SPACE_TYPES);
 
