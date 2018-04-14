@@ -32,11 +32,6 @@
                     <input type="text" th:field="*{lastName}" placeholder="Last Name" class="form-control" required="required" />
                     <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
                 </div>
-                <div class="form-group input-group has-feedback" style="width: 100%;">
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
-                    <input type="email" th:field="*{email}" placeholder="Email Address" class="form-control" required="required" />
-                    <span class="glyphicon form-control-feedback " aria-hidden="true"></span>
-                </div>
 
                 <div class="form-group input-group has-feedback" style="width: 100%;">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
@@ -44,6 +39,12 @@
                     <span class="glyphicon form-control-feedback " aria-hidden="true"></span>
                 </div>
 
+                <div class="form-group input-group has-feedback" style="width: 100%;">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+                    <input type="email" th:field="*{email}" placeholder="Email Address" class="form-control" required="required" />
+                    <span class="glyphicon form-control-feedback " aria-hidden="true"></span>
+                </div>
+                
                 <div class="form-group input-group has-feedback" style="width: 100%;">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
                     <input type="password" th:field="*{password}" placeholder="Password" class="form-control" required="required" />
