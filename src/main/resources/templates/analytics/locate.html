@@ -49,7 +49,9 @@
                                     th:id="${permitType.permitTypeKey}"
                                     th:value="${permitType.permitTypeKey}"
                                     th:checked="${preferredPermitTypes.contains(permitType.permitTypeKey)}"/>
-                            <label th:for="${permitType.permitTypeKey}" th:text="${permitType.name}"></label>
+                            <label  th:for="${permitType.permitTypeKey}"
+                                    th:text="${permitType.name}"
+                                    th:title="${permitType.description}"></label>
                         </div>
                     </div>
                 </div>
@@ -63,7 +65,9 @@
                                     th:id="${spaceType.spaceTypeKey}"
                                     th:value="${spaceType.spaceTypeKey}"
                                     th:checked="${preferredSpaceTypes.contains(spaceType.spaceTypeKey)}"/>
-                            <label th:for="${spaceType.spaceTypeKey}" th:text="${spaceType.name}"></label>
+                            <label  th:for="${spaceType.spaceTypeKey}"
+                                    th:text="${spaceType.name}"
+                                    th:title="${spaceType.description}"></label>
                         </div>
                     </div>
                 </div>
