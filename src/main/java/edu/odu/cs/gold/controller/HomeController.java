@@ -1,21 +1,21 @@
 package edu.odu.cs.gold.controller;
 
-import edu.odu.cs.gold.model.Event;
-import edu.odu.cs.gold.model.Garage;
-import edu.odu.cs.gold.model.User;
-import edu.odu.cs.gold.repository.EventRepository;
-import edu.odu.cs.gold.repository.GarageRepository;
-import edu.odu.cs.gold.repository.UserRepository;
+import com.hazelcast.query.Predicate;
+import com.hazelcast.query.Predicates;
+import edu.odu.cs.gold.model.*;
+import edu.odu.cs.gold.repository.*;
 import edu.odu.cs.gold.security.AuthenticatedUser;
+import edu.odu.cs.gold.service.GarageStatisticService;
 import org.joda.time.DateTime;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+
+import java.lang.reflect.Array;
+import java.util.*;
+import java.text.SimpleDateFormat;
 
 @Controller
 public class HomeController {
@@ -23,13 +23,22 @@ public class HomeController {
     private GarageRepository garageRepository;
     private EventRepository eventRepository;
     private UserRepository userRepository;
+    private GarageStatistic garageStatistic;
+    private FloorStatisticRepository floorStatisticRepository;
+    private FloorRepository floorRepository;
+    private GarageStatisticRepository garageStatisticRepository;
+    private GarageStatisticService garageStatisticService;
 
     public HomeController(GarageRepository garageRepository,
                           EventRepository eventRepository,
-                          UserRepository userRepository) {
+                          UserRepository userRepository,
+                          GarageStatisticRepository garageStatisticRepository,
+                          GarageStatisticService garageStatisticService) {
         this.garageRepository = garageRepository;
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
+        this.garageStatisticRepository = garageStatisticRepository;
+        this.garageStatisticService = garageStatisticService;
     }
 
     @GetMapping({"","/","/index"})
@@ -39,10 +48,45 @@ public class HomeController {
         List<Garage> garages = new ArrayList<>(garageRepository.findAll());
         garages.sort(Comparator.comparing(Garage::getName));
         StringBuilder currentAvailabilityDataString = new StringBuilder();
+
+        List<List<Double>> datas = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+
+        Date date = new Date();
+
         for (Garage garage : garages) {
             currentAvailabilityDataString.append(garage.getAvailableSpaces() + ",");
+
+            List<GarageStatistic> garageStatistics = garageStatisticService.findGarageCapacityByDate(garage.getGarageKey(), date);
+
+            StringBuilder labelString = new StringBuilder();
+            List<Double> data = new ArrayList<>();
+            for (GarageStatistic garageStatistic : garageStatistics) {
+                data.add(garageStatistic.getCapacity());
+
+                Calendar calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("America/New_York")); // creates a new calendar instance
+                calendar.setTime(garageStatistic.getTimestamp());   // assigns calendar to given date
+
+                if (calendar.get(Calendar.HOUR_OF_DAY) == 0) {
+                    labelString.append("12am,");
+                }
+                else if (calendar.get(Calendar.HOUR_OF_DAY) == 12) {
+                    labelString.append("12pm,");
+                }
+                else if (calendar.get(Calendar.HOUR_OF_DAY) < 12) {
+                    labelString.append(calendar.get(Calendar.HOUR_OF_DAY) + "am,");
+                }
+                else {
+                    labelString.append((calendar.get(Calendar.HOUR_OF_DAY) - 12) + "pm,");
+                }
+            }
+            datas.add(data);
+            labels.add(labelString.toString());
         }
+
         model.addAttribute("currentAvailabilityDataString", currentAvailabilityDataString.toString());
+        model.addAttribute("datas", datas);
+        model.addAttribute("labels", labels);
 
         // Alerts
         if (dangerMessage != null) {

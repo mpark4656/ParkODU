@@ -195,15 +195,24 @@ new Chart(document.getElementById("current-availability-chart"),
 		}
 	}
 });
+
+var dataArrays = /*[[${datas}]]*/;
+var labelStrings = /*[[${labels}]]*/;
+//var labelsA = labelStrings[0].split(',');
+//var labelsB = labelStrings[1].split(',');
+//var labelsC = labelStrings[2].split(',');
+//var labelsD = labelStrings[3].split(',');
+//var labelsE = labelStrings[4].split(',');
+
 new Chart(document.getElementById("garage-a-capacity-per-hour-chart"),
 {
 	"type": "line",
 	"data": {
-		"labels": ["9am","10am","11am","12pm","1pm"],
+		"labels": labelStrings[0].split(','),
 		"datasets": [
 			{
 				"label": "Garage A",
-				"data": [57,65,73,80,85],
+				"data": dataArrays[0],
 				"fill": false,
 				"borderColor": "rgb(75, 192, 192)",
 				"lineTension": 0.1
@@ -233,11 +242,11 @@ new Chart(document.getElementById("garage-b-capacity-per-hour-chart"),
 {
 	"type": "line",
 	"data": {
-		"labels": ["9am","10am","11am","12pm","1pm"],
+		"labels": labelStrings[1].split(','),
 		"datasets": [
 			{
 				"label": "Garage B",
-				"data": [23,35,43,50,55],
+				"data": dataArrays[1],
 				"fill": false,
 				"borderColor": "rgb(75, 192, 192)",
 				"lineTension": 0.1
@@ -267,11 +276,11 @@ new Chart(document.getElementById("garage-c-capacity-per-hour-chart"),
 {
 	"type": "line",
 	"data": {
-		"labels": ["9am","10am","11am","12pm","1pm"],
+		"labels": labelStrings[2].split(','),
 		"datasets": [
 			{
 				"label": "Garage C",
-				"data": [17,25,33,40,55],
+				"data": dataArrays[2],
 				"fill": false,
 				"borderColor": "rgb(75, 192, 192)",
 				"lineTension": 0.1
@@ -301,11 +310,11 @@ new Chart(document.getElementById("garage-d-capacity-per-hour-chart"),
 {
 	"type": "line",
 	"data": {
-		"labels": ["9am","10am","11am","12pm","1pm"],
+		"labels": labelStrings[3].split(','),
 		"datasets": [
 			{
 				"label": "Garage D",
-				"data": [57,65,73,80,85],
+				"data": dataArrays[3],
 				"fill": false,
 				"borderColor": "rgb(75, 192, 192)",
 				"lineTension": 0.1
@@ -335,11 +344,11 @@ new Chart(document.getElementById("garage-e-capacity-per-hour-chart"),
 {
 	"type": "line",
 	"data": {
-		"labels": ["9am","10am","11am","12pm","1pm"],
+		"labels": labelStrings[4].split(','),
 		"datasets": [
 			{
 				"label": "Garage E",
-				"data": [23,34,46,59,73],
+				"data": dataArrays[4],
 				"fill": false,
 				"borderColor": "rgb(75, 192, 192)",
 				"lineTension": 0.1

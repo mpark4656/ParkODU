@@ -54,6 +54,9 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
     private FloorStatisticRepository floorStatisticRepository;
 
     @Autowired
+    private GarageStatisticRepository garageStatisticRepository;
+
+    @Autowired
     private PermitTypeRepository permitTypeRepository;
 
     @Autowired
@@ -86,6 +89,9 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
     @Autowired
     private FloorStatisticService floorStatisticService;
 
+    @Autowired
+    private GarageStatisticService garageStatisticService;
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
@@ -104,6 +110,7 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         userRepository.loadAll();
         roleTypeRepository.loadAll();
         eventRepository.loadAll();
+        garageStatisticRepository.loadAll();
 
         // Remove all null stored users at startup
         String isEmpty = "";
@@ -114,6 +121,7 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         System.out.println("# of Floors loaded from Mongo: " + floorRepository.findAll().size());
         System.out.println("# of ParkingSpaces loaded from Mongo: " + parkingSpaceRepository.findAll().size());
         System.out.println("# of FloorStatistics loaded from Mongo: " + floorStatisticRepository.findAll().size());
+        System.out.println("# of GarageStatistics loaded from Mongo: " + garageStatisticRepository.findAll().size());
         System.out.println("# of Buildings loaded from Mongo: " + buildingRepository.findAll().size());
         System.out.println("# of TravelDistanceDurations loaded from Mongo: " + travelDistanceDurationRepository.findAll().size());
         System.out.println("# of PermitTypes loaded from Mongo: " + permitTypeRepository.findAll().size());

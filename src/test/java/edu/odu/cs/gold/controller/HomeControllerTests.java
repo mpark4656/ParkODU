@@ -1,21 +1,17 @@
 package edu.odu.cs.gold.controller;
 
 import com.hazelcast.query.Predicate;
-import edu.odu.cs.gold.model.Event;
-import edu.odu.cs.gold.model.Floor;
-import edu.odu.cs.gold.model.Garage;
-import edu.odu.cs.gold.model.User;
-import edu.odu.cs.gold.repository.EventRepository;
-import edu.odu.cs.gold.repository.FloorRepository;
-import edu.odu.cs.gold.repository.GarageRepository;
-import edu.odu.cs.gold.repository.UserRepository;
+import edu.odu.cs.gold.model.*;
+import edu.odu.cs.gold.repository.*;
 import edu.odu.cs.gold.service.GarageService;
+import edu.odu.cs.gold.service.GarageStatisticService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.ui.ExtendedModelMap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -37,6 +33,8 @@ public class HomeControllerTests {
     private GarageRepository garageRepository;
     private EventRepository eventRepository;
     private UserRepository userRepository;
+    private GarageStatisticService garageStatisticService;
+    private GarageStatisticRepository garageStatisticRepository;
 
     private Garage garageOne;
     private Garage garageTwo;
@@ -56,6 +54,9 @@ public class HomeControllerTests {
         garages.add(garageOne);
         garages.add(garageTwo);
 
+        ArrayList<GarageStatistic> garageStatistics = new ArrayList<>();
+        Date date = new Date();
+
         garageRepository = mock(GarageRepository.class);
         when(garageRepository.findAll()).thenReturn(garages);
 
@@ -67,10 +68,20 @@ public class HomeControllerTests {
         doNothing().when(userRepository).delete(anyString());
         doNothing().when(userRepository).save(any(User.class));
 
+        garageStatisticRepository = mock(GarageStatisticRepository.class);
+        when(garageStatisticRepository.findAll()).thenReturn(garageStatistics);
+
+        garageStatisticService = mock(GarageStatisticService.class);
+        when(garageStatisticService
+                .findGarageCapacityByDate(GARAGE_ONE_KEY,date)).thenReturn(garageStatistics);
+
+
         homeController = new HomeController(
                 garageRepository,
                 eventRepository,
-                userRepository
+                userRepository,
+                garageStatisticRepository,
+                garageStatisticService
         );
     }
 

@@ -30,6 +30,7 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     public static final String COLLECTION_TRAVEL_DISTANCE_DURATION = "TravelDistanceDuration";
 
     public static final String COLLECTION_FLOOR_STATISTIC = "FloorStatistic";
+    public static final String COLLECTION_GARAGE_STATISTIC = "GarageStatistic";
     public static final String COLLECTION_PERMIT_TYPE = "PermitType";
     public static final String COLLECTION_SPACE_TYPE = "SpaceType";
 
@@ -116,6 +117,11 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     }
 
     @Bean
+    public GarageStatisticRepository garageStatisticRepository() {
+        return new GarageStatisticRepository(hazelcastInstance(), COLLECTION_GARAGE_STATISTIC);
+    }
+
+    @Bean
     public PermitTypeRepository permitTypeRepository() {
         return new PermitTypeRepository(hazelcastInstance(), COLLECTION_PERMIT_TYPE);
     }
@@ -173,6 +179,11 @@ public class ParkODUConfiguration implements ApplicationContextAware {
     @Bean
     public MongoMapStore floorStatisticMapStore() {
         return new MongoMapStore(mongoTemplate, COLLECTION_FLOOR_STATISTIC, FloorStatistic.class);
+    }
+
+    @Bean
+    public MongoMapStore garageStatisticMapStore() {
+        return new MongoMapStore(mongoTemplate, COLLECTION_GARAGE_STATISTIC, GarageStatistic.class);
     }
 
     @Bean
@@ -305,6 +316,23 @@ public class ParkODUConfiguration implements ApplicationContextAware {
 
         // Indexed Attributes
         mapConfig.addMapIndexConfig(new MapIndexConfig("floorKey", false));
+
+        return mapConfig;
+    }
+
+    @Bean
+    public MapConfig garageStatisticRepositoryMapConfig() {
+        MapConfig mapConfig = new MapConfig(COLLECTION_GARAGE_STATISTIC);
+
+        // MapStore
+        MapStoreConfig mapStoreConfig = new MapStoreConfig();
+        mapStoreConfig.setImplementation(garageStatisticMapStore());
+        mapStoreConfig.setEnabled(true);
+        mapStoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.EAGER);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+
+        // Indexed Attributes
+        mapConfig.addMapIndexConfig(new MapIndexConfig("garageKey", false));
 
         return mapConfig;
     }
