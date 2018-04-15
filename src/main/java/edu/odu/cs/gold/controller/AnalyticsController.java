@@ -70,6 +70,7 @@ public class AnalyticsController {
         HashSet<String> preferredSpaceTypes = new HashSet<> ();
         String preferredStartingAddress = null;
         String preferredDestinationBuilding = null;
+        Integer preferredMinimumAvailableSpaces = 0;
 
         try {
             AuthenticatedUser authenticatedUser =
@@ -81,11 +82,16 @@ public class AnalyticsController {
             preferredSpaceTypes = (HashSet<String>)user.getPreferredSpaceTypes();
             preferredStartingAddress = user.getPreferredStartingAddress();
             preferredDestinationBuilding = user.getPreferredDestinationBuilding();
+            preferredMinimumAvailableSpaces = user.getPreferredMinimumAvailableSpaces();
 
+            if(preferredMinimumAvailableSpaces == null) {
+                preferredMinimumAvailableSpaces = 0;
+            }
         } catch(Exception e) {
-            // User is not logged on.
+            e.printStackTrace();
         }
 
+        model.addAttribute("preferredMinimumAvailableSpaces", preferredMinimumAvailableSpaces);
         model.addAttribute("preferredStartingAddress", preferredStartingAddress);
         model.addAttribute("preferredDestinationBuilding", preferredDestinationBuilding);
         model.addAttribute("preferredPermitTypes", preferredPermitTypes);
@@ -108,6 +114,10 @@ public class AnalyticsController {
 
         Location startingLocation = new Location(startingLatitude, startingLongitude);
         Building destinationBuilding = buildingRepository.findByKey(destinationBuildingId);
+
+        if(minSpaces == null) {
+            minSpaces = 0;
+        }
 
         Predicate permitPredicate = null;
         if (permitTypeKeys != null) {

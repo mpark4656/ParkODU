@@ -29,7 +29,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="event : ${events}">
+                <tr th:each="event : ${events}"
+                    th:id="'event-row-' + ${event.eventKey}">
                     <td th:text="${event.eventName}"></td>
                     <td th:text="${event.eventMessage}"></td>
                     <td>

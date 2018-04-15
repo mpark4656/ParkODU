@@ -22,6 +22,7 @@ public class User implements Serializable{
     private String lastNotificationViewedDate;
     private String preferredStartingAddress;
     private String preferredDestinationBuilding;
+    private Integer preferredMinimumAvailableSpaces;
     private Set<String> permissions;
     private Set<String> preferredPermitTypes;
     private Set<String> preferredSpaceTypes;
@@ -146,6 +147,14 @@ public class User implements Serializable{
         this.preferredDestinationBuilding = preferredDestinationBuilding;
     }
 
+    public Integer getPreferredMinimumAvailableSpaces() {
+        return preferredMinimumAvailableSpaces;
+    }
+
+    public void setPreferredMinimumAvailableSpaces(Integer preferredMinimumAvailableSpaces) {
+        this.preferredMinimumAvailableSpaces = preferredMinimumAvailableSpaces;
+    }
+
     public void setLastNotificationViewedDate(String lastNotificationViewedDate) {
         this.lastNotificationViewedDate = lastNotificationViewedDate;
     }
@@ -211,6 +220,7 @@ public class User implements Serializable{
                 ", permissions=" + permissions +
                 ", preferredStartingAddress=" + preferredStartingAddress + '\'' +
                 ", preferredDestinationBuilding=" + preferredDestinationBuilding + '\'' +
+                ", preferredMinimumAvailableSpaces=" + preferredMinimumAvailableSpaces +
                 ", preferredPermitTypes=" + preferredPermitTypes +
                 ", preferredSpaceTypes=" + preferredSpaceTypes +
                 " }";
