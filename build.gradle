@@ -1,5 +1,5 @@
 group 'edu.odu.cs'
-version '1.0.0-SNAPSHOT'
+version '1.0.1-SNAPSHOT'
 
 buildscript {
     repositories {
@@ -19,7 +19,7 @@ apply plugin: 'org.springframework.boot'
 
 jar {
     baseName = 'parkodu'
-    version = '1.0.0-SNAPSHOT'
+    version = '1.0.1-SNAPSHOT'
 
     exclude "META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA"
 
