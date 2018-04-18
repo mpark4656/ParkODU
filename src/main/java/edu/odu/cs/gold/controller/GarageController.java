@@ -19,25 +19,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.*;
 
+/**
+ * This controller provides methods for returning html pages that allow users
+ * to view Garage details
+ */
 @Controller
 @RequestMapping("/garage")
 public class GarageController {
 
     private GarageRepository garageRepository;
     private FloorRepository floorRepository;
-    private ParkingSpaceRepository parkingSpaceRepository;
-    private FloorStatisticRepository floorStatisticRepository;
     private GarageService garageService;
 
     public GarageController(GarageRepository garageRepository,
                             FloorRepository floorRepository,
-                            ParkingSpaceRepository parkingSpaceRepository,
-                            FloorStatisticRepository floorStatisticRepository,
                             GarageService garageService) {
         this.garageRepository = garageRepository;
         this.floorRepository = floorRepository;
-        this.parkingSpaceRepository = parkingSpaceRepository;
-        this.floorStatisticRepository = floorStatisticRepository;
         this.garageService = garageService;
     }
 

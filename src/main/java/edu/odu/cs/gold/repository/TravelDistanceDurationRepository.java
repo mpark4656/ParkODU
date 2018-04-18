@@ -25,9 +25,9 @@ public class TravelDistanceDurationRepository {
         return entity.getTravelDistanceDurationKey();
     }
 
-    public Collection<TravelDistanceDuration> findAll() {
+    public List<TravelDistanceDuration> findAll() {
         IMap map = hazelcastInstance.getMap(collectionName);
-        return map.values();
+        return new ArrayList<>(map.values());
     }
 
     public TravelDistanceDuration findByKey(String key) {
@@ -80,5 +80,4 @@ public class TravelDistanceDurationRepository {
         IMap map = hazelcastInstance.getMap(collectionName);
         map.loadAll(false);
     }
-
 }

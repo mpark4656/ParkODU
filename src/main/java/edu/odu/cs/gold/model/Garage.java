@@ -10,11 +10,7 @@ public class Garage implements Serializable {
     private String name;
     private String description;
     private String heightDescription;
-    private String addressOne;
-    private String addressTwo;
-    private String city;
-    private String state;
-    private String zipCode;
+    private String address;
     private Integer availableSpaces;
     private Integer totalSpaces;
     private Double capacity;
@@ -22,9 +18,7 @@ public class Garage implements Serializable {
     private Double longitude;
     private Date lastUpdated;
 
-    public Garage() {
-        this.garageKey = UUID.randomUUID().toString();
-    }
+    public Garage() { this.garageKey = UUID.randomUUID().toString(); }
 
     public Garage(String name, Double latitude, Double longitude) {
         this.garageKey = UUID.randomUUID().toString();
@@ -65,44 +59,12 @@ public class Garage implements Serializable {
         this.heightDescription = heightDescription;
     }
 
-    public String getAddressOne() {
-        return addressOne;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAddressOne(String addressOne) {
-        this.addressOne = addressOne;
-    }
-
-    public String getAddressTwo() {
-        return addressTwo;
-    }
-
-    public void setAddressTwo(String addressTwo) {
-        this.addressTwo = addressTwo;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Integer getAvailableSpaces() {
@@ -165,7 +127,7 @@ public class Garage implements Serializable {
     }
 
     public Location getLocation() {
-        return new Location(garageKey, name, latitude, longitude);
+        return new Location(latitude, longitude);
     }
 
     @Override
@@ -175,11 +137,7 @@ public class Garage implements Serializable {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", heightDescription='" + heightDescription + '\'' +
-                ", addressOne='" + addressOne + '\'' +
-                ", addressTwo='" + addressTwo + '\'' +
-                ", city='" + city + '\'' +
-                ", state='" + state + '\'' +
-                ", zipCode='" + zipCode + '\'' +
+                ", address='" + address + '\'' +
                 ", availableSpaces=" + availableSpaces +
                 ", totalSpaces=" + totalSpaces +
                 ", capacity=" + capacity +

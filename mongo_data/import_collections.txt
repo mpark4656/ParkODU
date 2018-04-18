@@ -1,0 +1,10 @@
+mongoimport --db parkodu --collection Building --file Building.json
+mongoimport --db parkodu --collection Floor --file Floor.json
+mongoimport --db parkodu --collection FloorStatistic --file FloorStatistic.json
+mongoimport --db parkodu --collection Garage --file Garage.json
+mongoimport --db parkodu --collection ParkingSpace --file ParkingSpace.json
+mongoimport --db parkodu --collection TravelDistanceDuration --file TravelDistanceDuration.json
+mongoimport --db parkodu --collection PermitType --file PermitType.json
+mongoimport --db parkodu --collection SpaceType --file SpaceType.json
+mongoimport --db parkodu --collection User --file User.json
+mongoimport --db parkodu --collection RoleType --file RoleType.json

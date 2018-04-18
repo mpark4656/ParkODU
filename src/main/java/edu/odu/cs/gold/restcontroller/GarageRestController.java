@@ -1,21 +1,16 @@
 package edu.odu.cs.gold.restcontroller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
 import edu.odu.cs.gold.model.Floor;
 import edu.odu.cs.gold.model.Garage;
-import edu.odu.cs.gold.model.ParkingSpace;
 import edu.odu.cs.gold.repository.FloorRepository;
 import edu.odu.cs.gold.repository.GarageRepository;
 import edu.odu.cs.gold.repository.ParkingSpaceRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -129,21 +124,16 @@ public class GarageRestController {
             if (garage.getHeightDescription() != null) {
                 existingGarage.setHeightDescription(garage.getHeightDescription());
             }
-            if (garage.getAddressOne() != null) {
-                existingGarage.setAddressOne(garage.getAddressOne());
+            if (garage.getAddress() != null) {
+                existingGarage.setAddress(garage.getAddress());
             }
-            if (garage.getAddressTwo() != null) {
-                existingGarage.setAddressTwo(garage.getAddressTwo());
+            if (garage.getLatitude() != null) {
+                existingGarage.setLatitude(garage.getLatitude());
             }
-            if (garage.getCity() != null) {
-                existingGarage.setCity(garage.getCity());
+            if (garage.getLongitude() != null) {
+                existingGarage.setLongitude(garage.getLongitude());
             }
-            if (garage.getState() != null) {
-                existingGarage.setState(garage.getState());
-            }
-            if (garage.getZipCode() != null) {
-                existingGarage.setZipCode(garage.getZipCode());
-            }
+
             existingGarage.setLastUpdated(new Date());
 
             garageRepository.save(existingGarage);
@@ -164,5 +154,24 @@ public class GarageRestController {
             }
         }
         return ResponseEntity.badRequest().build();
+    }
+
+    /**
+     * Simulator will use this to get a list of all garages. The client needs to provide the unique subscription key
+     * that matches.
+     *
+     * @param subscriptionKey
+     * @return
+     */
+    @GetMapping("/garages/{subscriptionKey}")
+    public List<Garage> getCollection(@PathVariable String subscriptionKey) {
+
+        if(subscriptionKey.equals("2093af49-30d2-4ba3-873b-29970e012656")) {
+            ArrayList<Garage> garageList = new ArrayList<> (garageRepository.findAll());
+            return garageList;
+        }
+        else {
+            return null;
+        }
     }
 }

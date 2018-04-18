@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+</head>
+<body>
+
+<a href="#" id="event-notification-button" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+    <i th:if="${newEventCount eq 0}" class="glyphicon glyphicon-bell event-notification-count"></i>
+    <i th:if="${newEventCount gt 0}" th:attr="data-count=${newEventCount}" class="glyphicon glyphicon-bell notification-icon event-notification-count"></i>
+    <span id="notification-mobile-text">Notifications</span>
+    <span class="caret"></span>
+</a>
+<ul id="notifications-container" class="dropdown-menu">
+    <li id="notifications-header" class="dropdown-header" style="padding-left: 20px;"><span id="notification-desktop-text">Notifications</span>&nbsp;<a id="notifications-view-all-link" th:href="@{/events/index}"><i class="glyphicon glyphicon-search"></i> View All</a></li>
+    <li th:if="${events.isEmpty()}" class="notification-item" style="border-top: 1px solid #eee;">
+        <div style="padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px;">
+            <b class="notification-title">No Events Found</b>
+        </div>
+    </li>
+    <li th:if="${events.isEmpty() eq false}" th:each="event : ${events}" class="notification-item" style="border-top: 1px solid #eee;">
+        <div style="padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px;">
+            <div th:if="${newEventKeys.contains(event.eventKey)}" class="notification-item-container new-item-highlight">
+                <p class="notification-title"><a th:href="@{'/events/index#event-row-' + ${event.eventKey}}" th:text="${event.eventName}"></a></p>
+                <strong class="notification-text" th:text="${event.eventMessage}"></strong>
+                <p class="small notification-text" th:text="'Affected Locations: ' + ${event.locationsAffected}"></p>
+                <p class="small notification-text" th:text="'Start: ' + ${event.getFormattedEventStartDateTime()}"></p>
+                <p class="small notification-text" th:text="'End: ' + ${event.getFormattedEventEndDateTime()}"></p>
+                <p class="small notification-text" th:text="'Updated: ' + ${event.getFormattedEventUpdatedDateTime()}"></p>
+            </div>
+            <div th:if="${newEventKeys.contains(event.eventKey) eq false}" class="notification-item-container">
+                <p class="notification-title"><a th:href="@{'/events/index#event-row-' + ${event.eventKey}}" th:text="${event.eventName}"></a></p>
+                <strong class="notification-text" th:text="${event.eventMessage}"></strong>
+                <p class="small notification-text" th:text="'Affected Locations: ' + ${event.locationsAffected}"></p>
+                <p class="small notification-text" th:text="'Start: ' + ${event.getFormattedEventStartDateTime()}"></p>
+                <p class="small notification-text" th:text="'End: ' + ${event.getFormattedEventEndDateTime()}"></p>
+                <p class="small notification-text" th:text="'Updated: ' + ${event.getFormattedEventUpdatedDateTime()}"></p>
+            </div>
+        </div>
+    </li>
+</ul>
+
+</body>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    $(document).ready(function() {
+        var userKey = /*[[${userKey}]]*/;
+        if (userKey != null) {
+            $('#notifications-container').parent().on('hide.bs.dropdown', function() {
+                resetNotification();
+            });
+        }
+    });
+
+    function resetNotification() {
+        var userKey = /*[[${userKey}]]*/;
+        var numNewItems = $('.new-item-highlight').length;
+        // Only update the user's last notification viewed date if the number of new items is greater than 0
+        if (numNewItems > 0) {
+            $.post("/rest/accounts/update_last_notification_viewed_date",
+            { userKey: userKey }).done(function(data) {
+                //alert(data);
+                $('.event-notification-count').attr('data-count', '0');
+                $('.event-notification-count').removeClass('notification-icon');
+                $('.new-item-highlight').removeClass('new-item-highlight');
+            });
+        }
+    }
+/*]]>*/
+</script>
+
+</html>

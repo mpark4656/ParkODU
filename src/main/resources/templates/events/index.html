@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
+
+<!-- Main Content -->
+<div class="container-fluid main-container">
+    <div class="row">
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
+            <div class="text-center main-header-container">
+                <img th:src="@{/img/parkodu_logo.png}" alt="ParkODU Logo" title="ParkODU Logo" height="50"/>
+                <h1 class="text-center main-header">Events</h1>
+            </div>
+            <hr/>
+            <table class="table table-bordered table-centered">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Message</th>
+                    <th>Affected Locations</th>
+                    <th>Event Tags</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="event : ${events}"
+                    th:id="'event-row-' + ${event.eventKey}">
+                    <td th:text="${event.eventName}"></td>
+                    <td th:text="${event.eventMessage}"></td>
+                    <td>
+                        <p th:each="location : ${event.locationsAffected}" th:text="${location}"></p>
+                    </td>
+                    <td>
+                        <p th:each="tag : ${event.eventTags}" th:text="${tag}"></p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Footer -->
+    <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
+</div>
+<!-- End Main Content -->
+
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+	$.ajax({
+		type: "GET",
+		url: '../events/notification',
+		success: function(data) {
+		    $('#notification-container').append(data);
+		}
+	});
+/*]]>*/
+</script>
+
+</body>
+</html>

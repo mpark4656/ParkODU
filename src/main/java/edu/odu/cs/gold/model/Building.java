@@ -7,8 +7,10 @@ public class Building implements Serializable {
 
     private String buildingKey;
     private String name;
+    private String description;
     private Double latitude;
     private Double longitude;
+    private String address;
 
     public Building() {
         buildingKey = UUID.randomUUID().toString();
@@ -37,6 +39,10 @@ public class Building implements Serializable {
         this.name = name;
     }
 
+    public String getDescription() { return description; }
+
+    public void setDescription(String description) { this.description = description; }
+
     public Double getLatitude() {
         return latitude;
     }
@@ -53,17 +59,23 @@ public class Building implements Serializable {
         this.longitude = longitude;
     }
 
+    public String getAddress() {return address;}
+
+    public void setAddress(String address) {this.address = address;}
+
     public Location getLocation() {
-        return new Location(buildingKey, name, latitude, longitude);
+        return new Location(latitude, longitude);
     }
 
     @Override
     public String toString() {
         return "Building{" +
-                "buildingKey='" + buildingKey + '\'' +
+                " buildingKey='" + buildingKey + '\'' +
                 ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
-                '}';
+                ", address='" + address + '\'' +
+                " }";
     }
 }

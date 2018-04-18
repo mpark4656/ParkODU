@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
+
+<!-- Main Content -->
+<div class="container-fluid main-container">
+    <div class="row">
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
+            <div class="text-center main-header-container">
+                <img th:src="@{/img/parkodu_logo.png}" alt="ParkODU Logo" title="ParkODU Logo" height="50"/>
+                <h1 class="text-center main-header">Create Parking Space</h1>
+            </div>
+            <hr/>
+            <!-- Alerts -->
+            <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
+            <form class="form-horizontal" id="create-garage-form" role="form" th:action="@{/settings/parking_space/create}" method="post" th:object="${parkingSpace}">
+                <input type="hidden" id="space-id" th:value="${parkingSpace.parkingSpaceKey}" th:field="${parkingSpace.parkingSpaceKey}"/>
+                <input type="hidden" id="garage-id" th:value="${parkingSpace.garageKey}" th:field="${parkingSpace.garageKey}"/>
+                <input type="hidden" id="floor-number" th:value="${parkingSpace.floor}" th:field="${parkingSpace.floor}"/>
+                <div class="form-group">
+                    <label for="number" class="col-md-4 control-label">Number</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="number" required="required" th:field="${parkingSpace.number}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="permitType" class="col-md-4 control-label" required="required">Permit Type</label>
+                    <div class="col-md-8">
+                        <select class="form-control permitTypeDropdown" id="permitType" th:field="*{permitTypeKey}">
+                            <option th:each="permitType : ${permitTypes}"
+                                    th:text="${permitType.name}"
+                                    th:value="${permitType.permitTypeKey}"
+                                    th:selected="(${parkingSpace.permitTypeKey eq permitType.permitTypeKey})"
+                            >
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="spaceType" class="col-md-4 control-label"  required="required">Space Type</label>
+                    <div class="col-md-8">
+                        <select class="form-control spaceTypeDropdown" id="spaceType" th:field="*{spaceTypeKey}">
+                            <option th:each="spaceType : ${spaceTypes}"
+                                    th:text="${spaceType.name}"
+                                    th:value="${spaceType.spaceTypeKey}"
+                                    th:selected="(${parkingSpace.spaceTypeKey eq spaceType.spaceTypeKey})">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-8 col-md-offset-4">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-primary">Reset</button>
+                    <a th:href="@{'/settings/parking_space/floor/' + ${floor.floorKey}}" class="btn btn-primary" title="Back">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Footer -->
+    <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
+</div>
+<!-- End Main Content -->
+
+
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+	$.ajax({
+		type: "GET",
+		url: '../../events/notification',
+		success: function(data) {
+		    $('#notification-container').append(data);
+		}
+	});
+/*]]>*/
+</script>
+
+</body>
+</html>

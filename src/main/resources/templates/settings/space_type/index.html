@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <!-- Head -->
+    <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
+
+<!-- Main Content -->
+<div class="container-fluid main-container">
+    <div class="row">
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+            <div class="text-center main-header-container">
+                <img th:src="@{/img/parkodu_logo.png}" alt="ParkODU Logo" title="ParkODU Logo" height="50"/>
+                <h1 class="text-center main-header">Configure Parking Space Types</h1>
+                <h4 class="text-center main-header">Add, remove, and create parking space types here</h4>
+            </div>
+            <hr/>
+            <!-- Alerts -->
+            <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
+            <p>
+                <span class="auto-update-message"></span>
+            </p>
+            <p class="text-right">
+                <a th:href="@{/settings/space_type/create}" class="btn btn-success btn-sm" title="Create Space Type">Create</a>
+                <a th:href="@{/settings/space_type/index}" class="btn btn-success btn-sm" title="Reload this page">Reload</a>
+            </p>
+            <table class="table table-bordered table-centered">
+                <thead>
+                <tr>
+                    <th>Parking Space</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="spaceType : ${spaceTypes}">
+                    <td>
+                        <input
+                                class="form-control text-center spaceName"
+                                type="text" th:value="${spaceType.name}"
+                                th:attr="data-key=${spaceType.spaceTypeKey}" />
+                    </td>
+                    <td>
+                        <textarea
+                                class="form-control spaceDescription"
+                                wrap="soft"
+                                cols="40"
+                                rows="4"
+                                th:text="${spaceType.description}"
+                                th:attr="data-key=${spaceType.spaceTypeKey}"></textarea>
+                    </td>
+                    <td>
+                        <button
+                                class="btn btn-danger btn-sm delete-spaceType-button"
+                                title="Safely Delete Space Type"
+                                th:attr="data-id=${spaceType.spaceTypeKey},data-name=${spaceType.name}"
+                                data-toggle="modal"
+                                data-target="#delete-spaceType-modal">Delete</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Footer -->
+    <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
+</div>
+<!-- End Main Content -->
+
+<!-- Delete Garage Modal -->
+<div class="modal fade" id="delete-spaceType-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" role="form" th:action="@{/settings/space_type/delete}" method="post">
+                <div class="modal-header modal-header-danger">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delete Parking Space</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center">Are you sure you want to delete the parking space '<span id="delete-spaceType-name-text"></span>'?</p>
+                    <p class="text-center">If any existing parking spaces are using this space type, no action will be taken.</p>
+                    <p class="text-center"><b>Warning:</b> This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="delete-spaceType-id" name="spaceTypeKey" required="required"/>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
+
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: toastr-script" /> /*/-->
+<script>
+$(document).ready(function(){
+    $(".spaceName").change(function(){
+
+    var spaceTypeKey = $(this).data("key")
+    var spaceName = $(this).val();
+
+    $.post("/settings/space_type/set_space_name", { spaceTypeKey : spaceTypeKey, spaceName: spaceName })
+        .done(function(data) {
+            toastr.info(data);
+        });
+    });
+});
+
+$(document).ready(function(){
+    $(".spaceDescription").change(function(){
+
+    var spaceTypeKey = $(this).data("key")
+    var spaceDescription = $(this).val();
+
+    $.post("/settings/space_type/set_space_description", { spaceTypeKey : spaceTypeKey, spaceDescription: spaceDescription })
+        .done(function(data) {
+            toastr.info(data);
+        });
+    });
+});
+</script>
+
+<script th:inline="javascript">
+$('.delete-spaceType-button').on('click', function()
+{
+    $('#delete-spaceType-name-text').text($(this).data("name"));
+    $('#delete-spaceType-id').val($(this).data("id"));
+});
+</script>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+	$.ajax({
+		type: "GET",
+		url: '../../events/notification',
+		success: function(data) {
+		    $('#notification-container').append(data);
+		}
+	});
+/*]]>*/
+</script>
+</body>
+</html>

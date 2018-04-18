@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+</head>
+<body>
+<div th:id="'chart-' + ${chartId}" class="col-xs-12 col-sm-12 col-md-6">
+    <div class="chartjs-wrapper"
+            style="
+            padding-top: 5px;
+            background-color: white;
+            margin-top: 75px;
+            padding-bottom: 10px;
+            padding-left: 10px;
+            padding-right: 10px;
+            border-radius: 10px;">
+        <h3 th:text="${garage.name}"></h3>
+        <h4>Floor <span th:text="${floorNumber}"></span> Occupancy Chart</h4>
+        <hr/>
+        <p>Date: <span th:text="${date}"></span></p>
+        <canvas th:id="'floorStatisticChart' + ${chartId}" class="chartjs" width="undefined" height="undefined"></canvas>
+        <p class="text-right">
+            <button th:attr="data-id=${chartId}" class="btn btn-danger btn-sm delete-button">Delete</button>
+        </p>
+    </div>
+</div>
+</body>
+
+<!-- Chart.js Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: chart-js-scripts" /> /*/-->
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+$(document).ready(function() {
+    eval([[${jsCode}]]);
+});
+/*]]>*/
+</script>
+
+</html>

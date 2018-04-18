@@ -4,6 +4,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.query.Predicate;
 import edu.odu.cs.gold.model.FloorStatistic;
+import edu.odu.cs.gold.model.Garage;
 import edu.odu.cs.gold.model.ParkingSpace;
 
 import java.util.ArrayList;
@@ -23,6 +24,11 @@ public class ParkingSpaceRepository {
 
     public String getId(ParkingSpace entity) {
         return entity.getParkingSpaceKey();
+    }
+
+    public List<ParkingSpace> findAll() {
+        IMap map = hazelcastInstance.getMap(collectionName);
+        return new ArrayList<>(map.values());
     }
 
     public ParkingSpace findByKey(String key) {

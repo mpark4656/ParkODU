@@ -3,19 +3,18 @@ package edu.odu.cs.gold.controller;
 import com.hazelcast.query.Predicate;
 import com.hazelcast.query.Predicates;
 import edu.odu.cs.gold.model.*;
-import edu.odu.cs.gold.repository.BuildingRepository;
-import edu.odu.cs.gold.repository.GarageRepository;
-import edu.odu.cs.gold.repository.ParkingSpaceRepository;
-import edu.odu.cs.gold.repository.TravelDistanceDurationRepository;
+import edu.odu.cs.gold.repository.*;
+import edu.odu.cs.gold.security.AuthenticatedUser;
 import edu.odu.cs.gold.service.GoogleMapService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import com.google.maps.model.*;
+
+import java.util.*;
+
 
 @Controller
 @RequestMapping("/analytics")
@@ -26,17 +25,27 @@ public class AnalyticsController {
     private ParkingSpaceRepository parkingSpaceRepository;
     private TravelDistanceDurationRepository travelDistanceDurationRepository;
     private GoogleMapService googleMapService;
+    private PermitTypeRepository permitTypeRepository;
+    private SpaceTypeRepository spaceTypeRepository;
+    private UserRepository userRepository;
 
     public AnalyticsController(GarageRepository garageRepository,
                                BuildingRepository buildingRepository,
                                ParkingSpaceRepository parkingSpaceRepository,
                                TravelDistanceDurationRepository travelDistanceDurationRepository,
-                               GoogleMapService googleMapService) {
+                               GoogleMapService googleMapService,
+                               PermitTypeRepository permitTypeRepository,
+                               SpaceTypeRepository spaceTypeRepository,
+                               UserRepository userRepository
+                               ) {
         this.garageRepository = garageRepository;
         this.buildingRepository = buildingRepository;
         this.parkingSpaceRepository = parkingSpaceRepository;
         this.travelDistanceDurationRepository = travelDistanceDurationRepository;
         this.googleMapService = googleMapService;
+        this.permitTypeRepository = permitTypeRepository;
+        this.spaceTypeRepository = spaceTypeRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping({"","/","/index"})
@@ -51,13 +60,44 @@ public class AnalyticsController {
     public String locate(Model model) {
         List<Building> buildings = new ArrayList<>(buildingRepository.findAll());
         buildings.sort(Comparator.comparing(Building::getName));
-        List<String> permitTypes = new ArrayList<>();
-        permitTypes.add("Commuter");
-        permitTypes.add("Faculty");
-        permitTypes.add("Metered");
-        permitTypes.add("Quad Resident");
-        model.addAttribute("buildings", buildings);
 
+        List<PermitType> permitTypes = new ArrayList<>(permitTypeRepository.findAll());
+        List<SpaceType> spaceTypes = new ArrayList<>(spaceTypeRepository.findAll());
+        permitTypes.sort(Comparator.comparing(PermitType::getName));
+        spaceTypes.sort(Comparator.comparing(SpaceType::getName));
+
+        HashSet<String> preferredPermitTypes = new HashSet<> ();
+        HashSet<String> preferredSpaceTypes = new HashSet<> ();
+        String preferredStartingAddress = null;
+        String preferredDestinationBuilding = null;
+        Integer preferredMinimumAvailableSpaces = 0;
+
+        try {
+            AuthenticatedUser authenticatedUser =
+                    (AuthenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String userKey = authenticatedUser.getUser().getUserKey();
+            User user = userRepository.findByKey(userKey);
+
+            preferredPermitTypes = (HashSet<String>)user.getPreferredPermitTypes();
+            preferredSpaceTypes = (HashSet<String>)user.getPreferredSpaceTypes();
+            preferredStartingAddress = user.getPreferredStartingAddress();
+            preferredDestinationBuilding = user.getPreferredDestinationBuilding();
+            preferredMinimumAvailableSpaces = user.getPreferredMinimumAvailableSpaces();
+
+            if(preferredMinimumAvailableSpaces == null) {
+                preferredMinimumAvailableSpaces = 0;
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        model.addAttribute("preferredMinimumAvailableSpaces", preferredMinimumAvailableSpaces);
+        model.addAttribute("preferredStartingAddress", preferredStartingAddress);
+        model.addAttribute("preferredDestinationBuilding", preferredDestinationBuilding);
+        model.addAttribute("preferredPermitTypes", preferredPermitTypes);
+        model.addAttribute("preferredSpaceTypes", preferredSpaceTypes);
+        model.addAttribute("buildings", buildings);
+        model.addAttribute("spaceTypes", spaceTypes);
         model.addAttribute("permitTypes", permitTypes);
         return "analytics/locate";
     }
@@ -66,29 +106,93 @@ public class AnalyticsController {
     public String locate(@RequestParam(name = "startingAddress", required = false) String startingAddress,
                          @RequestParam(name = "latitude", required = false) Double startingLatitude,
                          @RequestParam(name = "longitude", required = false) Double startingLongitude,
-                         @RequestParam(name = "permitTypes", required = false) List<String> permitTypes,
+                         @RequestParam(name = "permitTypeKeys", required = false) List<String> permitTypeKeys,
+                         @RequestParam(name = "spaceTypeKeys", required = false) List<String> spaceTypeKeys,
                          @RequestParam(name = "destinationBuildingId", required = false) String destinationBuildingId,
+                         @RequestParam(name = "minSpaces", required = false) Integer minSpaces,
                          Model model) {
-        Location startingLocation = new Location(startingAddress, startingLatitude, startingLongitude);
+
+        Location startingLocation = new Location(startingLatitude, startingLongitude);
         Building destinationBuilding = buildingRepository.findByKey(destinationBuildingId);
 
+        if(minSpaces == null) {
+            minSpaces = 0;
+        }
+
         Predicate permitPredicate = null;
-        if (permitTypes != null) {
+        if (permitTypeKeys != null) {
             List<Predicate> predicates = new ArrayList<>();
-            for (String permitType : permitTypes) {
-                predicates.add(Predicates.equal("permitType", permitType));
+            for (String permitTypeKey : permitTypeKeys) {
+                predicates.add(Predicates.equal("permitTypeKey", permitTypeKey));
             }
             permitPredicate = Predicates.or(predicates.toArray(new Predicate[0]));
+        }
+
+        Predicate spacePredicate = null;
+        if (spaceTypeKeys != null) {
+            List<Predicate> predicates = new ArrayList<>();
+            for (String spaceTypeKey : spaceTypeKeys) {
+                predicates.add(Predicates.equal("spaceTypeKey", spaceTypeKey));
+            }
+            spacePredicate = Predicates.or(predicates.toArray(new Predicate[0]));
         }
 
         List<Recommendation> recommendations = new ArrayList<>();
 
         List<Garage> garages = new ArrayList<>(garageRepository.findAll());
+
+        //Check for valid address
+        DistanceMatrix testDistanceMatrix = googleMapService.calculateDistanceDurationWithAddress(garages.get(0),startingAddress,TravelMode.DRIVING);
+        if (testDistanceMatrix.rows[0].elements[0].distance == null) {
+            return "error/500_search";
+        }
+
         for (Garage garage : garages) {
+
+            DistanceMatrix distanceMatrix = googleMapService.calculateDistanceDurationWithAddress(garage,startingAddress,TravelMode.DRIVING);
+
+            //System.out.println("Distance: ");
+            //System.out.println(distanceMatrix.rows[0].elements[0].distance.toString());
+            //System.out.println("Duration: ");
+            //System.out.println(distanceMatrix.rows[0].elements[0].duration.humanReadable.toString());
+
             int availabilityCount = 0;
             int totalCount = 0;
-            if (permitPredicate != null) {
+            if (permitPredicate != null && spacePredicate != null ) {
 
+                // Availability Count
+                Predicate availabilityCountPredicate = Predicates.and(
+                        Predicates.equal("garageKey", garage.getGarageKey()),
+                        Predicates.equal("available", true),
+                        permitPredicate, spacePredicate
+                );
+                availabilityCount = parkingSpaceRepository.countByPredicate(availabilityCountPredicate);
+
+                // Total Count
+                Predicate totalCountPredicate = Predicates.and(
+                        Predicates.equal("garageKey", garage.getGarageKey()),
+                        permitPredicate, spacePredicate
+                );
+                totalCount = parkingSpaceRepository.countByPredicate(totalCountPredicate);
+            }
+            else if (spacePredicate != null && permitPredicate == null) {
+                // Availability Count
+                Predicate availabilityCountPredicate = Predicates.and(
+                        Predicates.equal("garageKey", garage.getGarageKey()),
+                        Predicates.equal("available", true),
+                        spacePredicate
+                );
+                availabilityCount = parkingSpaceRepository.countByPredicate(availabilityCountPredicate);
+
+                // Total Count
+                Predicate totalCountPredicate = Predicates.and(
+                        Predicates.equal("garageKey", garage.getGarageKey()),
+                        Predicates.equal("available", garage.getGarageKey()),
+                        spacePredicate
+                );
+                totalCount = parkingSpaceRepository.countByPredicate(totalCountPredicate);
+            }
+            else if (permitPredicate != null && spacePredicate == null) {
                 // Availability Count
                 Predicate availabilityCountPredicate = Predicates.and(
                         Predicates.equal("garageKey", garage.getGarageKey()),
@@ -99,42 +203,67 @@ public class AnalyticsController {
 
                 // Total Count
                 Predicate totalCountPredicate = Predicates.and(
-                    Predicates.equal("garageKey", garage.getGarageKey()),
-                    permitPredicate
+                        Predicates.equal("garageKey", garage.getGarageKey()),
+                        permitPredicate
                 );
                 totalCount = parkingSpaceRepository.countByPredicate(totalCountPredicate);
             }
             else {
                 availabilityCount = garage.getAvailableSpaces();
             }
-            Recommendation recommendation = new Recommendation();
-            recommendation.setStartingAddress(startingAddress);
-            recommendation.setGarage(garage);
-            recommendation.setDestinationBuilding(destinationBuilding);
+            if (minSpaces <= availabilityCount) {
+                Recommendation recommendation = new Recommendation();
+                recommendation.generateRecommendationKey();
+                recommendation.setStartingAddress(startingAddress);
+                recommendation.setGarage(garage);
+                recommendation.setDestinationBuilding(destinationBuilding);
 
-            recommendation.setAvailabilityCount(availabilityCount);
-            recommendation.setTotalCount(totalCount);
+                recommendation.setAvailabilityCount(availabilityCount);
+                recommendation.setTotalCount(totalCount);
 
-            DistanceDuration startingAddressToGarage = googleMapService.getDistanceDuration(startingLocation, garage.getLocation(), GoogleMapService.TravelMode.DRIVING);
-            recommendation.setStartingAddressToGarage(startingAddressToGarage);
+                DistanceMatrix startingAddressToGarage = googleMapService.calculateDistanceDurationWithAddress(garage, startingAddress, TravelMode.DRIVING);
+                recommendation.setStartingAddressToGarage(startingAddressToGarage);
 
-            DistanceDuration garageToDestinationBuilding = googleMapService.getDistanceDuration(garage.getLocation(), destinationBuilding.getLocation(), GoogleMapService.TravelMode.WALKING);
-            recommendation.setGarageToDestinationBuilding(garageToDestinationBuilding);
+                DistanceMatrix garageToDestinationBuilding = googleMapService.calculateDistanceDurationWithAddress(garage, destinationBuilding.getAddress(),TravelMode.WALKING);
+                //getDistanceDuration(garage, destinationBuilding.getAddress(), TravelMode.WALKING);
 
-            // Set Total Distance
-            recommendation.setTotalDistanceValue(recommendation.getStartingAddressToGarageDistanceValue() + recommendation.getGarageToDestinationBuildingDistanceValue());
+                recommendation.setGarageToDestinationBuilding(garageToDestinationBuilding);
 
-            // Set Total Duration
-            recommendation.setTotalDurationValue(recommendation.getStartingAddressToGarageDurationValue() + recommendation.getGarageToDestinationBuildingDurationValue());
+                // Set Total Distance
+                recommendation.setTotalDistanceValue(recommendation.getStartingAddressToGarageDistanceValue() + recommendation.getGarageToDestinationBuildingDistanceValue());
 
-            recommendations.add(recommendation);
+                // Set Total Duration
+                recommendation.setTotalDurationValue(recommendation.getStartingAddressToGarageDurationValue() + recommendation.getGarageToDestinationBuildingDurationValue());
+
+                recommendations.add(recommendation);
+                //recommendationRepository.save(recommendation);
+            }
         }
 
         // Default sort by closest Garage to Destination Building
         recommendations.sort(Comparator.comparing(Recommendation::getGarageToDestinationBuildingDistanceValue));
 
+        List<PermitType> permitTypes = new ArrayList<> ();
+
+        // Get the Permit Type objects from the keys
+        if (permitTypeKeys != null) {
+            Set<String> permitTypeKeySet = new HashSet<String> (permitTypeKeys);
+            permitTypes = new ArrayList<> (permitTypeRepository.findByKeys(permitTypeKeySet));
+        }
+
+        List<SpaceType> spaceTypes = new ArrayList<> ();
+
+        // Get the Permit Type objects from the keys
+        if (spaceTypeKeys != null) {
+            Set<String> spaceTypeKeySet = new HashSet<String> (spaceTypeKeys);
+            spaceTypes = new ArrayList<> (spaceTypeRepository.findByKeys(spaceTypeKeySet));
+        }
+
         model.addAttribute("startingAddress", startingAddress);
+        model.addAttribute("startingLatitude", startingLatitude);
+        model.addAttribute("startingLongitude", startingLongitude);
         model.addAttribute("permitTypes", permitTypes);
+        model.addAttribute("spaceTypes",spaceTypes);
         model.addAttribute("destinationBuilding", destinationBuilding);
         model.addAttribute("recommendations", recommendations);
 

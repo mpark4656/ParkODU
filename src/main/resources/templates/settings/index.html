@@ -7,76 +7,50 @@
 </head>
 <body>
 
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid navbar-container">
-        <div class="col-md-3">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <!-- Main Logo -->
-                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div id="navbar" class="navbar-collapse collapse navbar-center">
-                <ul class="nav navbar-nav">
-                    <li><a th:href="@{/garage}">Garages</a></li>
-                    <li><a th:href="@{/analytics/locate}">Search</a></li>
-                    <!-- Settings Link -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
-                </ul>
-                <!--
-                <form class="navbar-form navbar-right">
-                    <input type="text" class="form-control" placeholder="Search..."/>
-                </form>
-                -->
-            </div>
-        </div>
-        <div class="col-md-3">
-            <!-- Social Media Links -->
-            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
-        </div>
-    </div>
-</nav>
+<!-- Navigation Bar -->
+<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
 
-<!--
-<div class="text-center submenu">
-    <th:block th:each="itemCategory : ${itemCategories}">
-        <a th:href="@{/gallery/category} + '/' + ${itemCategory.name}" class="submenu-text" th:text="${itemCategory.name}"></a>
-        <span th:if="${itemCategory.key != lastItemCategoryKey}" class="submenu-text">|</span>
-    </th:block>
-</div>
--->
+<!-- Main Content -->
 <div class="container-fluid main-container">
-
-    <!-- Welcome User -->
-    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
-
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <h1 class="text-center" style="text-transform: uppercase;">Settings</h1>
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1">
+            <div class="text-center main-header-container">
+                <img th:src="@{/img/parkodu_logo.png}" alt="ParkODU Logo" title="ParkODU Logo" height="50"/>
+                <h1 class="text-center main-header">Settings</h1>
+            </div>
             <hr/>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+            <!-- Alerts -->
+            <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
+            <h2 style="text-transform: uppercase;">Facility Management</h2>
             <ul>
-                <li><a th:href="@{/settings/parking_space}">Parking Spaces</a></li>
+                <li><a th:href="@{/settings/garage}">Configure Garages</a></li>
+                <li><a th:href="@{/settings/floor}">Configure Floors</a></li>
+                <li><a th:href="@{/settings/parking_space}">Configure Parking Spaces</a></li>
+                <li><a th:href="@{/settings/permit_type/index}">Configure Permit Types</a></li>
+                <li><a th:href="@{/settings/space_type/index}">Configure Space Types</a></li>
             </ul>
-
+            <h2 style="text-transform: uppercase;">Account Management</h2>
+            <ul>
+                <li><a th:href="@{/settings/accounts}">Accounts</a></li>
+            </ul>
+            <h2 style="text-transform: uppercase;">Event Management</h2>
         </div>
     </div>
     <!-- Footer -->
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
+<!-- End Main Content -->
 
-<!-- Scripts -->
-<!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
-
+<script th:inline="javascript">
+/*<![CDATA[*/
+	$.ajax({
+		type: "GET",
+		url: '../events/notification',
+		success: function(data) {
+		    $('#notification-container').append(data);
+		}
+	});
+/*]]>*/
+</script>
 </body>
 </html>

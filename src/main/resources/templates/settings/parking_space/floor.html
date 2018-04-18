@@ -4,8 +4,12 @@
 <head>
     <!-- Head -->
     <!--/*/ <th:block th:include="fragments/fragment :: head" /> /*/-->
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
 
-    <style>
+<style>
 .switch {
   position: relative;
   display: inline-block;
@@ -62,119 +66,205 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
-    </style>
+</style>
 </head>
 <body>
 
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid navbar-container">
-        <div class="col-md-3">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <!-- Main Logo -->
-                <!--/*/ <th:block th:include="fragments/fragment :: main-logo" /> /*/-->
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div id="navbar" class="navbar-collapse collapse navbar-center">
-                <ul class="nav navbar-nav">
-                    <li><a th:href="@{/garage}">Garages</a></li>
-                    <li><a th:href="@{/analytics/locate}">Search</a></li>
-                    <!-- Settings Link -->
-                    <!--/*/ <th:block th:include="fragments/fragment :: settings-link" /> /*/-->
-                </ul>
-                <!--
-                <form class="navbar-form navbar-right">
-                    <input type="text" class="form-control" placeholder="Search..."/>
-                </form>
-                -->
-            </div>
-        </div>
-        <div class="col-md-3">
-            <!-- Social Media Links -->
-            <!--/*/ <th:block th:include="fragments/fragment :: social-media-links" /> /*/-->
-        </div>
-    </div>
-</nav>
+<!-- Navigation Bar -->
+<!--/*/ <th:block th:include="fragments/fragment :: navigation-bar" /> /*/-->
 
+<!-- Main Content -->
 <div class="container-fluid main-container">
-
-    <!-- Welcome User -->
-    <!--/*/ <th:block th:include="fragments/fragment :: welcome-user" /> /*/-->
-
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-            <h1 class="text-center" style="text-transform: uppercase;" th:text="'Level ' + ${floor.number} + ' - ' + ${floor.description}"></h1>
-            <h4 class="text-center" style="text-transform: uppercase;" th:text="${garage.name}"></h4>
+        <div class="parkodu-container col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1">
+            <div class="text-center main-header-container">
+                <img th:src="@{/img/parkodu_logo.png}" alt="ParkODU Logo" title="ParkODU Logo" height="50"/>
+                <h1 class="text-center" style="text-transform: uppercase;" th:text="'Level ' + ${floor.number} + ' - ' + ${floor.description}"></h1>
+                <h4 class="text-center" style="text-transform: uppercase;" th:text="${garage.name}"></h4>
+            </div>
             <hr/>
-        </div>
-    </div>
+            <!-- Alerts -->
+            <!--/*/ <th:block th:include="fragments/fragment :: alerts" /> /*/-->
 
-    <div class="row">
-        <div class="col-xs-6 col-sm-6 col-md-5 col-md-offset-1">
-            <table class="table table-bordered table-centered">
+            <p class="text-right">
+                <a th:href="@{/settings/parking_space/create} + '/' + ${garage.garageKey} + '/' + ${floor.floorKey}" class="btn btn-success btn-sm" title="Create Parking Space">Create</a>
+                <a th:href="@{/settings/parking_space/floor} + '/' + ${floor.floorKey}" class="btn btn-success btn-sm" title="Reload this page">Reload</a>
+            </p>
+            <table class="table table-bordered table-centered table-header-centered">
                 <thead>
                     <tr>
                         <th>Number</th>
                         <th>Permit Type</th>
+                        <th>Space Type</th>
                         <th>Available</th>
+                        <th>Last Updated</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="parkingSpace : ${parkingSpaces}">
-                        <td th:text="${parkingSpace.number}"></td>
-                        <td th:text="${parkingSpace.permitType}"></td>
+                        <td>
+                            <input class="text-center spaceNumberBox" type="number" min="1" th:value="${parkingSpace.number}" th:attr="data-key=${parkingSpace.parkingSpaceKey}"/>
+                        </td>
+                        <td>
+                            <select class="form-control permitTypeDropdown" th:attr="data-key=${parkingSpace.parkingSpaceKey}">
+                                <option th:each="permitType : ${permitTypes}"
+                                        th:text="${permitType.name}"
+                                        th:value="${permitType.permitTypeKey}"
+                                        th:selected="(${parkingSpace.permitTypeKey eq permitType.permitTypeKey})">
+                                </option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-control spaceTypeDropdown" th:attr="data-key=${parkingSpace.parkingSpaceKey}">
+                                <option th:each="spaceType : ${spaceTypes}"
+                                        th:text="${spaceType.name}"
+                                        th:value="${spaceType.spaceTypeKey}"
+                                        th:selected="(${parkingSpace.spaceTypeKey eq spaceType.spaceTypeKey})">
+                                </option>
+                            </select>
+                        </td>
                         <td>
                             <label th:if="${parkingSpace.available}" class="switch">
                                 <input type="checkbox" class="availabilityCheckbox" checked="checked" th:value="${parkingSpace.parkingSpaceKey}"/>
                                 <span class="slider round"></span>
                             </label>
                             <label th:unless="${parkingSpace.available}" class="switch">
-                                <input type="checkbox" class="availabilityCheckbox" th:value="${parkingSpace.parkingSpaceKey}"/>
+                                <input type="checkbox" class="availabilityCheckbox" th:value="${parkingSpace.parkingSpaceKey}" />
                                 <span class="slider round"></span>
                             </label>
+                        </td>
+                        <td th:text="${parkingSpace.lastUpdated}">
+                        </td>
+                        <td>
+                            <button class="btn btn-danger btn-sm delete-parkingSpace-button"
+                                    title="Delete Parking Space"
+                                    th:attr="data-id=${parkingSpace.parkingSpaceKey},data-name=${parkingSpace.number}"
+                                    data-toggle="modal"
+                                    data-target="#delete-parkingSpace-modal">Delete</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
-
-    <br/>
-
     <!-- Footer -->
     <!--/*/ <th:block th:include="fragments/fragment :: footer" /> /*/-->
 </div>
+<!-- End Main Content -->
+
+<!-- Delete Garage Modal -->
+<div class="modal fade" id="delete-parkingSpace-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" role="form" th:action="@{/settings/parking_space/delete}" method="post">
+                <div class="modal-header modal-header-danger">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delete Parking Space</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center">Are you sure you want to delete the Parking Space '<span id="delete-parkingSpace-name-text"></span>'?</p>
+                    <p class="text-center"><b>Warning:</b> This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="delete-parkingSpace-id" name="parkingSpaceKey" required="required"/>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- End Delete Garage Modal -->
 
 <!-- Scripts -->
 <!--/*/ <th:block th:include="fragments/fragment :: scripts" /> /*/-->
 
+<!-- Scripts -->
+<!--/*/ <th:block th:include="fragments/fragment :: toastr-script" /> /*/-->
 <script>
 $(document).ready(function(){
     $(".availabilityCheckbox").change(function(){
+         //var varKey = $('#data-key').val($(this).data("key"));
+         //var varType = $('#date-type').val($(this).data("type"));
+         //console.log(varKey);
+         //console.log(varType);
 
         var parkingSpaceKey = $(this).val();
 
         if ($(this).prop('checked')) {
             $.post("/settings/parking_space/set_availability", { parkingSpaceKey: parkingSpaceKey, available: "true" })
                 .done(function(data) {
-                    //alert(data);
+                    toastr.info(data);
                 });
         }
         else {
             $.post("/settings/parking_space/set_availability", { parkingSpaceKey: parkingSpaceKey, available: "false" })
                 .done(function(data) {
-                    //alert(data);
+                    toastr.info(data);
                 });
         }
     });
 });
+
+$(document).ready(function(){
+    $(".permitTypeDropdown").change(function(){
+
+    var parkingSpaceKey = $(this).data("key");
+    var permitTypeKey = $(this).val();
+
+    $.post("/settings/parking_space/set_permit_type", { parkingSpaceKey: parkingSpaceKey, permitTypeKey: permitTypeKey })
+        .done(function(data) {
+            toastr.info(data);
+        });
+    });
+});
+
+$(document).ready(function(){
+    $('.spaceTypeDropdown').change(function(){
+
+    var parkingSpaceKey = $(this).data("key");
+    var spaceTypeKey = $(this).val();
+
+    $.post("/settings/parking_space/set_space_type", { parkingSpaceKey: parkingSpaceKey, spaceTypeKey: spaceTypeKey })
+        .done(function(data) {
+            toastr.info(data);
+        });
+    });
+});
+
+$(document).ready(function(){
+    $('.spaceNumberBox').change(function(){
+
+    var parkingSpaceKey = $(this).data("key");
+    var spaceNumber = $(this).val();
+
+    $.post("/settings/parking_space/set_space_number", { parkingSpaceKey: parkingSpaceKey, spaceNumber: spaceNumber })
+        .done(function(data) {
+            toastr.info(data);
+        });
+    });
+});
 </script>
 
+<script th:inline="javascript">
+$('.delete-parkingSpace-button').on('click', function()
+{
+    $('#delete-parkingSpace-name-text').text($(this).data("name"));
+    $('#delete-parkingSpace-id').val($(this).data("id"));
+});
+</script>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+	$.ajax({
+		type: "GET",
+		url: '../../events/notification',
+		success: function(data) {
+		    $('#notification-container').append(data);
+		}
+	});
+/*]]>*/
+</script>
 </body>
 </html>
