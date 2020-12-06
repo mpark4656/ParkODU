@@ -29,6 +29,7 @@ public class ParkODUMongoConfiguration extends AbstractMongoConfiguration {
         setDatabaseName(mongoProperties.getDatabase());
         List<ServerAddress> serverAddresses = mongoProperties.getServerAddresses();
         List<MongoCredential> mongoCredentials = mongoProperties.getMongoCredentials();
+
         if (serverAddresses.size() > 0) {
             if (mongoCredentials.size() > 0) {
                 return new MongoClient(serverAddresses, mongoCredentials, new MongoClientOptions.Builder().socketKeepAlive(true).maxConnectionIdleTime(30000).build());
@@ -36,7 +37,10 @@ public class ParkODUMongoConfiguration extends AbstractMongoConfiguration {
             else {
                 return new MongoClient(serverAddresses);
             }
+        } else if(mongoProperties.getMongoClientURI() != null) {
+            return new MongoClient(mongoProperties.getMongoClientURI());
+        } else {
+            return new MongoClient("localhost", 27017);
         }
-        return new MongoClient("localhost", 27017);
     }
 }

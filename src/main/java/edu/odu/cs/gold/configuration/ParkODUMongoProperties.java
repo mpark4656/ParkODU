@@ -1,5 +1,6 @@
 package edu.odu.cs.gold.configuration;
 
+import com.mongodb.MongoClientURI;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -13,10 +14,10 @@ import java.util.regex.Pattern;
 @Component
 @ConfigurationProperties(prefix = "mongo")
 public class ParkODUMongoProperties {
-
     String username;
     String password;
     String database;
+    String uri;
     List<String> servers;
 
     public String getUsername() {
@@ -50,9 +51,17 @@ public class ParkODUMongoProperties {
         return servers;
     }
 
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) { this.uri = uri; }
+
     public void setServers(List<String> servers) {
         this.servers = servers;
     }
+
+    public MongoClientURI getMongoClientURI() { return new MongoClientURI(uri); }
 
     public List<ServerAddress> getServerAddresses() {
         List<ServerAddress> serverAddresses = new ArrayList<>();
