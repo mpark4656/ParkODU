@@ -130,7 +130,6 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         System.out.println("# of Roles loaded from Mongo: " + roleTypeRepository.findAll().size());
         System.out.println("# of Events loaded from Mongo: " + eventRepository.findAll().size());
 
-        /*
         User user = new User();
         user.setUserKey(UUID.randomUUID().toString());
         user.setConfirmationToken(UUID.randomUUID().toString());
@@ -138,7 +137,7 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         user.setLastName("Sermello");
         user.setUsername("user");
         user.setEmail("user@odu.edu");
-        user.setPassword("awesome8");
+        user.setPassword("password");
         user.getPermissions().add("USER");
         user.setEnabled(true);
         userRepository.save(user);
@@ -149,162 +148,12 @@ public class ParkODUApplication implements ApplicationContextAware, ApplicationL
         admin.setFirstName("Adriana");
         admin.setLastName("Minunoz");
         admin.setUsername("admin");
-        admin.setEmail("admin@odu.edu");
-        admin.setPassword("awesome8");
+        admin.setEmail("root@odu.edu");
+        admin.setPassword("password");
         admin.getPermissions().add("USER");
         admin.getPermissions().add("ADMIN");
         admin.setEnabled(true);
         userRepository.save(admin);
-        */
-
-
-        if (false) {
-                    /*
-            Predicate predicate = Predicates.and(
-                    Predicates.equal("garageKey", "80696948-bfe8-42f4-a861-af9e368fd34e"),
-                    Predicates.or(
-                        Predicates.equal("floor", "2"),
-                        Predicates.equal("floor", "3"),
-                        Predicates.equal("floor", "5")
-                    )
-            );
-                    */
-
-            Predicate predicate = Predicates.equal("garageKey", "6c913f81-4a1a-488c-825a-abb2348ab4e9");
-            List<ParkingSpace> parkingSpaces = parkingSpaceRepository.findByPredicate(predicate);
-            for (ParkingSpace parkingSpace : parkingSpaces) {
-                switch (parkingSpace.getFloor()) {
-                    case "1":
-                        parkingSpace.setPermitType("Metered");
-                        break;
-                    case "2":
-                        if (parkingSpace.getNumber() <= 81) {
-                            parkingSpace.setPermitType("Metered");
-                        }
-                        else {
-                            parkingSpace.setPermitType("Faculty");
-                        }
-                        break;
-                    case "3":
-                        parkingSpace.setPermitType("Faculty");
-                        break;
-                    case "4":
-                        if (parkingSpace.getNumber() <= 81) {
-                            parkingSpace.setPermitType("Faculty");
-                        }
-                        else {
-                            parkingSpace.setPermitType("Quad Resident");
-                        }
-                        break;
-                    case "5":
-                        parkingSpace.setPermitType("Quad Resident");
-                        break;
-                }
-            }
-            parkingSpaceRepository.save(parkingSpaces);
-        }
-
-        // Duplicate FloorStatistics to all Levels
-        if (false) {
-            Predicate floorPredicate = Predicates.notEqual("floorKey", "7545a113-e926-4d89-8a16-13fc00215bd8");
-            List<Floor> floors = floorRepository.findByPredicate(floorPredicate);
-            Predicate predicate = Predicates.equal("floorKey", "7545a113-e926-4d89-8a16-13fc00215bd8");
-            List<FloorStatistic> floorStatistics = floorStatisticRepository.findByPredicate(predicate);
-            for (Floor floor : floors) {
-                for (FloorStatistic floorStatistic : floorStatistics) {
-                    floorStatistic.setFloorStatisticKey(UUID.randomUUID().toString());
-                    floorStatistic.setFloorKey(floor.getFloorKey());
-                    floorStatisticRepository.save(floorStatistic);
-                }
-            }
-        }
-/*
-        // Generate Walking Distance Data for all Buildings from all Garages
-        if (false) {
-            List<Garage> garages = new ArrayList<>(garageRepository.findAll());
-            List<Building> buildings = new ArrayList<>(buildingRepository.findAll());
-
-            List<TravelDistanceDuration> travelDistanceDurations = new ArrayList<>();
-            for (Building building : buildings) {
-                System.out.println("Building: " + building.getName());
-                for (Garage garage : garages) {
-
-                    Predicate predicate = Predicates.and(
-                            Predicates.equal("garageKey", garage.getGarageKey()),
-                            Predicates.equal("buildingKey", building.getBuildingKey())
-                    );
-                    List<TravelDistanceDuration> existingTravelDistanceDurations = travelDistanceDurationRepository.findByPredicate(predicate);
-                    TravelDistanceDuration travelDistanceDuration = googleMapService.getTravelDistanceDuration(garage, building, TravelMode.WALKING);
-                    if (!existingTravelDistanceDurations.isEmpty()) {
-                        TravelDistanceDuration existingTravelDistanceDuration = existingTravelDistanceDurations.get(0);
-                        travelDistanceDuration.setTravelDistanceDurationKey(existingTravelDistanceDuration.getTravelDistanceDurationKey());
-                        travelDistanceDurations.add(travelDistanceDuration);
-                    }
-                    else {
-                        travelDistanceDurations.add(travelDistanceDuration);
-                    }
-                    System.out.println(travelDistanceDuration);
-                }
-            }
-            travelDistanceDurationRepository.save(travelDistanceDurations);
-        }
-*/
-        /*
-        if (false) {
-            Building collegeOfHealthSciences = new Building("College of Health Sciences", 36.885792, -76.302185);
-            Building battenCollegeOfEngineeringAndTechnology = new Building("Batten College of Engineering & Technology", 36.885774, -76.303579);
-            Building engineeringSystemsBuilding = new Building("Engineering Systems Building", 36.885774, -76.303579);
-            Building alfriendChemistryBuilding = new Building("Alfriend Chemistry Building", 36.885349, -76.305022);
-            Building stromeCollegeOfBusiness = new Building("Strome College of Business", 36.88666, -76.306439);
-
-            List<Building> buildings = new ArrayList<>();
-            buildings.add(collegeOfHealthSciences);
-            buildings.add(battenCollegeOfEngineeringAndTechnology);
-            buildings.add(engineeringSystemsBuilding);
-            buildings.add(alfriendChemistryBuilding);
-            buildings.add(stromeCollegeOfBusiness);
-            buildingRepository.save(buildings);
-        }
-        */
-
-        // Fill all Garage Floors with Parking Spaces
-        if (false) {
-            List<Garage> garages = new ArrayList<>(garageRepository.findAll());
-            for (Garage garage : garages) {
-                System.err.println(garage.getName());
-                Predicate floorPredicate = Predicates.equal("garageKey", garage.getGarageKey());
-                List<Floor> floors = floorRepository.findByPredicate(floorPredicate);
-                for (Floor floor : floors) {
-
-                    Random random = new Random();
-                    int numAvailable = random.nextInt(5) + 1;
-                    Set<Integer> availableParkingSpaceNumbers = new HashSet<>();
-                    for (int i = 0; i < numAvailable; i++) {
-                        availableParkingSpaceNumbers.add(random.nextInt(162));
-                    }
-
-                    List<ParkingSpace> parkingSpaces = new ArrayList<>();
-                    for (int i = 1; i <= 162; i++) {
-                        ParkingSpace parkingSpace = new ParkingSpace();
-                        parkingSpace.setGarageKey(garage.getGarageKey());
-                        parkingSpace.setFloor(floor.getNumber());
-                        parkingSpace.setNumber(i);
-
-                        if (availableParkingSpaceNumbers.contains(i)) {
-                            parkingSpace.setAvailable(true);
-                        }
-                        else {
-                            parkingSpace.setAvailable(false);
-                        }
-
-                        parkingSpaces.add(parkingSpace);
-                    }
-
-                    System.err.println("Floor " + floor.getNumber() + ": " + parkingSpaces.size() + " with " + numAvailable + " available spaces.");
-                    parkingSpaceRepository.save(parkingSpaces);
-                }
-            }
-        }
     }
 
     public static void main(String[] args) {
